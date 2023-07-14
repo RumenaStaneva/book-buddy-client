@@ -12,7 +12,7 @@ function BookList({ books }) {
                         book.volumeInfo.imageLinks === undefined
                             ? ""
                             : `${book.volumeInfo.imageLinks.thumbnail}`
-                    } alt="Book Thumbnail" />
+                    } alt={`${book.volumeInfo.title} image`} />
                 </div>
             ))}
         </div>
