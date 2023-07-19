@@ -72,9 +72,12 @@ function App() {
 
 
       </Box>
-      <div className='spinner__container'>
-        {loading ? <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} /> : null}
-      </div>
+      {loading ?
+        <div className='spinner__container'>
+          <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+        </div>
+        : null
+      }
       <BookList books={books} />
 
 
