@@ -1,0 +1,41 @@
+.books__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.book {
+    max-height: 345px;
+    height: 100%;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.book button {
+    height: 345px;
+}
+
+.book__image {
+    max-height: 170px;
+    height: 100%;
+    object-fit: contain !important;
+    object-position: top;
+}
+
+.book__title {
+    white-space: nowrap;
+    max-width: 310px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.book__description {
+    white-space: nowrap;
+    max-width: 310px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

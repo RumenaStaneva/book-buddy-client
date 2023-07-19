@@ -1,0 +1,19 @@
+.search__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto !important;
+    padding: 10px;
+    border: 1px dashed darkcyan;
+}
+
+.search__input {
+    margin-right: 20px !important;
+}
+
+.spinner__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
