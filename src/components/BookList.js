@@ -34,6 +34,7 @@ function BookList({ books }) {
                                 <Typography variant="body2" color="text.secondary" className='book__description'>
                                     {book.volumeInfo.description}
                                 </Typography>
+                                <p>{book.volumeInfo.pageCount}</p>
                             </CardContent>
                         </CardActionArea>
                     </Card>
