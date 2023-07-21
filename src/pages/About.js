@@ -1,6 +1,11 @@
+import NavBar from "../components/NavBar";
+
 function About() {
 
-    return <div>I just want a job</div>
+    return <>
+        <NavBar />
+        <div>I just want a job</div>
+    </>
 }
 
 export default About;
