@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import { purple } from '@mui/material/colors';
 
-function SubmitButton({ children }) {
+function SubmitButton({ children, attributes }) {
 
     const ColorButton = styled(Button)(({ theme }) => ({
         color: theme.palette.getContrastText(purple[500]),
@@ -13,7 +13,7 @@ function SubmitButton({ children }) {
     }));
 
     return (
-        <ColorButton variant="contained">{children}</ColorButton>
+        <ColorButton variant="contained" {...attributes}>{children}</ColorButton>
     );
 }
 
