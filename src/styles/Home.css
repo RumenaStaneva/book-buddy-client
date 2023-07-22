@@ -1,3 +1,7 @@
+body {
+    background: rgba(237, 201, 191, 0.68);
+}
+
 .form__container {
     padding: 50px 20px;
 }
