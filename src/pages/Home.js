@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import BookList from '../components/BookList';
 import axios from "axios";
-import '../styles/App.css'
+import '../styles/Home.css'
 import SubmitButton from '../components/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -29,6 +29,7 @@ function Home() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log('Submit button clicked');
         if (title === '' || title === undefined || title === null) {
             setError('Please enter a title or author.');
         } else {
@@ -84,23 +85,25 @@ function Home() {
     };
 
 
-
     return (
         <>
             <Navigation />
-            <div>
+            <>
 
                 <Box
                     component="form"
-                    sx={{
-                        '& > :not(style)': { m: 1, width: '25ch' },
-                    }}
                     noValidate
                     autoComplete="off"
-                    action="/search-book-title" method='POST' onSubmit={handleSubmit}
+                    action="/search-book-title"
+                    method='POST'
+                    onSubmit={handleSubmit}
                     className='form__container'
+
                 >
-                    <div className='search__container'>
+                    <div className={`search__container ${books.length !== 0 ?
+                        'search__container--small'
+
+                        : null}`}>
                         <TextField id="outlined-basic"
                             label="Title/author"
                             variant="outlined"
@@ -109,7 +112,7 @@ function Home() {
                             error={Boolean(error)}
                             helperText={error}
                             className='search__input' />
-                        <SubmitButton variant="contained" type='submit'>Search</SubmitButton>
+                        <SubmitButton variant="contained" attributes={{ type: 'submit' }}>Search</SubmitButton>
                     </div>
 
 
@@ -120,15 +123,22 @@ function Home() {
                     </div>
                     : null
                 }
-                <BookList books={books} />
+
+                {books.length !== 0 ?
+                    <BookList books={books} />
+
+                    : null}
 
 
-                <div className="pagination__container">
-                    <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
-                    <button onClick={nextPage} disabled={currentPage === totalPages}>Next</button>
-                </div>
+                {books.length !== 0 ?
+                    <div className="pagination__container">
+                        <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
+                        <button onClick={nextPage} disabled={currentPage === totalPages}>Next</button>
+                    </div>
 
-            </div >
+                    : null}
+
+            </ >
         </>
 
     )
