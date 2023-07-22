@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import NavBar from '../components/NavBar'
 import '../styles/Login.css'
 
 function Login() {
@@ -21,8 +22,9 @@ function Login() {
 
     return (
         <>
+            <NavBar />
             <main>
-                <div className='form__container'>
+                <div className='wrapper login-form__container'>
                     <form action="/login" onSubmit={handleSubmit}>
                         <p className='form__message'>Welcome back!!!</p>
                         <h1>Sign in</h1>
@@ -35,15 +37,16 @@ function Login() {
                             <input type="password" name="password" value={password} onChange={handleChangePassword} />
                         </div>
                         <p className='form__forgot-pass'>
-                            <a href="/forgotten-password">Forgotten password?</a>
+                            <a href="/forgotten-password">Forgot password?</a>
                         </p>
 
-                        <button type='submit'>Sign in</button>
+                        <button type='submit' className='btn--cta'>Sign in</button>
+
+                        <p className='form-switch'>I don’t have an account ? <a href="/sign-up">Sign up</a></p>
                     </form>
                 </div>
-                <div>
+                <div className='wrapper'>
                     <div className='image__container'>
-
                         <img src={require("../images/reading-buddies.png")} tabIndex={-1} alt='' />
                     </div>
                 </div>

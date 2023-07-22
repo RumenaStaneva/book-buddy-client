@@ -1,44 +1,140 @@
+body {
+    background-color: #fff;
+}
+
 main {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.form__container {
-    margin-right: 175px;
+.wrapper {
+    height: 100vh
 }
 
-.form__container form {
+.wrapper:first-of-type {
+    padding: 80px 30px;
+
+}
+
+.wrapper:nth-of-type(2) {
+    width: 50%;
+    background-color: #EDC9BF;
+}
+
+.login-form__container {
+    max-width: 567px;
+    width: 100%;
+    margin-right: 150px;
+}
+
+.login-form__container form {
     position: relative;
     border-radius: 20px;
     background: #FFF;
     box-shadow: 0px 19px 40px 0px rgba(0, 0, 0, 0.05);
     padding: 85px 65px;
-    max-height: 620px;
-    height: 100%;
 }
 
-.form__message {
+.login-form__container .form__message {
     color: rgba(0, 0, 0, 0.50);
     font-size: 16px;
     font-weight: 400;
+    letter-spacing: 0.48px;
+    margin-bottom: 10px;
 }
 
-.form__container h1 {
+.login-form__container h1 {
     color: #000;
     font-size: 56px;
     font-weight: 600;
+    margin-bottom: 28px;
 }
 
-.form__forgot-pass {
+.login-form__container .form__forgot-pass {
     font-size: 14px;
     position: absolute;
     text-decoration: underline;
+    right: 60px;
+    opacity: 0.5;
+    font-size: 14px;
+    font-weight: 300;
+    bottom: 257px;
 }
 
-.form__group {
+.login-form__container .form__forgot-pass a {
+    color: #000;
+}
+
+.login-form__container .form__group {
     display: flex;
     flex-direction: column;
+    margin-bottom: 19px;
+}
+
+.login-form__container .form__group input {
+    border-radius: 4px;
+    background: #FFF6F4;
+    border: none;
+    padding: 12px 10px;
+    color: #000;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.login-form__container .form__group label {
+    color: #000;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.btn--cta {
+    border-radius: 25px;
+    background-color: #D92868;
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 1px solid #D92868;
+    padding: 10px 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 38px;
+}
+
+.btn--cta:hover {
+    cursor: pointer;
+    background-color: #fff;
+    color: #D92868;
+}
+
+.form-switch {
+    color: rgba(0, 0, 0, 0.20);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0.48px;
+    text-align: center;
+}
+
+.form-switch a {
+    color: #D92868;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0.48px;
+}
+
+.form-switch a:hover {
+    text-decoration: underline;
+    opacity: 0.75;
+}
+
+.image__container {
+    position: absolute;
+    top: 170px;
 }
 
 .image__container img {
