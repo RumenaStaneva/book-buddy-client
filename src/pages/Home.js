@@ -4,9 +4,10 @@ import axios from "axios";
 import '../styles/Home.css'
 import SubmitButton from '../components/Button';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
+import { motion } from "framer-motion"
+import ShakeableTextField from '../components/AnimatedTextField';
 
 function Home() {
 
@@ -17,7 +18,7 @@ function Home() {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [lastSearchedTitle, setLastSearchedTitle] = useState(''); // New state variable for the last searched title
+    const [lastSearchedTitle, setLastSearchedTitle] = useState('');
 
     const PAGE_SIZE = 10;
 
@@ -27,21 +28,22 @@ function Home() {
         setError('');
     }
 
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Submit button clicked');
         if (title === '' || title === undefined || title === null) {
             setError('Please enter a title or author.');
         } else {
-            setLastSearchedTitle(title); // Save the last searched title
+            setLastSearchedTitle(title);
             setCurrentPage(1);
             setTotalPages(0);
-            fetchData(1); // Fetch data for the first page when submitting the search
+            fetchData(1);
             setTitle('');
         }
     }
 
-    // Use useCallback to memoize the fetchData function
     const fetchData = useCallback(async (page) => {
         setLoading(true);
 
@@ -84,12 +86,21 @@ function Home() {
         }
     };
 
+    const variants = {
+        open: { opacity: 1 },
+        closed: { opacity: 0 },
+    };
+
+    const searchbarVariants = {
+        big: { height: 500 },
+        small: { height: 250 }
+    }
+
 
     return (
         <>
             <Navigation />
             <>
-
                 <Box
                     component="form"
                     noValidate
@@ -100,20 +111,28 @@ function Home() {
                     className='form__container'
 
                 >
-                    <div className={`search__container ${books.length !== 0 ?
-                        'search__container--small'
+                    <motion.div animate={books.length !== 0 ? "small" : "big"}
+                        transition={{
+                            duration: 1,
+                            ease: [0, 0.71, 0.2, 1.01],
+                            type: "spring",
+                            stiffness: 700,
+                            damping: 30
 
-                        : null}`}>
-                        <TextField id="outlined-basic"
+                        }}
+                        layout
+                        variants={searchbarVariants} className={`search__container`}>
+                        <ShakeableTextField
+                            id="outlined-basic"
                             label="Title/author"
                             variant="outlined"
                             value={title}
                             onChange={handleChange}
-                            error={Boolean(error)}
-                            helperText={error}
-                            className='search__input' />
+                            error={error}
+                            className='search__input'
+                        />
                         <SubmitButton variant="contained" attributes={{ type: 'submit' }}>Search</SubmitButton>
-                    </div>
+                    </motion.div>
 
 
                 </Box>
@@ -131,10 +150,19 @@ function Home() {
 
 
                 {books.length !== 0 ?
-                    <div className="pagination__container">
+                    <motion.div
+                        animate={books.length !== 0 ? "open" : "closed"}
+                        variants={variants}
+                        transition={{
+                            duration: 0.8,
+                            delay: 0.5,
+                            ease: [0, 0.71, 0.2, 1.01]
+                        }}
+                        className="pagination__container"
+                    >
                         <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
                         <button onClick={nextPage} disabled={currentPage === totalPages}>Next</button>
-                    </div>
+                    </motion.div>
 
                     : null}
 
