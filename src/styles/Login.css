@@ -2,14 +2,18 @@ body {
     background-color: #fff;
 }
 
-main {
+.login-signup-page {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .wrapper {
-    height: 100vh
+    height: 100vh;
+    width: 50%;
+    padding: 50px;
+
 }
 
 .wrapper:first-of-type {
@@ -17,15 +21,18 @@ main {
 
 }
 
-.wrapper:nth-of-type(2) {
-    width: 50%;
+/* .wrapper:nth-of-type(2) {
     background-color: #EDC9BF;
-}
+} */
 
 .login-form__container {
-    max-width: 567px;
-    width: 100%;
-    margin-right: 150px;
+    /* max-width: 567px;
+    width: 100%; */
+    margin-right: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .login-form__container form {
@@ -34,6 +41,9 @@ main {
     background: #FFF;
     box-shadow: 0px 19px 40px 0px rgba(0, 0, 0, 0.05);
     padding: 85px 65px;
+    max-width: 570px;
+    width: 100%;
+
 }
 
 .login-form__container .form__message {
@@ -137,7 +147,15 @@ main {
     top: 170px;
 }
 
-.image__container img {
+.mask {
+    position: absolute;
+    right: 0;
+    height: 100vh;
+    width: 40%;
+    background-color: #EDC9BF;
+}
+
+/* .image__container img {
     max-width: 570px;
     width: 100%;
-}
+} */
