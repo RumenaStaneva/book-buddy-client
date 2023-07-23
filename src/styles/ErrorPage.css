@@ -1,0 +1,32 @@
+.error-page {
+    text-align: center;
+    padding: 15px 50px;
+}
+
+.error-page__title {
+    font-size: 48px;
+    color: #D92868;
+    margin-bottom: 20px;
+}
+
+.error-page__subtitle {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.error-page img {
+    margin-bottom: 20px;
+}
+
+.error-page__subtitle--second {
+    font-size: 16px;
+    max-width: 650px;
+    width: 100%;
+    margin: 0 auto 40px;
+}
+
+.error-page__link {
+    font-weight: 600;
+    color: #007BFF;
+    text-decoration: none;
+}
