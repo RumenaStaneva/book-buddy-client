@@ -1,0 +1,24 @@
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar__input {
+    padding: 8px;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.search-bar__error-message {
+    color: #ff0000;
+}
+
+.search-bar__result-item {
+    margin-bottom: 10px;
+    list-style-type: none;
+}
+
+.search-bar__result-title {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 20px;
+}
