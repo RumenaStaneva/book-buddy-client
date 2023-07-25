@@ -1,7 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import '../styles/NavBar.css'
+import { useLogout } from '../hooks/useLogout';
 
 const NavBar = () => {
+    const { logout } = useLogout();
+
+    const handleClick = () => {
+        logout();
+    }
     return (
         <div className='nav__container'>
             <nav className='nav' aria-label='Main'>
@@ -25,6 +31,9 @@ const NavBar = () => {
                     </li>
                     <li className='nav__item'>
                         <NavLink className='nav__link' to='/sign-up'>Sign up</NavLink>
+                    </li>
+                    <li className='nav__item'>
+                        <button onClick={handleClick} className='nav__link' to='/'>Logout</button>
                     </li>
                 </ul>
 

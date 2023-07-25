@@ -29,7 +29,7 @@ function Login() {
                 <div className='wrapper login-form__container'>
                     <form action="/login" onSubmit={handleSubmit} method='POST'>
                         <p className='form__message'>Welcome back!!!</p>
-                        <h1>Sign in</h1>
+                        <h1>Login</h1>
                         <div className='form__group'>
                             <label htmlFor="email">Email</label>
                             <input type="email" name="email" value={email} onChange={handleChangeEmail} />
