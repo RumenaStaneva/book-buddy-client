@@ -15,7 +15,7 @@ function Login() {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefaut();
+        e.preventDefault();
         setEmail('');
         setPassword('');
     }
@@ -27,12 +27,12 @@ function Login() {
                 <div className="mask"></div>
 
                 <div className='wrapper login-form__container'>
-                    <form action="/login" onSubmit={handleSubmit}>
+                    <form action="/login" onSubmit={handleSubmit} method='POST'>
                         <p className='form__message'>Welcome back!!!</p>
                         <h1>Sign in</h1>
                         <div className='form__group'>
                             <label htmlFor="email">Email</label>
-                            <input type="text" name="email" value={email} onChange={handleChangeEmail} />
+                            <input type="email" name="email" value={email} onChange={handleChangeEmail} />
                         </div>
                         <div className="form__group">
                             <label htmlFor="password">Password</label>

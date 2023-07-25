@@ -21,15 +21,8 @@ body {
 
 }
 
-/* .wrapper:nth-of-type(2) {
-    background-color: #EDC9BF;
-} */
-
 .login-form__container {
-    /* max-width: 567px;
-    width: 100%; */
     margin-right: 30px;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,6 +91,19 @@ body {
     font-weight: 300;
 }
 
+.form__error {
+    color: #D92868;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #D92868;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
 .btn--cta {
     border-radius: 25px;
     background-color: #D92868;
@@ -154,8 +160,3 @@ body {
     width: 40%;
     background-color: #EDC9BF;
 }
-
-/* .image__container img {
-    max-width: 570px;
-    width: 100%;
-} */
