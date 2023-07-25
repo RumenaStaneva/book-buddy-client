@@ -28,7 +28,6 @@ function SignUp() {
             setError(false);
             return;
         }
-        console.log(email, ' ', password);
         await signup(email, password);
         setIdenticalPasswords(true);
         // setEmail('');

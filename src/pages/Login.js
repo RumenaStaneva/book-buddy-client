@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import NavBar from '../components/NavBar'
+import { useLogin } from '../hooks/useLogin';
 import '../styles/Login.css'
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login, error, isLoading } = useLogin();
+
 
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
@@ -14,8 +17,10 @@ function Login() {
         setPassword(e.target.value)
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        await login(email, password);
         setEmail('');
         setPassword('');
     }
@@ -42,8 +47,9 @@ function Login() {
                             <a href="/forgotten-password">Forgot password?</a>
                         </p>
 
-                        <button type='submit' className='btn--cta'>Sign in</button>
+                        {error && <p className="form__error">{error}</p>}
 
+                        <button type='submit' className='btn--cta' disabled={isLoading}>Sign in</button>
                         <p className='form-switch'>I don’t have an account ? <a href="/sign-up">Sign up</a></p>
                     </form>
                 </div>
