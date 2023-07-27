@@ -1,8 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import '../styles/NavBar.css'
 import { useLogout } from '../hooks/useLogout';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const NavBar = () => {
+    const { user } = useAuthContext();
     const { logout } = useLogout();
 
     const handleClick = () => {
@@ -26,15 +28,24 @@ const NavBar = () => {
 
             <nav className='nav nav__login-register' aria-label='Login/Signup'>
                 <ul className='nav__list' role='menubar'>
-                    <li className='nav__item'>
-                        <NavLink className='nav__link' to='/login'>Login</NavLink>
-                    </li>
-                    <li className='nav__item'>
-                        <NavLink className='nav__link' to='/sign-up'>Sign up</NavLink>
-                    </li>
-                    <li className='nav__item'>
-                        <button onClick={handleClick} className='nav__link' to='/'>Logout</button>
-                    </li>
+                    {user && (
+                        <>
+                            <p className='nav__username'>Hi {user.email.split('@')[0]}</p>
+                            <li className='nav__item'>
+                                <button onClick={handleClick} className='nav__link' to='/'>Logout</button>
+                            </li>
+                        </>
+                    )}
+                    {!user ?
+                        <>
+                            <li className='nav__item'>
+                                <NavLink className='nav__link' to='/login'>Login</NavLink>
+                            </li>
+                            <li className='nav__item'>
+                                <NavLink className='nav__link' to='/sign-up'>Sign up</NavLink>
+                            </li>
+                        </>
+                        : null}
                 </ul>
 
             </nav>
