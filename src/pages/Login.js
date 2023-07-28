@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import NavBar from '../components/NavBar'
-import '../styles/Login.css'
+import { useLogin } from '../hooks/useLogin';
+import '../styles/AuthenticationForms.css'
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login, error, isLoading } = useLogin();
+
 
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
@@ -14,8 +17,10 @@ function Login() {
         setPassword(e.target.value)
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefaut();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        await login(email, password);
         setEmail('');
         setPassword('');
     }
@@ -27,12 +32,12 @@ function Login() {
                 <div className="mask"></div>
 
                 <div className='wrapper login-form__container'>
-                    <form action="/login" onSubmit={handleSubmit}>
+                    <form action="/login" onSubmit={handleSubmit} method='POST'>
                         <p className='form__message'>Welcome back!!!</p>
-                        <h1>Sign in</h1>
+                        <h1>Login</h1>
                         <div className='form__group'>
                             <label htmlFor="email">Email</label>
-                            <input type="text" name="email" value={email} onChange={handleChangeEmail} />
+                            <input type="email" name="email" value={email} onChange={handleChangeEmail} />
                         </div>
                         <div className="form__group">
                             <label htmlFor="password">Password</label>
@@ -42,8 +47,9 @@ function Login() {
                             <a href="/forgotten-password">Forgot password?</a>
                         </p>
 
-                        <button type='submit' className='btn--cta'>Sign in</button>
+                        {error && <p className="form__error">{error}</p>}
 
+                        <button type='submit' className='btn--cta' disabled={isLoading}>Sign in</button>
                         <p className='form-switch'>I don’t have an account ? <a href="/sign-up">Sign up</a></p>
                     </form>
                 </div>
