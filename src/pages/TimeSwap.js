@@ -11,7 +11,6 @@ const TimeSwap = () => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(seconds);
         setTotalSeconds(seconds);
         setSeconds(0);
     }
