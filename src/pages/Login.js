@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Navigate } from 'react';
 import NavBar from '../components/NavBar'
 import { useLogin } from '../hooks/useLogin';
 import '../styles/AuthenticationForms.css'
@@ -6,6 +6,7 @@ import '../styles/AuthenticationForms.css'
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { login, error, isLoading } = useLogin();
 
 
@@ -21,8 +22,13 @@ function Login() {
         e.preventDefault();
 
         await login(email, password);
+        setIsLoggedIn(true);
         setEmail('');
         setPassword('');
+    }
+
+    if (isLoggedIn) {
+        return <Navigate to="/" />;
     }
 
     return (

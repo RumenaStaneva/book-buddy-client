@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Navigate } from "react";
 import NavBar from "../components/NavBar";
 import { useSignup } from "../hooks/useSignUp";
 import '../styles/AuthenticationForms.css'
@@ -8,6 +8,7 @@ function SignUp() {
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [identicalPassords, setIdenticalPasswords] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { signup, error, isLoading, setError } = useSignup();
 
     const handleChangeEmail = (e) => {
@@ -30,9 +31,14 @@ function SignUp() {
         }
         await signup(email, password);
         setIdenticalPasswords(true);
-        // setEmail('');
-        // setPassword('');
-        // setRepeatPassword('');
+        setIsLoggedIn(true);
+        setEmail('');
+        setPassword('');
+        setRepeatPassword('');
+    }
+
+    if (isLoggedIn) {
+        return <Navigate to="/" />;
     }
 
     return (
