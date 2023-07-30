@@ -8,6 +8,7 @@ import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 function Home() {
 
@@ -15,10 +16,10 @@ function Home() {
     const [books, setBooks] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
+    const { user } = useAuthContext();
 
     const PAGE_SIZE = 10;
 
@@ -28,25 +29,26 @@ function Home() {
         setError('');
     }
 
-
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Submit button clicked');
+
         if (title === '' || title === undefined || title === null) {
             setError('Please enter a title or author.');
         } else {
-            setLastSearchedTitle(title);
-            setCurrentPage(1);
-            setTotalPages(0);
-            fetchData(1);
-            setTitle('');
+            if (user) {
+                setLastSearchedTitle(title);
+                setCurrentPage(1);
+                setTotalPages(0);
+                fetchData(1);
+                setTitle('');
+            } else {
+                setError('Please login/sign up to use the search');
+            }
         }
     }
 
     const fetchData = useCallback(async (page) => {
         setLoading(true);
-
         try {
             const url = 'http://localhost:5000/search-book-title';
             const response = await axios.post(
@@ -55,6 +57,7 @@ function Home() {
                 {
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
                     },
                 }
             );
@@ -66,13 +69,13 @@ function Home() {
         } finally {
             setLoading(false);
         }
-    }, [lastSearchedTitle]); // Include lastSearchedTitle as a dependency
+    }, [lastSearchedTitle, user]); // Include lastSearchedTitle and user as a dependency
 
     useEffect(() => {
-        if (lastSearchedTitle) {
+        if (lastSearchedTitle && user) {
             fetchData(currentPage);
         }
-    }, [currentPage, lastSearchedTitle, fetchData]); // Fetch books when currentPage or lastSearchedTitle or fetchData changes
+    }, [currentPage, lastSearchedTitle, fetchData, user]); // Fetch books when currentPage or lastSearchedTitle or fetchData changes or user
 
     const nextPage = () => {
         if (currentPage < totalPages) {
@@ -86,13 +89,13 @@ function Home() {
         }
     };
 
-    const variants = {
-        open: { opacity: 1 },
-        closed: { opacity: 0 },
-    };
-
     const searchbarVariants = {
-        big: { height: 500 },
+        big: { height: 700 },
+        small: { height: 400 }
+    }
+
+    const imageVariants = {
+        big: { height: 400 },
         small: { height: 250 }
     }
 
@@ -122,16 +125,33 @@ function Home() {
                         }}
                         layout
                         variants={searchbarVariants} className={`search__container`}>
-                        <ShakeableTextField
-                            id="outlined-basic"
-                            label="Title/author"
-                            variant="outlined"
-                            value={title}
-                            onChange={handleChange}
-                            error={error}
-                            className='search__input'
-                        />
-                        <SubmitButton variant="contained" attributes={{ type: 'submit' }}>Search</SubmitButton>
+                        <motion.img
+                            animate={books.length !== 0 ? "small" : "big"}
+                            transition={{
+                                duration: 1,
+                                ease: [0, 0.71, 0.2, 1.01],
+                                type: "spring",
+                                stiffness: 700,
+                                damping: 30
+
+                            }}
+                            layout
+                            variants={imageVariants}
+                            src={require('../images/logo-big.png')}
+                            alt="Logo" />
+                        <div>
+                            <ShakeableTextField
+                                id="outlined-basic"
+                                label="Title/author"
+                                variant="outlined"
+                                value={title}
+                                onChange={handleChange}
+                                error={error}
+                                className='search__input'
+                            />
+                            <SubmitButton variant="contained" attributes={{ type: 'submit' }}>Search</SubmitButton>
+
+                        </div>
                     </motion.div>
 
 
@@ -150,20 +170,10 @@ function Home() {
 
 
                 {books.length !== 0 ?
-                    <motion.div
-                        animate={books.length !== 0 ? "open" : "closed"}
-                        variants={variants}
-                        transition={{
-                            duration: 0.8,
-                            delay: 0.5,
-                            ease: [0, 0.71, 0.2, 1.01]
-                        }}
-                        className="pagination__container"
-                    >
+                    <div className="pagination__container">
                         <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
                         <button onClick={nextPage} disabled={currentPage === totalPages}>Next</button>
-                    </motion.div>
-
+                    </div>
                     : null}
 
             </ >
