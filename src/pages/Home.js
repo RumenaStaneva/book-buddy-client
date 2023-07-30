@@ -89,11 +89,6 @@ function Home() {
         }
     };
 
-    const variants = {
-        open: { opacity: 1 },
-        closed: { opacity: 0 },
-    };
-
     const searchbarVariants = {
         big: { height: 700 },
         small: { height: 400 }
@@ -175,20 +170,10 @@ function Home() {
 
 
                 {books.length !== 0 ?
-                    <motion.div
-                        animate={books.length !== 0 ? "open" : "closed"}
-                        variants={variants}
-                        transition={{
-                            duration: 0.8,
-                            delay: 0.5,
-                            ease: [0, 0.71, 0.2, 1.01]
-                        }}
-                        className="pagination__container"
-                    >
+                    <div className="pagination__container">
                         <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
                         <button onClick={nextPage} disabled={currentPage === totalPages}>Next</button>
-                    </motion.div>
-
+                    </div>
                     : null}
 
             </ >
