@@ -11,6 +11,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 function BookList({ books }) {
     const [bookDetails, setBookDetails] = useState({});
     const { user } = useAuthContext();
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleAddToShelf = async (book) => {
         const bookInfo = book.volumeInfo;
@@ -26,32 +27,52 @@ function BookList({ books }) {
             categories: bookInfo.categories,
             pageCount: bookInfo.pageCount
         });
+
     }
 
+    //TODO see why it is maiking so many requests and fix
     useEffect(() => {
-        fetch('http://localhost:5000/add-to-shelf', {
-            method: 'POST',
-            // We convert the React state to JSON and send it as the POST body
-            body: JSON.stringify(bookDetails),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.token}`
-            },
-        }).then(function (response) {
-            console.log(response)
-            return response.json();
-        });
-    }, [bookDetails, user])
+        try {
+            fetch('http://localhost:5000/add-to-shelf', {
+                method: 'POST',
+                // We convert the React state to JSON and send it as the POST body
+                body: JSON.stringify(bookDetails),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+            }).then(function (response) {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.error); // Throw the custom error message
+                    });
+                }
+                setErrorMessage('');
+                return response.json();
+            })
+                .then(function (data) {
+                    setErrorMessage('');
+                    console.log(data); // The successful response data
+                })
+                .catch(function (error) {
+                    setErrorMessage(error.message); // Set the error state with the error message
+                });
+        } catch (error) {
+            setErrorMessage(error.message);
+        }// Catch any errors thrown during fetch setup
+    }, [bookDetails, user, errorMessage]);
+
     return (
         <div className='books__container'>
+            {errorMessage.length > 0 ? <p>{errorMessage}</p> : null}
             {
                 books.map(book => (
                     <div key={book.id}>
+
                         <Card sx={{ maxWidth: 345 }} className='book'>
                             <CardActionArea
                                 className='book__button'
                                 component="a"
-                                onClick={() => console.log("CardActionArea clicked")}
                             >
                                 <CardMedia
                                     component="img"
@@ -80,7 +101,6 @@ function BookList({ books }) {
                                     onClick={event => {
                                         event.stopPropagation();
                                         event.preventDefault();
-                                        console.log("Button clicked");
                                         handleAddToShelf(book);
                                     }}
                                 >Add to shelf</button>
