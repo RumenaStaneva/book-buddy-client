@@ -21,7 +21,7 @@ function Home() {
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
     const { user } = useAuthContext();
 
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 20;
 
     const handleChange = (e) => {
         const title = e.target.value;
@@ -62,8 +62,25 @@ function Home() {
                 }
             );
 
-            setBooks(response.data.items);
-            setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
+            // Filter the received books
+            const filteredBooks = response.data.books.filter(book => {
+                const { volumeInfo } = book;
+                return (
+                    volumeInfo.title &&
+                    volumeInfo.authors &&
+                    volumeInfo.description &&
+                    volumeInfo.publisher &&
+                    volumeInfo.categories &&
+                    volumeInfo.pageCount
+                );
+            });
+
+            setBooks(filteredBooks);
+
+            //TODO make it to show 20 results per page
+            const totalItems = response.data.totalItems;
+            const totalPages = Math.ceil(totalItems / PAGE_SIZE);
+            setTotalPages(totalPages || 0);
         } catch (error) {
             console.error('Error fetching books:', error);
         } finally {
@@ -114,7 +131,7 @@ function Home() {
                     className='form__container'
 
                 >
-                    <motion.div animate={books.length !== 0 ? "small" : "big"}
+                    <motion.div animate={books?.length !== 0 ? "small" : "big"}
                         transition={{
                             duration: 1,
                             ease: [0, 0.71, 0.2, 1.01],
@@ -126,7 +143,7 @@ function Home() {
                         layout
                         variants={searchbarVariants} className={`search__container`}>
                         <motion.img
-                            animate={books.length !== 0 ? "small" : "big"}
+                            animate={books?.length !== 0 ? "small" : "big"}
                             transition={{
                                 duration: 1,
                                 ease: [0, 0.71, 0.2, 1.01],
@@ -163,13 +180,13 @@ function Home() {
                     : null
                 }
 
-                {books.length !== 0 ?
+                {books?.length !== 0 ?
                     <BookList books={books} />
 
                     : null}
 
 
-                {books.length !== 0 ?
+                {books?.length !== 0 ?
                     <div className="pagination__container">
                         <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
                         <button onClick={nextPage} disabled={currentPage === totalPages}>Next</button>
