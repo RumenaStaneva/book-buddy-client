@@ -6,67 +6,85 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import '../styles/books-list.css'
 import { useAuthContext } from '../hooks/useAuthContext';
+import Modal from '../components/Modal'
+import BookCategories from '../constants/bookCategories'
 
 
 function BookList({ books }) {
-    const { user } = useAuthContext();
-    const [errorMessage, setErrorMessage] = useState('');
+    // const [errorMessage, setErrorMessage] = useState('');
     const [bookToAdd, setBookToAdd] = useState(null);
-    //const [bookDetails, setBookDetails] = useState({});
+    const [isOpen, setIsOpen] = useState(false);
+    // const [bookDetails, setBookDetails] = useState({});
 
-    const handleAddToShelf = async (book) => {
-        setBookToAdd(book); // Set the book details to be added to the shelf
+    const handleAddToShelf = (book) => {
+
+        setBookToAdd({
+            bookApiId: book.id,
+            title: book.volumeInfo.title,
+            authors: book.volumeInfo.authors,
+            description: book.volumeInfo.description,
+            publisher: book.volumeInfo.publisher,
+            thumbnail: book.volumeInfo.imageLinks.thumbnail,
+            categories: book.volumeInfo.categories,
+            pageCount: book.volumeInfo.pageCount
+        })
     }
 
-    useEffect(() => {
-        try {
-            if (bookToAdd) {
-                fetch('http://localhost:5000/add-to-shelf', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        userEmail: user.email,
-                        bookApiId: bookToAdd.id,
-                        title: bookToAdd.volumeInfo.title,
-                        authors: bookToAdd.volumeInfo.authors,
-                        description: bookToAdd.volumeInfo.description,
-                        publisher: bookToAdd.volumeInfo.publisher,
-                        thumbnail: bookToAdd.volumeInfo.imageLinks ? bookToAdd.volumeInfo.imageLinks.thumbnail : null,
-                        categories: bookToAdd.volumeInfo.categories,
-                        pageCount: bookToAdd.volumeInfo.pageCount
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}`
-                    },
-                })
-                    .then(function (response) {
-                        if (!response.ok) {
-                            return response.json().then(data => {
-                                throw new Error(data.error);
-                            });
-                        }
-                        setErrorMessage('');
-                        return response.json();
-                    })
-                    .then(function (data) {
-                        setErrorMessage('');
-                        console.log(data);
-                    })
-                    .catch(function (error) {
-                        setErrorMessage(error.message);
-                    });
-            }
-        } catch (error) {
-            setErrorMessage(error.message);
-        }
-        setBookToAdd(null); // Reset the book to add after the request is made
-    }, [bookToAdd, user]);
+    // useEffect(() => {
+    //     try {
+    //         if (bookToAdd) {
+    //             fetch('http://localhost:5000/add-to-shelf', {
+    //                 method: 'POST',
+    //                 body: JSON.stringify({
+    //                     userEmail: user.email,
+    //                     bookApiId: bookToAdd.id,
+    //                     title: bookToAdd.volumeInfo.title,
+    //                     authors: bookToAdd.volumeInfo.authors,
+    //                     description: bookToAdd.volumeInfo.description,
+    //                     publisher: bookToAdd.volumeInfo.publisher,
+    //                     thumbnail: bookToAdd.volumeInfo.imageLinks ? bookToAdd.volumeInfo.imageLinks.thumbnail : null,
+    //                     categories: bookToAdd.volumeInfo.categories,
+    //                     pageCount: bookToAdd.volumeInfo.pageCount
+    //                 }),
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'Authorization': `Bearer ${user.token}`
+    //                 },
+    //             })
+    //                 .then(function (response) {
+    //                     if (!response.ok) {
+    //                         return response.json().then(data => {
+    //                             throw new Error(data.error);
+    //                         });
+    //                     }
+    //                     setErrorMessage('');
+    //                     return response.json();
+    //                 })
+    //                 .then(function (data) {
+    //                     setErrorMessage('');
+    //                     console.log(data);
+    //                 })
+    //                 .catch(function (error) {
+    //                     setErrorMessage(error.message);
+    //                 });
+    //         }
+    //     } catch (error) {
+    //         setErrorMessage(error.message);
+    //     }
+    //     setBookToAdd(null); // Reset the book to add after the request is made
+    // }, [bookToAdd, user]);
+
+    // console.log(bookDetails);
+    // console.log(bookToAdd);
 
     // Update the book details to be displayed when a book is added to the shelf
+
+
     // useEffect(() => {
     //     if (bookToAdd) {
     //         const bookInfo = bookToAdd.volumeInfo;
     //         setBookDetails({
+    //             bookApiId: bookToAdd.id,
     //             title: bookInfo.title,
     //             authors: bookInfo.authors,
     //             description: bookInfo.description,
@@ -80,11 +98,13 @@ function BookList({ books }) {
 
     return (
         <>
-            {errorMessage.length > 0 ?
+            {isOpen && <Modal setIsOpen={setIsOpen} bookDetails={bookToAdd} />}
+
+            {/* {errorMessage.length > 0 ?
                 <div className='error-message__container'>
                     <p>{errorMessage}</p>
                 </div>
-                : null}
+                : null} */}
             <div className='books__container'>
                 {
                     books.map(book => (
@@ -122,6 +142,7 @@ function BookList({ books }) {
                                         onClick={event => {
                                             event.stopPropagation();
                                             event.preventDefault();
+                                            setIsOpen(true)
                                             handleAddToShelf(book);
                                         }}
                                     >Add to shelf</button>

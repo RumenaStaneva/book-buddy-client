@@ -66,6 +66,8 @@ function Home() {
 
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
+            console.log('2');
+            console.log(lastSearchedTitle);
             console.error('Error fetching books:', error);
         } finally {
             setLoading(false);
