@@ -43,13 +43,12 @@ const Modal = ({ setIsOpen, bookDetails }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('1 ', bookDetails);
-        const { id, title,
+        const { bookApiId, title,
             authors,
             publisher
         } = bookDetails;
         setBookToAdd({
-            bookApiId: id,
+            bookApiId: bookApiId,
             userEmail: user.email,
             title: title,
             authors: authors,
@@ -64,9 +63,9 @@ const Modal = ({ setIsOpen, bookDetails }) => {
         });
     }
 
-    useEffect(() => {
-        console.log(bookToAdd)
-    }, [bookToAdd])
+    // useEffect(() => {
+    //     console.log(bookToAdd)
+    // }, [bookToAdd])
 
     useEffect(() => {
         try {
@@ -82,8 +81,6 @@ const Modal = ({ setIsOpen, bookDetails }) => {
                     .then(function (response) {
                         if (!response.ok) {
                             return response.json().then(data => {
-                                console.log('1');
-                                console.log(data);
                                 throw new Error(data.error);
                             });
                         }
@@ -92,11 +89,8 @@ const Modal = ({ setIsOpen, bookDetails }) => {
                     })
                     .then(function (data) {
                         setErrorMessage('');
-                        console.log(data);
                     })
                     .catch(function (error) {
-                        console.log('2');
-
                         setErrorMessage(error.message);
                     });
             }

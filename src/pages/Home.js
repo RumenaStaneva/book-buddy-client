@@ -39,7 +39,7 @@ function Home() {
                 setLastSearchedTitle(title);
                 setCurrentPage(1);
                 setTotalPages(0);
-                fetchData(1);
+                fetchData(1, title);
                 setTitle('');
             } else {
                 setError('Please login/sign up to use the search');
@@ -47,13 +47,13 @@ function Home() {
         }
     }
 
-    const fetchData = useCallback(async (page) => {
+    const fetchData = useCallback(async (page, title) => {
         setLoading(true);
         try {
             const url = 'http://localhost:5000/search-book-title';
             const response = await axios.post(
                 url,
-                { title: lastSearchedTitle, startIndex: (page - 1) * PAGE_SIZE, maxResults: PAGE_SIZE },
+                { title: title, startIndex: (page - 1) * PAGE_SIZE, maxResults: PAGE_SIZE },
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -66,17 +66,15 @@ function Home() {
 
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
-            console.log('2');
-            console.log(lastSearchedTitle);
             console.error('Error fetching books:', error);
         } finally {
             setLoading(false);
         }
-    }, [lastSearchedTitle, user]); // Include lastSearchedTitle and user as a dependency
+    }, [user]); // Include user as a dependency
 
     useEffect(() => {
         if (lastSearchedTitle && user) {
-            fetchData(currentPage);
+            fetchData(currentPage, lastSearchedTitle);
         }
     }, [currentPage, lastSearchedTitle, fetchData, user]); // Fetch books when currentPage or lastSearchedTitle or fetchData changes or user
 
