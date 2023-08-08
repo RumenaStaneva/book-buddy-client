@@ -20,7 +20,6 @@ function Home() {
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
     const { user } = useAuthContext();
-
     const PAGE_SIZE = 10;
 
     const handleChange = (e) => {

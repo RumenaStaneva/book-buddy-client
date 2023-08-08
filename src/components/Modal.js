@@ -15,6 +15,7 @@ const Modal = ({ setIsOpen, bookDetails }) => {
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
+    const [file, setFile] = useState();
     const { user } = useAuthContext();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
 
@@ -54,7 +55,7 @@ const Modal = ({ setIsOpen, bookDetails }) => {
             authors: authors,
             description: updatedDescription,
             publisher: publisher,
-            thumbnail: updatedThumbnail,
+            thumbnail: file !== undefined ? file : updatedThumbnail,
             category: category,
             pageCount: updatedPageCount,
             notes: [],
@@ -63,18 +64,20 @@ const Modal = ({ setIsOpen, bookDetails }) => {
         });
     }
 
-    // useEffect(() => {
-    //     console.log(bookToAdd)
-    // }, [bookToAdd])
+    // Create a new FormData object
+    const formData = new FormData();
+
+    // Append fields to the FormData object
+    formData.append('thumbnail', file !== undefined ? file : updatedThumbnail);
+    formData.append('bookToAdd', JSON.stringify(bookToAdd));
 
     useEffect(() => {
         try {
             if (bookToAdd) {
                 fetch('http://localhost:5000/add-to-shelf', {
                     method: 'POST',
-                    body: JSON.stringify(bookToAdd),
+                    body: formData,
                     headers: {
-                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${user.token}`
                     },
                 })
@@ -84,6 +87,7 @@ const Modal = ({ setIsOpen, bookDetails }) => {
                                 throw new Error(data.error);
                             });
                         }
+                        // setIsOpen(false);
                         setErrorMessage('');
                         return response.json();
                     })
@@ -101,7 +105,6 @@ const Modal = ({ setIsOpen, bookDetails }) => {
     }, [bookToAdd, user]);
 
 
-
     return (
         <>
             <div className="darkBG" onClick={() => setIsOpen(false)} />
@@ -113,35 +116,48 @@ const Modal = ({ setIsOpen, bookDetails }) => {
                     <button className="closeBtn" onClick={() => setIsOpen(false)}>
                         <IoIosClose />
                     </button>
-                    <div className="modalContent">
-                        {errorMessage.length > 0 ?
-                            <div className='error-message__container'>
-                                <p>{errorMessage}</p>
-                            </div>
-                            : null}
-                        <form onSubmit={handleSubmit} className="add-book__form">
-                            <label htmlFor="description">Description</label>
-                            <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>
-                            <label htmlFor="thumbnail">Thumbnail</label>
-                            <input type="text" name="thumbnail" value={updatedThumbnail} onChange={handleThumbnailChange} />
-                            <label htmlFor="pageCount">Book Pages</label>
-                            <input type="text" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
-                            <Dropdown options={shelfOptions} onSelect={handleOptionSelect} />
-                            <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} />
-                            <button type="submit" onClick={handleSubmit}>Add</button>
-                        </form>
-                        <div className="modalActions">
-                            <div className="actionsContainer">
-                                <button type="submit" className="deleteBtn" onClick={() => setIsOpen(false)}>
+                    <div className="modal-content__container">
+                        <div className="modalContent">
+                            {errorMessage.length > 0 ?
+                                <div className='error-message__container'>
+                                    <p>{errorMessage}</p>
+                                </div>
+                                : null}
+                            <form onSubmit={handleSubmit} className="add-book__form">
+                                <p>{bookDetails.title}</p>
+                                <p>written by: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}</p>
+                                <label htmlFor="thumbnail">Thumbnail</label>
+                                <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={300} />
+                                {/* <input type="text" name="thumbnail" value={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} onChange={handleThumbnailChange} /> */}
+                                <label htmlFor="uploadImageThumbnail">Change book cover</label>
+                                <input
+                                    filename={file}
+                                    onChange={e => setFile(e.target.files[0])}
+                                    type="file"
+                                    name="uploadImageThumbnail"
+                                    accept="image/*"
+                                ></input>
+                                <label htmlFor="description">Description</label>
+                                <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>
+                                <label htmlFor="pageCount">Book Pages</label>
+                                <input type="text" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
+                                <Dropdown options={shelfOptions} onSelect={handleOptionSelect} />
+                                <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} />
+                                {/* <button type="submit" onClick={handleSubmit}>Add</button> */}
+                                <button type="submit" className="deleteBtn" onClick={handleSubmit}>
                                     Add Book
                                 </button>
-                                <button
-                                    className="cancelBtn"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
+                                {/* <div className="modalActions">
+                                    <div className="actionsContainer">
+                                        <button
+                                            className="cancelBtn"
+                                            onClick={() => setIsOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div> */}
+                            </form>
                         </div>
                     </div>
                 </div>

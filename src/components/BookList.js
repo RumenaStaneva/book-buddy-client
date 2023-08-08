@@ -5,26 +5,30 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import '../styles/books-list.css'
+import { Link } from 'react-router-dom';
 // import { useAuthContext } from '../hooks/useAuthContext';
 import Modal from '../components/Modal'
-// import BookCategories from '../constants/bookCategories'
 
 
 function BookList({ books }) {
-    // const [errorMessage, setErrorMessage] = useState('');
     const [bookToAdd, setBookToAdd] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     // const [bookDetails, setBookDetails] = useState({});
 
     const handleAddToShelf = (book) => {
-
+        let thumbnail = book.volumeInfo.imageLinks;
+        if (!thumbnail) {
+            thumbnail = null;
+        } else {
+            thumbnail = thumbnail.thumbnail;
+        }
         setBookToAdd({
             bookApiId: book.id,
             title: book.volumeInfo.title,
             authors: book.volumeInfo.authors,
             description: book.volumeInfo.description,
             publisher: book.volumeInfo.publisher,
-            thumbnail: book.volumeInfo.imageLinks.thumbnail,
+            thumbnail: thumbnail,
             categories: book.volumeInfo.categories,
             pageCount: book.volumeInfo.pageCount
         })
@@ -113,7 +117,13 @@ function BookList({ books }) {
                             <Card sx={{ maxWidth: 345 }} className='book'>
                                 <CardActionArea
                                     className='book__button'
-                                    component="a"
+                                    component='button'
+                                    onClick={event => {
+                                        event.stopPropagation();
+                                        event.preventDefault();
+                                        setIsOpen(true)
+                                        handleAddToShelf(book);
+                                    }}
                                 >
                                     <CardMedia
                                         component="img"
@@ -136,16 +146,6 @@ function BookList({ books }) {
                                         </Typography>
                                         <p>{book.volumeInfo.pageCount}</p>
                                     </CardContent>
-                                    <button
-                                        className='btn__add'
-                                        onMouseDown={event => event.stopPropagation()}
-                                        onClick={event => {
-                                            event.stopPropagation();
-                                            event.preventDefault();
-                                            setIsOpen(true)
-                                            handleAddToShelf(book);
-                                        }}
-                                    >Add to shelf</button>
                                 </CardActionArea>
                             </Card>
                         </div>
