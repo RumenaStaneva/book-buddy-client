@@ -64,20 +64,23 @@ const Modal = ({ setIsOpen, bookDetails }) => {
         });
     }
 
-    // Create a new FormData object
-    const formData = new FormData();
-
-    // Append fields to the FormData object
-    formData.append('thumbnail', file !== undefined ? file : updatedThumbnail);
-    formData.append('bookToAdd', JSON.stringify(bookToAdd));
 
     useEffect(() => {
         try {
             if (bookToAdd) {
+                // Create a new FormData object
+                // const formData = new FormData();
+
+                // Append fields to the FormData object
+                // formData.append('thumbnail', file !== undefined ? file : updatedThumbnail);
+                // formData.append('bookToAdd', JSON.stringify(bookToAdd));
+                // console.log(formData);
+
                 fetch('http://localhost:5000/add-to-shelf', {
                     method: 'POST',
-                    body: formData,
+                    body: JSON.stringify(bookToAdd),
                     headers: {
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${user.token}`
                     },
                 })
@@ -87,8 +90,8 @@ const Modal = ({ setIsOpen, bookDetails }) => {
                                 throw new Error(data.error);
                             });
                         }
-                        // setIsOpen(false);
                         setErrorMessage('');
+                        setIsOpen(false);
                         return response.json();
                     })
                     .then(function (data) {
@@ -111,7 +114,8 @@ const Modal = ({ setIsOpen, bookDetails }) => {
             <div className="centered">
                 <div className="modal">
                     <div className="modalHeader">
-                        <h5 className="heading">Dialog</h5>
+                        <h3 className="heading">{bookDetails.title}</h3>
+                        <p>written by: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}</p>
                     </div>
                     <button className="closeBtn" onClick={() => setIsOpen(false)}>
                         <IoIosClose />
@@ -124,27 +128,35 @@ const Modal = ({ setIsOpen, bookDetails }) => {
                                 </div>
                                 : null}
                             <form onSubmit={handleSubmit} className="add-book__form">
-                                <p>{bookDetails.title}</p>
-                                <p>written by: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}</p>
-                                <label htmlFor="thumbnail">Thumbnail</label>
-                                <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={300} />
+                                <div className="modal__section">
+                                    <label htmlFor="thumbnail">Thumbnail</label>
+                                    <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={250} />
+                                </div>
                                 {/* <input type="text" name="thumbnail" value={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} onChange={handleThumbnailChange} /> */}
-                                <label htmlFor="uploadImageThumbnail">Change book cover</label>
+                                {/* <label htmlFor="uploadImageThumbnail">Change book cover</label>
                                 <input
                                     filename={file}
                                     onChange={e => setFile(e.target.files[0])}
                                     type="file"
                                     name="uploadImageThumbnail"
                                     accept="image/*"
-                                ></input>
-                                <label htmlFor="description">Description</label>
-                                <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>
-                                <label htmlFor="pageCount">Book Pages</label>
-                                <input type="text" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
-                                <Dropdown options={shelfOptions} onSelect={handleOptionSelect} />
-                                <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} />
+                                ></input> */}
+                                <div className="modal__section">
+                                    <label htmlFor="description">Description</label>
+                                    <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>
+                                </div>
+                                <div className="modal__section">
+                                    <label htmlFor="pageCount">Book Pages</label>
+                                    <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
+                                </div>
+                                <div className="modal__section">
+                                    <Dropdown options={shelfOptions} onSelect={handleOptionSelect} />
+                                </div>
+                                <div className="modal__section">
+                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} />
+                                </div>
                                 {/* <button type="submit" onClick={handleSubmit}>Add</button> */}
-                                <button type="submit" className="deleteBtn" onClick={handleSubmit}>
+                                <button type="submit" className="cta-button" onClick={handleSubmit}>
                                     Add Book
                                 </button>
                                 {/* <div className="modalActions">

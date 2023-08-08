@@ -37,16 +37,17 @@
 }
 
 .modal-content__container {
-    max-height: 100%;
+    max-height: 85%;
     overflow: auto;
 }
 
 .modalHeader {
-    height: 50px;
-    background: white;
-    overflow: hidden;
+    /* height: 50px; */
+    text-align: center;
+    /* overflow: hidden; */
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
+    margin-bottom: 15px;
 }
 
 .heading {
@@ -59,7 +60,7 @@
 }
 
 .modalContent {
-    padding: 40px 0;
+    padding: 0 40px 0;
     font-size: 14px;
     color: #2c3e50;
     text-align: center;
@@ -102,7 +103,7 @@
     transform: translate(-4px, 4px);
 }
 
-.deleteBtn {
+.cta-button {
     margin-top: 10px;
     cursor: pointer;
     font-weight: 500;
@@ -115,7 +116,7 @@
     transition: all 0.25s ease;
 }
 
-.deleteBtn:hover {
+.cta-button:hover {
     box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
     transform: translateY(-5px);
     background: #ff3e4e;
@@ -146,8 +147,16 @@
     align-items: center;
 }
 
-.add-book__form textarea {
-    width: 80%;
+.modal__section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.add-book__form .modal__section textarea {
+    width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -155,7 +164,7 @@
     margin-bottom: 10px;
 }
 
-.add-book__form select {
+.add-book__form .modal__section select {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;

@@ -40,12 +40,6 @@
     text-overflow: ellipsis;
 }
 
-.btn__add {
-    background-color: aquamarine;
-    width: auto;
-    height: 30px;
-}
-
 .error-message__container {
     color: #D92868;
     font-size: 14px;
@@ -53,6 +47,19 @@
     text-align: center;
     font-weight: 600;
     border: 1px solid #D92868;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.success-message__container {
+    color: #50C878;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #50C878;
     background-color: #fff;
     padding: 10px;
     margin-bottom: 20px;

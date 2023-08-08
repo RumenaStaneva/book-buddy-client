@@ -5,7 +5,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import '../styles/books-list.css'
-import { Link } from 'react-router-dom';
 // import { useAuthContext } from '../hooks/useAuthContext';
 import Modal from '../components/Modal'
 
@@ -14,6 +13,8 @@ function BookList({ books }) {
     const [bookToAdd, setBookToAdd] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     // const [bookDetails, setBookDetails] = useState({});
+    const [successMessage, setSuccessMessage] = useState('');
+
 
     const handleAddToShelf = (book) => {
         let thumbnail = book.volumeInfo.imageLinks;
@@ -32,6 +33,9 @@ function BookList({ books }) {
             categories: book.volumeInfo.categories,
             pageCount: book.volumeInfo.pageCount
         })
+
+        setSuccessMessage(`"${book.volumeInfo.title}" added to your shelf successfully.`);
+        setIsOpen(true);
     }
 
     // useEffect(() => {
@@ -103,12 +107,11 @@ function BookList({ books }) {
     return (
         <>
             {isOpen && <Modal setIsOpen={setIsOpen} bookDetails={bookToAdd} />}
-
-            {/* {errorMessage.length > 0 ?
-                <div className='error-message__container'>
-                    <p>{errorMessage}</p>
+            {successMessage.length > 0 ?
+                <div className='success-message__container'>
+                    <p>{successMessage}</p>
                 </div>
-                : null} */}
+                : null}
             <div className='books__container'>
                 {
                     books.map(book => (
@@ -122,6 +125,7 @@ function BookList({ books }) {
                                         event.stopPropagation();
                                         event.preventDefault();
                                         setIsOpen(true)
+                                        setSuccessMessage('');
                                         handleAddToShelf(book);
                                     }}
                                 >
