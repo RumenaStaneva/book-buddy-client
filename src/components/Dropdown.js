@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Dropdown.css'
 
 const Dropdown = ({ options, onSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
+    const dropdownRef = useRef(null);
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
@@ -17,8 +18,23 @@ const Dropdown = ({ options, onSelect }) => {
         setIsOpen((prevState) => !prevState);
     };
 
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
+
     return (
-        <div className="dropdown">
+        <div className={`dropdown ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
             <div className="selected-option" onClick={handleToggleDropdown}>{selectedOption || 'Select an option'}</div>
             {isOpen ?
                 <ul className="dropdown-options">
