@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import '../styles/NavBar.css'
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -6,9 +6,11 @@ import { useAuthContext } from '../hooks/useAuthContext';
 const NavBar = () => {
     const { user } = useAuthContext();
     const { logout } = useLogout();
+    const navigate = useNavigate();
 
     const handleClick = () => {
         logout();
+        navigate('/');
     }
     return (
         <div className='nav__container'>
@@ -32,7 +34,7 @@ const NavBar = () => {
                         <>
                             <p className='nav__username'>Hi <a href='/users/profile'>{user.email.split('@')[0]}</a></p>
                             <li className='nav__item'>
-                                <button onClick={handleClick} className='nav__link' to='/'>Logout</button>
+                                <NavLink onClick={handleClick} className='nav__link' to='/'>Logout</NavLink>
                             </li>
                         </>
                     )}
