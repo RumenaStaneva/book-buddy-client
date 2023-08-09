@@ -41,7 +41,7 @@ function BookList({ books }) {
     // useEffect(() => {
     //     try {
     //         if (bookToAdd) {
-    //             fetch('http://localhost:5000/add-to-shelf', {
+    //             fetch('http://localhost:5000/books/add-to-shelf', {
     //                 method: 'POST',
     //                 body: JSON.stringify({
     //                     userEmail: user.email,

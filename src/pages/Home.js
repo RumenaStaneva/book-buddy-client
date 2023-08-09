@@ -49,7 +49,7 @@ function Home() {
     const fetchData = useCallback(async (page, title) => {
         setLoading(true);
         try {
-            const url = 'http://localhost:5000/search-book-title';
+            const url = `${process.env.REACT_APP_LOCAL_HOST}/books/search-book-title`;
             const response = await axios.post(
                 url,
                 { title: title, startIndex: (page - 1) * PAGE_SIZE, maxResults: PAGE_SIZE },

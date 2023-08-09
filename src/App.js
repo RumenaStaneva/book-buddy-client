@@ -3,7 +3,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import TimeSwap from './pages/TimeSwap';
 import Login from './pages/Login';
-import SignUp from './pages/SignUp';
+import SignUp from './pages/Signup';
 import PasswordReset from './pages/PasswordReset';
 import ErrorPage from './pages/ErrorPage';
 import './styles/App.css'

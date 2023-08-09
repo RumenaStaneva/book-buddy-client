@@ -38,7 +38,7 @@ function Login() {
                 <div className="mask"></div>
 
                 <div className='wrapper login-form__container'>
-                    <form action="/login" onSubmit={handleSubmit} method='POST'>
+                    <form action="/users/login" onSubmit={handleSubmit} method='POST'>
                         <p className='form__message'>Welcome back!!!</p>
                         <h1>Login</h1>
                         <div className='form__group'>

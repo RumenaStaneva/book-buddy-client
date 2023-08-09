@@ -50,7 +50,7 @@ function SignUp() {
 
                 <div className='wrapper login-form__container'>
                     <form
-                        //  action="/sign-up" method="POST" 
+                        action="/users/sign-up" method="POST"
                         onSubmit={handleSubmit}>
                         <p className='form__message'>Hi there!!!</p>
                         <h1>Sign Up</h1>

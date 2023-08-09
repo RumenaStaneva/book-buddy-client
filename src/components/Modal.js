@@ -18,6 +18,7 @@ const Modal = ({ setIsOpen, bookDetails }) => {
     const [file, setFile] = useState();
     const { user } = useAuthContext();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
+    const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
 
     const handleDescriptionChange = (e) => {
         setUpdatedDescription(e.target.value);
@@ -76,7 +77,7 @@ const Modal = ({ setIsOpen, bookDetails }) => {
                 // formData.append('bookToAdd', JSON.stringify(bookToAdd));
                 // console.log(formData);
 
-                fetch('http://localhost:5000/add-to-shelf', {
+                fetch(`${LOCAL_HOST}/books/add-to-shelf`, {
                     method: 'POST',
                     body: JSON.stringify(bookToAdd),
                     headers: {
