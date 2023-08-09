@@ -56,7 +56,7 @@ function Login() {
                         {error && <p className="form__error">{error}</p>}
 
                         <button type='submit' className='btn--cta' disabled={isLoading}>Sign in</button>
-                        <p className='form-switch'>I don’t have an account ? <a href="/sign-up">Sign up</a></p>
+                        <p className='form-switch'>I don’t have an account ? <a href="/users/sign-up">Sign up</a></p>
                     </form>
                 </div>
                 <div className='wrapper'>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Spinner from 'react-spinner-material';
+import NavBar from '../components/NavBar';
 
 
 function Profile() {
@@ -64,7 +65,7 @@ function Profile() {
 
     return (
         <>
-
+            <NavBar />
             {isLoading ? (
                 <div className='spinner__container'>
                     <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
