@@ -33,10 +33,12 @@ function BookList({ books }) {
             categories: book.volumeInfo.categories,
             pageCount: book.volumeInfo.pageCount
         })
-
-        setSuccessMessage(`"${book.volumeInfo.title}" added to your shelf successfully.`);
         setIsOpen(true);
     }
+
+    const handleBookAdded = (title) => {
+        setSuccessMessage(`${title} added successfully`);
+    };
 
     // useEffect(() => {
     //     try {
@@ -106,7 +108,7 @@ function BookList({ books }) {
 
     return (
         <>
-            {isOpen && <Modal setIsOpen={setIsOpen} bookDetails={bookToAdd} />}
+            {isOpen && <Modal setIsOpen={setIsOpen} bookDetails={bookToAdd} onBookAdded={handleBookAdded} />}
             {successMessage.length > 0 ?
                 <div className='success-message__container'>
                     <p>{successMessage}</p>

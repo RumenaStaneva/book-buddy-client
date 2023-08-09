@@ -7,7 +7,7 @@ import BookCategories from "../constants/bookCategories";
 import { IoIosClose } from 'react-icons/io'
 
 
-const Modal = ({ setIsOpen, bookDetails }) => {
+const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     const [shelf, setShelf] = useState(0);
     const [category, setCategory] = useState(0);
     const [bookToAdd, setBookToAdd] = useState(null);
@@ -93,6 +93,7 @@ const Modal = ({ setIsOpen, bookDetails }) => {
                         }
                         setErrorMessage('');
                         setIsOpen(false);
+                        onBookAdded(bookToAdd.title);
                         return response.json();
                     })
                     .then(function (data) {
