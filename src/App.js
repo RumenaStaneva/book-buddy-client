@@ -3,13 +3,14 @@ import Home from './pages/Home';
 import About from './pages/About';
 import TimeSwap from './pages/TimeSwap';
 import Login from './pages/Login';
-import SignUp from './pages/Signup';
+import SignUp from './pages/SignUp';
 import PasswordReset from './pages/PasswordReset';
 import ErrorPage from './pages/ErrorPage';
 import './styles/App.css'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 import BookDetailsPage from './pages/BookDetailsPage';
+import Profile from './pages/Profile';
 
 function App() {
 
@@ -21,10 +22,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/time-swap" element={user ? <TimeSwap /> : <Navigate to="/login" />} />
-        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-        <Route path="/sign-up" element={!user ? <SignUp /> : <Navigate to="/" />} />
-        <Route path="/forgotten-password" element={<PasswordReset />} />
-        <Route path="/books/:id" element={<BookDetailsPage />} />
+        <Route path="/users/login" element={!user ? <Login /> : <Navigate to="/" />} />
+        <Route path="/users/sign-up" element={!user ? <SignUp /> : <Navigate to="/" />} />
+        <Route path="/users/forgotten-password" element={<PasswordReset />} />
+        <Route path="/users/forgotten-password" element={<PasswordReset />} />
+        <Route path="/users/profile" element={<Profile />} />
 
         <Route path='*' element={<ErrorPage />} />
       </Routes>

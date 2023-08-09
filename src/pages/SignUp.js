@@ -74,7 +74,7 @@ function SignUp() {
 
                         <button type='submit' className='btn--cta' disabled={isLoading}>Sign up</button>
 
-                        <p className='form-switch'>Already have an account ? <a href="/login">Login</a></p>
+                        <p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
                     </form>
                 </div>
                 <div className='wrapper'>
