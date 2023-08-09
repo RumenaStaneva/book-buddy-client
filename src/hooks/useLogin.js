@@ -5,12 +5,13 @@ export const useLogin = () => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
     const { dispatch } = useAuthContext();
+    const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
 
     const login = async (email, password) => {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch('http://localhost:5000/login', {
+        const response = await fetch(`${LOCAL_HOST}/users/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })

@@ -50,7 +50,7 @@ function SignUp() {
 
                 <div className='wrapper login-form__container'>
                     <form
-                        //  action="/sign-up" method="POST" 
+                        action="/users/sign-up" method="POST"
                         onSubmit={handleSubmit}>
                         <p className='form__message'>Hi there!!!</p>
                         <h1>Sign Up</h1>
@@ -74,7 +74,7 @@ function SignUp() {
 
                         <button type='submit' className='btn--cta' disabled={isLoading}>Sign up</button>
 
-                        <p className='form-switch'>Already have an account ? <a href="/login">Login</a></p>
+                        <p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
                     </form>
                 </div>
                 <div className='wrapper'>

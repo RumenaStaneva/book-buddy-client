@@ -30,7 +30,7 @@ const NavBar = () => {
                 <ul className='nav__list' role='menubar'>
                     {user && (
                         <>
-                            <p className='nav__username'>Hi {user.email.split('@')[0]}</p>
+                            <p className='nav__username'>Hi <a href='/users/profile'>{user.email.split('@')[0]}</a></p>
                             <li className='nav__item'>
                                 <button onClick={handleClick} className='nav__link' to='/'>Logout</button>
                             </li>
@@ -39,10 +39,10 @@ const NavBar = () => {
                     {!user ?
                         <>
                             <li className='nav__item'>
-                                <NavLink className='nav__link' to='/login'>Login</NavLink>
+                                <NavLink className='nav__link' to='/users/login'>Login</NavLink>
                             </li>
                             <li className='nav__item'>
-                                <NavLink className='nav__link' to='/sign-up'>Sign up</NavLink>
+                                <NavLink className='nav__link' to='/users/sign-up'>Sign up</NavLink>
                             </li>
                         </>
                         : null}
