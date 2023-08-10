@@ -33,7 +33,7 @@
 }
 
 .profile__field {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     word-break: break-all;
 }
 
@@ -92,8 +92,8 @@
 }
 
 .update__button {
-    background-color: #007bff;
-    color: white;
+    color: #fff;
+    background: #ff3e4e;
     border: none;
     padding: 8px 14px;
     border-radius: 5px;
@@ -102,10 +102,13 @@
     display: block;
     margin: 15px auto;
     font-size: 16px;
+    transition: all 0.25s ease;
 }
 
 .update__button:hover {
-    background-color: #0056b3;
+    box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
+    transform: translateY(-5px);
+    background: #ff3e4e;
 }
 
 @media (max-width: 576px) {
