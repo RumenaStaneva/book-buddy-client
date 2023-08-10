@@ -18,9 +18,12 @@ export const useSignup = () => {
         });
         const json = await response.json();
 
+        setIsLoading(false); // Move setIsLoading(false) here to ensure it's always reset
+
         if (!response.ok) {
             setIsLoading(false);
             setError(json.error);
+            throw Error(json.error)
         }
 
         if (response.ok) {

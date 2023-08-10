@@ -45,8 +45,6 @@ function Home() {
     const fetchData = useCallback(async (page, title) => {
         setLoading(true);
         try {
-            console.log(process.env.REACT_APP_LOCAL_HOST);
-            console.log('title:', title, 'startIndex:', (page - 1) * PAGE_SIZE, 'maxResults:', PAGE_SIZE);
             const url = `${process.env.REACT_APP_LOCAL_HOST}/api/search-book-title`;
             const response = await axios.post(
                 url,
