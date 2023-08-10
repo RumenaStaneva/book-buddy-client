@@ -14,24 +14,45 @@
 }
 
 .nav__username {
+    font-weight: bold;
+    font-size: 18px;
     margin-right: 15px;
+}
+
+.nav__username a {
+    color: #5E81AC;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    text-transform: capitalize;
+}
+
+.nav__username a:hover {
+    color: #27ADBA;
+}
+
+.nav__username a:visited {
+    color: #5E81AC;
+}
+
+.nav__username a:visited:hover {
+    color: #27ADBA;
 }
 
 .nav__item {
     margin-right: 25px;
 }
 
-.nav__item a {
-    color: #000;
+.nav__link {
+    color: #4E6B5D;
     text-decoration: none;
 }
 
-.nav__item a:hover {
-    color: #00a8ff;
+.nav__link:hover {
+    color: #5E81AC;
 }
 
-.nav__item a.active {
-    color: #00a8ff;
+.nav__link.active {
+    color: #5E81AC;
 }
 
 .nav__login-register .nav__item a {

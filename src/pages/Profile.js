@@ -1,18 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
+import '../styles/Profile.css'
 
 
 function Profile() {
     const [userData, setUserData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [bio, setBio] = useState('');
+    const [hiddenBio, setHiddenBio] = useState(true);
+    const [hiddenUsername, setHiddenUsername] = useState(true);
     const [username, setUsername] = useState('');
     const { user } = useAuthContext();
 
-
-    const fetchUserData = async () => {
+    const fetchUserData = useCallback(async () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/profile`, {
                 headers: {
@@ -34,13 +36,13 @@ function Profile() {
             console.error('Error fetching user data:', error);
             setIsLoading(false);
         }
-    };
+    }, [user]);
 
     useEffect(() => {
         if (user && user.token) {
             fetchUserData();
         }
-    }, [user]);
+    }, [user, fetchUserData]);
 
     const handleUpdateInformation = async () => {
         try {
@@ -57,44 +59,75 @@ function Profile() {
                 console.error('Unauthorized access');
                 return;
             }
+            setHiddenBio(true);
+            setHiddenUsername(true);
             fetchUserData();
         } catch (error) {
             console.error('Error updating username:', error);
         }
     };
 
+
     return (
         <>
             <NavBar />
-            {isLoading ? (
-                <div className='spinner__container'>
-                    <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
-                </div>
-            ) : (
-                <>
-                    <p>User Profile</p>
-                    <p>Profile status:
-                        {!userData.isAdmin ? 'regular' : 'admin'}
-                    </p>
+            <div className="profile__container">
+                {isLoading ? (
+                    <div className='spinner__container'>
+                        <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                    </div>
+                ) : (
+                    <div className="profile__content">
+                        <h1>User Profile</h1>
+                        <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
 
-                    <p>Email: {userData.email}</p>
-                    <p>Bio: {bio}</p>
-                    <textarea
-                        rows="4"
-                        cols="50"
-                        value={bio}
-                        onChange={(e) => setBio(e.target.value)}
-                    />
-                    <p>Username: {username}</p>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                    <button onClick={handleUpdateInformation}>Update information</button>
-                </>
-            )}
+                        <div className="profile__field">
+                            <label>Email: </label>
+                            <div className="profile__info" id="email">{userData.email}</div>
+                        </div>
+
+                        <div className="profile__field">
+                            <label>Bio: </label>
+                            <div onClick={() => setHiddenBio(false)} className="profile__clickable" tabIndex="0">
+                                {!hiddenBio ? null : <span className="hidden">{bio}</span>}
+                            </div>
+                            <textarea
+                                rows="4"
+                                cols="50"
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
+                                {...(hiddenBio ? { hidden: true } : {})}
+                                className={`profile__textarea ${hiddenBio ? 'hidden' : ''}`}
+                                aria-labelledby="bio"
+                            />
+                        </div>
+
+                        <div className="profile__field">
+                            <label>Username: </label>
+                            <div onClick={() => setHiddenUsername(false)} className="profile__clickable" tabIndex="0">
+                                {!hiddenUsername ? null : <span className="hidden">{username}</span>}
+                            </div>
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                {...(hiddenUsername ? { hidden: true } : {})}
+                                className={`profile__input ${hiddenUsername ? 'hidden' : ''}`}
+                                aria-labelledby="username"
+                            />
+                        </div>
+
+                        {(username !== userData.username || bio !== userData.bio) && (
+                            <button onClick={handleUpdateInformation} className="update__button">
+                                Update Information
+                            </button>
+                        )}
+                    </div>
+                )}
+            </div>
         </>
+
+
     )
 }
 

@@ -1,0 +1,124 @@
+.profile__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.spinner__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+}
+
+.profile__content {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile__content h1 {
+    margin-bottom: 10px;
+}
+
+.profile__status {
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.profile__field {
+    margin-bottom: 15px;
+    word-break: break-all;
+}
+
+.profile__clickable {
+    cursor: pointer;
+    color: #F3647A;
+    margin-bottom: 3px;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.profile__clickable::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 1px;
+    background-color: #c25061;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.profile__clickable:focus,
+.profile__clickable:hover {
+    outline: none;
+    color: #c25061;
+}
+
+.profile__clickable:hover::before,
+.profile__clickable:focus::before {
+    transform: scaleX(1);
+}
+
+.profile__info {
+    display: inline-block;
+    color: #444444;
+    font-size: 14px;
+}
+
+.profile__textarea,
+.profile__input {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.profile__textarea.hidden,
+.profile__input.hidden {
+    display: none;
+}
+
+.update__button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 15px auto;
+    font-size: 16px;
+}
+
+.update__button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 576px) {
+    .profile__content {
+        padding: 10px;
+        max-width: 300px;
+    }
+
+    .profile__content h1 {
+        font-size: 22px;
+    }
+
+    .profile__status {
+        font-size: 16px;
+    }
+}
