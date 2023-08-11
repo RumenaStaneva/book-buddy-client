@@ -34,9 +34,17 @@ const NavBar = () => {
                     <li className='nav__item'>
                         <NavLink className='nav__link' to="/about">About</NavLink>
                     </li>
-                    <li className='nav__item'>
-                        <NavLink className='nav__link' to="/time-swap">Time swap</NavLink>
-                    </li>
+                    {user ?
+                        <>
+                            <li className='nav__item'>
+                                <NavLink className='nav__link' to="/time-swap">Time swap</NavLink>
+                            </li>
+                            <li className='nav__item'>
+                                <NavLink className='nav__link' to="/books/library">Library</NavLink>
+                            </li>
+                        </>
+                        : null
+                    }
                 </ul>
             </nav>
 
