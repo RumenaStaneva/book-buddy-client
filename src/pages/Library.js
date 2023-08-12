@@ -64,7 +64,7 @@ function Library() {
                 <>
                     {!wantToReadBooks.length > 0 && !currentlyReadingBooks.length && !readBooks.length ?
                         <h1>No books in library</h1>
-                        : null}
+                        : <h1 className='library__title'>{user.username !== '' ? user.username : user.email.split('@')[0]}'s library</h1>}
                     {currentlyReadingBooks.length > 0 ?
                         <>
                             < p > Currently reading</p >

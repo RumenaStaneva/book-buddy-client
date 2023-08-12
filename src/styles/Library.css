@@ -2,11 +2,14 @@
     max-height: 220px;
 }
 
+.library__title {
+    text-transform: capitalize;
+}
+
 .book__button {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
