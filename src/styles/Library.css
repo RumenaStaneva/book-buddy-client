@@ -1,0 +1,25 @@
+.book__image {
+    max-height: 220px;
+}
+
+.book__button {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.book__details {
+    margin-left: 15px;
+    margin-right: auto;
+}
+
+.book__title {
+    color: #fff;
+    font-weight: 600;
+    font-size: 22px;
+}

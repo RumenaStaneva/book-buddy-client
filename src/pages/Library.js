@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import { useAuthContext } from "../hooks/useAuthContext";
+import '../styles/Library.css'
+import LibraryBook from '../components/LibraryBook';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -28,7 +30,6 @@ function Library() {
                 });
 
                 const data = await response.json();
-                // console.log(data);
                 setWantToReadBooks(data.wantToReadBooks);
                 setCurrentlyReadingBooks(data.currntlyReadingBooks);
                 setReadBooks(data.readBooks);
@@ -56,9 +57,25 @@ function Library() {
                 </div>
             ) : (
                 <>
+                    {!wantToReadBooks.length > 0 && !currentlyReadingBooks.length && !readBooks.length ?
+                        <h1>No books in library</h1>
+                        : null}
+                    {currentlyReadingBooks.length > 0 ?
+                        <>
+                            < p > Currently reading</p >
+                            <div className='books__container'>
+                                {
+                                    currentlyReadingBooks.map(book => (
+                                        <LibraryBook book={book} />
+                                    ))
+                                }
+                            </div >
+                        </>
+                        : <p>No books to display</p>}
+
                     {wantToReadBooks.length > 0 ?
                         <>
-                            <p>Want to read</p>
+                            < p > Want to read books</p >
                             <div className='books__container'>
                                 {
                                     wantToReadBooks.map(book => (
@@ -101,53 +118,8 @@ function Library() {
                                 }
                             </div >
                         </>
-                        : <p>No books to display</p>}
-                    {currentlyReadingBooks.length > 0 ?
-                        <>
-                            < p > Currently reading</p >
-                            <div className='books__container'>
-                                {
-                                    currentlyReadingBooks.map(book => (
-                                        <div key={book._id}>
-
-                                            <Card sx={{ maxWidth: 345 }} className='book'>
-                                                <CardActionArea
-                                                    className='book__button'
-                                                    component='button'
-                                                    onClick={event => {
-                                                        event.stopPropagation();
-                                                        event.preventDefault();
-                                                    }}
-                                                >
-                                                    <CardMedia
-                                                        component="img"
-                                                        src={
-                                                            book.thumbnail === undefined
-                                                                ? require('../images/image-not-available.png')
-                                                                : `${book.thumbnail}`
-                                                        } alt={`${book.title}`}
-                                                        className='book__image'
-                                                    />
-                                                    <CardContent>
-                                                        <Typography gutterBottom variant="h5" component="div" className='book__title'>
-                                                            {book.title}
-                                                        </Typography>
-                                                        <Typography gutterBottom variant="subtitle1" component="div">
-                                                            {book.authors}
-                                                        </Typography>
-                                                        <Typography variant="body2" color="text.secondary" className='book__description'>
-                                                            {book.description}
-                                                        </Typography>
-                                                        <p>{book.pageCount}</p>
-                                                    </CardContent>
-                                                </CardActionArea>
-                                            </Card>
-                                        </div>
-                                    ))
-                                }
-                            </div >
-                        </>
-                        : <p>No books to display</p>}
+                        : <p>Nothing in want to read shelf</p>
+                    }
                     {readBooks.length > 0 ?
                         <>
                             < p > Already read</p >
