@@ -5,7 +5,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import '../styles/LibraryBook.css'
 
 
-function LibraryBook({ book }) {
+function LibraryBook({ book, currentlyReadingBooks, setCurrentlyReadingBooks, onRemoveFromWantToRead }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
@@ -39,10 +39,37 @@ function LibraryBook({ book }) {
             setInputVisible(false);
             const bookProgressPercent = calculateProgress()
             setBookProgressInPercentage(parseInt(bookProgressPercent));
+            if (parseInt(data.book.progress) === parseInt(bookTotalPages)) {
+
+                onRemoveFromWantToRead(data.book);
+                moveToReadShelf(data.book._id);
+                const updatedCurrentlyReadingBooks = currentlyReadingBooks.filter(b => b._id !== book._id);
+                setCurrentlyReadingBooks(updatedCurrentlyReadingBooks);
+            }
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
     }
+
+    const moveToReadShelf = async (bookId) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-shelf`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({
+                    bookId: bookId,
+                    shelf: 2
+                }),
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error('Error updating shelf:', error);
+        }
+    };
 
     return (
         <>

@@ -48,6 +48,11 @@ function Library() {
         }
     }, [user, fetchBooks]);
 
+    const handleBookMoveToRead = (book) => {
+        const updatedCurrentlyReadingBooks = currentlyReadingBooks.filter(b => b._id !== book._id);
+        setCurrentlyReadingBooks(updatedCurrentlyReadingBooks);
+        setReadBooks(prevReadBooks => [...prevReadBooks, book]);
+    };
     return (
         <>
             <NavBar />
@@ -66,7 +71,12 @@ function Library() {
                             <div className='books__container'>
                                 {
                                     currentlyReadingBooks.map(book => (
-                                        <LibraryBook book={book} />
+                                        <LibraryBook
+                                            book={book}
+                                            currentlyReadingBooks={currentlyReadingBooks}
+                                            setCurrentlyReadingBooks={setCurrentlyReadingBooks}
+                                            onRemoveFromWantToRead={handleBookMoveToRead}
+                                        />
                                     ))
                                 }
                             </div >
