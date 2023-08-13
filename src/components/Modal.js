@@ -15,16 +15,11 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
-    const [file, setFile] = useState();
     const { user } = useAuthContext();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
-    const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
 
     const handleDescriptionChange = (e) => {
         setUpdatedDescription(e.target.value);
-    }
-    const handleThumbnailChange = (e) => {
-        setUpdatedThumbnail(e.target.value);
     }
     const handlePageCountChange = (e) => {
         setUpdatedPageCount(e.target.value);
@@ -56,7 +51,7 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             authors: authors,
             description: updatedDescription,
             publisher: publisher,
-            thumbnail: file !== undefined ? file : updatedThumbnail,
+            thumbnail: updatedThumbnail,
             category: category,
             pageCount: updatedPageCount,
             notes: [],
@@ -69,15 +64,8 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     useEffect(() => {
         try {
             if (bookToAdd) {
-                // Create a new FormData object
-                // const formData = new FormData();
 
-                // Append fields to the FormData object
-                // formData.append('thumbnail', file !== undefined ? file : updatedThumbnail);
-                // formData.append('bookToAdd', JSON.stringify(bookToAdd));
-                // console.log(formData);
-
-                fetch(`${LOCAL_HOST}/books/add-to-shelf`, {
+                fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/add-to-shelf`, {
                     method: 'POST',
                     body: JSON.stringify(bookToAdd),
                     headers: {
@@ -134,15 +122,6 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                     <label htmlFor="thumbnail">Thumbnail</label>
                                     <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={250} />
                                 </div>
-                                {/* <input type="text" name="thumbnail" value={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} onChange={handleThumbnailChange} /> */}
-                                {/* <label htmlFor="uploadImageThumbnail">Change book cover</label>
-                                <input
-                                    filename={file}
-                                    onChange={e => setFile(e.target.files[0])}
-                                    type="file"
-                                    name="uploadImageThumbnail"
-                                    accept="image/*"
-                                ></input> */}
                                 <div className="modal__section">
                                     <label htmlFor="description">Description</label>
                                     <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>

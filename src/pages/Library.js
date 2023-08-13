@@ -4,6 +4,11 @@ import NavBar from '../components/NavBar';
 import { useAuthContext } from "../hooks/useAuthContext";
 import '../styles/Library.css'
 import LibraryBook from '../components/LibraryBook';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Autoplay } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -63,14 +68,36 @@ function Library() {
                         <>
                             < p > Currently reading</p >
                             <div className='books__container'>
-                                {
-                                    currentlyReadingBooks.map(book => (
-                                        <LibraryBook
-                                            key={book._id}
-                                            book={book}
-                                            fetchBooks={fetchBooks}
-                                        />
-                                    ))
+                                {<Swiper
+                                    pagination={{
+                                        dynamicBullets: true,
+                                        clickable: true
+                                    }}
+                                    className="book__carousel"
+                                    spaceBetween={30}
+                                    centeredSlides={true}
+                                    autoplay={{
+                                        delay: 5000,
+                                        disableOnInteraction: false,
+                                    }}
+                                    slidesPerView={1}
+                                    modules={[Pagination, Autoplay]}
+
+                                >
+                                    {
+
+                                        currentlyReadingBooks.map(book => (
+                                            <SwiperSlide
+                                                key={book._id}
+                                            >
+                                                <LibraryBook
+                                                    book={book}
+                                                    fetchBooks={fetchBooks}
+                                                />
+                                            </SwiperSlide>
+                                        ))
+                                    }
+                                </Swiper>
                                 }
                             </div >
                         </>
