@@ -1,4 +1,5 @@
-import { useState, Navigate } from "react";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { useSignup } from "../hooks/useSignUp";
 import '../styles/AuthenticationForms.css'
@@ -23,18 +24,28 @@ function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
 
         if (password !== repeatPassword) {
             setIdenticalPasswords(false);
             setError(false);
             return;
         }
-        await signup(email, password);
-        setIdenticalPasswords(true);
-        setIsLoggedIn(true);
-        setEmail('');
-        setPassword('');
-        setRepeatPassword('');
+        try {
+            await signup(email, password);
+            setIdenticalPasswords(true);
+            setIsLoggedIn(true);
+            setEmail('');
+            setPassword('');
+            setRepeatPassword('');
+        } catch (error) {
+            setIdenticalPasswords(true);
+            setEmail('');
+            setPassword('');
+            setRepeatPassword('');
+            setError(error.message);
+            setIsLoggedIn(false);
+        }
     }
 
     if (isLoggedIn) {
