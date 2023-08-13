@@ -19,7 +19,6 @@ function Library() {
     const [readBooks, setReadBooks] = useState(null);
     const { user } = useAuthContext();
 
-
     const fetchBooks = useCallback(
         async () => {
             try {
@@ -48,11 +47,6 @@ function Library() {
         }
     }, [user, fetchBooks]);
 
-    const handleBookMoveToRead = (book) => {
-        const updatedCurrentlyReadingBooks = currentlyReadingBooks.filter(b => b._id !== book._id);
-        setCurrentlyReadingBooks(updatedCurrentlyReadingBooks);
-        setReadBooks(prevReadBooks => [...prevReadBooks, book]);
-    };
     return (
         <>
             <NavBar />
@@ -72,10 +66,9 @@ function Library() {
                                 {
                                     currentlyReadingBooks.map(book => (
                                         <LibraryBook
+                                            key={book._id}
                                             book={book}
-                                            currentlyReadingBooks={currentlyReadingBooks}
-                                            setCurrentlyReadingBooks={setCurrentlyReadingBooks}
-                                            onRemoveFromWantToRead={handleBookMoveToRead}
+                                            fetchBooks={fetchBooks}
                                         />
                                     ))
                                 }

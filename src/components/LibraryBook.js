@@ -5,7 +5,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import '../styles/LibraryBook.css'
 
 
-function LibraryBook({ book, currentlyReadingBooks, setCurrentlyReadingBooks, onRemoveFromWantToRead }) {
+function LibraryBook({ book, fetchBooks }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
@@ -35,48 +35,25 @@ function LibraryBook({ book, currentlyReadingBooks, setCurrentlyReadingBooks, on
                 }),
             });
             const data = await response.json();
-            setBookPageProgress(data.book.progress)
+            setBookPageProgress(data.book.progress);
             setInputVisible(false);
-            const bookProgressPercent = calculateProgress()
+            const bookProgressPercent = calculateProgress();
             setBookProgressInPercentage(parseInt(bookProgressPercent));
-            if (parseInt(data.book.progress) === parseInt(bookTotalPages)) {
-
-                onRemoveFromWantToRead(data.book);
-                moveToReadShelf(data.book._id);
-                const updatedCurrentlyReadingBooks = currentlyReadingBooks.filter(b => b._id !== book._id);
-                setCurrentlyReadingBooks(updatedCurrentlyReadingBooks);
+            if (data.book.progress === parseInt(bookTotalPages)) {
+                //         //TODO Make congarts disappearing message when book is read
+                fetchBooks();
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
     }
 
-    const moveToReadShelf = async (bookId) => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-shelf`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`,
-                },
-                body: JSON.stringify({
-                    bookId: bookId,
-                    shelf: 2
-                }),
-            });
-            const data = await response.json();
-            console.log(data);
-        } catch (error) {
-            console.error('Error updating shelf:', error);
-        }
-    };
-
     return (
         <>
             <div className='books__container'>
                 {
 
-                    <div className='book' key={book._id}>
+                    <div className='book'>
                         <div className='blur-background' style={{ backgroundImage: `url(${book.thumbnail})` }}></div>
                         <div
                             className='book__button'
