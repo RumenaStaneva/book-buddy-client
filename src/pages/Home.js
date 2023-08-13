@@ -8,7 +8,7 @@ import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField';
-import { useAuthContext } from '../hooks/useAuthContext';
+// import { useAuthContext } from '../hooks/useAuthContext';
 
 function Home() {
 
@@ -19,7 +19,7 @@ function Home() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
-    const { user } = useAuthContext();
+    // const { user } = useAuthContext();
     const PAGE_SIZE = 10;
 
     const handleChange = (e) => {
@@ -34,48 +34,42 @@ function Home() {
         if (title === '' || title === undefined || title === null) {
             setError('Please enter a title or author.');
         } else {
-            if (user) {
-                setLastSearchedTitle(title);
-                setCurrentPage(1);
-                setTotalPages(0);
-                fetchData(1, title);
-                setTitle('');
-            } else {
-                setError('Please login/sign up to use the search');
-            }
+            setLastSearchedTitle(title);
+            setCurrentPage(1);
+            setTotalPages(0);
+            fetchData(1, title);
+            setTitle('');
         }
     }
 
     const fetchData = useCallback(async (page, title) => {
         setLoading(true);
         try {
-            const url = `${process.env.REACT_APP_LOCAL_HOST}/books/search-book-title`;
+            const url = `${process.env.REACT_APP_LOCAL_HOST}/api/search-book-title`;
             const response = await axios.post(
                 url,
                 { title: title, startIndex: (page - 1) * PAGE_SIZE, maxResults: PAGE_SIZE },
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}`
+                        // 'Authorization': `Bearer ${user.token}`
                     },
                 }
             );
-
             setBooks(response.data.items);
-
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
             console.error('Error fetching books:', error);
         } finally {
             setLoading(false);
         }
-    }, [user]); // Include user as a dependency
+    }, []);
 
     useEffect(() => {
-        if (lastSearchedTitle && user) {
+        if (lastSearchedTitle) {
             fetchData(currentPage, lastSearchedTitle);
         }
-    }, [currentPage, lastSearchedTitle, fetchData, user]); // Fetch books when currentPage or lastSearchedTitle or fetchData changes or user
+    }, [currentPage, lastSearchedTitle, fetchData]); // Fetch books when currentPage or lastSearchedTitle or fetchData changes or user
 
     const nextPage = () => {
         if (currentPage < totalPages) {
@@ -108,7 +102,7 @@ function Home() {
                     component="form"
                     noValidate
                     autoComplete="off"
-                    action="/search-book-title"
+                    action="/api/search-book-title"
                     method='POST'
                     onSubmit={handleSubmit}
                     className='form__container'

@@ -1,4 +1,5 @@
-import { useState, Navigate } from "react";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { useSignup } from "../hooks/useSignUp";
 import '../styles/AuthenticationForms.css'
@@ -23,18 +24,28 @@ function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
 
         if (password !== repeatPassword) {
             setIdenticalPasswords(false);
             setError(false);
             return;
         }
-        await signup(email, password);
-        setIdenticalPasswords(true);
-        setIsLoggedIn(true);
-        setEmail('');
-        setPassword('');
-        setRepeatPassword('');
+        try {
+            await signup(email, password);
+            setIdenticalPasswords(true);
+            setIsLoggedIn(true);
+            setEmail('');
+            setPassword('');
+            setRepeatPassword('');
+        } catch (error) {
+            setIdenticalPasswords(true);
+            setEmail('');
+            setPassword('');
+            setRepeatPassword('');
+            setError(error.message);
+            setIsLoggedIn(false);
+        }
     }
 
     if (isLoggedIn) {
@@ -74,7 +85,7 @@ function SignUp() {
 
                         <button type='submit' className='btn--cta' disabled={isLoading}>Sign up</button>
 
-                        <p className='form-switch'>Already have an account ? <a href="/login">Login</a></p>
+                        <p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
                     </form>
                 </div>
                 <div className='wrapper'>

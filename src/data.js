@@ -13,12 +13,12 @@ const pages = [
     {
         id: 3,
         title: 'Login',
-        link: '/login'
+        link: '/users/login'
     },
     {
         id: 4,
         title: 'Sign Up',
-        link: '/sign-up'
+        link: '/users/sign-up'
     },
     {
         id: 5,
