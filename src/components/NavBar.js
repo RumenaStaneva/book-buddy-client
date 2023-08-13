@@ -34,9 +34,17 @@ const NavBar = () => {
                     <li className='nav__item'>
                         <NavLink className='nav__link' to="/about">About</NavLink>
                     </li>
-                    <li className='nav__item'>
-                        <NavLink className='nav__link' to="/time-swap">Time swap</NavLink>
-                    </li>
+                    {user ?
+                        <>
+                            <li className='nav__item'>
+                                <NavLink className='nav__link' to="/time-swap">Time swap</NavLink>
+                            </li>
+                            <li className='nav__item'>
+                                <NavLink className='nav__link' to="/books/library">Library</NavLink>
+                            </li>
+                        </>
+                        : null
+                    }
                 </ul>
             </nav>
 
@@ -44,7 +52,7 @@ const NavBar = () => {
                 <ul className='nav__list' role='menubar'>
                     {user && (
                         <>
-                            <p className='nav__username'>Hi <a href='/users/profile'>{user.email.split('@')[0]}</a></p>
+                            <p className='nav__username'>Hi <a href='/users/profile'>{user.username !== '' ? user.username : user.email.split('@')[0]}</a></p>
                             <li className='nav__item'>
                                 <NavLink onClick={handleClick} className='nav__link' to='/'>Logout</NavLink>
                             </li>

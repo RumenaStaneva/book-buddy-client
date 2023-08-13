@@ -9,8 +9,9 @@ import ErrorPage from './pages/ErrorPage';
 import './styles/App.css'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
-import BookDetailsPage from './pages/BookDetailsPage';
+// import BookDetailsPage from './pages/BookDetailsPage';
 import Profile from './pages/Profile';
+import Library from './pages/Library';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/users/sign-up" element={!user ? <SignUp /> : <Navigate to="/" />} />
         <Route path="/users/forgotten-password" element={<PasswordReset />} />
         <Route path="/users/profile" element={<Profile />} />
+        <Route path='/books/library' element={<Library />} />
 
         <Route path='*' element={<ErrorPage />} />
       </Routes>
