@@ -67,6 +67,7 @@ function Library() {
                     {currentlyReadingBooks.length > 0 ?
                         <>
                             < p > Currently reading</p >
+                            <a href='/books/see-all?shelf=1'>See all</a>
                             <div className='books__container'>
                                 {<Swiper
                                     pagination={{
@@ -106,6 +107,7 @@ function Library() {
                     {wantToReadBooks.length > 0 ?
                         <>
                             < p > Want to read books</p >
+                            <a href='/books/see-all?shelf=0'>See all</a>
                             <div className='books__container'>
                                 {
                                     wantToReadBooks.map(book => (
@@ -153,6 +155,7 @@ function Library() {
                     {readBooks.length > 0 ?
                         <>
                             < p > Already read</p >
+                            <a href='/books/see-all?shelf=2'>See all</a>
                             <div className='books__container'>
                                 {
                                     readBooks.map(book => (
