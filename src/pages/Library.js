@@ -136,7 +136,7 @@ function Library() {
                                                             {book.title}
                                                         </Typography>
                                                         <Typography gutterBottom variant="subtitle1" component="div">
-                                                            {book.authors}
+                                                            {book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}
                                                         </Typography>
                                                         <Typography variant="body2" color="text.secondary" className='book__description'>
                                                             {book.description}

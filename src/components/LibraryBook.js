@@ -75,7 +75,7 @@ function LibraryBook({ book, fetchBooks }) {
                                     {book.title}
                                 </h5>
                                 <p> By: {' '}
-                                    {book.authors}
+                                    {book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}
                                 </p>
                                 {inputVisible ? (
                                     <>

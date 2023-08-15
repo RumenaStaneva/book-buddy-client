@@ -79,7 +79,7 @@ function BookList({ books }) {
                                             {book.volumeInfo.title}
                                         </Typography>
                                         <Typography gutterBottom variant="subtitle1" component="div">
-                                            {book.volumeInfo.authors}
+                                            {book.volumeInfo.authors.map((author, index) => index === book.volumeInfo.authors.length - 1 ? author : `${author}, `)}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary" className='book__description'>
                                             {book.volumeInfo.description}

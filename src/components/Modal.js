@@ -94,9 +94,8 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
         } catch (error) {
             setErrorMessage(error.message);
         }
-        setBookToAdd(null); // Reset the book to add after the request is made
+        setBookToAdd(null);
     }, [bookToAdd, user]);
-
 
     return (
         <>
