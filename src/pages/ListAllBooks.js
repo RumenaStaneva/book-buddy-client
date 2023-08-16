@@ -21,6 +21,7 @@ function ListAllBooks() {
     const [totalPages, setTotalPages] = useState(1);
     const [currentBook, setCurrentBook] = useState();
     const [open, setOpen] = useState(false);
+    const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
 
     const handleOpen = (book) => {
@@ -67,8 +68,38 @@ function ListAllBooks() {
         }
     }, [user, fetchBooks]);
 
-    const handleMoveToShelf = () => {
-        //todo
+    const handleShelfChange = (selectedOption) => {
+        console.log(selectedOption);
+
+        if (selectedOption === 'Want to read') {
+            setNewShelf(0);
+        } else if (selectedOption === 'Currently reading') {
+            setNewShelf(1);
+        } else if (selectedOption === 'Read') {
+            setNewShelf(2);
+        }
+    }
+    const handleMoveToShelf = async (currentBook) => {
+        currentBook.shelf = newShelf;
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({
+                    book: currentBook
+                }),
+            });
+
+            const data = await response.json();
+            console.log(data);
+            handleClose();
+            fetchBooks();
+        } catch (error) {
+            console.error('Error changing shelf:', error);
+        }
     }
 
     const style = {
@@ -107,7 +138,8 @@ function ListAllBooks() {
                                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                     Currently on: {getShelfName()} shelf
                                 </Typography>
-                                <Dropdown options={Object.values(shelfOptions)} onSelect={handleMoveToShelf} />
+                                <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} />
+                                <button onClick={() => handleMoveToShelf(currentBook)}>Save</button>
                             </Box>
                         </Modal>
                         : null}
