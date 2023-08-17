@@ -8,6 +8,7 @@ import NavBar from "../components/NavBar";
 import { Modal } from "@mui/material";
 import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
+// import { AiFillEdit } from "react-icons/ai";
 import '../styles/ListAllBooks.css'
 
 function ListAllBooks() {
@@ -52,7 +53,6 @@ function ListAllBooks() {
                 const data = await response.json();
                 setIsLoading(false);
                 setBooks(data.books);
-                // console.log(data.books);
                 setTotalPages(data.totalPages);
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -102,18 +102,6 @@ function ListAllBooks() {
         }
     }
 
-    const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
-
     return <>
         <NavBar />
         {isLoading ? (
@@ -124,22 +112,23 @@ function ListAllBooks() {
             books.length > 0 ?
                 < main className="books__list-all">
                     {currentBook ?
-                        //TODO STYLE MODAL AND MAKE CHANGE SHELF FUNCTIONALITY
                         <Modal
                             open={open}
                             onClose={handleClose}
                             aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                            className="change-shelf-modal"
                         >
-                            <Box sx={style}>
-                                <h3>Change shelf</h3>
-                                <Typography id="modal-modal-title" variant="h6" component="h2">
-                                    {currentBook.title}
+                            <Box className='change-shelf-modal__body'>
+                                <h3 id="modal-modal-title">Change shelf</h3>
+                                <Typography className="modal-body__book-title" variant="h6" component="h2">
+                                    Book: {currentBook.title}
                                 </Typography>
-                                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                <Typography className="modal-body__book-shelf" id="modal-modal-description">
                                     Currently on: {getShelfName()} shelf
                                 </Typography>
                                 <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} />
-                                <button onClick={() => handleMoveToShelf(currentBook)}>Save</button>
+                                <button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</button>
                             </Box>
                         </Modal>
                         : null}
@@ -155,6 +144,7 @@ function ListAllBooks() {
 
                             return (
                                 <div key={book._id} className="book" style={bookStyle}>
+                                    {/* <AiFillEdit className="edit-book__icon" /> */}
                                     <img
                                         src={
                                             book.thumbnail === undefined
@@ -166,8 +156,11 @@ function ListAllBooks() {
                                     <div className="book__info">
                                         <h2 className="book__title">{book.title}</h2>
                                         <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
-                                        <p className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</p>
-                                        <button onClick={() => handleOpen(book)} className="book__btn">Move to different shelf</button>
+                                        {/* //todo make it button to show only from this category */}
+                                        <div className="book__action-area">
+                                            <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
+                                            <button onClick={() => handleOpen(book)} className="cta-btn">Move</button>
+                                        </div>
                                     </div>
                                 </div>
                             )
@@ -175,13 +168,14 @@ function ListAllBooks() {
                     </div>
                     <div className="pagination">
                         {page > 1 && (
-                            <button onClick={() => setPage(page - 1)}>Previous</button>
+                            <button className="pagination-button" onClick={() => setPage(page - 1)}>Previous</button>
                         )}
-                        <span>Page {page} of {totalPages}</span>
+                        <span className="pagination-text">Page {page} of {totalPages}</span>
                         {page < totalPages && (
-                            <button onClick={() => setPage(page + 1)}>Next</button>
+                            <button className="pagination-button" onClick={() => setPage(page + 1)}>Next</button>
                         )}
                     </div>
+
                 </main >
                 : <h1>No books on shelf {getShelfName()}</h1>
         )
