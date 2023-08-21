@@ -8,7 +8,9 @@ import NavBar from "../components/NavBar";
 import { Modal } from "@mui/material";
 import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
+import BookCategories from "../constants/bookCategories";
 // import { AiFillEdit } from "react-icons/ai";
+import CategoryFilter from "../components/CategoryFilter";
 import '../styles/ListAllBooks.css'
 
 function ListAllBooks() {
@@ -24,6 +26,7 @@ function ListAllBooks() {
     const [open, setOpen] = useState(false);
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
+    const [selectedCategory, setSelectedCategory] = useState('');
 
     const handleOpen = (book) => {
         setCurrentBook(book)
@@ -43,12 +46,22 @@ function ListAllBooks() {
     const fetchBooks = useCallback(
         async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`, {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                });
+                let response;
+                if (selectedCategory !== '') {
+                    response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}&category=${selectedCategory}`, {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    });
+                } else {
+                    response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`, {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    });
+                }
 
                 const data = await response.json();
                 setIsLoading(false);
@@ -59,18 +72,16 @@ function ListAllBooks() {
                 setIsLoading(false);
             }
         },
-        [user, shelfNum, page, limit],
+        [user, shelfNum, page, limit, selectedCategory],
     )
 
     useEffect(() => {
         if (user) {
             fetchBooks();
         }
-    }, [user, fetchBooks]);
+    }, [user, fetchBooks, selectedCategory]);
 
     const handleShelfChange = (selectedOption) => {
-        console.log(selectedOption);
-
         if (selectedOption === 'Want to read') {
             setNewShelf(0);
         } else if (selectedOption === 'Currently reading') {
@@ -93,8 +104,7 @@ function ListAllBooks() {
                 }),
             });
 
-            const data = await response.json();
-            console.log(data);
+            await response.json();
             handleClose();
             fetchBooks();
         } catch (error) {
@@ -102,84 +112,102 @@ function ListAllBooks() {
         }
     }
 
+    const handleCategoryChange = async (selectedCategory) => {
+        setSelectedCategory(selectedCategory);
+    };
+
+    const handleRemoveCategoryFilter = () => {
+        setSelectedCategory('');
+        fetchBooks();
+    };
+
     return <>
         <NavBar />
-        {isLoading ? (
-            <div className='spinner__container'>
-                <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
-            </div>
-        ) : (
-            books.length > 0 ?
-                < main className="books__list-all">
-                    {currentBook ?
-                        <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                            className="change-shelf-modal"
-                        >
-                            <Box className='change-shelf-modal__body'>
-                                <h3 id="modal-modal-title">Change shelf</h3>
-                                <Typography className="modal-body__book-title" variant="h6" component="h2">
-                                    Book: {currentBook.title}
-                                </Typography>
-                                <Typography className="modal-body__book-shelf" id="modal-modal-description">
-                                    Currently on: {getShelfName()} shelf
-                                </Typography>
-                                <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} />
-                                <button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</button>
-                            </Box>
-                        </Modal>
-                        : null}
-                    <div className="heading-section">
-                        <h1 className="section-title">All books on {getShelfName()}</h1>
-                    </div>
-                    <div className="books__container">
-                        {books && books.map(book => {
-                            const categoryColor = categoryColors[book.category] || '#FFFFFF';
-                            const bookStyle = {
-                                background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
-                            };
+        < main className="books__list-all">
+            <CategoryFilter categories={Object.values(BookCategories)} onSelect={handleCategoryChange} />
+            {selectedCategory && (
+                <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
+                    Clear Filter
+                </button>
+            )}
+            {isLoading ? (
+                <div className='spinner__container'>
+                    <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                </div>
+            ) : (
+                books.length > 0 ?
+                    <>
+                        {currentBook ?
+                            <Modal
+                                open={open}
+                                onClose={handleClose}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                                className="change-shelf-modal"
+                            >
+                                <Box className='change-shelf-modal__body'>
+                                    <h3 id="modal-modal-title">Change shelf</h3>
+                                    <Typography className="modal-body__book-title" variant="h6" component="h2">
+                                        Book: {currentBook.title}
+                                    </Typography>
+                                    <Typography className="modal-body__book-shelf" id="modal-modal-description">
+                                        Currently on: {getShelfName()} shelf
+                                    </Typography>
+                                    <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} />
+                                    <button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</button>
+                                </Box>
+                            </Modal>
+                            : null}
+                        <div className="heading-section">
+                            <h1 className="section-title">All books on {getShelfName()}</h1>
+                        </div>
+                        <div className="books__container">
+                            <div className="books__container">
+                                {books.map(book => {
+                                    const categoryColor = categoryColors[book.category] || '#FFFFFF';
+                                    const bookStyle = {
+                                        background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
+                                    };
 
-                            return (
-                                <div key={book._id} className="book" style={bookStyle}>
-                                    {/* <AiFillEdit className="edit-book__icon" /> */}
-                                    <img
-                                        src={
-                                            book.thumbnail === undefined
-                                                ? require('../images/image-not-available.png')
-                                                : `${book.thumbnail}`
-                                        } alt={`${book.title}`}
-                                        className='book__image'
-                                    />
-                                    <div className="book__info">
-                                        <h2 className="book__title">{book.title}</h2>
-                                        <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
-                                        {/* //todo make it button to show only from this category */}
-                                        <div className="book__action-area">
-                                            <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
-                                            <button onClick={() => handleOpen(book)} className="cta-btn">Move</button>
+                                    return (
+                                        <div key={book._id} className="book" style={bookStyle}>
+                                            {/* <AiFillEdit className="edit-book__icon" /> */}
+                                            <img
+                                                src={
+                                                    book.thumbnail === undefined
+                                                        ? require('../images/image-not-available.png')
+                                                        : `${book.thumbnail}`
+                                                } alt={`${book.title}`}
+                                                className='book__image'
+                                            />
+                                            <div className="book__info">
+                                                <h2 className="book__title">{book.title}</h2>
+                                                <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
+                                                {/* //todo make it button to show only from this category */}
+                                                <div className="book__action-area">
+                                                    <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
+                                                    <button onClick={() => handleOpen(book)} className="cta-btn">Move</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <div className="pagination">
-                        {page > 1 && (
-                            <button className="pagination-button" onClick={() => setPage(page - 1)}>Previous</button>
-                        )}
-                        <span className="pagination-text">Page {page} of {totalPages}</span>
-                        {page < totalPages && (
-                            <button className="pagination-button" onClick={() => setPage(page + 1)}>Next</button>
-                        )}
-                    </div>
+                                    );
+                                })}
+                            </div>
 
-                </main >
-                : <h1>No books on shelf {getShelfName()}</h1>
-        )
-        }
+                        </div>
+                        <div className="pagination">
+                            {page > 1 && (
+                                <button className="pagination-button" onClick={() => setPage(page - 1)}>Previous</button>
+                            )}
+                            <span className="pagination-text">Page {page} of {totalPages}</span>
+                            {page < totalPages && (
+                                <button className="pagination-button" onClick={() => setPage(page + 1)}>Next</button>
+                            )}
+                        </div>
+                    </>
+                    : <h1>No books on shelf {getShelfName()}</h1>
+            )}
+        </main >
     </>
 }
 
