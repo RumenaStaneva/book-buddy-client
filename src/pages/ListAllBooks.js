@@ -45,6 +45,7 @@ function ListAllBooks() {
 
     const fetchBooks = useCallback(
         async () => {
+            setIsLoading(true);
             try {
                 let response;
                 if (selectedCategory !== '') {
@@ -183,7 +184,6 @@ function ListAllBooks() {
                                             <div className="book__info">
                                                 <h2 className="book__title">{book.title}</h2>
                                                 <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
-                                                {/* //todo make it button to show only from this category */}
                                                 <div className="book__action-area">
                                                     <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
                                                     <button onClick={() => handleOpen(book)} className="cta-btn">Move</button>
@@ -205,7 +205,7 @@ function ListAllBooks() {
                             )}
                         </div>
                     </>
-                    : <h1>No books on shelf {getShelfName()}</h1>
+                    : <h1>No books on shelf {getShelfName()} {!selectedCategory ? null : `in ${selectedCategory} category`}</h1>
             )}
         </main >
     </>

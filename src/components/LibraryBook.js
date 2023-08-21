@@ -4,7 +4,6 @@ import LinearProgressWithLabel from './Progress'
 import { useAuthContext } from "../hooks/useAuthContext";
 import '../styles/LibraryBook.css'
 
-
 function LibraryBook({ book, fetchBooks }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);

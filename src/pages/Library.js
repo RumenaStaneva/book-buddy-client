@@ -79,7 +79,8 @@ function Library() {
                                     centeredSlides={true}
                                     autoplay={{
                                         delay: 5000,
-                                        disableOnInteraction: false,
+                                        disableOnInteraction: true,
+                                        pauseOnMouseEnter: true
                                     }}
                                     slidesPerView={1}
                                     modules={[Pagination, Autoplay]}
