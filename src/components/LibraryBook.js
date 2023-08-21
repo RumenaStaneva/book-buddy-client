@@ -21,17 +21,17 @@ function LibraryBook({ book, fetchBooks }) {
         return Math.floor((bookPageProgress / totalPagesNumber) * 100);
     };
 
-    const updateProgress = async (bookId) => {
+    const updateProgress = async (currentBook) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book-progress`, {
-                method: 'POST',
+            currentBook.progress = parseInt(bookPageProgress);
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.token}`,
                 },
                 body: JSON.stringify({
-                    bookId: bookId,
-                    progress: bookPageProgress,
+                    book: currentBook
                 }),
             });
             const data = await response.json();
@@ -52,7 +52,6 @@ function LibraryBook({ book, fetchBooks }) {
         <>
             <div className='books__container'>
                 {
-
                     <div className='book'>
                         <div className='blur-background' style={{ backgroundImage: `url(${book.thumbnail})` }}></div>
                         <div
@@ -87,7 +86,7 @@ function LibraryBook({ book, fetchBooks }) {
                                             value={bookPageProgress != null ? bookPageProgress : book.progress}
                                             onChange={(e) => setBookPageProgress(e.target.value)}
                                         />
-                                        <button type='submit' onClick={() => updateProgress(book._id)}>Update</button>
+                                        <button type='submit' onClick={() => updateProgress(book)}>Update</button>
                                     </>
                                 ) : (
                                     <>
