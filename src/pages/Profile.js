@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
+import Header from '../components/Header';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import '../styles/Profile.css'
@@ -67,10 +68,15 @@ function Profile() {
         }
     };
 
+    useEffect(() => {
+        document.title = `${user.username !== '' ? user.username : user.email.split('@')[0]}'s profile`;
+    }, []);
+
 
     return (
         <>
             <NavBar />
+            <Header title={`${user.username !== '' ? user.username : user.email.split('@')[0]}'s profile`} />
             <div className="profile__container">
                 {isLoading ? (
                     <div className='spinner__container'>

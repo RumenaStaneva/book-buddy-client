@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import Header from '../components/Header';
 import BookList from '../components/BookList';
 import axios from "axios";
 import '../styles/Home.css'
@@ -7,7 +8,7 @@ import Box from '@mui/material/Box';
 import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
 import { motion } from "framer-motion"
-import ShakeableTextField from '../components/AnimatedTextField';
+import ShakeableTextField from '../components/AnimatedTextField'
 // import { useAuthContext } from '../hooks/useAuthContext';
 
 function Home() {
@@ -21,6 +22,10 @@ function Home() {
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
     // const { user } = useAuthContext();
     const PAGE_SIZE = 10;
+
+    useEffect(() => {
+        document.title = 'Home';
+    }, []);
 
     const handleChange = (e) => {
         const title = e.target.value;
@@ -97,6 +102,7 @@ function Home() {
     return (
         <>
             <Navigation />
+            <Header title="Find your next favourite book" />
             <>
                 <Box
                     component="form"
