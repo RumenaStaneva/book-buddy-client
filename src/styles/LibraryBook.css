@@ -14,3 +14,7 @@
     filter: blur(10px);
     z-index: -1;
 }
+
+.book__title.book__title-outline {
+    text-shadow: 3px 3px 5px #111, 3px 3px 5px #111;
+}

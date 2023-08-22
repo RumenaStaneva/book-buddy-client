@@ -1,11 +1,11 @@
 const categoryColors = {
-    'Fiction': '#FFD700',
+    'Fiction': '#CC7178',
     'Mystery/Thriller/Crime': '#685369',
     'Romance': '#FF69B4',
     'Fantasy': '#EFA48B',
     'Science Fiction': '#ADD8E6',
     'Horror': '#90323D',
-    'Historical Fiction': '#DBD8B3',
+    'Historical Fiction': '#558564',
     'Adventure': '#C6D8AF',
     'Dystopian': '#FF4500',
     'Young Adult (YA)': '#66CED6',

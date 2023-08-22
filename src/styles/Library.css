@@ -11,6 +11,48 @@
     text-transform: capitalize;
 }
 
+.books__library .book-colorful {
+    padding: 0;
+}
+
+.books__library .book-colorful__image {
+    transform: translate(0, -25px);
+    width: 100%;
+    max-width: 165px;
+    height: 100%;
+    max-height: 250px;
+}
+
+.books__library .book-colorful__image:hover {
+    transform: translate(0, -35px) scale(1.1);
+}
+
+.books-colorful__container .book__button {
+    display: flex;
+}
+
+.book-colorful .book__description {
+    max-width: 310px;
+    width: 100%;
+    max-height: 80px;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    -webkit-line-clamp: 4;
+}
+
+.book-colorful .book__action-area {
+    justify-content: center;
+}
+
+.book-colorful .book__title.book__title-outline {
+    color: #111;
+    text-shadow: 9px 0px 7px rgba(255, 255, 255, 1), -5px 1px 7px rgba(255, 255, 255, 1);
+}
+
 .book__button {
     background-repeat: no-repeat;
     background-position: center;

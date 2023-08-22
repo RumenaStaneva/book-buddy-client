@@ -112,11 +112,9 @@ function ListAllBooks() {
             console.error('Error changing shelf:', error);
         }
     }
-
     const handleCategoryChange = async (selectedCategory) => {
         setSelectedCategory(selectedCategory);
     };
-
     const handleRemoveCategoryFilter = () => {
         setSelectedCategory('');
         fetchBooks();
@@ -162,38 +160,35 @@ function ListAllBooks() {
                         <div className="heading-section">
                             <h1 className="section-title">All books on {getShelfName()}</h1>
                         </div>
-                        <div className="books__container">
-                            <div className="books__container">
-                                {books.map(book => {
-                                    const categoryColor = categoryColors[book.category] || '#FFFFFF';
-                                    const bookStyle = {
-                                        background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
-                                    };
+                        <div className="books__container books-colorful__container">
+                            {books.map(book => {
+                                const categoryColor = categoryColors[book.category] || '#FFFFFF';
+                                const bookStyle = {
+                                    background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
+                                };
 
-                                    return (
-                                        <div key={book._id} className="book" style={bookStyle}>
-                                            {/* <AiFillEdit className="edit-book__icon" /> */}
-                                            <img
-                                                src={
-                                                    book.thumbnail === undefined
-                                                        ? require('../images/image-not-available.png')
-                                                        : `${book.thumbnail}`
-                                                } alt={`${book.title}`}
-                                                className='book__image'
-                                            />
-                                            <div className="book__info">
-                                                <h2 className="book__title">{book.title}</h2>
-                                                <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
-                                                <div className="book__action-area">
-                                                    <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
-                                                    <button onClick={() => handleOpen(book)} className="cta-btn">Move</button>
-                                                </div>
+                                return (
+                                    <div key={book._id} className="book-colorful" style={bookStyle}>
+                                        {/* <AiFillEdit className="edit-book__icon" /> */}
+                                        <img
+                                            src={
+                                                book.thumbnail === undefined
+                                                    ? require('../images/image-not-available.png')
+                                                    : `${book.thumbnail}`
+                                            } alt={`${book.title}`}
+                                            className='book-colorful__image'
+                                        />
+                                        <div className="book-colorful__info">
+                                            <h2 className="book__title">{book.title}</h2>
+                                            <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
+                                            <div className="book__action-area">
+                                                <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
+                                                <button onClick={() => handleOpen(book)} className="cta-btn">Move</button>
                                             </div>
                                         </div>
-                                    );
-                                })}
-                            </div>
-
+                                    </div>
+                                );
+                            })}
                         </div>
                         <div className="pagination">
                             {page > 1 && (

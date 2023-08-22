@@ -16,11 +16,11 @@
     font-size: 32px;
 }
 
-.books__list-all .books__container {
+.books-colorful__container {
     justify-content: center;
 }
 
-.books__list-all .book {
+.book-colorful {
     display: flex;
     flex: 0 0 33%;
     white-space: break-spaces;
@@ -29,7 +29,7 @@
     border-radius: 32px;
 }
 
-.books__list-all .book__image {
+.book-colorful__image {
     margin-right: 20px;
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -38,12 +38,12 @@
     animation: zoomin 0.5s;
 }
 
-.books__list-all .book__info {
+.book-colorful__info {
     width: 100%;
     max-width: 225px;
 }
 
-.books__list-all .book__image:hover {
+.book-colorful__image:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
     transform: translate(0, -64px) scale(1.1);
 }
@@ -54,15 +54,16 @@
     font-weight: 900;
     color: #000;
     margin-bottom: 5px;
+    text-shadow: none;
 }
 
-.books__list-all .book__authors {
+.book__authors {
     font-size: 18px;
     color: rgba(0, 0, 0, 0.7);
     margin-bottom: 15px;
 }
 
-.books__list-all .book__category {
+.book__category {
     display: inline-block;
     border: 0px;
     padding: 8px 16px;

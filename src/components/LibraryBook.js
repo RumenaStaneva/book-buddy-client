@@ -69,7 +69,7 @@ function LibraryBook({ book, fetchBooks }) {
                                 className='book__image'
                             />
                             <div className='book__details'>
-                                <h5 className='book__title'>
+                                <h5 className='book__title book__title-outline'>
                                     {book.title}
                                 </h5>
                                 <p> By: {' '}
