@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../styles/NavBar.css'
 import { useLogout } from '../hooks/useLogout';
@@ -6,9 +6,23 @@ import { useAuthContext } from '../hooks/useAuthContext';
 
 const NavBar = () => {
     const [navVisible, setNavVisible] = useState(false);
-    const { user } = useAuthContext();
+    const { user, dispatch } = useAuthContext();
     const { logout } = useLogout();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleStorageChange = (e) => {
+            if (e.key === 'user') {
+                dispatch({ type: 'LOGIN', payload: JSON.parse(e.newValue) });
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, [dispatch]);
 
     const handleClick = () => {
         logout();

@@ -12,8 +12,8 @@ function Profile() {
     const [bio, setBio] = useState('');
     const [hiddenBio, setHiddenBio] = useState(true);
     const [hiddenUsername, setHiddenUsername] = useState(true);
+    const { user, dispatch } = useAuthContext();
     const [username, setUsername] = useState('');
-    const { user } = useAuthContext();
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -62,6 +62,10 @@ function Profile() {
             }
             setHiddenBio(true);
             setHiddenUsername(true);
+            const localstorageUser = JSON.parse(localStorage.getItem('user'));
+            localstorageUser.username = username;
+            localStorage.setItem('user', JSON.stringify(localstorageUser));
+            dispatch({ type: 'LOGIN', payload: localstorageUser });
             fetchUserData();
         } catch (error) {
             console.error('Error updating username:', error);
@@ -69,15 +73,16 @@ function Profile() {
     };
 
     useEffect(() => {
-        document.title = `${user.username !== '' ? user.username : user.email.split('@')[0]}'s profile`;
+        document.title = `User's profile`;
     }, []);
-
 
     return (
         <>
             <NavBar />
-            <Header title={`${user.username !== '' ? user.username : user.email.split('@')[0]}'s profile`} />
             <div className="profile__container">
+                {isLoading ? null :
+                    <Header title={`${user.username !== '' ? username : user.email.split('@')[0]}'s profile`} />
+                }
                 {isLoading ? (
                     <div className='spinner__container'>
                         <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
