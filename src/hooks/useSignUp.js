@@ -28,7 +28,7 @@ export const useSignup = () => {
 
         if (response.ok) {
             setIsLoading(false);
-            //save user to lacal storage -> in userController when we sign up user we send email and token in json
+            //save user to local storage -> in userController when we sign up user we send email and token in json
             localStorage.setItem('user', JSON.stringify(json));
 
             //update auth context
