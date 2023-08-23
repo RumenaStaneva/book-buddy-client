@@ -27,6 +27,8 @@ function ListAllBooks() {
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
     const handleOpen = (book) => {
         setCurrentBook(book)
@@ -47,22 +49,22 @@ function ListAllBooks() {
         async () => {
             setIsLoading(true);
             try {
-                let response;
+                let url = `${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`;
+
                 if (selectedCategory !== '') {
-                    response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}&category=${selectedCategory}`, {
-                        method: 'GET',
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    });
-                } else {
-                    response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`, {
-                        method: 'GET',
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    });
+                    url += `&category=${selectedCategory}`;
                 }
+
+                if (searchTerm !== '') {
+                    url += `&search=${searchTerm}`;
+                }
+                console.log(url);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
 
                 const data = await response.json();
                 setIsLoading(false);
@@ -73,9 +75,8 @@ function ListAllBooks() {
                 setIsLoading(false);
             }
         },
-        [user, shelfNum, page, limit, selectedCategory],
+        [user, shelfNum, page, limit, selectedCategory, searchTerm],
     )
-
     useEffect(() => {
         if (user) {
             fetchBooks();
@@ -120,15 +121,14 @@ function ListAllBooks() {
         fetchBooks();
     };
 
+    const handleSearchQuery = () => {
+        setSearchTerm(searchQuery);
+        fetchBooks();
+    }
+    console.log(searchQuery);
     return <>
         <NavBar />
         < main className="books__list-all">
-            <CategoryFilter categories={Object.values(BookCategories)} onSelect={handleCategoryChange} />
-            {selectedCategory && (
-                <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
-                    Clear Filter
-                </button>
-            )}
             {isLoading ? (
                 <div className='spinner__container'>
                     <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
@@ -160,6 +160,22 @@ function ListAllBooks() {
                         <div className="heading-section">
                             <h1 className="section-title">All books on {getShelfName()}</h1>
                         </div>
+                        <div className="filters__container">
+                            <CategoryFilter categories={Object.values(BookCategories)} onSelect={handleCategoryChange} />
+                            {selectedCategory && (
+                                <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
+                                    Clear Filter
+                                </button>
+                            )}
+                            <input
+                                type="text"
+                                placeholder="Search books..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                            <button onClick={handleSearchQuery}>Search</button>
+                        </div>
+
                         <div className="books__container books-colorful__container">
                             {books.map(book => {
                                 const categoryColor = categoryColors[book.category] || '#FFFFFF';
@@ -194,7 +210,7 @@ function ListAllBooks() {
                             {page > 1 && (
                                 <button className="pagination-button" onClick={() => setPage(page - 1)}>Previous</button>
                             )}
-                            <span className="pagination-text">Page {page} of {totalPages}</span>
+                            <span className="pagination-text">Page {page} of {totalPages === 0 ? '1' : totalPages}</span>
                             {page < totalPages && (
                                 <button className="pagination-button" onClick={() => setPage(page + 1)}>Next</button>
                             )}
