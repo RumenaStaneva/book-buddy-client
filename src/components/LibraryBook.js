@@ -2,6 +2,8 @@ import { useState } from 'react';
 import '../styles/Library.css'
 import LinearProgressWithLabel from './Progress'
 import { useAuthContext } from "../hooks/useAuthContext";
+import { GiBookmarklet } from "react-icons/gi";
+import categoryColors from "../constants/categoryColors";
 import '../styles/LibraryBook.css'
 
 function LibraryBook({ book, fetchBooks }) {
@@ -47,9 +49,11 @@ function LibraryBook({ book, fetchBooks }) {
         }
     }
 
+    const categoryColor = categoryColors[book.category] || '#FFFFFF';
+
     return (
         <>
-            <div className='books__container'>
+            <div className='books__container currently-reading__container'>
                 {
                     <div className='book'>
                         <div className='blur-background' style={{ backgroundImage: `url(${book.thumbnail})` }}></div>
@@ -69,12 +73,25 @@ function LibraryBook({ book, fetchBooks }) {
                                 className='book__image'
                             />
                             <div className='book__details'>
-                                <h5 className='book__title book__title-outline'>
+                                <h5 className='book__title book-font__outline'>
                                     {book.title}
                                 </h5>
-                                <p> By: {' '}
+                                <p className='book__authors'> By: {' '}
                                     {book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}
                                 </p>
+                                <div className='details__additional-info'>
+                                    <div className='book__all-pages'>
+                                        <p className='book-font__outline'>Print Length</p>
+                                        <div className='d-flex fw-600'>
+                                            <GiBookmarklet />
+                                            <p>{book.pageCount}</p>
+                                        </div>
+                                    </div>
+                                    <div className="book__action-area">
+                                        <p className='book-font__outline'>Category</p>
+                                        <span className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</span>
+                                    </div>
+                                </div>
                                 {inputVisible ? (
                                     <>
                                         <label htmlFor="updatedProgress">Read pages: </label>
@@ -92,7 +109,6 @@ function LibraryBook({ book, fetchBooks }) {
                                         <div className='book__progress'>
                                             <LinearProgressWithLabel value={bookProgressInPercentage != null ? bookProgressInPercentage : calculateProgress()} />
                                         </div>
-                                        <p>{book.pageCount}</p>
                                         <button onClick={() => setInputVisible(true)}>Update progress</button>
                                     </>
                                 )}

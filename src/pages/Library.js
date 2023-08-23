@@ -8,6 +8,7 @@ import LibraryBook from '../components/LibraryBook';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import categoryColors from "../constants/categoryColors";
+import { GiBookmarklet } from "react-icons/gi";
 
 
 import 'swiper/css';
@@ -27,9 +28,9 @@ function Library() {
     const [readBooks, setReadBooks] = useState(null);
     const { user } = useAuthContext();
 
-    useEffect(() => {
-        document.title = `${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`;
-    }, []);
+    // useEffect(() => {
+    //     document.title = `${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`;
+    // }, []);
 
     const fetchBooks = useCallback(
         async () => {
@@ -62,9 +63,12 @@ function Library() {
     return (
         <>
             <NavBar />
-            <Header title={`${!wantToReadBooks.length > 0 && !currentlyReadingBooks.length && !readBooks.length ?
-                `No books in library`
-                : `${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`}`} />
+            {isLoading ?
+                null :
+                <Header title={!wantToReadBooks.length > 0 && !currentlyReadingBooks.length && !readBooks.length ?
+                    `No books in ${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`
+                    : `${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`} />
+            }
 
             <main className='books__library'>
                 {isLoading ? (
@@ -75,8 +79,10 @@ function Library() {
                     <>
                         {currentlyReadingBooks.length > 0 ?
                             <>
-                                < p > Currently reading</p >
-                                <a href='/books/see-all?shelf=1'>See all</a>
+                                <div className='shelf-header'>
+                                    <h2 className='shelf-title'>Currently Reading</h2>
+                                    <a href='/books/see-all?shelf=1' className='cta-btn'>See all</a>
+                                </div>
                                 <div className='books__container'>
                                     {<Swiper
                                         pagination={{
@@ -116,8 +122,10 @@ function Library() {
 
                         {wantToReadBooks.length > 0 ?
                             <>
-                                < p > Want to read books</p >
-                                <a href='/books/see-all?shelf=0'>See all</a>
+                                <div className='shelf-header'>
+                                    <h2 className='shelf-title'>Want to read books</h2>
+                                    <a href='/books/see-all?shelf=0' className='cta-btn'>See all</a>
+                                </div>
                                 <div className='books__container books-colorful__container'>
                                     {
                                         wantToReadBooks.map(book => {
@@ -129,7 +137,7 @@ function Library() {
                                                 <div key={book._id} className="book-colorful" style={bookStyle}>
                                                     <CardActionArea
                                                         className='book__button'
-                                                        component='button'
+                                                        // component='button'
                                                         onClick={event => {
                                                             event.stopPropagation();
                                                             event.preventDefault();
@@ -154,9 +162,18 @@ function Library() {
                                                             <Typography variant="body2" color="text.secondary" className='book__description'>
                                                                 {book.description}
                                                             </Typography>
-                                                            <p>{book.pageCount}</p>
-                                                            <div className="book__action-area">
-                                                                <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
+                                                            <div className='details__additional-info'>
+                                                                <div className='book__all-pages'>
+                                                                    <p className='book-font__outline'>Print Length</p>
+                                                                    <div className='d-flex fw-600'>
+                                                                        <GiBookmarklet />
+                                                                        <p>{book.pageCount}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="book__action-area">
+                                                                    <p className='book-font__outline'>Category</p>
+                                                                    <span className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</span>
+                                                                </div>
                                                             </div>
                                                         </CardContent>
                                                     </CardActionArea>
@@ -168,63 +185,76 @@ function Library() {
                             </>
                             : <p>Nothing in want to read shelf</p>
                         }
-                        {readBooks.length > 0 ?
-                            <>
-                                < p > Already read</p >
-                                <a href='/books/see-all?shelf=2'>See all</a>
-                                <div className='books__container books-colorful__container'>
-                                    {
-                                        readBooks.map(book => {
-                                            const categoryColor = categoryColors[book.category] || '#FFFFFF';
-                                            const bookStyle = {
-                                                background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
-                                            }
-                                            return (
-                                                <div key={book._id} className="book-colorful" style={bookStyle}>
-                                                    <CardActionArea
-                                                        className='book__button'
-                                                        component='button'
-                                                        onClick={event => {
-                                                            event.stopPropagation();
-                                                            event.preventDefault();
-                                                        }}
-                                                    >
-                                                        <CardMedia
-                                                            component="img"
-                                                            src={
-                                                                book.thumbnail === undefined
-                                                                    ? require('../images/image-not-available.png')
-                                                                    : `${book.thumbnail}`
-                                                            } alt={`${book.title}`}
-                                                            className='book-colorful__image'
-                                                        />
-                                                        <CardContent className='book-colorful__info'>
-                                                            <h5 component="div" className='book__title book__title-outline'>
-                                                                {book.title}
-                                                            </h5>
-                                                            <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
-                                                                {book.authors}
-                                                            </Typography>
-                                                            <Typography variant="body2" color="text.secondary" className='book__description'>
-                                                                {book.description}
-                                                            </Typography>
-                                                            <p>{book.pageCount}</p>
-                                                            <div className="book__action-area">
-                                                                <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
-                                                            </div>
-                                                        </CardContent>
-                                                    </CardActionArea>
-                                                </div>
-                                            )
-                                        })}
-                                </div >
-                            </>
-                            : <p>No books to display</p>}
+                        {
+                            readBooks.length > 0 ?
+                                <>
+                                    <div className='shelf-header'>
+                                        <h2 className='shelf-title'>Already read</h2>
+                                        <a href='/books/see-all?shelf=2' className='cta-btn'>See all</a>
+                                    </div>
+                                    <div className='books__container books-colorful__container'>
+                                        {
+                                            readBooks.map(book => {
+                                                const categoryColor = categoryColors[book.category] || '#FFFFFF';
+                                                const bookStyle = {
+                                                    background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
+                                                }
+                                                return (
+                                                    <div key={book._id} className="book-colorful" style={bookStyle}>
+                                                        <CardActionArea
+                                                            className='book__button'
+                                                            // component='button'
+                                                            onClick={event => {
+                                                                event.stopPropagation();
+                                                                event.preventDefault();
+                                                            }}
+                                                        >
+                                                            <CardMedia
+                                                                component="img"
+                                                                src={
+                                                                    book.thumbnail === undefined
+                                                                        ? require('../images/image-not-available.png')
+                                                                        : `${book.thumbnail}`
+                                                                } alt={`${book.title}`}
+                                                                className='book-colorful__image'
+                                                            />
+                                                            <CardContent className='book-colorful__info'>
+                                                                <h5 component="div" className='book__title book__title-outline'>
+                                                                    {book.title}
+                                                                </h5>
+                                                                <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
+                                                                    {book.authors}
+                                                                </Typography>
+                                                                <Typography variant="body2" color="text.secondary" className='book__description'>
+                                                                    {book.description}
+                                                                </Typography>
+                                                                <div className='details__additional-info'>
+                                                                    <div className='book__all-pages'>
+                                                                        <p className='book-font__outline'>Print Length</p>
+                                                                        <div className='d-flex fw-600'>
+                                                                            <GiBookmarklet />
+                                                                            <p>{book.pageCount}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="book__action-area">
+                                                                        <p className='book-font__outline'>Category</p>
+                                                                        <span className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </CardContent>
+                                                        </CardActionArea>
+                                                    </div>
+                                                )
+                                            })}
+                                    </div >
+                                </>
+                                : <p>No books to display</p>
+                        }
                     </>
 
                 )
                 }
-            </main>
+            </main >
         </>
     )
 }

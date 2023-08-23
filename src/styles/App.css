@@ -11,14 +11,30 @@
     border: 0px;
     border-radius: 32px;
     background-color: #D92868;
+    border: 1px solid #D92868;
     color: #fff;
     font-size: 14px;
     cursor: pointer;
     margin: 0 auto;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.cta-btn:hover {
+    color: #D92868;
+    background-color: #fff;
 }
 
 .header {
     color: #111;
     padding: 2rem 1rem 0;
     text-align: center;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.fw-600 {
+    font-weight: 600;
 }
