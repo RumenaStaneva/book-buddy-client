@@ -14,7 +14,6 @@ import { GiBookmarklet } from "react-icons/gi";
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
@@ -137,11 +136,11 @@ function Library() {
                                                 <div key={book._id} className="book-colorful" style={bookStyle}>
                                                     <CardActionArea
                                                         className='book__button'
-                                                        // component='button'
+                                                        component='a'
                                                         onClick={event => {
                                                             event.stopPropagation();
-                                                            event.preventDefault();
                                                         }}
+                                                        href={`/books/book-details/${book._id}`}
                                                     >
                                                         <CardMedia
                                                             component="img"
@@ -203,11 +202,11 @@ function Library() {
                                                     <div key={book._id} className="book-colorful" style={bookStyle}>
                                                         <CardActionArea
                                                             className='book__button'
-                                                            // component='button'
+                                                            component='a'
                                                             onClick={event => {
                                                                 event.stopPropagation();
-                                                                event.preventDefault();
                                                             }}
+                                                            href={`/books/book-details/${book._id}`}
                                                         >
                                                             <CardMedia
                                                                 component="img"
