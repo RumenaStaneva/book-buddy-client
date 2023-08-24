@@ -4,12 +4,18 @@ import NavBar from '../components/NavBar';
 import Header from '../components/Header'
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useParams } from 'react-router-dom';
+import categoryColors from "../constants/categoryColors";
+import EditBookModal from '../components/EditBookModal';
+import { AiFillEdit } from "react-icons/ai";
 import '../styles/BookDetails.css'
 
 function BookDetails() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [bookDetails, setBookDetails] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [bookCategoryColor, setBookCategoryColor] = useState();
+  const [bookStyle, setBookStyle] = useState();
   const { user } = useAuthContext();
   const params = useParams();
 
@@ -17,7 +23,7 @@ function BookDetails() {
     document.title = `Book details`;
   }, []);
 
-  const fetchBooks = useCallback(
+  const fetchBook = useCallback(
     async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/book-details?bookId=${params.bookId}`, {
@@ -29,20 +35,28 @@ function BookDetails() {
         const data = await response.json();
         console.log(data.book);
         setBookDetails(data.book);
+        setBookCategoryColor(categoryColors[data.book.category] || '#FFFFFF');
+        setBookStyle({
+          background: `linear-gradient(${categoryColors[data.book.category]}, rgba(0, 0, 0, 0))`,
+        });
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching book data:', error);
         setIsLoading(false);
       }
     },
-    [user],
+    [user, params.bookId],
   )
 
   useEffect(() => {
     if (user) {
-      fetchBooks();
+      fetchBook();
     }
-  }, [user, fetchBooks]);
+  }, [user, fetchBook]);
+
+  const handleEditBook = () => {
+    setIsOpen(true);
+  }
 
   return (
     <>
@@ -52,9 +66,11 @@ function BookDetails() {
       ) : (
         <>
           <Header title='Book Details' />
-          <div className="book-details-container">
+          <main className="book-details-container">
+            {isOpen && <EditBookModal setIsOpen={setIsOpen} bookDetails={bookDetails} />}
             {bookDetails !== null ? (
-              <div className="book-card">
+              <div className="book-card" style={bookStyle}>
+                <AiFillEdit className="edit-book__icon" onClick={handleEditBook} />
                 <div className="book-thumbnail">
                   <img
                     src={bookDetails.thumbnail}
@@ -63,17 +79,18 @@ function BookDetails() {
                 </div>
                 <div className="book-details">
                   <h2 className="book-title">{bookDetails.title}</h2>
-                  <p className="book-category">{bookDetails.category}</p>
+                  <p className="book-category book__category" style={{ backgroundColor: bookCategoryColor }}>{bookDetails.category}</p>
                   <p className="book-description">{bookDetails.description}</p>
                   <p className="book-authors">
-                    Authors: {bookDetails.authors.join(', ')}
+                    Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
                   </p>
+                  <button onClick={handleEditBook}>Edit</button>
                 </div>
               </div>
             ) : (
               <h2>Nothing to see here</h2>
             )}
-          </div>
+          </main>
         </>
       )}
     </>

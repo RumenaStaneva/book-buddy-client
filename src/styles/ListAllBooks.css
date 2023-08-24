@@ -155,20 +155,6 @@
     color: #111;
 }
 
-/* .edit-book__icon {
-    position: absolute;
-    right: 20px;
-    width: 25px;
-    height: 25px;
-    fill: #111;
-    cursor: pointer;
-    transition: fill ease-in-out;
-}
-
-.edit-book__icon:hover {
-    fill: #fff;
-} */
-
 @media (max-width: 768px) {
     .books__list-all .book {
         flex: 0 0 50%;
