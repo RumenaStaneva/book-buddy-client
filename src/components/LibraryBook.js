@@ -106,6 +106,11 @@ function LibraryBook({ book, fetchBooks }) {
                                     </>
                                 ) : (
                                     <>
+                                        <a
+                                            onClick={event => {
+                                                event.stopPropagation();
+                                            }}
+                                            href={`/books/book-details/${book._id}`}>See more</a>
                                         <div className='book__progress'>
                                             <LinearProgressWithLabel value={bookProgressInPercentage != null ? bookProgressInPercentage : calculateProgress()} />
                                         </div>

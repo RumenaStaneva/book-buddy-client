@@ -7,16 +7,20 @@ import BookCategories from "../constants/bookCategories";
 import { IoIosClose } from 'react-icons/io'
 
 
-const EditBookModal = ({ setIsOpen, bookDetails }) => {
-    const [shelf, setShelf] = useState(bookDetails.shelf);
-    const [category, setCategory] = useState(bookDetails.category);
-    const [bookToAdd, setBookToAdd] = useState(null);
+const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
+    const [updatedShelf, setUpdatedShelf] = useState(bookDetails.shelf);
+    const [updatedCategory, setUpdatedCategory] = useState(bookDetails.category);
+    const [bookToUpdate, setBookToUpdate] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
     const { user } = useAuthContext();
-    const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
+    const shelfOptions = [
+        { value: 0, label: 'Want to read' },
+        { value: 1, label: 'Currently reading' },
+        { value: 2, label: 'Read' }
+    ];
 
     const handleDescriptionChange = (e) => {
         setUpdatedDescription(e.target.value);
@@ -24,27 +28,33 @@ const EditBookModal = ({ setIsOpen, bookDetails }) => {
     const handlePageCountChange = (e) => {
         setUpdatedPageCount(e.target.value);
     }
-    const handleOptionSelect = (selectedOption) => {
-        if (selectedOption === 'Want to read') {
-            setShelf(0);
-        } else if (selectedOption === 'Currently reading') {
-            setShelf(1);
-        } else if (selectedOption === 'Read') {
-            setShelf(2);
+    const handleThumbnailChange = (e) => {
+        setUpdatedThumbnail(e.target.value);
+    }
+    const handleShelfSelect = (selectedOption) => {
+        const selectedValue = shelfOptions.find(option => option.label === selectedOption)?.value;
+        if (selectedValue !== undefined) {
+            setUpdatedShelf(selectedValue);
         }
     };
-
     const handleCategorySelect = (selectedCategory) => {
-        setCategory(selectedCategory);
+        setUpdatedCategory(selectedCategory);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const { bookApiId, title,
+        const {
+            _id,
+            bookApiId,
+            title,
             authors,
-            publisher
+            publisher,
+            notes,
+            progress,
+
         } = bookDetails;
-        setBookToAdd({
+        setBookToUpdate({
+            _id,
             bookApiId: bookApiId,
             userEmail: user.email,
             title: title,
@@ -52,21 +62,39 @@ const EditBookModal = ({ setIsOpen, bookDetails }) => {
             description: updatedDescription,
             publisher: publisher,
             thumbnail: updatedThumbnail,
-            category: category,
+            category: updatedCategory,
             pageCount: updatedPageCount,
-            notes: [],
-            progress: 0,
-            shelf: shelf
+            notes: notes,
+            progress: progress,
+            shelf: updatedShelf
         });
     }
+    const updateBook = async (updatedBook) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({
+                    book: updatedBook
+                }),
+            });
 
-    const shelfValueToLabel = {
-        0: 'Want to read',
-        1: 'Currently reading',
-        2: 'Read'
-    };
+            await response.json();
+            setIsOpen(false);
+            fetchBook();
+        } catch (error) {
+            console.error('Error updating book:', error);
+        }
+    }
 
-
+    useEffect(() => {
+        if (bookToUpdate) {
+            updateBook(bookToUpdate);
+        }
+    }, [bookToUpdate, user]);
 
 
     return (
@@ -102,12 +130,20 @@ const EditBookModal = ({ setIsOpen, bookDetails }) => {
                                     <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
                                 </div>
                                 <div className="modal__section">
-                                    <Dropdown options={shelfOptions} onSelect={handleOptionSelect} selectedOption={shelf !== null ? shelfValueToLabel[shelf] : null} />
+                                    <label htmlFor="bookImage">Book image</label>
+                                    <input type="text" name="bookImage" value={updatedThumbnail} onChange={handleThumbnailChange} />
                                 </div>
                                 <div className="modal__section">
-                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={category} />
+                                    <Dropdown
+                                        options={shelfOptions.map(option => option.label)}
+                                        onSelect={handleShelfSelect}
+                                        selectedOption={updatedShelf !== null ? shelfOptions.find(option => option.value === updatedShelf)?.label : null}
+                                    />
                                 </div>
-                                <button type="submit" className="cta-button" onClick={handleSubmit}>
+                                <div className="modal__section">
+                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
+                                </div>
+                                <button type="submit" className="cta-button">
                                     Edit Book
                                 </button>
                             </form>

@@ -33,7 +33,7 @@ function BookDetails() {
         });
 
         const data = await response.json();
-        console.log(data.book);
+        // console.log(data.book);
         setBookDetails(data.book);
         setBookCategoryColor(categoryColors[data.book.category] || '#FFFFFF');
         setBookStyle({
@@ -67,7 +67,7 @@ function BookDetails() {
         <>
           <Header title='Book Details' />
           <main className="book-details-container">
-            {isOpen && <EditBookModal setIsOpen={setIsOpen} bookDetails={bookDetails} />}
+            {isOpen && <EditBookModal setIsOpen={setIsOpen} bookDetails={bookDetails} fetchBook={fetchBook} />}
             {bookDetails !== null ? (
               <div className="book-card" style={bookStyle}>
                 <AiFillEdit className="edit-book__icon" onClick={handleEditBook} />
@@ -84,7 +84,8 @@ function BookDetails() {
                   <p className="book-authors">
                     Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
                   </p>
-                  <button onClick={handleEditBook}>Edit</button>
+                  {/* TODO add notes */}
+                  <button>Add notes</button>
                 </div>
               </div>
             ) : (
