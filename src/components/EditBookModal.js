@@ -8,8 +8,8 @@ import { IoIosClose } from 'react-icons/io'
 
 
 const EditBookModal = ({ setIsOpen, bookDetails }) => {
-    const [shelf, setShelf] = useState(0);
-    const [category, setCategory] = useState(0);
+    const [shelf, setShelf] = useState(bookDetails.shelf);
+    const [category, setCategory] = useState(bookDetails.category);
     const [bookToAdd, setBookToAdd] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
@@ -60,42 +60,14 @@ const EditBookModal = ({ setIsOpen, bookDetails }) => {
         });
     }
 
+    const shelfValueToLabel = {
+        0: 'Want to read',
+        1: 'Currently reading',
+        2: 'Read'
+    };
 
-    useEffect(() => {
-        try {
-            if (bookToAdd) {
 
-                fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/add-to-shelf`, {
-                    method: 'POST',
-                    body: JSON.stringify(bookToAdd),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}`
-                    },
-                })
-                    .then(function (response) {
-                        if (!response.ok) {
-                            return response.json().then(data => {
-                                throw new Error(data.error);
-                            });
-                        }
-                        setErrorMessage('');
-                        setIsOpen(false);
-                        // onBookAdded(bookToAdd.title);
-                        return response.json();
-                    })
-                    .then(function (data) {
-                        setErrorMessage('');
-                    })
-                    .catch(function (error) {
-                        setErrorMessage(error.message);
-                    });
-            }
-        } catch (error) {
-            setErrorMessage(error.message);
-        }
-        setBookToAdd(null);
-    }, [bookToAdd, user, setIsOpen]);
+
 
     return (
         <>
@@ -130,10 +102,10 @@ const EditBookModal = ({ setIsOpen, bookDetails }) => {
                                     <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
                                 </div>
                                 <div className="modal__section">
-                                    <Dropdown options={shelfOptions} onSelect={handleOptionSelect} />
+                                    <Dropdown options={shelfOptions} onSelect={handleOptionSelect} selectedOption={shelf !== null ? shelfValueToLabel[shelf] : null} />
                                 </div>
                                 <div className="modal__section">
-                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} />
+                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={category} />
                                 </div>
                                 <button type="submit" className="cta-button" onClick={handleSubmit}>
                                     Edit Book
