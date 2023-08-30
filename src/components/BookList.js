@@ -5,14 +5,12 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import '../styles/books-list.css'
-// import { useAuthContext } from '../hooks/useAuthContext';
 import Modal from '../components/Modal'
 
 
 function BookList({ books }) {
     const [bookToAdd, setBookToAdd] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
-    // const [bookDetails, setBookDetails] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
 
 
