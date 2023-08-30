@@ -17,6 +17,8 @@ function BookDetails() {
   const [bookCategoryColor, setBookCategoryColor] = useState();
   const [bookStyle, setBookStyle] = useState();
   const { user } = useAuthContext();
+  const [notesIsVisible, setNotesIsVisible] = useState(false);
+  const [note, setNote] = useState('');
   const params = useParams();
 
   useEffect(() => {
@@ -57,6 +59,24 @@ function BookDetails() {
   const handleEditBook = () => {
     setIsOpen(true);
   }
+  const handleAddNote = async (bookId) => {
+    try {
+      console.log(note);
+      const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/add-note`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        },
+        body: JSON.stringify({ noteText: note, bookId }),
+      })
+      const data = await response.json();
+      console.log(data);
+      setNotesIsVisible(false);
+    } catch (error) {
+      console.log('Error creating note: ', error);
+    }
+  }
 
   return (
     <>
@@ -84,9 +104,19 @@ function BookDetails() {
                   <p className="book-authors">
                     Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
                   </p>
-                  {/* TODO add notes */}
-                  <button>Add notes</button>
+                  {notesIsVisible ? null :
+                    <button onClick={() => setNotesIsVisible(true)}>Create note for this book</button>
+                  }
+                  <a href={`/notes/see-book-notes/${bookDetails._id}`}>See book's notes</a>
                 </div>
+
+                {notesIsVisible ?
+                  <div>
+                    <label htmlFor="addNote">Create note for this book: </label>
+                    <textarea name="addNote" id="addNote" cols="100" rows="10" onChange={(e) => setNote(e.target.value)}></textarea>
+                    <button className='cta-btn' onClick={() => handleAddNote(bookDetails._id)}>Add note</button>
+                  </div>
+                  : null}
               </div>
             ) : (
               <h2>Nothing to see here</h2>
