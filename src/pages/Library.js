@@ -22,14 +22,10 @@ import { CardActionArea } from '@mui/material';
 function Library() {
 
     const [isLoading, setIsLoading] = useState(true);
-    const [wantToReadBooks, setWantToReadBooks] = useState(null);
-    const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState(null);
-    const [readBooks, setReadBooks] = useState(null);
+    const [wantToReadBooks, setWantToReadBooks] = useState([]);
+    const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState([]);
+    const [readBooks, setReadBooks] = useState([]);
     const { user } = useAuthContext();
-
-    // useEffect(() => {
-    //     document.title = `${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`;
-    // }, []);
 
     const fetchBooks = useCallback(
         async () => {
@@ -59,14 +55,21 @@ function Library() {
         }
     }, [user, fetchBooks]);
 
+    useEffect(() => {
+        document.title = `User's library`;
+    }, []);
+
     return (
         <>
             <NavBar />
             {isLoading ?
                 null :
-                <Header title={!wantToReadBooks.length > 0 && !currentlyReadingBooks.length && !readBooks.length ?
-                    `No books in ${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`
-                    : `${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`} />
+                <Header title={(wantToReadBooks && wantToReadBooks.length > 0) ||
+                    (currentlyReadingBooks && currentlyReadingBooks.length > 0) ||
+                    (readBooks && readBooks.length > 0)
+                    ? `User's library`
+                    : `No books in ${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`} />
+
             }
 
             <main className='books__library'>
@@ -76,7 +79,7 @@ function Library() {
                     </div>
                 ) : (
                     <>
-                        {currentlyReadingBooks.length > 0 ?
+                        {currentlyReadingBooks && currentlyReadingBooks.length > 0 ?
                             <>
                                 <div className='shelf-header'>
                                     <h2 className='shelf-title'>Currently Reading</h2>
@@ -119,7 +122,7 @@ function Library() {
                             </>
                             : <p>No books to display</p>}
 
-                        {wantToReadBooks.length > 0 ?
+                        {wantToReadBooks && wantToReadBooks.length > 0 ?
                             <>
                                 <div className='shelf-header'>
                                     <h2 className='shelf-title'>Want to read books</h2>
@@ -185,7 +188,7 @@ function Library() {
                             : <p>Nothing in want to read shelf</p>
                         }
                         {
-                            readBooks.length > 0 ?
+                            readBooks && readBooks.length > 0 ?
                                 <>
                                     <div className='shelf-header'>
                                         <h2 className='shelf-title'>Already read</h2>
