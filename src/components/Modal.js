@@ -8,15 +8,19 @@ import { IoIosClose } from 'react-icons/io'
 
 
 const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
-    const [shelf, setShelf] = useState(0);
-    const [category, setCategory] = useState(0);
+    const [shelf, setShelf] = useState(null);
+    const [category, setCategory] = useState(null);
     const [bookToAdd, setBookToAdd] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
     const { user } = useAuthContext();
-    const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
+    const shelfOptions = [
+        { value: 0, label: 'Want to read' },
+        { value: 1, label: 'Currently reading' },
+        { value: 2, label: 'Read' }
+    ];
 
     const handleDescriptionChange = (e) => {
         setUpdatedDescription(e.target.value);
@@ -25,12 +29,10 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
         setUpdatedPageCount(e.target.value);
     }
     const handleOptionSelect = (selectedOption) => {
-        if (selectedOption === 'Want to read') {
-            setShelf(0);
-        } else if (selectedOption === 'Currently reading') {
-            setShelf(1);
-        } else if (selectedOption === 'Read') {
-            setShelf(2);
+        const selectedValue = shelfOptions.find(option => option.label === selectedOption)?.value;
+        if (selectedValue !== undefined) {
+            setShelf(selectedValue);
+
         }
     };
 
@@ -40,7 +42,8 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { bookApiId, title,
+        const { bookApiId,
+            title,
             authors,
             publisher
         } = bookDetails;
@@ -130,25 +133,18 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                     <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
                                 </div>
                                 <div className="modal__section">
-                                    <Dropdown options={shelfOptions} onSelect={handleOptionSelect} />
+                                    <Dropdown
+                                        options={shelfOptions.map(option => option.label)}
+                                        onSelect={handleOptionSelect}
+                                        selectedOption={shelf !== null ? shelfOptions.find(option => option.value === shelf).label : null}
+                                    />
                                 </div>
                                 <div className="modal__section">
-                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} />
+                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={category !== null ? category : null} />
                                 </div>
-                                {/* <button type="submit" onClick={handleSubmit}>Add</button> */}
                                 <button type="submit" className="cta-button" onClick={handleSubmit}>
                                     Add Book
                                 </button>
-                                {/* <div className="modalActions">
-                                    <div className="actionsContainer">
-                                        <button
-                                            className="cancelBtn"
-                                            onClick={() => setIsOpen(false)}
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div> */}
                             </form>
                         </div>
                     </div>
