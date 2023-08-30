@@ -5,14 +5,12 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import '../styles/books-list.css'
-// import { useAuthContext } from '../hooks/useAuthContext';
 import Modal from '../components/Modal'
 
 
 function BookList({ books }) {
     const [bookToAdd, setBookToAdd] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
-    // const [bookDetails, setBookDetails] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
 
 
@@ -79,7 +77,7 @@ function BookList({ books }) {
                                             {book.volumeInfo.title}
                                         </Typography>
                                         <Typography gutterBottom variant="subtitle1" component="div">
-                                            {book.volumeInfo.authors}
+                                            {book.volumeInfo.authors.map((author, index) => index === book.volumeInfo.authors.length - 1 ? author : `${author}, `)}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary" className='book__description'>
                                             {book.volumeInfo.description}

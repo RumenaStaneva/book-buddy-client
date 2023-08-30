@@ -9,9 +9,10 @@ import ErrorPage from './pages/ErrorPage';
 import './styles/App.css'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
-// import BookDetailsPage from './pages/BookDetailsPage';
+import BookDetails from './pages/BookDetails';
 import Profile from './pages/Profile';
 import Library from './pages/Library';
+import ListAllBooks from './pages/ListAllBooks';
 
 function App() {
 
@@ -28,7 +29,8 @@ function App() {
         <Route path="/users/forgotten-password" element={<PasswordReset />} />
         <Route path="/users/profile" element={<Profile />} />
         <Route path='/books/library' element={<Library />} />
-
+        <Route path='/books/see-all' element={<ListAllBooks />} />
+        <Route path='/books/book-details/:bookId' element={<BookDetails />} />
         <Route path='*' element={<ErrorPage />} />
       </Routes>
     </>

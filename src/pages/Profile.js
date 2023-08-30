@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
+import Header from '../components/Header';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import '../styles/Profile.css'
@@ -11,8 +12,8 @@ function Profile() {
     const [bio, setBio] = useState('');
     const [hiddenBio, setHiddenBio] = useState(true);
     const [hiddenUsername, setHiddenUsername] = useState(true);
+    const { user, dispatch } = useAuthContext();
     const [username, setUsername] = useState('');
-    const { user } = useAuthContext();
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -61,17 +62,27 @@ function Profile() {
             }
             setHiddenBio(true);
             setHiddenUsername(true);
+            const localstorageUser = JSON.parse(localStorage.getItem('user'));
+            localstorageUser.username = username;
+            localStorage.setItem('user', JSON.stringify(localstorageUser));
+            dispatch({ type: 'LOGIN', payload: localstorageUser });
             fetchUserData();
         } catch (error) {
             console.error('Error updating username:', error);
         }
     };
 
+    useEffect(() => {
+        document.title = `User's profile`;
+    }, []);
 
     return (
         <>
             <NavBar />
             <div className="profile__container">
+                {isLoading ? null :
+                    <Header title={`${user.username !== '' ? username : user.email.split('@')[0]}'s profile`} />
+                }
                 {isLoading ? (
                     <div className='spinner__container'>
                         <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />

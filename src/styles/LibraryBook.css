@@ -1,5 +1,5 @@
 .book {
-    max-width: 500px;
+    max-width: 600px;
     position: relative;
     padding: 0 20px;
 }
@@ -13,4 +13,86 @@
     background-size: cover;
     filter: blur(10px);
     z-index: -1;
+}
+
+.book-font__outline {
+    text-shadow: 3px 3px 5px #111, 3px 3px 5px #111;
+}
+
+.details__additional-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.book__all-pages {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.book__all-pages p:first-child {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.book__all-pages svg {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.details__additional-info .book__category {
+    max-width: 150px;
+    width: 100%;
+    margin-right: 0;
+    font-size: 12px;
+
+}
+
+.book__details .book__see-more {
+    color: #111;
+    font-size: 14px;
+    text-decoration: none;
+    position: relative;
+}
+
+.book__details .book__see-more::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    width: 0;
+    background-color: #111;
+    transition: width 0.3s ease;
+}
+
+.book__details .book__see-more:hover::after {
+    color: #111;
+    width: 100%;
+}
+
+
+.book__details .book__see-more svg {
+    margin-left: 5px;
+}
+
+.book__progress {
+    margin-bottom: 10px;
+}
+
+.details__additional-info .book__action-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.details__additional-info .book__action-area p {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
 }

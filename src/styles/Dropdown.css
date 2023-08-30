@@ -3,18 +3,29 @@
     display: inline-block;
     width: 100%;
     max-width: 250px;
+    margin-bottom: 20px;
 }
 
-/* Selected Option */
 .selected-option {
-    background-color: #f0f0f0;
+    background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 8px;
     cursor: pointer;
+    background-image:
+        linear-gradient(45deg, transparent 50%, #111 50%),
+        linear-gradient(135deg, #111 50%, transparent 50%);
+    background-position:
+        calc(100% - 20px) calc(1em + 2px),
+        calc(100% - 15px) calc(1em + 2px),
+        100% 0;
+    background-size:
+        5px 5px,
+        5px 5px,
+        2.5em 2.5em;
+    background-repeat: no-repeat;
 }
 
-/* Dropdown Options */
 .dropdown-options {
     list-style: none;
     padding: 0;
@@ -35,14 +46,12 @@
     transition: max-height 0.3s ease-in-out;
 }
 
-/* Dropdown Option */
 .dropdown-option {
     padding: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
 }
 
-/* Apply same height to all options */
 .dropdown-option:nth-child(even) {
     background-color: #f9f9f9;
 }
@@ -51,7 +60,22 @@
     background-color: #f0f0f0;
 }
 
-/* Show Dropdown Options when Open */
 .dropdown.open .dropdown-options {
     display: block;
+}
+
+.dropdown.open .selected-option {
+    background-image:
+        linear-gradient(45deg, #111 50%, transparent 50%),
+        linear-gradient(135deg, transparent 50%, #111 50%);
+    background-position:
+        calc(100% - 15px) 1em,
+        calc(100% - 20px) 1em,
+        100% 0;
+    background-size:
+        5px 5px,
+        5px 5px,
+        1px 1.5em;
+    background-repeat: no-repeat;
+    outline: 0;
 }

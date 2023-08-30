@@ -5,6 +5,10 @@
     padding: 10px;
 }
 
+.profile__container h1 {
+    margin-bottom: 20px;
+}
+
 .spinner__container {
     display: flex;
     justify-content: center;

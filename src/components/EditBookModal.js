@@ -7,10 +7,10 @@ import BookCategories from "../constants/bookCategories";
 import { IoIosClose } from 'react-icons/io'
 
 
-const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
-    const [shelf, setShelf] = useState(null);
-    const [category, setCategory] = useState(null);
-    const [bookToAdd, setBookToAdd] = useState(null);
+const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
+    const [updatedShelf, setUpdatedShelf] = useState(bookDetails.shelf);
+    const [updatedCategory, setUpdatedCategory] = useState(bookDetails.category);
+    const [bookToUpdate, setBookToUpdate] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
@@ -28,26 +28,33 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     const handlePageCountChange = (e) => {
         setUpdatedPageCount(e.target.value);
     }
-    const handleOptionSelect = (selectedOption) => {
+    const handleThumbnailChange = (e) => {
+        setUpdatedThumbnail(e.target.value);
+    }
+    const handleShelfSelect = (selectedOption) => {
         const selectedValue = shelfOptions.find(option => option.label === selectedOption)?.value;
         if (selectedValue !== undefined) {
-            setShelf(selectedValue);
-
+            setUpdatedShelf(selectedValue);
         }
     };
-
     const handleCategorySelect = (selectedCategory) => {
-        setCategory(selectedCategory);
+        setUpdatedCategory(selectedCategory);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const { bookApiId,
+        const {
+            _id,
+            bookApiId,
             title,
             authors,
-            publisher
+            publisher,
+            notes,
+            progress,
+
         } = bookDetails;
-        setBookToAdd({
+        setBookToUpdate({
+            _id,
             bookApiId: bookApiId,
             userEmail: user.email,
             title: title,
@@ -55,50 +62,40 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             description: updatedDescription,
             publisher: publisher,
             thumbnail: updatedThumbnail,
-            category: category,
+            category: updatedCategory,
             pageCount: updatedPageCount,
-            notes: [],
-            progress: 0,
-            shelf: shelf
+            notes: notes,
+            progress: progress,
+            shelf: updatedShelf
         });
     }
+    const updateBook = async (updatedBook) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({
+                    book: updatedBook
+                }),
+            });
 
+            await response.json();
+            setIsOpen(false);
+            fetchBook();
+        } catch (error) {
+            console.error('Error updating book:', error);
+        }
+    }
 
     useEffect(() => {
-        try {
-            if (bookToAdd) {
-
-                fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/add-to-shelf`, {
-                    method: 'POST',
-                    body: JSON.stringify(bookToAdd),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}`
-                    },
-                })
-                    .then(function (response) {
-                        if (!response.ok) {
-                            return response.json().then(data => {
-                                throw new Error(data.error);
-                            });
-                        }
-                        setErrorMessage('');
-                        setIsOpen(false);
-                        onBookAdded(bookToAdd.title);
-                        return response.json();
-                    })
-                    .then(function (data) {
-                        setErrorMessage('');
-                    })
-                    .catch(function (error) {
-                        setErrorMessage(error.message);
-                    });
-            }
-        } catch (error) {
-            setErrorMessage(error.message);
+        if (bookToUpdate) {
+            updateBook(bookToUpdate);
         }
-        setBookToAdd(null);
-    }, [bookToAdd, user]);
+    }, [bookToUpdate, user]);
+
 
     return (
         <>
@@ -133,17 +130,21 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                     <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
                                 </div>
                                 <div className="modal__section">
+                                    <label htmlFor="bookImage">Book image</label>
+                                    <input type="text" name="bookImage" value={updatedThumbnail} onChange={handleThumbnailChange} />
+                                </div>
+                                <div className="modal__section">
                                     <Dropdown
                                         options={shelfOptions.map(option => option.label)}
-                                        onSelect={handleOptionSelect}
-                                        selectedOption={shelf !== null ? shelfOptions.find(option => option.value === shelf).label : null}
+                                        onSelect={handleShelfSelect}
+                                        selectedOption={updatedShelf !== null ? shelfOptions.find(option => option.value === updatedShelf)?.label : null}
                                     />
                                 </div>
                                 <div className="modal__section">
-                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={category !== null ? category : null} />
+                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
                                 </div>
-                                <button type="submit" className="cta-button" onClick={handleSubmit}>
-                                    Add Book
+                                <button type="submit" className="cta-button">
+                                    Edit Book
                                 </button>
                             </form>
                         </div>
@@ -153,4 +154,4 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
         </>
     );
 };
-export default Modal;
+export default EditBookModal;
