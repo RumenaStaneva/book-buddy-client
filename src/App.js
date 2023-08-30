@@ -13,6 +13,7 @@ import BookDetails from './pages/BookDetails';
 import Profile from './pages/Profile';
 import Library from './pages/Library';
 import ListAllBooks from './pages/ListAllBooks';
+import BookNotes from './pages/BookNotes';
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         <Route path='/books/library' element={<Library />} />
         <Route path='/books/see-all' element={<ListAllBooks />} />
         <Route path='/books/book-details/:bookId' element={<BookDetails />} />
+        <Route path='/notes/see-book-notes/:bookId' element={<BookNotes />} />
         <Route path='*' element={<ErrorPage />} />
       </Routes>
     </>
