@@ -58,7 +58,6 @@ function ListAllBooks() {
                 if (searchTerm !== '') {
                     url += `&search=${searchTerm}`;
                 }
-                console.log(url);
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
@@ -125,7 +124,6 @@ function ListAllBooks() {
         setSearchTerm(searchQuery);
         fetchBooks();
     }
-    console.log(searchQuery);
     return <>
         <NavBar />
         < main className="books__list-all">

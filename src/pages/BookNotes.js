@@ -12,9 +12,6 @@ function BookNotes() {
 
     const params = useParams();
     const { user } = useAuthContext();
-
-    console.log(params.bookId);
-
     const fetchNotes = useCallback(
         async () => {
             try {
@@ -25,7 +22,6 @@ function BookNotes() {
                 });
 
                 const data = await response.json();
-                console.log(data.notes);
                 setNotes(data.notes);
                 setIsLoading(false);
             } catch (error) {

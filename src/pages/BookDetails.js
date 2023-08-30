@@ -61,7 +61,6 @@ function BookDetails() {
   }
   const handleAddNote = async (bookId) => {
     try {
-      console.log(note);
       const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/add-note`, {
         method: 'POST',
         headers: {
@@ -70,8 +69,7 @@ function BookDetails() {
         },
         body: JSON.stringify({ noteText: note, bookId }),
       })
-      const data = await response.json();
-      console.log(data);
+      await response.json();
       setNotesIsVisible(false);
     } catch (error) {
       console.log('Error creating note: ', error);
