@@ -53,6 +53,38 @@
 
 }
 
+.book__details .book__see-more {
+    color: #111;
+    font-size: 14px;
+    text-decoration: none;
+    position: relative;
+}
+
+.book__details .book__see-more::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    width: 0;
+    background-color: #111;
+    transition: width 0.3s ease;
+}
+
+.book__details .book__see-more:hover::after {
+    color: #111;
+    width: 100%;
+}
+
+
+.book__details .book__see-more svg {
+    margin-left: 5px;
+}
+
+.book__progress {
+    margin-bottom: 10px;
+}
+
 .details__additional-info .book__action-area {
     display: flex;
     flex-direction: column;

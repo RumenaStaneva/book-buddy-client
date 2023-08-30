@@ -4,6 +4,7 @@ import LinearProgressWithLabel from './Progress'
 import { useAuthContext } from "../hooks/useAuthContext";
 import { GiBookmarklet } from "react-icons/gi";
 import categoryColors from "../constants/categoryColors";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import '../styles/LibraryBook.css'
 
 function LibraryBook({ book, fetchBooks }) {
@@ -94,27 +95,30 @@ function LibraryBook({ book, fetchBooks }) {
                                 </div>
                                 {inputVisible ? (
                                     <>
-                                        <label htmlFor="updatedProgress">Read pages: </label>
-                                        <input
-                                            type="number"
-                                            name="updatedProgress"
-                                            id="updatedProgress"
-                                            value={bookPageProgress != null ? bookPageProgress : book.progress}
-                                            onChange={(e) => setBookPageProgress(e.target.value)}
-                                        />
-                                        <button type='submit' onClick={() => updateProgress(book)}>Update</button>
+                                        <div className='book__progress'>
+                                            <label htmlFor="updatedProgress">Read pages: </label>
+                                            <input
+                                                type="number"
+                                                name="updatedProgress"
+                                                id="updatedProgress"
+                                                value={bookPageProgress != null ? bookPageProgress : book.progress}
+                                                onChange={(e) => setBookPageProgress(e.target.value)}
+                                            />
+                                        </div>
+                                        <button className='cta-btn' type='submit' onClick={() => updateProgress(book)}>Update</button>
                                     </>
                                 ) : (
                                     <>
                                         <a
+                                            className='book__see-more'
                                             onClick={event => {
                                                 event.stopPropagation();
                                             }}
-                                            href={`/books/book-details/${book._id}`}>See more</a>
+                                            href={`/books/book-details/${book._id}`}>See more details <AiOutlineArrowRight /></a>
                                         <div className='book__progress'>
                                             <LinearProgressWithLabel value={bookProgressInPercentage != null ? bookProgressInPercentage : calculateProgress()} />
                                         </div>
-                                        <button onClick={() => setInputVisible(true)}>Update progress</button>
+                                        <button className='cta-btn' onClick={() => setInputVisible(true)}>Update progress</button>
                                     </>
                                 )}
                             </div>
