@@ -61,6 +61,13 @@
     fill: #fff;
 }
 
+.notes-container {
+    max-height: 100px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
 @media (max-width: 768px) {
     .book-card {
         max-width: 90%;
