@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import categoryColors from "../constants/categoryColors";
 import EditBookModal from '../components/EditBookModal';
 import { AiFillEdit } from "react-icons/ai";
-import InfiniteScroll from 'react-infinite-scroll-component';
+import NotesList from '../components/NoteList';
 import '../styles/BookDetails.css'
 
 function BookDetails() {
@@ -18,10 +18,6 @@ function BookDetails() {
   const [bookCategoryColor, setBookCategoryColor] = useState();
   const [bookStyle, setBookStyle] = useState();
   const { user } = useAuthContext();
-  const [notesIsVisible, setNotesIsVisible] = useState(false);
-  const [note, setNote] = useState('');
-  const [notes, setNotes] = useState([]);
-  const [hasMoreNotes, setHasMoreNotes] = useState(true);
   const params = useParams();
 
   useEffect(() => {
@@ -62,82 +58,6 @@ function BookDetails() {
   const handleEditBook = () => {
     setIsOpen(true);
   }
-  const handleAddNote = async (bookId) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/add-note`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
-        },
-        body: JSON.stringify({ noteText: note, bookId }),
-      })
-      await response.json();
-      setNotesIsVisible(false);
-      fetchMoreNotes();
-      setHasMoreNotes(true);
-    } catch (error) {
-      console.log('Error creating note: ', error);
-    }
-  }
-
-  const fetchNotes = useCallback(
-    async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/book-notes?bookId=${params.bookId}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-
-        const data = await response.json();
-        setNotes(data.notes);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching notes data:', error);
-        setIsLoading(false);
-      }
-    },
-    [user, params.bookId],
-  );
-
-  const fetchMoreNotes = useCallback(
-    async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/book-notes?bookId=${params.bookId}&offset=${notes.length}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-
-        const data = await response.json();
-        if (data.notes.length > 0) {
-          setNotes([...notes, ...data.notes]);
-        } else {
-          setHasMoreNotes(false);
-        }
-      } catch (error) {
-        console.error('Error fetching more notes data:', error);
-      }
-    },
-    [user, params.bookId, notes],
-  );
-
-
-  useEffect(() => {
-    if (user) {
-      fetchNotes();
-    }
-  }, [user, fetchNotes]);
-
-  const handleScroll = e => {
-    const element = e.target;
-    const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
-
-    if (atBottom && hasMoreNotes) {
-      fetchMoreNotes();
-    }
-  };
 
 
   return (
@@ -171,39 +91,9 @@ function BookDetails() {
 
 
                 </div>
+                <div className='notes__container'>
 
-                <div>
-                  {notesIsVisible ? null :
-                    <button onClick={() => setNotesIsVisible(true)}>Create note for this book</button>
-                  }
-                  {notesIsVisible ?
-                    <div>
-                      <label htmlFor="addNote">Create note for this book: </label>
-                      <textarea name="addNote" id="addNote" cols="100" rows="10" onChange={(e) => setNote(e.target.value)}></textarea>
-                      <button className='cta-btn' onClick={() => handleAddNote(bookDetails._id)}>Add note</button>
-                    </div>
-                    : null}
-                  <div>
-                    <p>Book Notes</p>
-                    <br />
-
-                    <div className="notes-container"
-                      onScroll={handleScroll}>
-                      <InfiniteScroll
-                        dataLength={notes.length}
-                        next={fetchMoreNotes}
-                        hasMore={hasMoreNotes}
-                        loader={<p>...</p>}
-                        endMessage={<p>No more data to load.</p>}
-                      >
-                        <ul>
-                          {notes.map(note => (
-                            <li key={note._id}>{note.noteText}</li>
-                          ))}
-                        </ul>
-                      </InfiniteScroll>
-                    </div>
-                  </div>
+                  <NotesList bookDetails={bookDetails} />
                 </div>
               </div>
             ) : (

@@ -61,12 +61,102 @@
     fill: #fff;
 }
 
-.notes-container {
-    max-height: 100px;
-    overflow-y: scroll;
+.notes__container {
+    margin: 20px;
+    padding: 20px;
+    max-width: 350px;
+    width: 100%;
     border: 1px solid #ccc;
-    padding: 10px;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.notes__create-button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.notes__create-button:hover {
+    background-color: #0056b3;
+}
+
+.notes__add-form {
+    margin-top: 20px;
+}
+
+.notes__add-label {
+    font-weight: bold;
+}
+
+.notes__add-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.notes__add-button {
+    margin-top: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.notes__add-button:hover {
+    background-color: #0056b3;
+}
+
+.notes__header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.notes__list-container {
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    padding: 10px;
+    max-height: 525px;
+    overflow: auto;
+}
+
+.notes__list {
+    padding: 0;
+}
+
+.notes__item {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    position: relative;
+    width: 100%;
+    max-width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.note__actions svg {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.edit-note {
+    margin-right: 5px;
+}
+
 
 @media (max-width: 768px) {
     .book-card {
