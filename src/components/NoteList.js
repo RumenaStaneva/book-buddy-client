@@ -115,9 +115,12 @@ const NotesList = ({ bookDetails }) => {
             });
 
             const data = await response.json();
+            const editedNote = data.editedNote;
             console.log(data);
+            console.log(editedNote);
             setEditNoteVisible(false);
             handleCancelEdit();
+            notes.map(note => note._id == editedNote._id ? note.noteText = editedNote.noteText : note);
         } catch (error) {
             console.error('Error updating note:', error);
         }
