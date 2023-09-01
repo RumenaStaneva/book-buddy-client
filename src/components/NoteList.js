@@ -120,7 +120,7 @@ const NotesList = ({ bookDetails }) => {
             console.log(editedNote);
             setEditNoteVisible(false);
             handleCancelEdit();
-            notes.map(note => note._id == editedNote._id ? note.noteText = editedNote.noteText : note);
+            notes.map(note => note._id === editedNote._id ? note.noteText = editedNote.noteText : note);
         } catch (error) {
             console.error('Error updating note:', error);
         }
