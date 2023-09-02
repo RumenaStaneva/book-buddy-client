@@ -19,9 +19,26 @@ export const AuthContextProvider = ({ children }) => {
     });
 
     useEffect(() => {
-        //when stored in local storage => user is JSON string and we parse it to object
-        const user = JSON.parse(localStorage.getItem('user'))
+        const user = JSON.parse(localStorage.getItem('user'));
+
         if (user) {
+            const token = user.token;
+            const tokenParts = token.split('.');
+
+            if (tokenParts.length === 3) {
+                const payload = JSON.parse(atob(tokenParts[1]));
+                const expDate = payload.exp * 1000;
+                const dateNow = Date.now();
+
+                if (dateNow >= expDate) {
+                    dispatch({ type: 'LOGOUT' })
+                    return;
+                }
+
+                dispatch({ type: 'LOGIN', payload: user });
+            } else {
+                console.error('Invalid JWT token format');
+            }
             dispatch({ type: 'LOGIN', payload: user })
         }
     }, [])

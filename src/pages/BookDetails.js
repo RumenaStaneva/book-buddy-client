@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import categoryColors from "../constants/categoryColors";
 import EditBookModal from '../components/EditBookModal';
 import { AiFillEdit } from "react-icons/ai";
+import NotesList from '../components/NoteList';
 import '../styles/BookDetails.css'
 
 function BookDetails() {
@@ -58,6 +59,7 @@ function BookDetails() {
     setIsOpen(true);
   }
 
+
   return (
     <>
       <NavBar />
@@ -69,23 +71,29 @@ function BookDetails() {
           <main className="book-details-container">
             {isOpen && <EditBookModal setIsOpen={setIsOpen} bookDetails={bookDetails} fetchBook={fetchBook} />}
             {bookDetails !== null ? (
-              <div className="book-card" style={bookStyle}>
-                <AiFillEdit className="edit-book__icon" onClick={handleEditBook} />
-                <div className="book-thumbnail">
-                  <img
-                    src={bookDetails.thumbnail}
-                    alt={`Thumbnail for ${bookDetails.title}`}
-                  />
+              <div className='d-flex'>
+                <div className="book-card" style={bookStyle}>
+                  <AiFillEdit className="edit-book__icon" onClick={handleEditBook} />
+                  <div className="book-thumbnail">
+                    <img
+                      src={bookDetails.thumbnail}
+                      alt={`Thumbnail for ${bookDetails.title}`}
+                    />
+                  </div>
+                  <div className="book-details">
+                    <h2 className="book-title">{bookDetails.title}</h2>
+                    <p className="book-category book__category" style={{ backgroundColor: bookCategoryColor }}>{bookDetails.category}</p>
+                    <p className="book-description">{bookDetails.description}</p>
+                    <p className="book-authors">
+                      Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
+                    </p>
+                  </div>
+
+
                 </div>
-                <div className="book-details">
-                  <h2 className="book-title">{bookDetails.title}</h2>
-                  <p className="book-category book__category" style={{ backgroundColor: bookCategoryColor }}>{bookDetails.category}</p>
-                  <p className="book-description">{bookDetails.description}</p>
-                  <p className="book-authors">
-                    Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
-                  </p>
-                  {/* TODO add notes */}
-                  <button>Add notes</button>
+                <div className='notes__container'>
+
+                  <NotesList bookDetails={bookDetails} />
                 </div>
               </div>
             ) : (
