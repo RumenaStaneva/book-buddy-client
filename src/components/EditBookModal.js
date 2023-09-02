@@ -1,10 +1,13 @@
 import React from "react";
 import '../styles/Modal.css'
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';
 import BookCategories from "../constants/bookCategories";
 import { IoIosClose } from 'react-icons/io'
+import { AiOutlineDelete } from 'react-icons/ai';
+
 
 
 const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
@@ -15,6 +18,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
+    const navigate = useNavigate();
     const { user } = useAuthContext();
     const shelfOptions = [
         { value: 0, label: 'Want to read' },
@@ -40,7 +44,6 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
     const handleCategorySelect = (selectedCategory) => {
         setUpdatedCategory(selectedCategory);
     }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const {
@@ -89,6 +92,24 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
             console.error('Error updating book:', error);
         }
     }
+    const deleteBook = async (bookId) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/delete-book?bookId=${bookId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+            });
+
+            const data = await response.json();
+            console.log(data);
+            setIsOpen(false);
+            navigate('/books/library');
+        } catch (error) {
+            setErrorMessage(error.error);
+        }
+    }
 
     useEffect(() => {
         if (bookToUpdate) {
@@ -104,11 +125,12 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                 <div className="modal">
                     <div className="modalHeader">
                         <h3 className="heading">{bookDetails.title}</h3>
-                        <p>written by: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}</p>
+                        <p>written by: {bookDetails.authors?.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}</p>
                     </div>
                     <button className="closeBtn" onClick={() => setIsOpen(false)}>
                         <IoIosClose />
                     </button>
+                    <AiOutlineDelete className="modal__delete-btn" onClick={() => { deleteBook(bookDetails._id) }} />
                     <div className="modal-content__container">
                         <div className="modalContent">
                             {errorMessage.length > 0 ?
