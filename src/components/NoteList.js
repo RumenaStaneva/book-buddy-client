@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { AiFillEdit, AiOutlineDelete } from 'react-icons/ai';
+import { AiFillEdit, AiOutlineDelete, AiOutlineSave } from 'react-icons/ai';
+import { MdOutlineCancel } from "react-icons/md";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAuthContext } from "../hooks/useAuthContext";
 import Spinner from 'react-spinner-material';
@@ -19,10 +20,14 @@ const NotesList = ({ bookDetails }) => {
     const [note, setNote] = useState('');
     const [notes, setNotes] = useState([]);
     const [hasMoreNotes, setHasMoreNotes] = useState(true);
-
-
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleAddNote = async () => {
+        if (note.trim().length === 0) {
+            setErrorMessage('Note can not be empty');
+            return;
+        }
+
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/add-note`, {
                 method: 'POST',
@@ -33,11 +38,13 @@ const NotesList = ({ bookDetails }) => {
                 body: JSON.stringify({ noteText: note, bookId }),
             })
             await response.json();
+            setErrorMessage('');
             setNotesIsVisible(false);
             fetchMoreNotes();
             setHasMoreNotes(true);
         } catch (error) {
             console.log('Error creating note: ', error);
+            errorMessage(error);
         }
     }
 
@@ -132,15 +139,41 @@ const NotesList = ({ bookDetails }) => {
         setEditedNoteText('');
     }
 
+    const handleDeleteNote = async (noteId) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/delete-note?noteId=${noteId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+            });
+
+            const data = await response.json();
+            const deletedNoteId = data.deletedNote._id;
+            const updatedNotes = notes.filter(note => note._id !== deletedNoteId);
+            setNotes(updatedNotes);
+        } catch (error) {
+            setErrorMessage(error.error);
+        }
+    }
 
     return (
         <>
             {notesIsVisible ? null :
-                <button className='notes__create-button' onClick={() => setNotesIsVisible(true)}>Create note for this book</button>
+                <button className='cta-btn' onClick={() => setNotesIsVisible(true)}>Create note for this book</button>
             }
             {notesIsVisible ?
                 <div className='notes__add-form'>
-                    <label className='notes__add-label' htmlFor="addNote">Create note for this book: </label>
+                    <div className='notes__inner'>
+                        <label className='notes__add-label' htmlFor="addNote">Create note for this book: </label>
+                        <MdOutlineCancel onClick={() => setNotesIsVisible(false)} />
+                    </div>
+                    {errorMessage.length > 0 ?
+                        <div className='error-message__container'>
+                            <p>{errorMessage}</p>
+                        </div>
+                        : null}
                     <textarea className='notes__add-textarea' name="addNote" id="addNote" cols="100" rows="10" onChange={(e) => setNote(e.target.value)}></textarea>
                     <button className='cta-btn' onClick={() => handleAddNote()}>Add note</button>
                 </div>
@@ -154,14 +187,12 @@ const NotesList = ({ bookDetails }) => {
                         {notes.map((note) =>
                             (editNoteVisible && editedNoteId === note._id) ? (
                                 <div className='notes__item' key={note._id}>
-                                    <textarea className='edit-note-input' value={editedNoteText} onChange={(e) => setEditedNoteText(e.target.value)} />
+                                    <textarea className='edit-note-textarea' value={editedNoteText} onChange={(e) => setEditedNoteText(e.target.value)} ></textarea>
                                     <div className='note__actions'>
-                                        <button className='save-edit' onClick={() => handleSaveEdit(note)}>
-                                            Save
-                                        </button>
-                                        <button className='cancel-edit' onClick={() => handleCancelEdit()}>
-                                            Cancel
-                                        </button>
+                                        <AiOutlineSave className='save-edit' onClick={() => handleSaveEdit(note)} />
+
+                                        <MdOutlineCancel className='cancel-edit' onClick={() => handleCancelEdit()} />
+
                                     </div>
                                 </div>
                             ) : (
@@ -169,7 +200,7 @@ const NotesList = ({ bookDetails }) => {
                                     {note.noteText}
                                     <div className='note__actions'>
                                         <AiFillEdit className='edit-note' onClick={() => handleEditNote(note._id, note.noteText)} />
-                                        <AiOutlineDelete className='delete-note' />
+                                        <AiOutlineDelete className='delete-note' onClick={() => handleDeleteNote(note._id)} />
                                     </div>
                                 </div>
                             )
