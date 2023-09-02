@@ -58,7 +58,11 @@ const NotesList = ({ bookDetails }) => {
                 });
 
                 const data = await response.json();
-                setNotes(data.notes);
+                if (data.notes.length > 0) {
+                    setNotes(data.notes);
+                } else {
+
+                }
             } catch (error) {
                 console.error('Error fetching notes data:', error);
             }
@@ -180,41 +184,45 @@ const NotesList = ({ bookDetails }) => {
                 : null}
             <div>
                 <p className='notes__header'>Book Notes</p>
+                {notes.length > 0 ?
+                    <div className="notes__list-container"
+                        onScroll={handleScroll}>
+                        <div className='notes__list'>
+                            {notes.map((note) =>
+                                (editNoteVisible && editedNoteId === note._id) ? (
+                                    <div className='notes__item' key={note._id}>
+                                        <textarea className='edit-note-textarea' value={editedNoteText} onChange={(e) => setEditedNoteText(e.target.value)} ></textarea>
+                                        <div className='note__actions'>
+                                            <AiOutlineSave className='save-edit' onClick={() => handleSaveEdit(note)} />
 
-                <div className="notes__list-container"
-                    onScroll={handleScroll}>
-                    <div className='notes__list'>
-                        {notes.map((note) =>
-                            (editNoteVisible && editedNoteId === note._id) ? (
-                                <div className='notes__item' key={note._id}>
-                                    <textarea className='edit-note-textarea' value={editedNoteText} onChange={(e) => setEditedNoteText(e.target.value)} ></textarea>
-                                    <div className='note__actions'>
-                                        <AiOutlineSave className='save-edit' onClick={() => handleSaveEdit(note)} />
+                                            <MdOutlineCancel className='cancel-edit' onClick={() => handleCancelEdit()} />
 
-                                        <MdOutlineCancel className='cancel-edit' onClick={() => handleCancelEdit()} />
-
+                                        </div>
                                     </div>
-                                </div>
-                            ) : (
-                                <div className='notes__item' key={note._id}>
-                                    {note.noteText}
-                                    <div className='note__actions'>
-                                        <AiFillEdit className='edit-note' onClick={() => handleEditNote(note._id, note.noteText)} />
-                                        <AiOutlineDelete className='delete-note' onClick={() => handleDeleteNote(note._id)} />
+                                ) : (
+                                    <div className='notes__item' key={note._id}>
+                                        {note.noteText}
+                                        <div className='note__actions'>
+                                            <AiFillEdit className='edit-note' onClick={() => handleEditNote(note._id, note.noteText)} />
+                                            <AiOutlineDelete className='delete-note' onClick={() => handleDeleteNote(note._id)} />
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        )}
-                        <InfiniteScroll
-                            dataLength={notes.length}
-                            next={fetchMoreNotes}
-                            hasMore={hasMoreNotes}
-                            height={100}
-                            loader={<Spinner />}
-                            endMessage={<p>No more notes</p>}
-                        ></InfiniteScroll>
+                                )
+                            )}
+                            <InfiniteScroll
+                                dataLength={notes.length}
+                                next={fetchMoreNotes}
+                                hasMore={hasMoreNotes}
+                                height={100}
+                                loader={<Spinner />}
+                                endMessage={<p>No more notes</p>}
+                            ></InfiniteScroll>
+                        </div>
                     </div>
-                </div>
+                    : <div className="notes__list-container">
+                        <p>No notes yet for this book</p>
+                    </div>
+                }
             </div>
         </>
     );
