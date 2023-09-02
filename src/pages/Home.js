@@ -50,6 +50,7 @@ function Home() {
     const fetchData = useCallback(async (page, title) => {
         setLoading(true);
         try {
+            console.log(title);
             const url = `${process.env.REACT_APP_LOCAL_HOST}/api/search-book-title`;
             const response = await axios.post(
                 url,
@@ -57,7 +58,6 @@ function Home() {
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        // 'Authorization': `Bearer ${user.token}`
                     },
                 }
             );
@@ -97,7 +97,6 @@ function Home() {
         big: { height: 400 },
         small: { height: 250 }
     }
-
 
     return (
         <>

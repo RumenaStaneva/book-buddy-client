@@ -78,7 +78,7 @@ function LibraryBook({ book, fetchBooks }) {
                                     {book.title}
                                 </h5>
                                 <p className='book__authors'> By: {' '}
-                                    {book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}
+                                    {book.authors?.join(', ')}
                                 </p>
                                 <div className='details__additional-info'>
                                     <div className='book__all-pages'>
