@@ -13,6 +13,9 @@ import BookCategories from "../constants/bookCategories";
 // import CategoryFilter from "../components/CategoryFilter";
 import '../styles/ListAllBooks.css'
 
+import { useSelector, useDispatch } from 'react-redux';
+import { setSearchQuery } from '../actions/searchActions';
+
 function ListAllBooks() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -27,8 +30,15 @@ function ListAllBooks() {
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [searchQuery, setSearchQuery] = useState('');
+    // const [searchQuery, setSearchQuery] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+
+    const query = useSelector((state) => state.search.query);
+    const dispatch = useDispatch();
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value); // Update local state
+    };
 
     const handleOpen = (book) => {
         setCurrentBook(book)
@@ -55,8 +65,8 @@ function ListAllBooks() {
                     url += `&category=${selectedCategory}`;
                 }
 
-                if (searchTerm !== '') {
-                    url += `&search=${searchTerm}`;
+                if (query !== '') { // Use the query from Redux state
+                    url += `&search=${query}`;
                 }
                 const response = await fetch(url, {
                     method: 'GET',
@@ -65,16 +75,22 @@ function ListAllBooks() {
                     },
                 });
 
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
                 const data = await response.json();
                 setIsLoading(false);
                 setBooks(data.books);
                 setTotalPages(data.totalPages);
+                return response;
             } catch (error) {
                 console.error('Error fetching user data:', error);
                 setIsLoading(false);
+                return null;
             }
         },
-        [user, shelfNum, page, limit, selectedCategory, searchTerm],
+        [user, shelfNum, page, limit, selectedCategory, query],
     )
     useEffect(() => {
         if (user) {
@@ -120,10 +136,17 @@ function ListAllBooks() {
         fetchBooks();
     };
 
-    const handleSearchQuery = () => {
-        setSearchTerm(searchQuery);
-        fetchBooks();
-    }
+    //todo refactor
+    const handleSearchQuery = async () => {
+        dispatch(setSearchQuery(searchTerm));
+        console.log('Search query:', searchTerm);
+
+        try {
+            await fetchBooks();
+        } catch (error) {
+            console.error('Error fetching books:', error);
+        }
+    };
 
     const handleLimitChange = async (selectedLimit) => {
         setLimit(selectedLimit);
@@ -175,8 +198,8 @@ function ListAllBooks() {
                             <input
                                 type="text"
                                 placeholder="Search books..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                value={searchTerm}
+                                onChange={handleSearchChange}
                             />
                             <button onClick={handleSearchQuery}>Search</button>
                         </div>
