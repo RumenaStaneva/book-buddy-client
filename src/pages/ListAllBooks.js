@@ -10,7 +10,7 @@ import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
 import BookCategories from "../constants/bookCategories";
 // import { AiFillEdit } from "react-icons/ai";
-import CategoryFilter from "../components/CategoryFilter";
+// import CategoryFilter from "../components/CategoryFilter";
 import '../styles/ListAllBooks.css'
 
 function ListAllBooks() {
@@ -124,6 +124,12 @@ function ListAllBooks() {
         setSearchTerm(searchQuery);
         fetchBooks();
     }
+
+    const handleLimitChange = async (selectedLimit) => {
+        setLimit(selectedLimit);
+        fetchBooks();
+    }
+
     return <>
         <NavBar />
         < main className="books__list-all">
@@ -159,7 +165,8 @@ function ListAllBooks() {
                             <h1 className="section-title">All books on {getShelfName()}</h1>
                         </div>
                         <div className="filters__container">
-                            <CategoryFilter categories={Object.values(BookCategories)} onSelect={handleCategoryChange} />
+                            <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={selectedCategory.length > 0 ? selectedCategory : 'Select a category'} />
+                            {/* <CategoryFilter categories={Object.values(BookCategories)} onSelect={handleCategoryChange} /> */}
                             {selectedCategory && (
                                 <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
                                     Clear Filter
@@ -172,6 +179,10 @@ function ListAllBooks() {
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                             <button onClick={handleSearchQuery}>Search</button>
+                        </div>
+                        <div className="limits__container">
+                            <label htmlFor="limit">Set book's limit</label>
+                            <Dropdown name="limit" options={[5, 10, 15]} onSelect={handleLimitChange} selectedOption={limit} />
                         </div>
 
                         <div className="books__container books-colorful__container">

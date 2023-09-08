@@ -24,10 +24,13 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
     const handleDescriptionChange = (e) => {
         setUpdatedDescription(e.target.value);
-    }
+    };
     const handlePageCountChange = (e) => {
         setUpdatedPageCount(e.target.value);
-    }
+    };
+    const handleThumbnailChange = (e) => {
+        setUpdatedThumbnail(e.target.value);
+    };
     const handleOptionSelect = (selectedOption) => {
         const selectedValue = shelfOptions.find(option => option.label === selectedOption)?.value;
         if (selectedValue !== undefined) {
@@ -38,7 +41,7 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
     const handleCategorySelect = (selectedCategory) => {
         setCategory(selectedCategory);
-    }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -61,7 +64,7 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             progress: 0,
             shelf: shelf
         });
-    }
+    };
 
 
     useEffect(() => {
@@ -98,7 +101,7 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             setErrorMessage(error.message);
         }
         setBookToAdd(null);
-    }, [bookToAdd, user]);
+    }, [bookToAdd, user, onBookAdded, setIsOpen]);
 
     return (
         <>
@@ -107,7 +110,7 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                 <div className="modal">
                     <div className="modalHeader">
                         <h3 className="heading">{bookDetails.title}</h3>
-                        <p>written by: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}</p>
+                        <p>written by: {bookDetails.authors ? bookDetails.authors.join(', ') : 'No author/s listed'}</p>
                     </div>
                     <button className="closeBtn" onClick={() => setIsOpen(false)}>
                         <IoIosClose />
@@ -131,6 +134,10 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                 <div className="modal__section">
                                     <label htmlFor="pageCount">Book Pages</label>
                                     <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
+                                </div>
+                                <div className="modal__section">
+                                    <label htmlFor="bookImage">Book image</label>
+                                    <input type="text" name="bookImage" value={updatedThumbnail} onChange={handleThumbnailChange} />
                                 </div>
                                 <div className="modal__section">
                                     <Dropdown

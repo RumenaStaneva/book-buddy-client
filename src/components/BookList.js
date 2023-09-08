@@ -13,7 +13,6 @@ function BookList({ books }) {
     const [isOpen, setIsOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
 
-
     const handleAddToShelf = (book) => {
         let thumbnail = book.volumeInfo.imageLinks;
         if (!thumbnail) {
@@ -46,7 +45,7 @@ function BookList({ books }) {
                     <p>{successMessage}</p>
                 </div>
                 : null}
-            <div className='books__container'>
+            <div className='books__container books-list__container'>
                 {
                     books.map(book => (
                         <div key={book.id}>
@@ -73,16 +72,15 @@ function BookList({ books }) {
                                         className='book__image'
                                     />
                                     <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div" className='book__title'>
+                                        <p className='book__title'>
                                             {book.volumeInfo.title}
-                                        </Typography>
+                                        </p>
                                         <Typography gutterBottom variant="subtitle1" component="div">
-                                            {book.volumeInfo.authors.map((author, index) => index === book.volumeInfo.authors.length - 1 ? author : `${author}, `)}
+                                            {book.volumeInfo.authors?.join(', ')}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary" className='book__description'>
                                             {book.volumeInfo.description}
                                         </Typography>
-                                        <p>{book.volumeInfo.pageCount}</p>
                                     </CardContent>
                                 </CardActionArea>
                             </Card>

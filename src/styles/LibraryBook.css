@@ -46,11 +46,11 @@
 }
 
 .details__additional-info .book__category {
-    max-width: 150px;
+    max-width: 130px;
     width: 100%;
     margin-right: 0;
     font-size: 12px;
-
+    word-wrap: break-word;
 }
 
 .book__details .book__see-more {

@@ -32,6 +32,10 @@
     text-overflow: ellipsis;
 }
 
+.books-list__container .book__title {
+    color: #111;
+}
+
 .book__description {
     white-space: nowrap;
     max-width: 310px;
