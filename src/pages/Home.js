@@ -9,7 +9,6 @@ import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
-// import { useAuthContext } from '../hooks/useAuthContext';
 
 function Home() {
 
@@ -20,7 +19,6 @@ function Home() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
-    // const { user } = useAuthContext();
     const PAGE_SIZE = 10;
 
     useEffect(() => {
@@ -50,7 +48,6 @@ function Home() {
     const fetchData = useCallback(async (page, title) => {
         setLoading(true);
         try {
-            console.log(title);
             const url = `${process.env.REACT_APP_LOCAL_HOST}/api/search-book-title`;
             const response = await axios.post(
                 url,
@@ -74,7 +71,7 @@ function Home() {
         if (lastSearchedTitle) {
             fetchData(currentPage, lastSearchedTitle);
         }
-    }, [currentPage, lastSearchedTitle, fetchData]); // Fetch books when currentPage or lastSearchedTitle or fetchData changes or user
+    }, [currentPage, lastSearchedTitle, fetchData]);
 
     const nextPage = () => {
         if (currentPage < totalPages) {

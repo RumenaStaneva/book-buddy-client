@@ -101,7 +101,7 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             setErrorMessage(error.message);
         }
         setBookToAdd(null);
-    }, [bookToAdd, user]);
+    }, [bookToAdd, user, onBookAdded, setIsOpen]);
 
     return (
         <>

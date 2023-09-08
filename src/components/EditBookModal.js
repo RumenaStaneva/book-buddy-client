@@ -72,26 +72,33 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
             shelf: updatedShelf
         });
     }
-    const updateBook = async (updatedBook) => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${user.token}`,
-                },
-                body: JSON.stringify({
-                    book: updatedBook
-                }),
-            });
+    useEffect(() => {
+        const updateBook = async (updatedBook) => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                    body: JSON.stringify({
+                        book: updatedBook
+                    }),
+                });
 
-            await response.json();
-            setIsOpen(false);
-            fetchBook();
-        } catch (error) {
-            console.error('Error updating book:', error);
+                await response.json();
+                setIsOpen(false);
+                fetchBook();
+            } catch (error) {
+                console.error('Error updating book:', error);
+            }
         }
-    }
+
+        if (bookToUpdate) {
+            updateBook(bookToUpdate);
+        }
+    }, [bookToUpdate, user, setIsOpen, fetchBook]);
+
     const deleteBook = async (bookId) => {
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/delete-book?bookId=${bookId}`, {
@@ -110,13 +117,6 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
             setErrorMessage(error.error);
         }
     }
-
-    useEffect(() => {
-        if (bookToUpdate) {
-            updateBook(bookToUpdate);
-        }
-    }, [bookToUpdate, user]);
-
 
     return (
         <>

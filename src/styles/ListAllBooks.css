@@ -36,6 +36,9 @@
     transition: all 0.2s;
     transform: translate(0, -64px);
     animation: zoomin 0.5s;
+    max-width: 128px;
+    height: 100%;
+    max-height: 250px;
 }
 
 .book-colorful__info {
