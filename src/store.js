@@ -5,7 +5,7 @@ import categoryChangeReducer from './reducers/categoryChangeReducer';
 const store = configureStore({
     reducer: {
         search: searchReducer,
-        categoryChange: categoryChangeReducer
+        category: categoryChangeReducer
     },
 });
 console.log('store initial state: ', store.getState());

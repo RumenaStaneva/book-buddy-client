@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import Spinner from 'react-spinner-material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -10,7 +10,6 @@ import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
 import BookCategories from "../constants/bookCategories";
 // import { AiFillEdit } from "react-icons/ai";
-// import CategoryFilter from "../components/CategoryFilter";
 import '../styles/ListAllBooks.css'
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,7 +34,7 @@ function ListAllBooks() {
     const [searchTerm, setSearchTerm] = useState('');
 
     const query = useSelector((state) => state.search.query);
-    const category = useSelector((state) => state.categoryChange.category);
+    const category = useSelector((state) => state.category.category);
     const dispatch = useDispatch();
 
     const handleSearchChange = (e) => {
@@ -136,9 +135,15 @@ function ListAllBooks() {
     };
     const handleRemoveCategoryFilter = () => {
         dispatch(setCategory(''));
-        console.log('stores state: ', store.getState());
         fetchBooks();
     };
+
+    const removeAllFilters = () => {
+        dispatch(setCategory(''));
+        setSearchTerm('');
+        dispatch(setSearchQuery(''));
+        fetchBooks();
+    }
 
     const handleSearchQuery = async () => {
         dispatch(setSearchQuery(searchTerm));
@@ -155,7 +160,6 @@ function ListAllBooks() {
         fetchBooks();
     }
 
-    console.log(books?.length);
 
     return <>
         <NavBar />
@@ -193,7 +197,6 @@ function ListAllBooks() {
                         </div>
                         <div className="filters__container">
                             <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={category.length > 0 ? category : 'Select a category'} />
-                            {/* <CategoryFilter categories={Object.values(BookCategories)} onSelect={handleCategoryChange} /> */}
                             {category && (
                                 <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
                                     Clear Filter
@@ -252,7 +255,19 @@ function ListAllBooks() {
                             )}
                         </div>
                     </>
-                    : <h1>No books on shelf {getShelfName()} {category === '' ? null : `in ${category} category`}</h1>
+                    :
+                    <Fragment>
+                        <h1>No books on shelf {getShelfName()} {category === '' ? null : `in ${category} category`}</h1>
+                        {category && (
+                            <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
+                                Clear Filter
+                            </button>
+                        )}
+
+                        <button onClick={removeAllFilters}>Remove all added filters</button>
+
+
+                    </Fragment>
             )}
         </main >
     </>
