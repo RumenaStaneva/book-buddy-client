@@ -1,4 +1,3 @@
-// searchReducer.js
 import { SET_SEARCH_QUERY } from '../actions/searchActions';
 
 const initialState = {

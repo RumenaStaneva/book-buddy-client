@@ -15,6 +15,9 @@ import '../styles/ListAllBooks.css'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchQuery } from '../actions/searchActions';
+import { setCategory } from "../actions/categoryChangeActions";
+
+import store from "../store";
 
 function ListAllBooks() {
     const location = useLocation();
@@ -29,15 +32,14 @@ function ListAllBooks() {
     const [open, setOpen] = useState(false);
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
-    const [selectedCategory, setSelectedCategory] = useState('');
-    // const [searchQuery, setSearchQuery] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
     const query = useSelector((state) => state.search.query);
+    const category = useSelector((state) => state.categoryChange.category);
     const dispatch = useDispatch();
 
     const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value); // Update local state
+        setSearchTerm(e.target.value);
     };
 
     const handleOpen = (book) => {
@@ -61,11 +63,11 @@ function ListAllBooks() {
             try {
                 let url = `${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`;
 
-                if (selectedCategory !== '') {
-                    url += `&category=${selectedCategory}`;
+                if (category !== '') {
+                    url += `&category=${category}`;
                 }
 
-                if (query !== '') { // Use the query from Redux state
+                if (query !== '') {
                     url += `&search=${query}`;
                 }
                 const response = await fetch(url, {
@@ -90,13 +92,13 @@ function ListAllBooks() {
                 return null;
             }
         },
-        [user, shelfNum, page, limit, selectedCategory, query],
+        [user, shelfNum, page, limit, category, query],
     )
     useEffect(() => {
         if (user) {
             fetchBooks();
         }
-    }, [user, fetchBooks, selectedCategory]);
+    }, [user, fetchBooks]);
 
     const handleShelfChange = (selectedOption) => {
         if (selectedOption === 'Want to read') {
@@ -129,17 +131,17 @@ function ListAllBooks() {
         }
     }
     const handleCategoryChange = async (selectedCategory) => {
-        setSelectedCategory(selectedCategory);
+        dispatch(setCategory(selectedCategory));
+        console.log('stores state: ', store.getState());
     };
     const handleRemoveCategoryFilter = () => {
-        setSelectedCategory('');
+        dispatch(setCategory(''));
+        console.log('stores state: ', store.getState());
         fetchBooks();
     };
 
-    //todo refactor
     const handleSearchQuery = async () => {
         dispatch(setSearchQuery(searchTerm));
-        console.log('Search query:', searchTerm);
 
         try {
             await fetchBooks();
@@ -152,6 +154,8 @@ function ListAllBooks() {
         setLimit(selectedLimit);
         fetchBooks();
     }
+
+    console.log(books?.length);
 
     return <>
         <NavBar />
@@ -188,9 +192,9 @@ function ListAllBooks() {
                             <h1 className="section-title">All books on {getShelfName()}</h1>
                         </div>
                         <div className="filters__container">
-                            <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={selectedCategory.length > 0 ? selectedCategory : 'Select a category'} />
+                            <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={category.length > 0 ? category : 'Select a category'} />
                             {/* <CategoryFilter categories={Object.values(BookCategories)} onSelect={handleCategoryChange} /> */}
-                            {selectedCategory && (
+                            {category && (
                                 <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
                                     Clear Filter
                                 </button>
@@ -248,7 +252,7 @@ function ListAllBooks() {
                             )}
                         </div>
                     </>
-                    : <h1>No books on shelf {getShelfName()} {!selectedCategory ? null : `in ${selectedCategory} category`}</h1>
+                    : <h1>No books on shelf {getShelfName()} {category === '' ? null : `in ${category} category`}</h1>
             )}
         </main >
     </>
