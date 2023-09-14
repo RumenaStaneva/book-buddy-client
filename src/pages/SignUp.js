@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import Button from "../components/Button";
 import { useSignup } from "../hooks/useSignUp";
 import '../styles/AuthenticationForms.css'
 
@@ -83,7 +84,7 @@ function SignUp() {
                             : null}
                         {error && <p className="form__error">{error}</p>}
 
-                        <button type='submit' className='btn--cta' disabled={isLoading}>Sign up</button>
+                        <Button type='submit' className='btn--cta' disabled={isLoading}>Sign up</Button>
 
                         <p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
                     </form>

@@ -4,7 +4,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAuthContext } from "../hooks/useAuthContext";
 import Spinner from 'react-spinner-material';
-
+import Button from './Button';
 
 
 
@@ -40,8 +40,13 @@ const NotesList = ({ bookDetails }) => {
             await response.json();
             setErrorMessage('');
             setNotesIsVisible(false);
-            fetchMoreNotes();
-            setHasMoreNotes(true);
+            if (notes.length < 10) {
+                fetchNotes();
+                setHasMoreNotes(false);
+            } else {
+                fetchMoreNotes();
+                setHasMoreNotes(true);
+            }
         } catch (error) {
             console.log('Error creating note: ', error);
             errorMessage(error);
@@ -165,7 +170,7 @@ const NotesList = ({ bookDetails }) => {
     return (
         <>
             {notesIsVisible ? null :
-                <button className='cta-btn' onClick={() => setNotesIsVisible(true)}>Create note for this book</button>
+                <Button className='cta-btn' onClick={() => setNotesIsVisible(true)}>Create note for this book</Button>
             }
             {notesIsVisible ?
                 <div className='notes__add-form'>
@@ -179,7 +184,7 @@ const NotesList = ({ bookDetails }) => {
                         </div>
                         : null}
                     <textarea className='notes__add-textarea' name="addNote" id="addNote" cols="100" rows="10" onChange={(e) => setNote(e.target.value)}></textarea>
-                    <button className='cta-btn' onClick={() => handleAddNote()}>Add note</button>
+                    <Button className='cta-btn' onClick={() => handleAddNote()}>Add note</Button>
                 </div>
                 : null}
             <div>

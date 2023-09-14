@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import BookList from '../components/BookList';
 import axios from "axios";
 import '../styles/Home.css'
-import SubmitButton from '../components/Button';
+import Button from '../components/Button';
 import Box from '@mui/material/Box';
 import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
@@ -135,7 +135,7 @@ function Home() {
                             variants={imageVariants}
                             src={require('../images/logo-big.png')}
                             alt="Logo" />
-                        <div>
+                        <div className='d-flex'>
                             <ShakeableTextField
                                 id="outlined-basic"
                                 label="Title/author"
@@ -145,7 +145,7 @@ function Home() {
                                 error={error}
                                 className='search__input'
                             />
-                            <SubmitButton variant="contained" attributes={{ type: 'submit' }}>Search</SubmitButton>
+                            <Button className='cta-btn' type='submit'>Search</Button>
 
                         </div>
                     </motion.div>
@@ -167,8 +167,8 @@ function Home() {
 
                 {books.length !== 0 ?
                     <div className="pagination__container">
-                        <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
-                        <button onClick={nextPage} disabled={currentPage === totalPages}>Next</button>
+                        <Button onClick={prevPage} disabled={currentPage === 1}>Previous</Button>
+                        <Button onClick={nextPage} disabled={currentPage === totalPages}>Next</Button>
                     </div>
                     : null}
 

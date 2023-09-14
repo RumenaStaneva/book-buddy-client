@@ -10,6 +10,7 @@ import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
 import BookCategories from "../constants/bookCategories";
 // import { AiFillEdit } from "react-icons/ai";
+import Button from "../components/Button";
 import '../styles/ListAllBooks.css'
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -61,6 +62,8 @@ function ListAllBooks() {
             setIsLoading(true);
             try {
                 let url = `${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`;
+                console.log(category, query);
+                console.log('stores state: ', store.getState());
 
                 if (category !== '') {
                     url += `&category=${category}`;
@@ -135,6 +138,7 @@ function ListAllBooks() {
     };
     const handleRemoveCategoryFilter = () => {
         dispatch(setCategory(''));
+        console.log('stores state: ', store.getState());
         fetchBooks();
     };
 
@@ -142,12 +146,14 @@ function ListAllBooks() {
         dispatch(setCategory(''));
         setSearchTerm('');
         dispatch(setSearchQuery(''));
+        // console.log('stores state: ', store.getState());
+
         fetchBooks();
     }
 
     const handleSearchQuery = async () => {
         dispatch(setSearchQuery(searchTerm));
-
+        console.log('stores state: ', store.getState());
         try {
             await fetchBooks();
         } catch (error) {
@@ -188,7 +194,7 @@ function ListAllBooks() {
                                         Currently on: {getShelfName()} shelf
                                     </Typography>
                                     <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} />
-                                    <button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</button>
+                                    <Button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</Button>
                                 </Box>
                             </Modal>
                             : null}
@@ -198,9 +204,9 @@ function ListAllBooks() {
                         <div className="filters__container">
                             <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={category.length > 0 ? category : 'Select a category'} />
                             {category && (
-                                <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
+                                <Button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
                                     Clear Filter
-                                </button>
+                                </Button>
                             )}
                             <input
                                 type="text"
@@ -208,7 +214,7 @@ function ListAllBooks() {
                                 value={searchTerm}
                                 onChange={handleSearchChange}
                             />
-                            <button onClick={handleSearchQuery}>Search</button>
+                            <Button onClick={handleSearchQuery}>Search</Button>
                         </div>
                         <div className="limits__container">
                             <label htmlFor="limit">Set book's limit</label>
@@ -237,8 +243,8 @@ function ListAllBooks() {
                                             <h2 className="book__title">{book.title}</h2>
                                             <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
                                             <div className="book__action-area">
-                                                <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
-                                                <button onClick={() => handleOpen(book)} className="cta-btn">Move</button>
+                                                <Button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</Button>
+                                                <Button onClick={() => handleOpen(book)} className="cta-btn">Move</Button>
                                             </div>
                                         </div>
                                     </div>
@@ -247,24 +253,19 @@ function ListAllBooks() {
                         </div>
                         <div className="pagination">
                             {page > 1 && (
-                                <button className="pagination-button" onClick={() => setPage(page - 1)}>Previous</button>
+                                <Button className="pagination-button" onClick={() => setPage(page - 1)}>Previous</Button>
                             )}
                             <span className="pagination-text">Page {page} of {totalPages === 0 ? '1' : totalPages}</span>
                             {page < totalPages && (
-                                <button className="pagination-button" onClick={() => setPage(page + 1)}>Next</button>
+                                <Button className="pagination-button" onClick={() => setPage(page + 1)}>Next</Button>
                             )}
                         </div>
                     </>
                     :
                     <Fragment>
                         <h1>No books on shelf {getShelfName()} {category === '' ? null : `in ${category} category`}</h1>
-                        {category && (
-                            <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
-                                Clear Filter
-                            </button>
-                        )}
 
-                        <button onClick={removeAllFilters}>Remove all added filters</button>
+                        <Button onClick={removeAllFilters}>Remove all added filters</Button>
 
 
                     </Fragment>

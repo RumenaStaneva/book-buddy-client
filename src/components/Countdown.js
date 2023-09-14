@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Button from './Button';
 
 const Countdown = ({ seconds }) => {
     const [timeLeft, setTimeLeft] = useState(seconds);
@@ -40,6 +41,7 @@ const Countdown = ({ seconds }) => {
     };
 
     const startTimer = () => {
+        console.log('start');
         setTimerActive(true);
     };
 
@@ -55,11 +57,11 @@ const Countdown = ({ seconds }) => {
                 <h2>Countdown: {formatTime(timeLeft)}</h2>
             )}
             {timerFinished ? (
-                <button onClick={() => setTimerFinished(false)}>Reset</button>
+                <Button onClick={() => setTimerFinished(false)}>Reset</Button>
             ) : (
                 <>
-                    <button onClick={startTimer}>Start</button>
-                    <button onClick={stopTimer}>Stop</button>
+                    <Button onClick={startTimer}>Start</Button>
+                    <Button onClick={stopTimer}>Stop</Button>
                     <p>Time Remaining: {formatTime(timeLeft)}</p>
                 </>
             )}

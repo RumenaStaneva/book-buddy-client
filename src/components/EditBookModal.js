@@ -7,7 +7,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import BookCategories from "../constants/bookCategories";
 import { IoIosClose } from 'react-icons/io'
 import { AiOutlineDelete } from 'react-icons/ai';
-
+import Button from "./Button";
 
 
 const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
@@ -127,9 +127,9 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                         <h3 className="heading">{bookDetails.title}</h3>
                         <p>written by: {bookDetails.authors?.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}</p>
                     </div>
-                    <button className="closeBtn" onClick={() => setIsOpen(false)}>
+                    <Button className="closeBtn" onClick={() => setIsOpen(false)}>
                         <IoIosClose />
-                    </button>
+                    </Button>
                     <AiOutlineDelete className="modal__delete-btn" onClick={() => { deleteBook(bookDetails._id) }} />
                     <div className="modal-content__container">
                         <div className="modalContent">
@@ -165,9 +165,9 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                                 <div className="modal__section">
                                     <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
                                 </div>
-                                <button type="submit" className="cta-button">
+                                <Button type="submit" className="cta-button">
                                     Edit Book
-                                </button>
+                                </Button>
                             </form>
                         </div>
                     </div>

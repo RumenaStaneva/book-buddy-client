@@ -7,15 +7,16 @@
 
 .cta-btn {
     display: block;
-    padding: 8px 16px;
+    padding: 5px 16px;
     border: 0px;
     border-radius: 32px;
     background-color: #D92868;
     border: 1px solid #D92868;
+    height: 40px;
     color: #fff;
-    font-size: 14px;
+    font-size: 18px;
     cursor: pointer;
-    margin: 0 auto;
+    margin: auto;
     transition: all 0.2s ease;
     text-decoration: none;
 }

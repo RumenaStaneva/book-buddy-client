@@ -5,6 +5,7 @@ import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';
 import BookCategories from "../constants/bookCategories";
 import { IoIosClose } from 'react-icons/io'
+import Button from "./Button";
 
 
 const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
@@ -112,9 +113,9 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                         <h3 className="heading">{bookDetails.title}</h3>
                         <p>written by: {bookDetails.authors ? bookDetails.authors.join(', ') : 'No author/s listed'}</p>
                     </div>
-                    <button className="closeBtn" onClick={() => setIsOpen(false)}>
+                    <Button className="closeBtn" onClick={() => setIsOpen(false)}>
                         <IoIosClose />
-                    </button>
+                    </Button>
                     <div className="modal-content__container">
                         <div className="modalContent">
                             {errorMessage.length > 0 ?
@@ -149,9 +150,9 @@ const Modal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                 <div className="modal__section">
                                     <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={category !== null ? category : null} />
                                 </div>
-                                <button type="submit" className="cta-button" onClick={handleSubmit}>
+                                <Button type="submit" className="cta-button" onClick={handleSubmit}>
                                     Add Book
-                                </button>
+                                </Button>
                             </form>
                         </div>
                     </div>

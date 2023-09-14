@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../styles/Library.css'
+import Button from './Button';
 import LinearProgressWithLabel from './Progress'
 import { useAuthContext } from "../hooks/useAuthContext";
 import { GiBookmarklet } from "react-icons/gi";
@@ -105,7 +106,7 @@ function LibraryBook({ book, fetchBooks }) {
                                                 onChange={(e) => setBookPageProgress(e.target.value)}
                                             />
                                         </div>
-                                        <button className='cta-btn' type='submit' onClick={() => updateProgress(book)}>Update</button>
+                                        <Button className='cta-btn' type='submit' onClick={() => updateProgress(book)}>Update</Button>
                                     </>
                                 ) : (
                                     <>
@@ -118,7 +119,7 @@ function LibraryBook({ book, fetchBooks }) {
                                         <div className='book__progress'>
                                             <LinearProgressWithLabel value={bookProgressInPercentage != null ? bookProgressInPercentage : calculateProgress()} />
                                         </div>
-                                        <button className='cta-btn' onClick={() => setInputVisible(true)}>Update progress</button>
+                                        <Button className='cta-btn' onClick={() => setInputVisible(true)}>Update progress</Button>
                                     </>
                                 )}
                             </div>

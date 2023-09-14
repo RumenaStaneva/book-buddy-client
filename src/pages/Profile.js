@@ -3,6 +3,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import Header from '../components/Header';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
+import Button from '../components/Button';
 import '../styles/Profile.css'
 
 
@@ -129,9 +130,9 @@ function Profile() {
                         </div>
 
                         {(username !== userData.username || bio !== userData.bio) && (
-                            <button onClick={handleUpdateInformation} className="update__button">
+                            <Button onClick={handleUpdateInformation} className="update__button">
                                 Update Information
-                            </button>
+                            </Button>
                         )}
                     </div>
                 )}
