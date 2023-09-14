@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import '../styles/books-list.css'
-import Modal from '../components/Modal'
+import AddBookModal from './AddBookModal'
 
 
 function BookList({ books }) {
@@ -39,7 +39,7 @@ function BookList({ books }) {
 
     return (
         <>
-            {isOpen && <Modal setIsOpen={setIsOpen} bookDetails={bookToAdd} onBookAdded={handleBookAdded} />}
+            {isOpen && <AddBookModal setIsOpen={setIsOpen} bookDetails={bookToAdd} onBookAdded={handleBookAdded} />}
             {successMessage.length > 0 ?
                 <div className='success-message__container'>
                     <p>{successMessage}</p>

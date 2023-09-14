@@ -1,17 +1,15 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
 import Spinner from 'react-spinner-material';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import NavBar from "../components/NavBar";
-import { Modal } from "@mui/material";
 import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
 import BookCategories from "../constants/bookCategories";
 // import { AiFillEdit } from "react-icons/ai";
 import Button from "../components/Button";
 import '../styles/ListAllBooks.css'
+import Modal from '../components/Dialog'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchQuery } from '../actions/searchActions';
@@ -23,13 +21,14 @@ function ListAllBooks() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const shelfNum = parseInt(searchParams.get('shelf'));
+    const { user } = useAuthContext();
     const [books, setBooks] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
     const [totalPages, setTotalPages] = useState(1);
     const [currentBook, setCurrentBook] = useState();
-    const [open, setOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [searchTerm, setSearchTerm] = useState('');
@@ -41,14 +40,10 @@ function ListAllBooks() {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
-
     const handleOpen = (book) => {
         setCurrentBook(book)
-        setOpen(true);
+        setIsOpen(true);
     }
-    const handleClose = () => setOpen(false);
-
-    const { user } = useAuthContext();
 
     const getShelfName = () => {
         if (shelfNum === 0) return 'Want to read';
@@ -126,7 +121,7 @@ function ListAllBooks() {
             });
 
             await response.json();
-            handleClose();
+            setIsOpen(false);
             fetchBooks();
         } catch (error) {
             console.error('Error changing shelf:', error);
@@ -177,26 +172,23 @@ function ListAllBooks() {
             ) : (
                 books.length > 0 ?
                     <>
-                        {currentBook ?
+                        {currentBook && isOpen ?
                             <Modal
-                                open={open}
-                                onClose={handleClose}
-                                aria-labelledby="modal-modal-title"
-                                aria-describedby="modal-modal-description"
+                                title={'Change shelf'}
+                                onClose={() => setIsOpen(false)}
+                                subtitle={`Book: ${currentBook.title}`}
+                                setIsOpen={setIsOpen}
                                 className="change-shelf-modal"
-                            >
-                                <Box className='change-shelf-modal__body'>
-                                    <h3 id="modal-modal-title">Change shelf</h3>
-                                    <Typography className="modal-body__book-title" variant="h6" component="h2">
-                                        Book: {currentBook.title}
-                                    </Typography>
-                                    <Typography className="modal-body__book-shelf" id="modal-modal-description">
-                                        Currently on: {getShelfName()} shelf
-                                    </Typography>
-                                    <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} />
-                                    <Button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</Button>
-                                </Box>
-                            </Modal>
+                                content={
+                                    <>
+                                        <p className="modal-body__book-shelf" id="modal-modal-description">
+                                            Currently on: {getShelfName()} shelf
+                                        </p>
+                                        <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} selectedOption={getShelfName()} />
+                                        <Button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</Button>
+                                    </>
+                                }
+                            />
                             : null}
                         <div className="heading-section">
                             <h1 className="section-title">All books on {getShelfName()}</h1>
