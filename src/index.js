@@ -7,14 +7,20 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <AuthContextProvider>
-      <BrowserRouter>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </BrowserRouter>
-    </AuthContextProvider>
-  </React.StrictMode>
-);
+const render = () => {
+  root.render(
+    <React.StrictMode>
+      <AuthContextProvider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </BrowserRouter>
+      </AuthContextProvider>
+    </React.StrictMode>
+  );
+};
+
+render();
+
+store.subscribe(render);
