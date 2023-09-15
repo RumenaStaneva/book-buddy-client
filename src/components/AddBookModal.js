@@ -45,6 +45,10 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!user) {
+            setErrorMessage('You have to be logged in to add books!');
+            return;
+        }
         const { bookApiId,
             title,
             authors,
@@ -65,7 +69,6 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             shelf: shelf
         });
     };
-
 
     useEffect(() => {
         try {
@@ -111,11 +114,6 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             setIsOpen={setIsOpen}
             content={
                 <>
-                    {errorMessage.length > 0 ?
-                        <div className='error-message__container'>
-                            <p>{errorMessage}</p>
-                        </div>
-                        : null}
                     {errorMessage.length > 0 ?
                         <div className='error-message__container'>
                             <p>{errorMessage}</p>
