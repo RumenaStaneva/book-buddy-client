@@ -8,6 +8,7 @@ import categoryColors from "../constants/categoryColors";
 import EditBookModal from '../components/EditBookModal';
 import { AiFillEdit } from "react-icons/ai";
 import NotesList from '../components/NoteList';
+import Error from '../components/Error';
 import '../styles/BookDetails.css'
 
 function BookDetails() {
@@ -17,6 +18,7 @@ function BookDetails() {
   const [isOpen, setIsOpen] = useState(false);
   const [bookCategoryColor, setBookCategoryColor] = useState();
   const [bookStyle, setBookStyle] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
   const { user } = useAuthContext();
   const params = useParams();
 
@@ -42,7 +44,8 @@ function BookDetails() {
         });
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching book data:', error);
+        setErrorMessage('Error fetching book data: ', error);
+        console.error('Error fetching book data: ', error);
         setIsLoading(false);
       }
     },
@@ -70,6 +73,9 @@ function BookDetails() {
           <Header title='Book Details' />
           <main className="book-details-container">
             {isOpen && <EditBookModal setIsOpen={setIsOpen} bookDetails={bookDetails} fetchBook={fetchBook} />}
+            {errorMessage.length > 0 ? (
+              <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+            ) : null}
             {bookDetails !== null ? (
               <div className='d-flex'>
                 <div className="book-card" style={bookStyle}>

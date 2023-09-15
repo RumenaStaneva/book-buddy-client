@@ -6,6 +6,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import BookCategories from "../constants/bookCategories";
 import Button from "./Button";
 import Modal from './Dialog'
+import Error from './Error'
 
 const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     const [shelf, setShelf] = useState(null);
@@ -114,11 +115,9 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             setIsOpen={setIsOpen}
             content={
                 <>
-                    {errorMessage.length > 0 ?
-                        <div className='error-message__container'>
-                            <p>{errorMessage}</p>
-                        </div>
-                        : null}
+                    {errorMessage.length > 0 ? (
+                        <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                    ) : null}
                     <form onSubmit={handleSubmit} className="add-book__form">
                         <div className="modal__section">
                             <label htmlFor="thumbnail">Thumbnail</label>

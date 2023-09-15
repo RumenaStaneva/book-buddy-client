@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import Box from '@mui/material/Box';
 import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
+import Error from '../components/Error';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
 
@@ -14,7 +15,7 @@ function Home() {
 
     const [title, setTitle] = useState('');
     const [books, setBooks] = useState([]);
-    const [error, setError] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -28,14 +29,14 @@ function Home() {
     const handleChange = (e) => {
         const title = e.target.value;
         setTitle(title);
-        setError('');
+        setErrorMessage('');
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (title === '' || title === undefined || title === null) {
-            setError('Please enter a title or author.');
+            setErrorMessage('Please enter a title or author.');
         } else {
             setLastSearchedTitle(title);
             setCurrentPage(1);
@@ -61,7 +62,8 @@ function Home() {
             setBooks(response.data.items);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
-            console.error('Error fetching books:', error);
+            setErrorMessage('Error fetching books: ', error);
+            console.error('Error fetching books: ', error);
         } finally {
             setLoading(false);
         }
@@ -135,6 +137,9 @@ function Home() {
                             variants={imageVariants}
                             src={require('../images/logo-big.png')}
                             alt="Logo" />
+                        {errorMessage.length > 0 ? (
+                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                        ) : null}
                         <div className='d-flex'>
                             <ShakeableTextField
                                 id="outlined-basic"
@@ -142,7 +147,7 @@ function Home() {
                                 variant="outlined"
                                 value={title}
                                 onChange={handleChange}
-                                error={error}
+                                error={errorMessage}
                                 className='search__input'
                             />
                             <Button className='cta-btn' type='submit'>Search</Button>

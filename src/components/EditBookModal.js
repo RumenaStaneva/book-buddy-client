@@ -8,6 +8,7 @@ import BookCategories from "../constants/bookCategories";
 import { AiOutlineDelete } from 'react-icons/ai';
 import Button from "./Button";
 import Modal from './Dialog'
+import Error from "./Error";
 
 
 const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
@@ -129,11 +130,9 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                 <>
                     <AiOutlineDelete className="modal__delete-btn" onClick={() => { deleteBook(bookDetails._id) }} />
 
-                    {errorMessage.length > 0 ?
-                        <div className='error-message__container'>
-                            <p>{errorMessage}</p>
-                        </div>
-                        : null}
+                    {errorMessage.length > 0 ? (
+                        <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                    ) : null}
                     <form onSubmit={handleSubmit} className="add-book__form">
                         <div className="modal__section">
                             <label htmlFor="thumbnail">Thumbnail</label>

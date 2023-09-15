@@ -5,7 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useAuthContext } from "../hooks/useAuthContext";
 import Spinner from 'react-spinner-material';
 import Button from './Button';
-
+import Error from './Error';
 
 
 const NotesList = ({ bookDetails }) => {
@@ -49,7 +49,7 @@ const NotesList = ({ bookDetails }) => {
             }
         } catch (error) {
             console.log('Error creating note: ', error);
-            errorMessage(error);
+            setErrorMessage('Error creating note: ', error);
         }
     }
 
@@ -69,6 +69,7 @@ const NotesList = ({ bookDetails }) => {
 
                 }
             } catch (error) {
+                setErrorMessage('Error fetching notes data:', error);
                 console.error('Error fetching notes data:', error);
             }
         },
@@ -91,6 +92,7 @@ const NotesList = ({ bookDetails }) => {
                     setHasMoreNotes(false);
                 }
             } catch (error) {
+                setErrorMessage('Error fetching more notes data:', error);
                 console.error('Error fetching more notes data:', error);
             }
         },
@@ -138,6 +140,7 @@ const NotesList = ({ bookDetails }) => {
             handleCancelEdit();
             notes.map(note => note._id === editedNote._id ? note.noteText = editedNote.noteText : note);
         } catch (error) {
+            setErrorMessage('Error updating note:', error);
             console.error('Error updating note:', error);
         }
     }
@@ -178,11 +181,9 @@ const NotesList = ({ bookDetails }) => {
                         <label className='notes__add-label' htmlFor="addNote">Create note for this book: </label>
                         <MdOutlineCancel onClick={() => setNotesIsVisible(false)} />
                     </div>
-                    {errorMessage.length > 0 ?
-                        <div className='error-message__container'>
-                            <p>{errorMessage}</p>
-                        </div>
-                        : null}
+                    {errorMessage.length > 0 ? (
+                        <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                    ) : null}
                     <textarea className='notes__add-textarea' name="addNote" id="addNote" cols="100" rows="10" onChange={(e) => setNote(e.target.value)}></textarea>
                     <Button className='cta-btn' onClick={() => handleAddNote()}>Add note</Button>
                 </div>

@@ -26,6 +26,24 @@
     background-color: #fff;
 }
 
+.close-btn {
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    font-size: 18px;
+    padding: 0 5px;
+    background: transparent;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.25s ease;
+}
+
+.close-btn:hover {
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

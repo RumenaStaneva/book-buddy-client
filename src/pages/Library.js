@@ -13,11 +13,11 @@ import { GiBookmarklet } from "react-icons/gi";
 
 import 'swiper/css';
 import 'swiper/css/pagination';
-
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
+import Error from '../components/Error';
 
 function Library() {
 
@@ -25,6 +25,7 @@ function Library() {
     const [wantToReadBooks, setWantToReadBooks] = useState([]);
     const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState([]);
     const [readBooks, setReadBooks] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
     const { user } = useAuthContext();
 
     const fetchBooks = useCallback(
@@ -42,7 +43,8 @@ function Library() {
                 setReadBooks(data.readBooks);
                 setIsLoading(false);
             } catch (error) {
-                console.error('Error fetching user data:', error);
+                setErrorMessage('Error fetching user data: ', error);
+                console.error('Error fetching user data: ', error);
                 setIsLoading(false);
             }
         },
@@ -79,6 +81,9 @@ function Library() {
                     </div>
                 ) : (
                     <>
+                        {errorMessage.length > 0 ? (
+                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                        ) : null}
                         {currentlyReadingBooks && currentlyReadingBooks.length > 0 ?
                             <>
                                 <div className='shelf-header'>

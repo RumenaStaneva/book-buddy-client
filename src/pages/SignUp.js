@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import Button from "../components/Button";
+import Error from "../components/Error";
 import { useSignup } from "../hooks/useSignUp";
 import '../styles/AuthenticationForms.css'
 
@@ -11,7 +12,7 @@ function SignUp() {
     const [repeatPassword, setRepeatPassword] = useState('');
     const [identicalPassords, setIdenticalPasswords] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const { signup, error, isLoading, setError } = useSignup();
+    const { signup, errorMessage, isLoading, setErrorMessage } = useSignup();
 
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
@@ -25,11 +26,11 @@ function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setErrorMessage('');
 
         if (password !== repeatPassword) {
             setIdenticalPasswords(false);
-            setError(false);
+            setErrorMessage(false);
             return;
         }
         try {
@@ -44,7 +45,7 @@ function SignUp() {
             setEmail('');
             setPassword('');
             setRepeatPassword('');
-            setError(error.message);
+            setErrorMessage(error.message);
             setIsLoggedIn(false);
         }
     }
@@ -82,7 +83,9 @@ function SignUp() {
                         {!identicalPassords ?
                             <p className="form__error">Passwords should match</p>
                             : null}
-                        {error && <p className="form__error">{error}</p>}
+                        {errorMessage.length > 0 ? (
+                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                        ) : null}
 
                         <Button type='submit' className='btn--cta' disabled={isLoading}>Sign up</Button>
 

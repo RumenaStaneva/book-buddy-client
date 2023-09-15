@@ -7,11 +7,13 @@ import { GiBookmarklet } from "react-icons/gi";
 import categoryColors from "../constants/categoryColors";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import '../styles/LibraryBook.css'
+import Error from './Error';
 
 function LibraryBook({ book, fetchBooks }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
+    const [errorMessage, setErrorMessage] = useState('');
     const { user } = useAuthContext();
 
     const bookTotalPages = book.pageCount;
@@ -47,6 +49,7 @@ function LibraryBook({ book, fetchBooks }) {
                 fetchBooks();
             }
         } catch (error) {
+            setErrorMessage('Error fetching user data:', error);
             console.error('Error fetching user data:', error);
         }
     }
@@ -75,6 +78,9 @@ function LibraryBook({ book, fetchBooks }) {
                                 className='book__image'
                             />
                             <div className='book__details'>
+                                {errorMessage.length > 0 ? (
+                                    <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                                ) : null}
                                 <h5 className='book__title book-font__outline'>
                                     {book.title}
                                 </h5>

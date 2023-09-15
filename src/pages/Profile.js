@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import Button from '../components/Button';
+import Error from '../components/Error';
 import '../styles/Profile.css'
 
 
@@ -15,6 +16,7 @@ function Profile() {
     const [hiddenUsername, setHiddenUsername] = useState(true);
     const { user, dispatch } = useAuthContext();
     const [username, setUsername] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -25,6 +27,7 @@ function Profile() {
             });
 
             if (response.status === 401) {
+                setErrorMessage('Unauthorized access');
                 console.error('Unauthorized access');
                 return;
             }
@@ -35,7 +38,8 @@ function Profile() {
             setUsername(data.userProfile.username)
             setIsLoading(false);
         } catch (error) {
-            console.error('Error fetching user data:', error);
+            setErrorMessage('Error fetching user data: ', error);
+            console.error('Error fetching user data: ', error);
             setIsLoading(false);
         }
     }, [user]);
@@ -58,6 +62,7 @@ function Profile() {
             });
 
             if (response.status === 401) {
+                setErrorMessage('Unauthorized access');
                 console.error('Unauthorized access');
                 return;
             }
@@ -69,7 +74,8 @@ function Profile() {
             dispatch({ type: 'LOGIN', payload: localstorageUser });
             fetchUserData();
         } catch (error) {
-            console.error('Error updating username:', error);
+            setErrorMessage('Error updating username: ', error);
+            console.error('Error updating username: ', error);
         }
     };
 
@@ -90,6 +96,9 @@ function Profile() {
                     </div>
                 ) : (
                     <div className="profile__content">
+                        {errorMessage.length > 0 ? (
+                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                        ) : null}
                         <h1>User Profile</h1>
                         <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
 

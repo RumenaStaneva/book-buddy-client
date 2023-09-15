@@ -10,7 +10,7 @@ import BookCategories from "../constants/bookCategories";
 import Button from "../components/Button";
 import '../styles/ListAllBooks.css'
 import Modal from '../components/Dialog'
-
+import Error from "../components/Error";
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchQuery } from '../actions/searchActions';
 import { setCategory } from "../actions/categoryChangeActions";
@@ -32,7 +32,7 @@ function ListAllBooks() {
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [errorMessage, setErrorMessage] = useState('');
     const query = useSelector((state) => state.search.query);
     const category = useSelector((state) => state.category.category);
     const dispatch = useDispatch();
@@ -75,6 +75,7 @@ function ListAllBooks() {
                 });
 
                 if (!response.ok) {
+                    setErrorMessage('Network response was not ok');
                     throw new Error('Network response was not ok');
                 }
 
@@ -84,7 +85,8 @@ function ListAllBooks() {
                 setTotalPages(data.totalPages);
                 return response;
             } catch (error) {
-                console.error('Error fetching user data:', error);
+                setErrorMessage('Error fetching user data: ', error);
+                console.error('Error fetching user data: ', error);
                 setIsLoading(false);
                 return null;
             }
@@ -214,6 +216,9 @@ function ListAllBooks() {
                         </div>
 
                         <div className="books__container books-colorful__container">
+                            {errorMessage.length > 0 ? (
+                                <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                            ) : null}
                             {books.map(book => {
                                 const categoryColor = categoryColors[book.category] || '#FFFFFF';
                                 const bookStyle = {
