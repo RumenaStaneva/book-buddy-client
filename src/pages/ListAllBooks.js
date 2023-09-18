@@ -1,17 +1,16 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
 import Spinner from 'react-spinner-material';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import NavBar from "../components/NavBar";
-import { Modal } from "@mui/material";
 import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
 import BookCategories from "../constants/bookCategories";
 // import { AiFillEdit } from "react-icons/ai";
+import Button from "../components/Button";
 import '../styles/ListAllBooks.css'
-
+import Modal from '../components/Dialog'
+import Error from "../components/Error";
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchQuery } from '../actions/searchActions';
 import { setCategory } from "../actions/categoryChangeActions";
@@ -22,17 +21,18 @@ function ListAllBooks() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const shelfNum = parseInt(searchParams.get('shelf'));
+    const { user } = useAuthContext();
     const [books, setBooks] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
     const [totalPages, setTotalPages] = useState(1);
     const [currentBook, setCurrentBook] = useState();
-    const [open, setOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [errorMessage, setErrorMessage] = useState('');
     const query = useSelector((state) => state.search.query);
     const category = useSelector((state) => state.category.category);
     const dispatch = useDispatch();
@@ -40,14 +40,10 @@ function ListAllBooks() {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
-
     const handleOpen = (book) => {
         setCurrentBook(book)
-        setOpen(true);
+        setIsOpen(true);
     }
-    const handleClose = () => setOpen(false);
-
-    const { user } = useAuthContext();
 
     const getShelfName = () => {
         if (shelfNum === 0) return 'Want to read';
@@ -61,6 +57,8 @@ function ListAllBooks() {
             setIsLoading(true);
             try {
                 let url = `${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`;
+                console.log(category, query);
+                console.log('stores state: ', store.getState());
 
                 if (category !== '') {
                     url += `&category=${category}`;
@@ -77,6 +75,7 @@ function ListAllBooks() {
                 });
 
                 if (!response.ok) {
+                    setErrorMessage('Network response was not ok');
                     throw new Error('Network response was not ok');
                 }
 
@@ -86,7 +85,8 @@ function ListAllBooks() {
                 setTotalPages(data.totalPages);
                 return response;
             } catch (error) {
-                console.error('Error fetching user data:', error);
+                setErrorMessage('Error fetching user data: ', error);
+                console.error('Error fetching user data: ', error);
                 setIsLoading(false);
                 return null;
             }
@@ -123,7 +123,7 @@ function ListAllBooks() {
             });
 
             await response.json();
-            handleClose();
+            setIsOpen(false);
             fetchBooks();
         } catch (error) {
             console.error('Error changing shelf:', error);
@@ -135,6 +135,7 @@ function ListAllBooks() {
     };
     const handleRemoveCategoryFilter = () => {
         dispatch(setCategory(''));
+        console.log('stores state: ', store.getState());
         fetchBooks();
     };
 
@@ -142,12 +143,14 @@ function ListAllBooks() {
         dispatch(setCategory(''));
         setSearchTerm('');
         dispatch(setSearchQuery(''));
+        // console.log('stores state: ', store.getState());
+
         fetchBooks();
     }
 
     const handleSearchQuery = async () => {
         dispatch(setSearchQuery(searchTerm));
-
+        console.log('stores state: ', store.getState());
         try {
             await fetchBooks();
         } catch (error) {
@@ -171,26 +174,23 @@ function ListAllBooks() {
             ) : (
                 books.length > 0 ?
                     <>
-                        {currentBook ?
+                        {currentBook && isOpen ?
                             <Modal
-                                open={open}
-                                onClose={handleClose}
-                                aria-labelledby="modal-modal-title"
-                                aria-describedby="modal-modal-description"
+                                title={'Change shelf'}
+                                onClose={() => setIsOpen(false)}
+                                subtitle={`Book: ${currentBook.title}`}
+                                setIsOpen={setIsOpen}
                                 className="change-shelf-modal"
-                            >
-                                <Box className='change-shelf-modal__body'>
-                                    <h3 id="modal-modal-title">Change shelf</h3>
-                                    <Typography className="modal-body__book-title" variant="h6" component="h2">
-                                        Book: {currentBook.title}
-                                    </Typography>
-                                    <Typography className="modal-body__book-shelf" id="modal-modal-description">
-                                        Currently on: {getShelfName()} shelf
-                                    </Typography>
-                                    <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} />
-                                    <button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</button>
-                                </Box>
-                            </Modal>
+                                content={
+                                    <>
+                                        <p className="modal-body__book-shelf" id="modal-modal-description">
+                                            Currently on: {getShelfName()} shelf
+                                        </p>
+                                        <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} selectedOption={getShelfName()} />
+                                        <Button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</Button>
+                                    </>
+                                }
+                            />
                             : null}
                         <div className="heading-section">
                             <h1 className="section-title">All books on {getShelfName()}</h1>
@@ -198,9 +198,9 @@ function ListAllBooks() {
                         <div className="filters__container">
                             <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={category.length > 0 ? category : 'Select a category'} />
                             {category && (
-                                <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
+                                <Button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
                                     Clear Filter
-                                </button>
+                                </Button>
                             )}
                             <input
                                 type="text"
@@ -208,7 +208,7 @@ function ListAllBooks() {
                                 value={searchTerm}
                                 onChange={handleSearchChange}
                             />
-                            <button onClick={handleSearchQuery}>Search</button>
+                            <Button onClick={handleSearchQuery}>Search</Button>
                         </div>
                         <div className="limits__container">
                             <label htmlFor="limit">Set book's limit</label>
@@ -216,6 +216,9 @@ function ListAllBooks() {
                         </div>
 
                         <div className="books__container books-colorful__container">
+                            {errorMessage.length > 0 ? (
+                                <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                            ) : null}
                             {books.map(book => {
                                 const categoryColor = categoryColors[book.category] || '#FFFFFF';
                                 const bookStyle = {
@@ -237,8 +240,8 @@ function ListAllBooks() {
                                             <h2 className="book__title">{book.title}</h2>
                                             <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
                                             <div className="book__action-area">
-                                                <button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</button>
-                                                <button onClick={() => handleOpen(book)} className="cta-btn">Move</button>
+                                                <Button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</Button>
+                                                <Button onClick={() => handleOpen(book)} className="cta-btn">Move</Button>
                                             </div>
                                         </div>
                                     </div>
@@ -247,24 +250,19 @@ function ListAllBooks() {
                         </div>
                         <div className="pagination">
                             {page > 1 && (
-                                <button className="pagination-button" onClick={() => setPage(page - 1)}>Previous</button>
+                                <Button className="pagination-button" onClick={() => setPage(page - 1)}>Previous</Button>
                             )}
                             <span className="pagination-text">Page {page} of {totalPages === 0 ? '1' : totalPages}</span>
                             {page < totalPages && (
-                                <button className="pagination-button" onClick={() => setPage(page + 1)}>Next</button>
+                                <Button className="pagination-button" onClick={() => setPage(page + 1)}>Next</Button>
                             )}
                         </div>
                     </>
                     :
                     <Fragment>
                         <h1>No books on shelf {getShelfName()} {category === '' ? null : `in ${category} category`}</h1>
-                        {category && (
-                            <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
-                                Clear Filter
-                            </button>
-                        )}
 
-                        <button onClick={removeAllFilters}>Remove all added filters</button>
+                        <Button onClick={removeAllFilters}>Remove all added filters</Button>
 
 
                     </Fragment>

@@ -2,14 +2,15 @@ import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
-    const [error, setError] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [isLoading, setIsLoading] = useState(null);
     const { dispatch } = useAuthContext();
     const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
 
     const signup = async (email, password) => {
         setIsLoading(true);
-        setError(null);
+        setErrorMessage(null);
 
         const response = await fetch(`${LOCAL_HOST}/users/sign-up`, {
             method: 'POST',
@@ -22,7 +23,7 @@ export const useSignup = () => {
 
         if (!response.ok) {
             setIsLoading(false);
-            setError(json.error);
+            setErrorMessage(json.error);
             throw Error(json.error)
         }
 
@@ -38,5 +39,5 @@ export const useSignup = () => {
         }
     };
 
-    return { signup, isLoading, error, setError }
+    return { signup, isLoading, errorMessage, setErrorMessage }
 };

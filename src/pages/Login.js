@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import NavBar from '../components/NavBar'
+import Button from '../components/Button';
 import { useLogin } from '../hooks/useLogin';
 import '../styles/AuthenticationForms.css'
+import Error from '../components/Error';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const { login, error, isLoading } = useLogin();
+    const { login, errorMessage, isLoading, setErrorMessage } = useLogin();
 
 
     const handleChangeEmail = (e) => {
@@ -53,9 +55,11 @@ function Login() {
                                 <a href="/forgotten-password">Forgot password?</a>
                             </p>
 
-                            {error && <p className="form__error">{error}</p>}
+                            {errorMessage.length > 0 ? (
+                                <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                            ) : null}
 
-                            <button type='submit' className='btn--cta' disabled={isLoading}>Sign in</button>
+                            <Button type='submit' className='btn--cta' disabled={isLoading}>Sign in</Button>
                             <p className='form-switch'>I don’t have an account ? <Link href="/users/sign-up">Sign up</Link></p>
                         </form>
                     </div>

@@ -3,10 +3,11 @@ import Header from '../components/Header';
 import BookList from '../components/BookList';
 import axios from "axios";
 import '../styles/Home.css'
-import SubmitButton from '../components/Button';
+import Button from '../components/Button';
 import Box from '@mui/material/Box';
 import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
+import Error from '../components/Error';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
 
@@ -14,7 +15,7 @@ function Home() {
 
     const [title, setTitle] = useState('');
     const [books, setBooks] = useState([]);
-    const [error, setError] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -28,14 +29,14 @@ function Home() {
     const handleChange = (e) => {
         const title = e.target.value;
         setTitle(title);
-        setError('');
+        setErrorMessage('');
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (title === '' || title === undefined || title === null) {
-            setError('Please enter a title or author.');
+            setErrorMessage('Please enter a title or author.');
         } else {
             setLastSearchedTitle(title);
             setCurrentPage(1);
@@ -61,7 +62,8 @@ function Home() {
             setBooks(response.data.items);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
-            console.error('Error fetching books:', error);
+            setErrorMessage('Error fetching books: ', error);
+            console.error('Error fetching books: ', error);
         } finally {
             setLoading(false);
         }
@@ -135,17 +137,20 @@ function Home() {
                             variants={imageVariants}
                             src={require('../images/logo-big.png')}
                             alt="Logo" />
-                        <div>
+                        {errorMessage.length > 0 ? (
+                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                        ) : null}
+                        <div className='d-flex'>
                             <ShakeableTextField
                                 id="outlined-basic"
                                 label="Title/author"
                                 variant="outlined"
                                 value={title}
                                 onChange={handleChange}
-                                error={error}
+                                error={errorMessage}
                                 className='search__input'
                             />
-                            <SubmitButton variant="contained" attributes={{ type: 'submit' }}>Search</SubmitButton>
+                            <Button className='cta-btn' type='submit'>Search</Button>
 
                         </div>
                     </motion.div>
@@ -167,8 +172,8 @@ function Home() {
 
                 {books.length !== 0 ?
                     <div className="pagination__container">
-                        <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
-                        <button onClick={nextPage} disabled={currentPage === totalPages}>Next</button>
+                        <Button onClick={prevPage} disabled={currentPage === 1}>Previous</Button>
+                        <Button onClick={nextPage} disabled={currentPage === totalPages}>Next</Button>
                     </div>
                     : null}
 
