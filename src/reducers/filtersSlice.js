@@ -11,13 +11,13 @@ const options = {
     initialState: initialState,
     reducers: {
         setCategory: (state, action) => {
-            return { ...state, category: action.payload };
+            state.category = action.payload;
         },
         setSearchQuery: (state, action) => {
-            return { ...state, query: action.payload };
+            state.query = action.payload;
         },
         setLimit: (state, action) => {
-            return { ...state, limit: action.payload };
+            state.limit = action.payload;
         }
     }
 }
