@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import Spinner from 'react-spinner-material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -10,8 +10,13 @@ import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
 import BookCategories from "../constants/bookCategories";
 // import { AiFillEdit } from "react-icons/ai";
-// import CategoryFilter from "../components/CategoryFilter";
 import '../styles/ListAllBooks.css'
+
+import { useSelector, useDispatch } from 'react-redux';
+import { setSearchQuery } from '../actions/searchActions';
+import { setCategory } from "../actions/categoryChangeActions";
+
+import store from "../store";
 
 function ListAllBooks() {
     const location = useLocation();
@@ -26,9 +31,15 @@ function ListAllBooks() {
     const [open, setOpen] = useState(false);
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [searchQuery, setSearchQuery] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+
+    const query = useSelector((state) => state.search.query);
+    const category = useSelector((state) => state.category.category);
+    const dispatch = useDispatch();
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
     const handleOpen = (book) => {
         setCurrentBook(book)
@@ -51,12 +62,12 @@ function ListAllBooks() {
             try {
                 let url = `${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`;
 
-                if (selectedCategory !== '') {
-                    url += `&category=${selectedCategory}`;
+                if (category !== '') {
+                    url += `&category=${category}`;
                 }
 
-                if (searchTerm !== '') {
-                    url += `&search=${searchTerm}`;
+                if (query !== '') {
+                    url += `&search=${query}`;
                 }
                 const response = await fetch(url, {
                     method: 'GET',
@@ -65,22 +76,28 @@ function ListAllBooks() {
                     },
                 });
 
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
                 const data = await response.json();
                 setIsLoading(false);
                 setBooks(data.books);
                 setTotalPages(data.totalPages);
+                return response;
             } catch (error) {
                 console.error('Error fetching user data:', error);
                 setIsLoading(false);
+                return null;
             }
         },
-        [user, shelfNum, page, limit, selectedCategory, searchTerm],
+        [user, shelfNum, page, limit, category, query],
     )
     useEffect(() => {
         if (user) {
             fetchBooks();
         }
-    }, [user, fetchBooks, selectedCategory]);
+    }, [user, fetchBooks]);
 
     const handleShelfChange = (selectedOption) => {
         if (selectedOption === 'Want to read') {
@@ -113,22 +130,36 @@ function ListAllBooks() {
         }
     }
     const handleCategoryChange = async (selectedCategory) => {
-        setSelectedCategory(selectedCategory);
+        dispatch(setCategory(selectedCategory));
+        console.log('stores state: ', store.getState());
     };
     const handleRemoveCategoryFilter = () => {
-        setSelectedCategory('');
+        dispatch(setCategory(''));
         fetchBooks();
     };
 
-    const handleSearchQuery = () => {
-        setSearchTerm(searchQuery);
+    const removeAllFilters = () => {
+        dispatch(setCategory(''));
+        setSearchTerm('');
+        dispatch(setSearchQuery(''));
         fetchBooks();
     }
+
+    const handleSearchQuery = async () => {
+        dispatch(setSearchQuery(searchTerm));
+
+        try {
+            await fetchBooks();
+        } catch (error) {
+            console.error('Error fetching books:', error);
+        }
+    };
 
     const handleLimitChange = async (selectedLimit) => {
         setLimit(selectedLimit);
         fetchBooks();
     }
+
 
     return <>
         <NavBar />
@@ -165,9 +196,8 @@ function ListAllBooks() {
                             <h1 className="section-title">All books on {getShelfName()}</h1>
                         </div>
                         <div className="filters__container">
-                            <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={selectedCategory.length > 0 ? selectedCategory : 'Select a category'} />
-                            {/* <CategoryFilter categories={Object.values(BookCategories)} onSelect={handleCategoryChange} /> */}
-                            {selectedCategory && (
+                            <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={category.length > 0 ? category : 'Select a category'} />
+                            {category && (
                                 <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
                                     Clear Filter
                                 </button>
@@ -175,8 +205,8 @@ function ListAllBooks() {
                             <input
                                 type="text"
                                 placeholder="Search books..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                value={searchTerm}
+                                onChange={handleSearchChange}
                             />
                             <button onClick={handleSearchQuery}>Search</button>
                         </div>
@@ -225,7 +255,19 @@ function ListAllBooks() {
                             )}
                         </div>
                     </>
-                    : <h1>No books on shelf {getShelfName()} {!selectedCategory ? null : `in ${selectedCategory} category`}</h1>
+                    :
+                    <Fragment>
+                        <h1>No books on shelf {getShelfName()} {category === '' ? null : `in ${category} category`}</h1>
+                        {category && (
+                            <button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
+                                Clear Filter
+                            </button>
+                        )}
+
+                        <button onClick={removeAllFilters}>Remove all added filters</button>
+
+
+                    </Fragment>
             )}
         </main >
     </>
