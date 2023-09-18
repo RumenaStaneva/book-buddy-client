@@ -16,8 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setCategory, setSearchQuery, setLimit } from '../reducers/filtersSlice';
 
-
-import store from "../store";
+// import store from "../store";
 
 function ListAllBooks() {
     const location = useLocation();
@@ -37,9 +36,6 @@ function ListAllBooks() {
     const category = useSelector((state) => state.filters.category);
     const limit = useSelector((state) => state.filters.limit)
     // console.log(store.getState());
-    console.log('limit', limit);
-    console.log('category', category);
-    console.log('query', query);
     const dispatch = useDispatch();
 
     const handleSearchChange = (e) => {
