@@ -132,7 +132,7 @@ function ListAllBooks() {
     }
     const handleCategoryChange = async (selectedCategory) => {
         dispatch(setCategory(selectedCategory));
-        console.log('stores state: ', store.getState());
+        // console.log('stores state: ', store.getState());
     };
     const handleRemoveCategoryFilter = () => {
         dispatch(setCategory(''));

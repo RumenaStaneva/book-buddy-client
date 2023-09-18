@@ -10,9 +10,15 @@ const options = {
     name: 'filter',
     initialState: initialState,
     reducers: {
-        setCategory: (state, action) => { state.category = action.payload },
-        setSearchQuery: (state, action) => { state.query = action.payload },
-        setLimit: (state, action) => { state.limit = action.payload }
+        setCategory: (state, action) => {
+            return { ...state, category: action.payload };
+        },
+        setSearchQuery: (state, action) => {
+            return { ...state, query: action.payload };
+        },
+        setLimit: (state, action) => {
+            return { ...state, limit: action.payload };
+        }
     }
 }
 export const filtersSlice = createSlice(options);
