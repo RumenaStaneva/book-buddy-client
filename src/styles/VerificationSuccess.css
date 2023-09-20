@@ -1,0 +1,43 @@
+.verification-success__error {
+    background-color: #ffcccc;
+    padding: 20px;
+    border: 1px solid #ff3333;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
+    text-align: center;
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+.verification-success__error h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.verification-success__error p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #ff3333;
+}
+
+.verification-success__container {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.verification-success__title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.verification-success__message {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.verification-success__user-id {
+    font-size: 16px;
+    color: #888;
+}
