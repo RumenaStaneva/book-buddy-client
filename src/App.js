@@ -13,6 +13,8 @@ import BookDetails from './pages/BookDetails';
 import Profile from './pages/Profile';
 import Library from './pages/Library';
 import ListAllBooks from './pages/ListAllBooks';
+import VerificationEmailSent from './pages/VerificationEmailSent';
+import VerificationSuccess from './pages/VerificationSuccess';
 
 function App() {
 
@@ -32,6 +34,8 @@ function App() {
         <Route path='/books/see-all' element={<ListAllBooks />} />
         <Route path='/books/book-details/:bookId' element={<BookDetails />} />
         <Route path='*' element={<ErrorPage />} />
+        <Route path='/verificate-email' element={<VerificationEmailSent />} />
+        <Route path='/users/verify/:token' element={<VerificationSuccess />} />
       </Routes>
     </>
 

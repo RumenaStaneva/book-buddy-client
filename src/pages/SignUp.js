@@ -5,14 +5,18 @@ import Button from "../components/Button";
 import Error from "../components/Error";
 import { useSignup } from "../hooks/useSignUp";
 import '../styles/AuthenticationForms.css'
+import VerificationEmailSent from "./VerificationEmailSent";
+import Spinner from 'react-spinner-material';
+
 
 function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [identicalPassords, setIdenticalPasswords] = useState(true);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const { signup, errorMessage, isLoading, setErrorMessage } = useSignup();
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [verificationEmailSent, setVerificationEmailSent] = useState(false);
+    const { signup, errorMessage, isLoading, setErrorMessage, setIsLoading } = useSignup();
 
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
@@ -27,7 +31,7 @@ function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage('');
-
+        setIsLoading(true);
         if (password !== repeatPassword) {
             setIdenticalPasswords(false);
             setErrorMessage(false);
@@ -36,22 +40,28 @@ function SignUp() {
         try {
             await signup(email, password);
             setIdenticalPasswords(true);
-            setIsLoggedIn(true);
+            // setIsLoggedIn(true);
             setEmail('');
             setPassword('');
             setRepeatPassword('');
+            setVerificationEmailSent(true);
         } catch (error) {
+            setVerificationEmailSent(false);
             setIdenticalPasswords(true);
             setEmail('');
             setPassword('');
             setRepeatPassword('');
-            setErrorMessage(error.message);
-            setIsLoggedIn(false);
+            // setErrorMessage(error.message);
+            // setIsLoggedIn(false);
         }
     }
 
-    if (isLoggedIn) {
-        return <Navigate to="/" />;
+    // if (isLoggedIn) {
+    //     return <Navigate to="/" />;
+    // }
+
+    if (verificationEmailSent) {
+        return <Navigate to='/verificate-email' />;
     }
 
     return (
@@ -62,42 +72,48 @@ function SignUp() {
                 <div className="mask"></div>
 
                 <div className='wrapper login-form__container'>
-                    <form
-                        action="/users/sign-up" method="POST"
-                        onSubmit={handleSubmit}>
-                        <p className='form__message'>Hi there!!!</p>
-                        <h1>Sign Up</h1>
-                        <div className='form__group'>
-                            <label htmlFor="email">Email</label>
-                            <input type="email" name="email" value={email} onChange={handleChangeEmail} />
+                    {isLoading ? (
+                        <div className='spinner__container'>
+                            <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                         </div>
-                        <div className="form__group">
-                            <label htmlFor="password">Password</label>
-                            <input type="password" name="password" value={password} onChange={handleChangePassword} />
-                        </div>
-                        <div className="form__group">
-                            <label htmlFor="username">Repeat Password</label>
-                            <input type="password" name="repeat-password" value={repeatPassword} onChange={handleRepeatPassword} />
-                        </div>
+                    ) : (
+                        <form
+                            action="/users/sign-up" method="POST"
+                            onSubmit={handleSubmit}>
+                            <p className='form__message'>Hi there!!!</p>
+                            <h1>Sign Up</h1>
+                            <div className='form__group'>
+                                <label htmlFor="email">Email</label>
+                                <input type="email" name="email" value={email} onChange={handleChangeEmail} />
+                            </div>
+                            <div className="form__group">
+                                <label htmlFor="password">Password</label>
+                                <input type="password" name="password" value={password} onChange={handleChangePassword} />
+                            </div>
+                            <div className="form__group">
+                                <label htmlFor="username">Repeat Password</label>
+                                <input type="password" name="repeat-password" value={repeatPassword} onChange={handleRepeatPassword} />
+                            </div>
 
-                        {!identicalPassords ?
-                            <p className="form__error">Passwords should match</p>
-                            : null}
-                        {errorMessage.length > 0 ? (
-                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                        ) : null}
+                            {!identicalPassords ?
+                                <p className="form__error">Passwords should match</p>
+                                : null}
+                            {errorMessage.length > 0 ? (
+                                <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                            ) : null}
 
-                        <Button type='submit' className='btn--cta' disabled={isLoading}>Sign up</Button>
+                            <Button type='submit' className='btn--cta' disabled={isLoading} onClick={handleSubmit}>Sign up</Button>
 
-                        <p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
-                    </form>
+                            < p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
+                        </form>
+                    )}
                 </div>
                 <div className='wrapper'>
                     <div className='image__container'>
                         <img src={require("../images/reading-buddies.png")} tabIndex={-1} alt='' width={570} height={487} />
                     </div>
                 </div>
-            </main>
+            </main >
         </>
     )
 }

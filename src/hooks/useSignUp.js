@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
+import { Navigate } from "react-router-dom";
+
 
 export const useSignup = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -10,7 +12,7 @@ export const useSignup = () => {
 
     const signup = async (email, password) => {
         setIsLoading(true);
-        setErrorMessage(null);
+        setErrorMessage('');
 
         const response = await fetch(`${LOCAL_HOST}/users/sign-up`, {
             method: 'POST',
@@ -23,6 +25,7 @@ export const useSignup = () => {
 
         if (!response.ok) {
             setIsLoading(false);
+            console.log(json.error);
             setErrorMessage(json.error);
             throw Error(json.error)
         }
@@ -33,11 +36,11 @@ export const useSignup = () => {
             localStorage.setItem('user', JSON.stringify(json));
 
             //update auth context
-            dispatch({ type: 'LOGIN', payload: json });
-
+            dispatch({ type: 'CONFIRMATION_PENDING' });
             setIsLoading(false);
+            <Navigate to="/verificate-email" />
         }
     };
 
-    return { signup, isLoading, errorMessage, setErrorMessage }
+    return { signup, isLoading, errorMessage, setErrorMessage, setIsLoading }
 };
