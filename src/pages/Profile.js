@@ -60,7 +60,6 @@ function Profile() {
                 },
                 body: JSON.stringify({ bio: bio, username: username }),
             });
-
             if (response.status === 401) {
                 setErrorMessage('Unauthorized access');
                 console.error('Unauthorized access');
@@ -68,10 +67,17 @@ function Profile() {
             }
             setHiddenBio(true);
             setHiddenUsername(true);
-            const localstorageUser = JSON.parse(localStorage.getItem('user'));
-            localstorageUser.username = username;
-            localStorage.setItem('user', JSON.stringify(localstorageUser));
-            dispatch({ type: 'LOGIN', payload: localstorageUser });
+            if (!response.ok) {
+                const errorData = await response.json();
+                setErrorMessage(`Error updating username: ${errorData.error}`);
+                return;
+            } else {
+                const localstorageUser = JSON.parse(localStorage.getItem('user'));
+                localstorageUser.username = username;
+                localStorage.setItem('user', JSON.stringify(localstorageUser));
+                dispatch({ type: 'LOGIN', payload: localstorageUser });
+                setErrorMessage('');
+            }
             fetchUserData();
         } catch (error) {
             setErrorMessage('Error updating username: ', error);

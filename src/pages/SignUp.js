@@ -14,19 +14,9 @@ function SignUp() {
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [identicalPassords, setIdenticalPasswords] = useState(true);
-    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
     const [verificationEmailSent, setVerificationEmailSent] = useState(false);
     const { signup, errorMessage, isLoading, setErrorMessage, setIsLoading } = useSignup();
-
-    const handleChangeEmail = (e) => {
-        setEmail(e.target.value);
-    }
-    const handleChangePassword = (e) => {
-        setPassword(e.target.value);
-    }
-    const handleRepeatPassword = (e) => {
-        setRepeatPassword(e.target.value);
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,12 +28,12 @@ function SignUp() {
             return;
         }
         try {
-            await signup(email, password);
+            await signup(email, password, username);
             setIdenticalPasswords(true);
-            // setIsLoggedIn(true);
             setEmail('');
             setPassword('');
             setRepeatPassword('');
+            setUsername('');
             setVerificationEmailSent(true);
         } catch (error) {
             setVerificationEmailSent(false);
@@ -51,14 +41,9 @@ function SignUp() {
             setEmail('');
             setPassword('');
             setRepeatPassword('');
-            // setErrorMessage(error.message);
-            // setIsLoggedIn(false);
+            setUsername('');
         }
     }
-
-    // if (isLoggedIn) {
-    //     return <Navigate to="/" />;
-    // }
 
     if (verificationEmailSent) {
         return <Navigate to='/verificate-email' />;
@@ -84,15 +69,19 @@ function SignUp() {
                             <h1>Sign Up</h1>
                             <div className='form__group'>
                                 <label htmlFor="email">Email</label>
-                                <input type="email" name="email" value={email} onChange={handleChangeEmail} />
+                                <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            </div>
+                            <div className='form__group'>
+                                <label htmlFor="username">Username</label>
+                                <input type="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
                             </div>
                             <div className="form__group">
                                 <label htmlFor="password">Password</label>
-                                <input type="password" name="password" value={password} onChange={handleChangePassword} />
+                                <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                             </div>
                             <div className="form__group">
-                                <label htmlFor="username">Repeat Password</label>
-                                <input type="password" name="repeat-password" value={repeatPassword} onChange={handleRepeatPassword} />
+                                <label htmlFor="repeat-password">Repeat Password</label>
+                                <input type="password" name="repeat-password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
                             </div>
 
                             {!identicalPassords ?

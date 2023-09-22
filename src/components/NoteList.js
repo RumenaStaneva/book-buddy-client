@@ -48,7 +48,6 @@ const NotesList = ({ bookDetails }) => {
                 setHasMoreNotes(true);
             }
         } catch (error) {
-            console.log('Error creating note: ', error);
             setErrorMessage('Error creating note: ', error);
         }
     }
@@ -134,8 +133,6 @@ const NotesList = ({ bookDetails }) => {
 
             const data = await response.json();
             const editedNote = data.editedNote;
-            console.log(data);
-            console.log(editedNote);
             setEditNoteVisible(false);
             handleCancelEdit();
             notes.map(note => note._id === editedNote._id ? note.noteText = editedNote.noteText : note);

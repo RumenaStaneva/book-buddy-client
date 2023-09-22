@@ -7,15 +7,10 @@ import '../styles/AuthenticationForms.css'
 import Error from '../components/Error';
 
 function Login() {
-    const [email, setEmail] = useState('');
+    const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { login, errorMessage, isLoading, setErrorMessage } = useLogin();
-
-
-    const handleChangeEmail = (e) => {
-        setEmail(e.target.value);
-    }
 
     const handleChangePassword = (e) => {
         setPassword(e.target.value)
@@ -24,7 +19,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await login(email, password);
+            await login(emailOrUsername, password);
         } catch (error) {
             setIsLoggedIn(false); // Set isLoggedIn to false to prevent redirection
         }
@@ -44,8 +39,8 @@ function Login() {
                             <p className='form__message'>Welcome back!!!</p>
                             <h1>Login</h1>
                             <div className='form__group'>
-                                <label htmlFor="email">Email</label>
-                                <input type="email" name="email" value={email} onChange={handleChangeEmail} />
+                                <label htmlFor="emailOrUsername">Email / Username</label>
+                                <input type="emailOrUsername" name="emailOrUsername" value={emailOrUsername} onChange={(e => setEmailOrUsername(e.target.value))} />
                             </div>
                             <div className="form__group">
                                 <p className='form__forgot-pass'>

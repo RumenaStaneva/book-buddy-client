@@ -16,13 +16,11 @@ function VerificationSuccess() {
     const fetchData = useCallback(
         async () => {
             try {
-                console.log('fetchData function called with token:', token);
                 const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/verify/${token}`);
                 if (!response.ok) {
                     throw new Error(`Fetch request failed with status ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(data);
                 setVerificationResult(data);
                 setIsLoading(false);
             } catch (error) {

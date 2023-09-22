@@ -9,14 +9,14 @@ export const useSignup = () => {
     const { dispatch } = useAuthContext();
     const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
 
-    const signup = async (email, password) => {
+    const signup = async (email, password, username) => {
         setIsLoading(true);
         setErrorMessage('');
 
         const response = await fetch(`${LOCAL_HOST}/users/sign-up`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password, username })
         });
         const json = await response.json();
 
@@ -24,7 +24,6 @@ export const useSignup = () => {
 
         if (!response.ok) {
             setIsLoading(false);
-            console.log(json.error);
             setErrorMessage(json.error);
             throw Error(json.error)
         }
