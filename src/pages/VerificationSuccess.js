@@ -1,18 +1,22 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import NavBar from "../components/NavBar";
+import Spinner from 'react-spinner-material';
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import '../styles/VerificationSuccess.css'
+
 
 function VerificationSuccess() {
     const { token } = useParams();
-    console.log(token);
     const [verificationResult, setVerificationResult] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchData = async () => {
+    //todo figure out why it rerenders twice
+    const fetchData = useCallback(
+        async () => {
             try {
-                console.log('fetchhh');
+                console.log('fetchData function called with token:', token);
                 const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/verify/${token}`);
                 if (!response.ok) {
                     throw new Error(`Fetch request failed with status ${response.status}`);
@@ -23,38 +27,57 @@ function VerificationSuccess() {
                 setIsLoading(false);
             } catch (error) {
                 console.error(error);
+                setVerificationResult(error);
                 setIsLoading(false);
             }
-        };
+        },
+        [token],
+    );
 
-        fetchData();
-    }, [token]);
+    useEffect(() => {
+        if (token) {
+            fetchData();
+        }
+    }, [token, fetchData]);
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-    if (verificationResult.error) {
-        return (
-            <>
-                <NavBar />
-                <main className="verification-success__error">
-                    <h2>Email Verification Failed</h2>
-                    <p>{verificationResult.error}</p>
-                </main>
-            </>
-        );
-    }
+
+
 
     return (
         <>
             <NavBar />
-            <main>
-                <div className="verification-success__container">
-                    <h2 className="verification-success__title">Email Verification Successful!</h2>
-                    <p className="verification-success__message">{verificationResult.message}</p>
-                    {/* <p className="verification-success__user-id">User ID: {verificationResult.user._id}</p> */}
+            {isLoading ? (
+                <div className='spinner__container'>
+                    <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                 </div>
-            </main>
+            ) : null}
+            {!verificationResult.error ?
+                (
+                    <main>
+                        <div className="verification-success__container">
+                            <h2 className="verification-success__title">Email Verification Successful!</h2>
+                            <AiOutlineCheckCircle className="verification-success__icon" />
+                            <p className="verification-success__message">Your email has been successfully verified.</p>
+
+                            <div className="d-flex">
+                                <a className="cta-btn" href="/users/login">Click here to login</a>
+                            </div>
+                        </div>
+                    </main>
+                )
+                : (
+                    <main className="verification-success__error">
+                        <h2>Email Verification Failed</h2>
+                        <AiOutlineCloseCircle className="verification-error__icon" />
+                        <p className="verification-error__message">
+                            Something went wrong. Please contact our support team.
+                        </p>
+                        <p className="verification-error__contact">
+                            Contact Support:{" "}
+                            <a href="mailto:bookbuddy.library1@gmail.com">bookbuddy.library1@gmail.com</a>
+                        </p>
+                    </main>
+                )}
         </>
     );
 }

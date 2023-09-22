@@ -58,11 +58,11 @@ body {
     font-size: 14px;
     position: absolute;
     text-decoration: underline;
-    right: 60px;
+    top: 0;
+    right: 0;
     opacity: 0.5;
     font-size: 14px;
     font-weight: 300;
-    bottom: 257px;
 }
 
 .login-form__container .form__forgot-pass a {
@@ -73,6 +73,7 @@ body {
     display: flex;
     flex-direction: column;
     margin-bottom: 19px;
+    position: relative;
 }
 
 .login-form__container .form__group input {

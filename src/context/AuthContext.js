@@ -5,9 +5,9 @@ export const AuthContext = createContext();
 export const authReducer = (state, action) => {
     switch (action.type) {
         case 'LOGIN':
-            return { user: action.payload, isConfirmationPending: false };
+            return { user: action.payload };
         case 'LOGOUT':
-            return { user: null, isConfirmationPending: false };
+            return { user: null };
         case 'CONFIRMATION_PENDING':
             return { user: null, isConfirmationPending: true };
         default:
@@ -50,7 +50,7 @@ export const AuthContextProvider = ({ children }) => {
 
         // Clear the confirmationPending flag when a user logs in
         if (state.user) {
-            localStorage.removeItem('confirmationPending');
+            localStorage.removeItem('isConfirmationPending');
         }
     }, [])
 

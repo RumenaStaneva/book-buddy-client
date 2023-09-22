@@ -5,7 +5,7 @@
     box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
     text-align: center;
     margin: 20px auto;
-    max-width: 400px;
+    max-width: 550px;
 }
 
 .verification-success__error h2 {
@@ -20,11 +20,17 @@
 }
 
 .verification-success__container {
-    background-color: #fff;
+    background-color: #ccffcc;
     padding: 20px;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid #33ff33;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
     text-align: center;
+    margin: 20px auto;
+    max-width: 550px;
+}
+
+.verification-success__message {
+    margin-bottom: 20px;
 }
 
 .verification-success__title {
@@ -32,12 +38,42 @@
     margin-bottom: 10px;
 }
 
-.verification-success__message {
-    font-size: 18px;
-    margin-bottom: 20px;
+.verification-success__container svg {
+    width: 80px;
+    height: 80px;
+    fill: #177f17;
 }
 
-.verification-success__user-id {
+.verification-success__error svg {
+    width: 80px;
+    height: 80px;
+    fill: #ff3333;
+}
+
+.verification-error__contact {
     font-size: 16px;
-    color: #888;
+}
+
+.verification-error__contact a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.verification-error__contact a:hover {
+    text-decoration: underline;
+}
+
+.verification-success__login-link {
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.verification-success__login-link a {
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.verification-success__login-link a:hover {
+    text-decoration: none;
 }
