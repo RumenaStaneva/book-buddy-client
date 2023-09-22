@@ -24,7 +24,7 @@ function SignUp() {
         setIsLoading(true);
         if (password !== repeatPassword) {
             setIdenticalPasswords(false);
-            setErrorMessage(false);
+            setErrorMessage('Passwords should match');
             return;
         }
         try {

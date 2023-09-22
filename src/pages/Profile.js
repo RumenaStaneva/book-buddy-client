@@ -80,7 +80,7 @@ function Profile() {
             }
             fetchUserData();
         } catch (error) {
-            setErrorMessage('Error updating username: ', error);
+            setErrorMessage(error);
             console.error('Error updating username: ', error);
         }
     };
@@ -115,6 +115,7 @@ function Profile() {
 
                         <div className="profile__field">
                             <label>Bio: </label>
+                            {hiddenBio && !bio.length > 0 ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
                             <div onClick={() => setHiddenBio(false)} className="profile__clickable" tabIndex="0">
                                 {!hiddenBio ? null : <span className="hidden">{bio}</span>}
                             </div>
