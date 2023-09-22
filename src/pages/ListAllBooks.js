@@ -12,10 +12,10 @@ import '../styles/ListAllBooks.css'
 import Modal from '../components/Dialog'
 import Error from "../components/Error";
 import { useSelector, useDispatch } from 'react-redux';
-import { setSearchQuery } from '../actions/searchActions';
-import { setCategory } from "../actions/categoryChangeActions";
 
-import store from "../store";
+import { setCategory, setSearchQuery, setLimit } from '../reducers/filtersSlice';
+
+// import store from "../store";
 
 function ListAllBooks() {
     const location = useLocation();
@@ -25,7 +25,6 @@ function ListAllBooks() {
     const [books, setBooks] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(5);
     const [totalPages, setTotalPages] = useState(1);
     const [currentBook, setCurrentBook] = useState();
     const [isOpen, setIsOpen] = useState(false);
@@ -33,8 +32,11 @@ function ListAllBooks() {
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [searchTerm, setSearchTerm] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const query = useSelector((state) => state.search.query);
-    const category = useSelector((state) => state.category.category);
+
+    const query = useSelector((state) => state.filters.query);
+    const category = useSelector((state) => state.filters.category);
+    const limit = useSelector((state) => state.filters.limit)
+
     const dispatch = useDispatch();
 
     const handleSearchChange = (e) => {
@@ -152,7 +154,7 @@ function ListAllBooks() {
     };
 
     const handleLimitChange = async (selectedLimit) => {
-        setLimit(selectedLimit);
+        dispatch(setLimit(selectedLimit));
         fetchBooks();
     }
 

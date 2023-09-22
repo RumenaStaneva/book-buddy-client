@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import searchReducer from './searchReducer';
-import categoryChangeReducer from './categoryChangeReducer';
+import { filtersSlice } from './filtersSlice';
 
 const rootReducer = combineReducers({
-    search: searchReducer,
-    category: categoryChangeReducer
+    search: filtersSlice.actions.setSearchQuery,
+    category: filtersSlice.actions.setCategory,
+    limit: filtersSlice.actions.setLimit
 
 });
 
