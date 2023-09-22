@@ -29,13 +29,17 @@ function App() {
         <Route path="/users/login" element={!user ? <Login /> : <Navigate to="/" />} />
         <Route path="/users/sign-up" element={!user ? <SignUp /> : <Navigate to="/" />} />
         <Route path="/users/forgotten-password" element={<PasswordReset />} />
-        <Route path="/users/profile" element={<Profile />} />
-        <Route path='/books/library' element={<Library />} />
-        <Route path='/books/see-all' element={<ListAllBooks />} />
-        <Route path='/books/book-details/:bookId' element={<BookDetails />} />
-        <Route path='*' element={<ErrorPage />} />
+        {user && (
+          <>
+            <Route path="/users/profile" element={<Profile />} />
+            <Route path='/books/library' element={<Library />} />
+            <Route path='/books/see-all' element={<ListAllBooks />} />
+            <Route path='/books/book-details/:bookId' element={<BookDetails />} />
+          </>
+        )}
         <Route path='/verificate-email' element={<VerificationEmailSent />} />
         <Route path='/users/verify/:token' element={<VerificationSuccess />} />
+        <Route path='*' element={<ErrorPage />} />
       </Routes>
     </>
 

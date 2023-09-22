@@ -48,12 +48,12 @@ function Login() {
                                 <input type="email" name="email" value={email} onChange={handleChangeEmail} />
                             </div>
                             <div className="form__group">
+                                <p className='form__forgot-pass'>
+                                    <a href="/forgotten-password">Forgot password?</a>
+                                </p>
                                 <label htmlFor="password">Password</label>
                                 <input type="password" name="password" value={password} onChange={handleChangePassword} />
                             </div>
-                            <p className='form__forgot-pass'>
-                                <a href="/forgotten-password">Forgot password?</a>
-                            </p>
 
                             {errorMessage.length > 0 ? (
                                 <Error message={errorMessage} onClose={() => setErrorMessage('')} />
