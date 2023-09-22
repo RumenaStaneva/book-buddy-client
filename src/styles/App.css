@@ -5,6 +5,20 @@
     font-family: 'Poppins', sans-serif;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+textarea {
+    resize: none;
+}
+
 .cta-btn {
     display: block;
     padding: 5px 16px;
@@ -19,6 +33,10 @@
     margin: auto;
     transition: all 0.2s ease;
     text-decoration: none;
+}
+
+.btn-sm {
+    font-size: 14px;
 }
 
 .cta-btn:hover {
@@ -42,18 +60,6 @@
 
 .close-btn:hover {
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
-}
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-    -moz-appearance: textfield;
 }
 
 .header {

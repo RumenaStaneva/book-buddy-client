@@ -36,7 +36,6 @@ function BookDetails() {
         });
 
         const data = await response.json();
-        // console.log(data.book);
         setBookDetails(data.book);
         setBookCategoryColor(categoryColors[data.book.category] || '#FFFFFF');
         setBookStyle({

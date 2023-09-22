@@ -59,8 +59,6 @@ function ListAllBooks() {
             setIsLoading(true);
             try {
                 let url = `${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`;
-                console.log(category, query);
-                console.log('stores state: ', store.getState());
 
                 if (category !== '') {
                     url += `&category=${category}`;
@@ -133,11 +131,9 @@ function ListAllBooks() {
     }
     const handleCategoryChange = async (selectedCategory) => {
         dispatch(setCategory(selectedCategory));
-        // console.log('stores state: ', store.getState());
     };
     const handleRemoveCategoryFilter = () => {
         dispatch(setCategory(''));
-        console.log('stores state: ', store.getState());
         fetchBooks();
     };
 
@@ -145,14 +141,11 @@ function ListAllBooks() {
         dispatch(setCategory(''));
         setSearchTerm('');
         dispatch(setSearchQuery(''));
-        // console.log('stores state: ', store.getState());
-
         fetchBooks();
     }
 
     const handleSearchQuery = async () => {
         dispatch(setSearchQuery(searchTerm));
-        console.log('stores state: ', store.getState());
         try {
             await fetchBooks();
         } catch (error) {

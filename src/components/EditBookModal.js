@@ -111,7 +111,6 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
             });
 
             const data = await response.json();
-            console.log(data);
             setIsOpen(false);
             navigate('/books/library');
         } catch (error) {

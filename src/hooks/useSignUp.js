@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 
+
 export const useSignup = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -8,18 +9,18 @@ export const useSignup = () => {
     const { dispatch } = useAuthContext();
     const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
 
-    const signup = async (email, password) => {
+    const signup = async (email, password, username) => {
         setIsLoading(true);
-        setErrorMessage(null);
+        setErrorMessage('');
 
         const response = await fetch(`${LOCAL_HOST}/users/sign-up`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password, username })
         });
         const json = await response.json();
 
-        setIsLoading(false); // Move setIsLoading(false) here to ensure it's always reset
+        setIsLoading(false);
 
         if (!response.ok) {
             setIsLoading(false);
@@ -29,15 +30,13 @@ export const useSignup = () => {
 
         if (response.ok) {
             setIsLoading(false);
-            //save user to local storage -> in userController when we sign up user we send email and token in json
             localStorage.setItem('user', JSON.stringify(json));
 
-            //update auth context
-            dispatch({ type: 'LOGIN', payload: json });
-
+            dispatch({ type: 'CONFIRMATION_PENDING' });
             setIsLoading(false);
+
         }
     };
 
-    return { signup, isLoading, errorMessage, setErrorMessage }
+    return { signup, isLoading, errorMessage, setErrorMessage, setIsLoading }
 };
