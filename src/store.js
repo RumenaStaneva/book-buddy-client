@@ -1,11 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import searchReducer from './reducers/searchReducer';
-import categoryChangeReducer from './reducers/categoryChangeReducer';
+
+import { filtersSlice } from './reducers/filtersSlice';
 
 const store = configureStore({
     reducer: {
-        search: searchReducer,
-        category: categoryChangeReducer
+        filters: filtersSlice.reducer,
     },
 });
 export default store;
