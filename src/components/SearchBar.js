@@ -1,4 +1,3 @@
-// SearchBar.js - Search bar component
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import pages from '../data';

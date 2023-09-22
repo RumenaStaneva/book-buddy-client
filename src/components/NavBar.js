@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../styles/NavBar.css'
+import Button from './Button';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
 
@@ -35,11 +36,11 @@ const NavBar = () => {
 
     return (
         <div className='nav__container'>
-            <button className='nav__burger' onClick={toggleNav}>
+            <Button className='nav__burger' onClick={toggleNav}>
                 <span className='burger__line'></span>
                 <span className='burger__line'></span>
                 <span className='burger__line'></span>
-            </button>
+            </Button>
             <nav className={`nav nav__main ${navVisible ? 'nav--open' : ''}`} aria-label='Main'>
                 <ul className='nav__list' role='menubar'>
                     <li className='nav__item'>

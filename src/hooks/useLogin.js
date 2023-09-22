@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 
 export const useLogin = () => {
-    const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
     const { dispatch } = useAuthContext();
     const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
 
     const login = async (email, password) => {
         setIsLoading(true);
-        setError(null);
+        setErrorMessage('');
 
         const response = await fetch(`${LOCAL_HOST}/users/login`, {
             method: 'POST',
@@ -20,7 +20,7 @@ export const useLogin = () => {
 
         if (!response.ok) {
             setIsLoading(false);
-            setError(json.error);
+            setErrorMessage(json.error);
         }
 
         if (response.ok) {
@@ -35,5 +35,5 @@ export const useLogin = () => {
         }
     };
 
-    return { login, isLoading, error }
+    return { login, isLoading, errorMessage, setErrorMessage }
 };

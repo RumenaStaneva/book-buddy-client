@@ -1,5 +1,6 @@
 import NavBar from "../components/NavBar";
 import Countdown from "../components/Countdown";
+import Button from "../components/Button";
 import { useState } from "react";
 
 const TimeSwap = () => {
@@ -20,7 +21,7 @@ const TimeSwap = () => {
             <NavBar />
             <form onSubmit={handleSubmit}>
                 <input type="number" value={seconds} onChange={handleChange} />
-                <button type="submit" onClick={handleSubmit}>Submit</button>
+                <Button type="submit" onClick={handleSubmit}>Submit</Button>
 
             </form>
             <Countdown seconds={totalSeconds} />

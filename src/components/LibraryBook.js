@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import '../styles/Library.css'
+import Button from './Button';
 import LinearProgressWithLabel from './Progress'
 import { useAuthContext } from "../hooks/useAuthContext";
 import { GiBookmarklet } from "react-icons/gi";
 import categoryColors from "../constants/categoryColors";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import '../styles/LibraryBook.css'
+import Error from './Error';
 
 function LibraryBook({ book, fetchBooks }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
+    const [errorMessage, setErrorMessage] = useState('');
     const { user } = useAuthContext();
 
     const bookTotalPages = book.pageCount;
@@ -46,6 +49,7 @@ function LibraryBook({ book, fetchBooks }) {
                 fetchBooks();
             }
         } catch (error) {
+            setErrorMessage('Error fetching user data:', error);
             console.error('Error fetching user data:', error);
         }
     }
@@ -74,6 +78,9 @@ function LibraryBook({ book, fetchBooks }) {
                                 className='book__image'
                             />
                             <div className='book__details'>
+                                {errorMessage.length > 0 ? (
+                                    <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                                ) : null}
                                 <h5 className='book__title book-font__outline'>
                                     {book.title}
                                 </h5>
@@ -105,7 +112,7 @@ function LibraryBook({ book, fetchBooks }) {
                                                 onChange={(e) => setBookPageProgress(e.target.value)}
                                             />
                                         </div>
-                                        <button className='cta-btn' type='submit' onClick={() => updateProgress(book)}>Update</button>
+                                        <Button className='cta-btn' type='submit' onClick={() => updateProgress(book)}>Update</Button>
                                     </>
                                 ) : (
                                     <>
@@ -118,7 +125,7 @@ function LibraryBook({ book, fetchBooks }) {
                                         <div className='book__progress'>
                                             <LinearProgressWithLabel value={bookProgressInPercentage != null ? bookProgressInPercentage : calculateProgress()} />
                                         </div>
-                                        <button className='cta-btn' onClick={() => setInputVisible(true)}>Update progress</button>
+                                        <Button className='cta-btn' onClick={() => setInputVisible(true)}>Update progress</Button>
                                     </>
                                 )}
                             </div>
