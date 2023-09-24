@@ -4,7 +4,7 @@ import About from './pages/About';
 import TimeSwap from './pages/TimeSwap';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import PasswordReset from './pages/PasswordReset';
+import ForgotPassword from './pages/ForgotPassword';
 import ErrorPage from './pages/ErrorPage';
 import './styles/App.css'
 import { Routes, Route, Navigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ import Library from './pages/Library';
 import ListAllBooks from './pages/ListAllBooks';
 import VerificationEmailSent from './pages/VerificationEmailSent';
 import VerificationSuccess from './pages/VerificationSuccess';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
 
@@ -28,7 +29,8 @@ function App() {
         <Route path="/time-swap" element={user ? <TimeSwap /> : <Navigate to="users/login" />} />
         <Route path="/users/login" element={!user ? <Login /> : <Navigate to="/books/library" />} />
         <Route path="/users/sign-up" element={!user ? <SignUp /> : <Navigate to="/" />} />
-        <Route path="/users/forgotten-password" element={<PasswordReset />} />
+        <Route path="/users/forgot-password" element={<ForgotPassword />} />
+        <Route path="/users/reset-password/:token" element={<ResetPassword />} />
         {user && (
           <>
             <Route path="/users/profile" element={<Profile />} />
