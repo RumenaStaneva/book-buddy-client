@@ -2,6 +2,10 @@
     padding: 0 40px 40px;
 }
 
+.books__list-all .modal {
+    height: unset
+}
+
 .heading-section {
     display: flex;
     padding: 30px;

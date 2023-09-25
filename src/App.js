@@ -29,8 +29,8 @@ function App() {
         <Route path="/time-swap" element={user ? <TimeSwap /> : <Navigate to="users/login" />} />
         <Route path="/users/login" element={!user ? <Login /> : <Navigate to="/books/library" />} />
         <Route path="/users/sign-up" element={!user ? <SignUp /> : <Navigate to="/" />} />
-        <Route path="/users/forgot-password" element={<ForgotPassword />} />
-        <Route path="/users/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/users/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/books/library" />} />
+        <Route path="/users/reset-password/:token" element={!user ? <ResetPassword /> : <Navigate to="/books/library" />} />
         {user && (
           <>
             <Route path="/users/profile" element={<Profile />} />
