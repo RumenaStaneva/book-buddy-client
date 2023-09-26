@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar'
 import Button from '../components/Button';
 import { useLogin } from '../hooks/useLogin';
@@ -37,7 +37,7 @@ function Login() {
                         </div>
                         <div className="form__group">
                             <p className='form__forgot-pass'>
-                                <a href="/forgotten-password">Forgot password?</a>
+                                <a href="/users/forgot-password">Forgot password?</a>
                             </p>
                             <label htmlFor="password">Password</label>
                             <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />

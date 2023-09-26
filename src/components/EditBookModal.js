@@ -1,7 +1,7 @@
 import React from "react";
 import '../styles/Modal.css'
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';
 import BookCategories from "../constants/bookCategories";
@@ -9,6 +9,7 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import Button from "./Button";
 import Modal from './Dialog'
 import Error from "./Error";
+import ConformationModal from "./ConformationModal";
 
 
 const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
@@ -19,7 +20,9 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
-    const navigate = useNavigate();
+
+    const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+    // const navigate = useNavigate();
     const { user } = useAuthContext();
     const shelfOptions = [
         { value: 0, label: 'Want to read' },
@@ -100,73 +103,68 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
         }
     }, [bookToUpdate, user, setIsOpen, fetchBook]);
 
-    const deleteBook = async (bookId) => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/delete-book?bookId=${bookId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                },
-            });
-
-            const data = await response.json();
-            setIsOpen(false);
-            navigate('/books/library');
-        } catch (error) {
-            setErrorMessage(error.error);
-        }
+    const handleDeleteBook = () => {
+        setDeleteModalIsOpen(true);
     }
 
-
     return (
-        <Modal
-            title={bookDetails.title}
-            onClose={() => setIsOpen(false)}
-            subtitle={`written by: ${bookDetails.authors ? bookDetails.authors.join(', ') : 'No author/s listed'}`}
-            setIsOpen={setIsOpen}
-            content={
-                <>
-                    <AiOutlineDelete className="modal__delete-btn" onClick={() => { deleteBook(bookDetails._id) }} />
+        <div className="modals__container">
+            <Modal
+                title={bookDetails.title}
+                onClose={() => setIsOpen(false)}
+                subtitle={`written by: ${bookDetails.authors ? bookDetails.authors.join(', ') : 'No author/s listed'}`}
+                setIsOpen={setIsOpen}
+                content={
+                    <>
+                        <AiOutlineDelete className="modal__delete-btn"
+                            // onClick={() => { deleteBook(bookDetails._id) }} 
+                            onClick={handleDeleteBook} />
 
-                    {errorMessage.length > 0 ? (
-                        <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                    ) : null}
-                    <form onSubmit={handleSubmit} className="add-book__form">
-                        <div className="modal__section">
-                            <label htmlFor="thumbnail">Thumbnail</label>
-                            <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={250} />
-                        </div>
-                        <div className="modal__section">
-                            <label htmlFor="description">Description</label>
-                            <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>
-                        </div>
-                        <div className="modal__section">
-                            <label htmlFor="pageCount">Book Pages</label>
-                            <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
-                        </div>
-                        <div className="modal__section">
-                            <label htmlFor="bookImage">Book image</label>
-                            <input type="text" name="bookImage" value={updatedThumbnail} onChange={handleThumbnailChange} />
-                        </div>
-                        <div className="modal__section">
-                            <Dropdown
-                                options={shelfOptions.map(option => option.label)}
-                                onSelect={handleShelfSelect}
-                                selectedOption={updatedShelf !== null ? shelfOptions.find(option => option.value === updatedShelf)?.label : null}
-                            />
-                        </div>
-                        <div className="modal__section">
-                            <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
-                        </div>
-                        <Button type="submit" className="cta-button">
-                            Edit Book
-                        </Button>
-                    </form>
+                        {errorMessage.length > 0 ? (
+                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                        ) : null}
+                        <form onSubmit={handleSubmit} className="add-book__form">
+                            <div className="modal__section">
+                                <label htmlFor="thumbnail">Thumbnail</label>
+                                <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={250} />
+                            </div>
+                            <div className="modal__section">
+                                <label htmlFor="description">Description</label>
+                                <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>
+                            </div>
+                            <div className="modal__section">
+                                <label htmlFor="pageCount">Book Pages</label>
+                                <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
+                            </div>
+                            <div className="modal__section">
+                                <label htmlFor="bookImage">Book image</label>
+                                <input type="text" name="bookImage" value={updatedThumbnail} onChange={handleThumbnailChange} />
+                            </div>
+                            <div className="modal__section">
+                                <Dropdown
+                                    options={shelfOptions.map(option => option.label)}
+                                    onSelect={handleShelfSelect}
+                                    selectedOption={updatedShelf !== null ? shelfOptions.find(option => option.value === updatedShelf)?.label : null}
+                                />
+                            </div>
+                            <div className="modal__section">
+                                <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
+                            </div>
+                            <Button type="submit" className="cta-button">
+                                Edit Book
+                            </Button>
+                        </form>
+                    </>
+                }
+            />
+            {deleteModalIsOpen && <ConformationModal
+                onClose={() => setDeleteModalIsOpen(false)}
+                setIsOpen={setDeleteModalIsOpen}
+                bookId={bookDetails._id}
+            />}
 
-                </>
-            }
-        />
+        </div>
+
     );
 };
 

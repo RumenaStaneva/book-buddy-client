@@ -2,12 +2,11 @@ import '../styles/Modal.css';
 import Button from "./Button";
 import { IoIosClose } from 'react-icons/io'
 
-const Modal = ({ title, content, setIsOpen, subtitle }) => {
+const Modal = ({ title, content, setIsOpen, subtitle, small }) => {
     return (
         <>
-            <div className="darkBG" onClick={() => setIsOpen(false)} />
-            {/* <div className="centered"> */}
-            <div className="modal">
+            <div className={`darkBG ${small ? 'modal-sm' : ''}`} onClick={() => setIsOpen(false)} />
+            <div className={`modal ${small ? 'modal-sm' : ''}`}>
                 <div className="modalHeader">
                     <h3 className="heading">{title}</h3>
                     <p>{subtitle}</p>
@@ -19,7 +18,6 @@ const Modal = ({ title, content, setIsOpen, subtitle }) => {
                     <div className="modalContent">{content}</div>
                 </div>
             </div>
-            {/* </div> */}
         </>
     );
 };

@@ -44,6 +44,20 @@ textarea {
     background-color: #fff;
 }
 
+.cta-btn__alt {
+    color: #D92868;
+    background-color: #fff;
+}
+
+.cta-btn__alt:hover {
+    color: #fff;
+    background-color: #D92868;
+}
+
+.cancel-btn {
+    margin-right: 10px;
+}
+
 .close-btn {
     cursor: pointer;
     border-radius: 8px;

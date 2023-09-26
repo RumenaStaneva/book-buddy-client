@@ -176,6 +176,7 @@ function ListAllBooks() {
                                 subtitle={`Book: ${currentBook.title}`}
                                 setIsOpen={setIsOpen}
                                 className="change-shelf-modal"
+                                small={true}
                                 content={
                                     <>
                                         <p className="modal-body__book-shelf" id="modal-modal-description">
