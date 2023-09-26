@@ -3,7 +3,6 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDarkTheme } from '../reducers/themeSlice';
 
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
