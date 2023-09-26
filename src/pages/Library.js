@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { NavLink } from 'react-router-dom';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import Header from '../components/Header'
@@ -81,60 +82,70 @@ function Library() {
                     </div>
                 ) : (
                     <>
+                        {console.log(currentlyReadingBooks.length, wantToReadBooks.length, readBooks.length)}
                         {errorMessage.length > 0 ? (
                             <Error message={errorMessage} onClose={() => setErrorMessage('')} />
                         ) : null}
-                        {currentlyReadingBooks && currentlyReadingBooks.length > 0 ?
+                        {!currentlyReadingBooks.length > 0 && !wantToReadBooks.length > 0 && !readBooks.length > 0 ?
+                            <div className='shelf-header d-flex' style={{ 'marginBottom': '60px', 'justifyContent': 'center' }}>
+                                <p>Currently there are no books in your library. You can search and add one from <NavLink to={'/'}>here.</NavLink></p>
+                            </div>
+                            : null}
+                        {currentlyReadingBooks ?
                             <>
                                 <div className='shelf-header'>
                                     <h2 className='shelf-title'>Currently Reading</h2>
                                     <a href='/books/see-all?shelf=1' className='cta-btn'>See all</a>
                                 </div>
-                                <div className='books__container'>
-                                    {<Swiper
-                                        pagination={{
-                                            dynamicBullets: true,
-                                            clickable: true
-                                        }}
-                                        className="book__carousel"
-                                        spaceBetween={30}
-                                        centeredSlides={true}
-                                        autoplay={{
-                                            delay: 5000,
-                                            disableOnInteraction: true,
-                                            pauseOnMouseEnter: true
-                                        }}
-                                        slidesPerView={1}
-                                        modules={[Pagination, Autoplay]}
+                                {currentlyReadingBooks.length > 0 ?
+                                    <div className='books__container'>
 
-                                    >
-                                        {
+                                        <Swiper
+                                            pagination={{
+                                                dynamicBullets: true,
+                                                clickable: true
+                                            }}
+                                            className="book__carousel"
+                                            spaceBetween={30}
+                                            centeredSlides={true}
+                                            autoplay={{
+                                                delay: 5000,
+                                                disableOnInteraction: true,
+                                                pauseOnMouseEnter: true
+                                            }}
+                                            slidesPerView={1}
+                                            modules={[Pagination, Autoplay]}
 
-                                            currentlyReadingBooks.map(book => (
-                                                <SwiperSlide
-                                                    key={book._id}
-                                                >
-                                                    <LibraryBook
-                                                        book={book}
-                                                        fetchBooks={fetchBooks}
-                                                    />
-                                                </SwiperSlide>
-                                            ))
-                                        }
-                                    </Swiper>
-                                    }
-                                </div >
+                                        >
+                                            {
+
+                                                currentlyReadingBooks.map(book => (
+                                                    <SwiperSlide
+                                                        key={book._id}
+                                                    >
+                                                        <LibraryBook
+                                                            book={book}
+                                                            fetchBooks={fetchBooks}
+                                                        />
+                                                    </SwiperSlide>
+                                                ))
+                                            }
+                                        </Swiper>
+
+                                    </div >
+                                    : <p style={{ 'textAlign': 'center' }}>No books to display</p>}
                             </>
-                            : <p>No books to display</p>}
+                            : null}
 
-                        {wantToReadBooks && wantToReadBooks.length > 0 ?
+                        {wantToReadBooks ?
                             <>
                                 <div className='shelf-header'>
                                     <h2 className='shelf-title'>Want to read books</h2>
                                     <a href='/books/see-all?shelf=0' className='cta-btn'>See all</a>
                                 </div>
                                 <div className='books__container books-colorful__container'>
-                                    {
+                                    {wantToReadBooks.length > 0 ?
+
                                         wantToReadBooks.map(book => {
                                             const categoryColor = categoryColors[book.category] || '#FFFFFF';
                                             const bookStyle = {
@@ -187,20 +198,23 @@ function Library() {
                                                 </div>
                                             )
 
-                                        })}
+                                        })
+
+                                        : <p>Nothing in want to read shelf</p>}
                                 </div >
                             </>
-                            : <p>Nothing in want to read shelf</p>
+                            : null
                         }
                         {
-                            readBooks && readBooks.length > 0 ?
+                            readBooks ?
                                 <>
                                     <div className='shelf-header'>
                                         <h2 className='shelf-title'>Already read</h2>
                                         <a href='/books/see-all?shelf=2' className='cta-btn'>See all</a>
                                     </div>
                                     <div className='books__container books-colorful__container'>
-                                        {
+                                        {readBooks.length > 0 ?
+
                                             readBooks.map(book => {
                                                 const categoryColor = categoryColors[book.category] || '#FFFFFF';
                                                 const bookStyle = {
@@ -252,10 +266,13 @@ function Library() {
                                                         </CardActionArea>
                                                     </div>
                                                 )
-                                            })}
+                                            })
+
+                                            : <p>Nothing in read shelf</p>}
+
                                     </div >
                                 </>
-                                : <p>No books to display</p>
+                                : null
                         }
                     </>
 
