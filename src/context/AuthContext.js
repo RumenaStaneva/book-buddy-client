@@ -47,11 +47,6 @@ export const AuthContextProvider = ({ children }) => {
             }
             dispatch({ type: 'LOGIN', payload: user })
         }
-
-        // Clear the confirmationPending flag when a user logs in
-        if (state.user) {
-            localStorage.removeItem('isConfirmationPending');
-        }
     }, [])
 
     console.log('AuthContext state: ', state);

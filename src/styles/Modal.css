@@ -91,8 +91,8 @@
     transition: all 0.25s ease;
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
     position: absolute;
-    right: 15px;
-    top: 20px;
+    right: 25px;
+    top: 25px;
     align-self: flex-end;
     margin-top: -7px;
     margin-right: -7px;
@@ -101,6 +101,11 @@
 .closeBtn:hover {
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
     transform: translate(-4px, 4px);
+}
+
+.closeBtn svg {
+    width: 20px;
+    height: 20px;
 }
 
 .cta-button {
@@ -171,6 +176,28 @@
     border-radius: 4px;
     font-size: 14px;
     margin-bottom: 10px;
+}
+
+.modal__delete-btn {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.modals__container {
+    position: relative;
+}
+
+.modal.modal-sm {
+    height: unset;
+    z-index: 12;
+}
+
+.darkBG.modal-sm {
+    z-index: 11;
 }
 
 @media (max-width: 768px) {
