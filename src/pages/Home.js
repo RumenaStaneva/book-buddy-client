@@ -10,6 +10,9 @@ import Navigation from '../components/NavBar';
 import Error from '../components/Error';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
+import { useSelector, useDispatch } from 'react-redux';
+import { setDarkTheme } from '../reducers/themeSlice';
+import ThemeSwitch from '../components/ThemeSwitch';
 
 function Home() {
 
@@ -21,6 +24,8 @@ function Home() {
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
     const PAGE_SIZE = 10;
+    const dispatch = useDispatch();
+    const isDarkTheme = useSelector((state) => state.theme.darkMode);
 
     useEffect(() => {
         document.title = 'Home';
@@ -102,6 +107,7 @@ function Home() {
             <Navigation />
             <Header title="Find your next favourite book" />
             <>
+                <ThemeSwitch />
                 <Box
                     component="form"
                     noValidate
