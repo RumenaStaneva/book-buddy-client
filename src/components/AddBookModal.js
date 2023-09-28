@@ -86,7 +86,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                     .then(function (response) {
                         if (!response.ok) {
                             return response.json().then(data => {
-                                throw new Error(data.error);
+                                throw new window.Error(data.error);
                             });
                         }
                         setErrorMessage('');
@@ -95,6 +95,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                         return response.json();
                     })
                     .then(function (data) {
+                        console.log(data);
                         setErrorMessage('');
                     })
                     .catch(function (error) {
