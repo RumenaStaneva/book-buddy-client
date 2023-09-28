@@ -82,7 +82,6 @@ function Library() {
                     </div>
                 ) : (
                     <>
-                        {console.log(currentlyReadingBooks.length, wantToReadBooks.length, readBooks.length)}
                         {errorMessage.length > 0 ? (
                             <Error message={errorMessage} onClose={() => setErrorMessage('')} />
                         ) : null}
