@@ -58,12 +58,10 @@ function Login() {
                         <Button type='submit' className='btn--cta' disabled={isLoading}>Sign in</Button>
                         <p className='form-switch'>I don’t have an account ? <Link href="/users/sign-up">Sign up</Link></p>
                         <GoogleLogin
-
                             buttonText="Login with Google"
                             onSuccess={(response) => {
                                 loginWithGoogle(response);
-                            }} onError={error => setErrorMessage(error)}
-                            cookiePolicy={'single_host_origin'} />
+                            }} onError={error => setErrorMessage(error)} />
                     </form>
                 </div>
                 <div className='wrapper'>
