@@ -105,13 +105,13 @@ function SignUp() {
                             <Button type='submit' className='btn--cta' disabled={isLoading} onClick={handleSubmit}>Sign up</Button>
 
                             < p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
-                            <GoogleLogin
-
-                                buttonText="Login with Google"
-                                onSuccess={(response) => {
-                                    signupWithGoogle(response);
-                                }} onError={error => setErrorMessage(error)}
-                                cookiePolicy={'single_host_origin'} />
+                            <div className="google-auth-btn__container">
+                                <GoogleLogin
+                                    buttonText="Sign in with Google"
+                                    onSuccess={(response) => {
+                                        signupWithGoogle(response);
+                                    }} onError={error => setErrorMessage(error)} />
+                            </div>
                         </form>
                     )}
                 </div>
