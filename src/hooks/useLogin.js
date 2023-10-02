@@ -24,7 +24,7 @@ export const useLogin = () => {
 
         if (response.ok) {
             setIsLoading(false);
-            //save user to lacal storage -> in userController when we sign up user we send email and token in json
+            //save user to local storage -> in userController when we sign up user we send email and token in json
             localStorage.setItem('user', JSON.stringify(json));
 
             //update auth context
@@ -34,5 +34,27 @@ export const useLogin = () => {
         }
     };
 
-    return { login, isLoading, errorMessage, setErrorMessage }
+    const loginWithGoogleAuth = async (data) => {
+        const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/login-with-google`, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const json = await response.json();
+        if (!response.ok) {
+            setIsLoading(false);
+            setErrorMessage(json.error);
+        }
+
+        if (response.ok) {
+            setIsLoading(false);
+            localStorage.setItem('user', JSON.stringify(json));
+            dispatch({ type: 'LOGIN', payload: json });
+            setIsLoading(false);
+        }
+    }
+
+    return { login, loginWithGoogleAuth, isLoading, errorMessage, setErrorMessage }
 };
