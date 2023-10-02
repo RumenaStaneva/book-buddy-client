@@ -5,11 +5,12 @@ import Button from '../components/Button';
 import { useLogin } from '../hooks/useLogin';
 import '../styles/AuthenticationForms.css'
 import Error from '../components/Error';
+import { GoogleLogin } from '@react-oauth/google';
 
 function Login() {
     const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { login, errorMessage, isLoading, setErrorMessage } = useLogin();
+    const { login, loginWithGoogleAuth, errorMessage, isLoading, setErrorMessage } = useLogin();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,7 +18,14 @@ function Login() {
             await login(emailOrUsername, password);
         } catch (error) {
             setErrorMessage(error)
-            console.log(error);
+        }
+    }
+
+    const loginWithGoogle = async (res) => {
+        try {
+            await loginWithGoogleAuth(res);
+        } catch (error) {
+            setErrorMessage(error.message)
         }
     }
 
@@ -49,6 +57,13 @@ function Login() {
 
                         <Button type='submit' className='btn--cta' disabled={isLoading}>Sign in</Button>
                         <p className='form-switch'>I don’t have an account ? <Link href="/users/sign-up">Sign up</Link></p>
+                        <div className="google-auth-btn__container">
+                            <GoogleLogin
+                                buttonText="Login with Google"
+                                onSuccess={(response) => {
+                                    loginWithGoogle(response);
+                                }} onError={error => setErrorMessage(error)} />
+                        </div>
                     </form>
                 </div>
                 <div className='wrapper'>

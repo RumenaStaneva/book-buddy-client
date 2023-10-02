@@ -38,5 +38,33 @@ export const useSignup = () => {
         }
     };
 
-    return { signup, isLoading, errorMessage, setErrorMessage, setIsLoading }
+    const signUpWithGoogleAuth = async (data) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/signup-with-google`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                const json = await response.json();
+                console.log(json.error);
+                setErrorMessage(json.error);
+                return;
+            }
+            const json = await response.json();
+            if (response.ok) {
+                setIsLoading(false);
+                localStorage.setItem('user', JSON.stringify(json));
+                dispatch({ type: 'LOGIN', payload: json });
+                setIsLoading(false);
+            }
+
+        } catch (error) {
+            setErrorMessage(error.message);
+        }
+    }
+
+    return { signup, signUpWithGoogleAuth, isLoading, errorMessage, setErrorMessage, setIsLoading }
 };
