@@ -112,7 +112,6 @@ function Profile() {
                             <label>Email: </label>
                             <div className="profile__info" id="email">{userData.email}</div>
                         </div>
-
                         <div className="profile__field">
                             <label>Bio: </label>
                             {hiddenBio && !bio.length > 0 ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
@@ -150,7 +149,9 @@ function Profile() {
                                 Update Information
                             </Button>
                         )}
+
                     </div>
+
                 )}
             </div>
         </>

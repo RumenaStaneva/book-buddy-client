@@ -8,27 +8,24 @@ import categoryColors from "../constants/categoryColors";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import '../styles/LibraryBook.css'
 import Error from './Error';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllBooks, calculateProgress } from '../reducers/booksSlice';
 
-function LibraryBook({ book, fetchBooks }) {
+function LibraryBook({ book }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
     const [errorMessage, setErrorMessage] = useState('');
     const { user } = useAuthContext();
+    const dispatchRedux = useDispatch();
 
     const bookTotalPages = book.pageCount;
 
-    const calculateProgress = () => {
-        const totalPagesNumber = parseInt(bookTotalPages, 10);
-        if (totalPagesNumber === 0) {
-            return 0;
-        }
-        return Math.floor((bookPageProgress / totalPagesNumber) * 100);
-    };
-
     const updateProgress = async (currentBook) => {
         try {
-            currentBook.progress = parseInt(bookPageProgress);
+            const mutableBook = { ...currentBook };
+            mutableBook.progress = parseInt(bookPageProgress);
+
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
@@ -36,17 +33,17 @@ function LibraryBook({ book, fetchBooks }) {
                     'Authorization': `Bearer ${user.token}`,
                 },
                 body: JSON.stringify({
-                    book: currentBook
+                    book: mutableBook
                 }),
             });
             const data = await response.json();
             setBookPageProgress(data.book.progress);
             setInputVisible(false);
-            const bookProgressPercent = calculateProgress();
+            const bookProgressPercent = calculateProgress(bookPageProgress, bookTotalPages);
             setBookProgressInPercentage(parseInt(bookProgressPercent));
             if (data.book.progress === parseInt(bookTotalPages)) {
                 //         //TODO Make congarts disappearing message when book is read
-                fetchBooks();
+                dispatchRedux(fetchAllBooks(user))
             }
         } catch (error) {
             setErrorMessage('Error fetching user data:', error);
@@ -123,7 +120,7 @@ function LibraryBook({ book, fetchBooks }) {
                                             }}
                                             href={`/books/book-details/${book._id}`}>See more details <AiOutlineArrowRight /></a>
                                         <div className='book__progress'>
-                                            <LinearProgressWithLabel value={bookProgressInPercentage != null ? bookProgressInPercentage : calculateProgress()} />
+                                            <LinearProgressWithLabel value={bookProgressInPercentage != null ? bookProgressInPercentage : calculateProgress(bookPageProgress, bookTotalPages)} />
                                         </div>
                                         <Button className='cta-btn' onClick={() => setInputVisible(true)}>Update progress</Button>
                                     </>

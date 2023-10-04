@@ -19,44 +19,19 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Error from '../components/Error';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllBooks } from '../reducers/booksSlice';
 
 function Library() {
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [wantToReadBooks, setWantToReadBooks] = useState([]);
-    const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState([]);
-    const [readBooks, setReadBooks] = useState([]);
-    const [errorMessage, setErrorMessage] = useState('');
     const { user } = useAuthContext();
 
-    const fetchBooks = useCallback(
-        async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/library`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                });
-
-                const data = await response.json();
-                setWantToReadBooks(data.wantToReadBooks);
-                setCurrentlyReadingBooks(data.currntlyReadingBooks);
-                setReadBooks(data.readBooks);
-                setIsLoading(false);
-            } catch (error) {
-                setErrorMessage('Error fetching user data: ', error);
-                console.error('Error fetching user data: ', error);
-                setIsLoading(false);
-            }
-        },
-        [user],
-    )
-
+    const dispatchRedux = useDispatch();
+    const { wantToReadBooks, currentlyReadingBooks, readBooks, isLoading, errorMessage } = useSelector((state) => state.books);
+    const state = useSelector((state) => state);
+    console.log('state', state);
     useEffect(() => {
-        if (user) {
-            fetchBooks();
-        }
-    }, [user, fetchBooks]);
+        dispatchRedux(fetchAllBooks(user));
+    }, [dispatchRedux, user]);
 
     useEffect(() => {
         document.title = `User's library`;
@@ -82,8 +57,10 @@ function Library() {
                     </div>
                 ) : (
                     <>
-                        {errorMessage.length > 0 ? (
-                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
+                        {!errorMessage.length > 0 ? (
+                            <Error message={errorMessage}
+                            // onClose={() => errorMessage = ''}
+                            />
                         ) : null}
                         {!currentlyReadingBooks.length > 0 && !wantToReadBooks.length > 0 && !readBooks.length > 0 ?
                             <div className='shelf-header d-flex' style={{ 'marginBottom': '60px', 'justifyContent': 'center' }}>
@@ -124,7 +101,7 @@ function Library() {
                                                     >
                                                         <LibraryBook
                                                             book={book}
-                                                            fetchBooks={fetchBooks}
+                                                        // fetchBooks={fetchBooks}
                                                         />
                                                     </SwiperSlide>
                                                 ))
