@@ -8,10 +8,10 @@ import categoryColors from "../constants/categoryColors";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import '../styles/LibraryBook.css'
 import Error from './Error';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchAllBooks, calculateProgress } from '../reducers/booksSlice';
 
-function LibraryBook({ book }) {
+function LibraryBook({ book, setSuccessMessage }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
@@ -23,6 +23,10 @@ function LibraryBook({ book }) {
 
     const updateProgress = async (currentBook) => {
         try {
+            if (bookPageProgress < 1) {
+                throw Error({ message: 'Only positive numbers are allowed' });
+            }
+
             const mutableBook = { ...currentBook };
             mutableBook.progress = parseInt(bookPageProgress);
 
@@ -41,13 +45,15 @@ function LibraryBook({ book }) {
             setInputVisible(false);
             const bookProgressPercent = calculateProgress(bookPageProgress, bookTotalPages);
             setBookProgressInPercentage(parseInt(bookProgressPercent));
-            if (data.book.progress === parseInt(bookTotalPages)) {
+            if (data.book.progress >= parseInt(bookTotalPages)) {
                 //         //TODO Make congarts disappearing message when book is read
+                setSuccessMessage(`Hurray, you successfully read ${data.book.title}`);
                 dispatchRedux(fetchAllBooks(user))
             }
         } catch (error) {
-            setErrorMessage('Error fetching user data:', error);
-            console.error('Error fetching user data:', error);
+            console.log('errorMessage', errorMessage);
+            setErrorMessage(`Error fetching book's data: ${error}`);
+            console.error('Error fetching book`s data:', error);
         }
     }
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
@@ -20,15 +20,13 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Error from '../components/Error';
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllBooks } from '../reducers/booksSlice';
+import { fetchAllBooks, setErrorMessage } from '../reducers/booksSlice';
 
 function Library() {
+    const [successMessage, setSuccessMessage] = useState('');
     const { user } = useAuthContext();
-
     const dispatchRedux = useDispatch();
     const { wantToReadBooks, currentlyReadingBooks, readBooks, isLoading, errorMessage } = useSelector((state) => state.books);
-    const state = useSelector((state) => state);
-    console.log('state', state);
     useEffect(() => {
         dispatchRedux(fetchAllBooks(user));
     }, [dispatchRedux, user]);
@@ -36,6 +34,16 @@ function Library() {
     useEffect(() => {
         document.title = `User's library`;
     }, []);
+    useEffect(() => {
+        const clearMessage = () => {
+            setSuccessMessage('');
+        };
+
+        if (successMessage.length > 0) {
+            const timer = setTimeout(clearMessage, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [successMessage]);
 
     return (
         <>
@@ -47,7 +55,6 @@ function Library() {
                     (readBooks && readBooks.length > 0)
                     ? `User's library`
                     : `No books in ${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`} />
-
             }
 
             <main className='books__library'>
@@ -57,9 +64,14 @@ function Library() {
                     </div>
                 ) : (
                     <>
-                        {!errorMessage.length > 0 ? (
+                        {successMessage.length > 0 ?
+                            <div className={`success-message__container ${successMessage.length > 0 ? 'fade-out' : ''}`}>
+                                <p>{successMessage}</p>
+                            </div>
+                            : null}
+                        {errorMessage.length > 0 ? (
                             <Error message={errorMessage}
-                            // onClose={() => errorMessage = ''}
+                                onClose={() => dispatchRedux(setErrorMessage(''))}
                             />
                         ) : null}
                         {!currentlyReadingBooks.length > 0 && !wantToReadBooks.length > 0 && !readBooks.length > 0 ?
@@ -101,6 +113,7 @@ function Library() {
                                                     >
                                                         <LibraryBook
                                                             book={book}
+                                                            setSuccessMessage={setSuccessMessage}
                                                         // fetchBooks={fetchBooks}
                                                         />
                                                     </SwiperSlide>

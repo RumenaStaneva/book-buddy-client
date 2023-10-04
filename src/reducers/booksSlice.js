@@ -46,7 +46,7 @@ const options = {
     extraReducers: {
         [fetchAllBooks.pending]: (state, action) => {
             state.isLoading = true;
-            state.errorMessage = false;
+            state.errorMessage = '';
         },
         [fetchAllBooks.fulfilled]: (state, action) => {
             const allBooks = action.payload;
@@ -54,27 +54,8 @@ const options = {
             state.currentlyReadingBooks = allBooks.currentlyReadingBooks;
             state.readBooks = allBooks.readBooks;
             state.isLoading = false;
-            state.errorMessage = false;
+            state.errorMessage = '';
         },
-
-        // [updateProgress.fulfilled]: (state, action) => {
-        //     // Action payload should contain the updated book object
-        //     const updatedBook = action.payload;
-        //     const { _id } = updatedBook;
-
-        //     // Find and update the book with the corresponding ID in the state
-        //     state.wantToReadBooks = state.wantToReadBooks.map((book) =>
-        //         book._id === _id ? updatedBook : book
-        //     );
-        //     state.currentlyReadingBooks = state.currentlyReadingBooks.map((book) =>
-        //         book._id === _id ? updatedBook : book
-        //     );
-        //     state.readBooks = state.readBooks.map((book) =>
-        //         book._id === _id ? updatedBook : book
-        //     );
-        // },
-
-
         [fetchAllBooks.rejected]: (state, action) => {
             state.isLoading = false;
             state.errorMessage = action.payload;
@@ -82,5 +63,5 @@ const options = {
     },
 }
 export const booksSlice = createSlice(options);
-
+export const { setErrorMessage } = booksSlice.actions;
 export default booksSlice.reducer;

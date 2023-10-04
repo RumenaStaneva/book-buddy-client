@@ -72,7 +72,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
             category: updatedCategory,
             pageCount: updatedPageCount,
             notes: notes,
-            progress: progress,
+            progress: updatedShelf === 1 ? 0 : progress,
             shelf: updatedShelf
         });
     }
