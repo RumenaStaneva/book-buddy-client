@@ -6,12 +6,15 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import '../styles/books-list.css'
 import AddBookModal from './AddBookModal'
-
+import { useDispatch } from "react-redux";
+import { clearError } from '../reducers/errorSlice';
 
 function BookList({ books }) {
     const [bookToAdd, setBookToAdd] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const dispatchError = useDispatch();
+
 
     const handleAddToShelf = (book) => {
         let thumbnail = book.volumeInfo.imageLinks;
@@ -45,6 +48,7 @@ function BookList({ books }) {
                     <p>{successMessage}</p>
                 </div>
                 : null}
+
             <div className='books__container books-list__container'>
                 {
                     books.map(book => (
@@ -60,6 +64,7 @@ function BookList({ books }) {
                                         setIsOpen(true)
                                         setSuccessMessage('');
                                         handleAddToShelf(book);
+                                        dispatchError(clearError());
                                     }}
                                 >
                                     <CardMedia
