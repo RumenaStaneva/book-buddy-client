@@ -1,7 +1,5 @@
-import React from "react";
 import '../styles/Modal.css'
-import { useState, useEffect } from "react";
-// import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from "react";
 import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';
 import BookCategories from "../constants/bookCategories";
@@ -9,6 +7,8 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import Button from "./Button";
 import Modal from './Dialog'
 import Error from "./Error";
+import { useDispatch } from "react-redux";
+import { setError } from '../reducers/errorSlice';
 import ConformationModal from "./ConformationModal";
 
 
@@ -16,14 +16,13 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
     const [updatedShelf, setUpdatedShelf] = useState(bookDetails.shelf);
     const [updatedCategory, setUpdatedCategory] = useState(bookDetails.category);
     const [bookToUpdate, setBookToUpdate] = useState(null);
-    const [errorMessage, setErrorMessage] = useState('');
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
-
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
-    // const navigate = useNavigate();
+    const dispatchError = useDispatch();
     const { user } = useAuthContext();
+    const errorRef = useRef(null);
     const shelfOptions = [
         { value: 0, label: 'Want to read' },
         { value: 1, label: 'Currently reading' },
@@ -50,6 +49,13 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (updatedPageCount < 0) {
+            dispatchError(setError({ message: 'Pages must be positive integer' }));
+            setTimeout(() => {
+                executeScroll();
+            }, 10);
+            return;
+        }
         const {
             _id,
             bookApiId,
@@ -76,6 +82,16 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
             shelf: updatedShelf
         });
     }
+    const executeScroll = () => {
+        if (errorRef.current) {
+            errorRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest',
+            });
+        }
+    };
+
     useEffect(() => {
         const updateBook = async (updatedBook) => {
             try {
@@ -94,12 +110,27 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                 setIsOpen(false);
                 fetchBook();
             } catch (error) {
+                dispatchError(setError({ message: `Error updating book: ${error}` }));
                 console.error('Error updating book:', error);
             }
         }
 
+        const scrollOnError = () => {
+            if (errorRef.current) {
+                errorRef.current.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                    inline: 'nearest',
+                });
+            }
+        };
+
         if (bookToUpdate) {
-            updateBook(bookToUpdate);
+            updateBook(bookToUpdate)
+                .then(scrollOnError) // Scroll after the asynchronous updateBook operation completes
+                .catch((error) => {
+                    console.error('Error updating book:', error);
+                });
         }
     }, [bookToUpdate, user, setIsOpen, fetchBook]);
 
@@ -117,12 +148,9 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                 content={
                     <>
                         <AiOutlineDelete className="modal__delete-btn"
-                            // onClick={() => { deleteBook(bookDetails._id) }} 
                             onClick={handleDeleteBook} />
 
-                        {errorMessage.length > 0 ? (
-                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                        ) : null}
+                        <Error ref={errorRef} />
                         <form onSubmit={handleSubmit} className="add-book__form">
                             <div className="modal__section">
                                 <label htmlFor="thumbnail">Thumbnail</label>

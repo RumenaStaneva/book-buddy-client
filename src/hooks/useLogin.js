@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
+import { useDispatch } from "react-redux";
+import { setError, clearError } from '../reducers/errorSlice';
 
 export const useLogin = () => {
     const [isLoading, setIsLoading] = useState(null);
-    const [errorMessage, setErrorMessage] = useState('');
     const { dispatch } = useAuthContext();
     const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
+    const dispatchError = useDispatch();
 
     const login = async (emailOrUsername, password) => {
         setIsLoading(true);
-        setErrorMessage('');
+        dispatchError(clearError());
 
         const response = await fetch(`${LOCAL_HOST}/users/login`, {
             method: 'POST',
@@ -19,7 +21,8 @@ export const useLogin = () => {
         const json = await response.json();
         if (!response.ok) {
             setIsLoading(false);
-            setErrorMessage(json.error);
+            dispatchError(setError({ message: json.error }));
+
         }
 
         if (response.ok) {
@@ -45,7 +48,7 @@ export const useLogin = () => {
         const json = await response.json();
         if (!response.ok) {
             setIsLoading(false);
-            setErrorMessage(json.error);
+            dispatchError(setError({ message: json.error }));
         }
 
         if (response.ok) {
@@ -56,5 +59,5 @@ export const useLogin = () => {
         }
     }
 
-    return { login, loginWithGoogleAuth, isLoading, errorMessage, setErrorMessage }
+    return { login, loginWithGoogleAuth, isLoading }
 };

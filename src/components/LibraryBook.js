@@ -10,26 +10,23 @@ import '../styles/LibraryBook.css'
 import Error from './Error';
 import { useDispatch } from "react-redux";
 import { fetchAllBooks, calculateProgress } from '../reducers/booksSlice';
+import { clearError, setError } from '../reducers/errorSlice';
 
 function LibraryBook({ book, setSuccessMessage }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
-    const [errorMessage, setErrorMessage] = useState('');
     const { user } = useAuthContext();
     const dispatchRedux = useDispatch();
+    const dispatchError = useDispatch();
 
     const bookTotalPages = book.pageCount;
 
     const updateProgress = async (currentBook) => {
         try {
-            if (bookPageProgress < 1) {
-                throw Error({ message: 'Only positive numbers are allowed' });
-            }
-
             const mutableBook = { ...currentBook };
             mutableBook.progress = parseInt(bookPageProgress);
-
+            console.log(mutableBook.progress);
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
@@ -41,18 +38,21 @@ function LibraryBook({ book, setSuccessMessage }) {
                 }),
             });
             const data = await response.json();
-            setBookPageProgress(data.book.progress);
-            setInputVisible(false);
-            const bookProgressPercent = calculateProgress(bookPageProgress, bookTotalPages);
-            setBookProgressInPercentage(parseInt(bookProgressPercent));
-            if (data.book.progress >= parseInt(bookTotalPages)) {
-                //         //TODO Make congarts disappearing message when book is read
-                setSuccessMessage(`Hurray, you successfully read ${data.book.title}`);
-                dispatchRedux(fetchAllBooks(user))
+            if (response.ok) {
+                setBookPageProgress(data.book.progress);
+                setInputVisible(false);
+                const bookProgressPercent = calculateProgress(bookPageProgress, bookTotalPages);
+                setBookProgressInPercentage(parseInt(bookProgressPercent));
+                if (data.book.progress >= parseInt(bookTotalPages)) {
+                    setSuccessMessage(`Hurray, you successfully read ${data.book.title}`);
+                    dispatchRedux(fetchAllBooks(user))
+                }
+                dispatchError(clearError());
+            } else {
+                dispatchError(setError({ message: data.message }))
             }
         } catch (error) {
-            console.log('errorMessage', errorMessage);
-            setErrorMessage(`Error fetching book's data: ${error}`);
+            dispatchError(setError({ message: `Error fetching book's data ${error.message}` }))
             console.error('Error fetching book`s data:', error);
         }
     }
@@ -81,9 +81,7 @@ function LibraryBook({ book, setSuccessMessage }) {
                                 className='book__image'
                             />
                             <div className='book__details'>
-                                {errorMessage.length > 0 ? (
-                                    <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                                ) : null}
+                                <Error />
                                 <h5 className='book__title book-font__outline'>
                                     {book.title}
                                 </h5>

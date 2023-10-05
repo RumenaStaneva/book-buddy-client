@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
-
+import { useDispatch } from "react-redux";
+import { setError, clearError } from '../reducers/errorSlice';
 
 export const useSignup = () => {
-    const [errorMessage, setErrorMessage] = useState('');
-
     const [isLoading, setIsLoading] = useState(null);
     const { dispatch } = useAuthContext();
     const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
+    const dispatchError = useDispatch();
 
     const signup = async (email, password, username) => {
         setIsLoading(true);
-        setErrorMessage('');
+        dispatchError(clearError());
 
         const response = await fetch(`${LOCAL_HOST}/users/sign-up`, {
             method: 'POST',
@@ -24,7 +24,7 @@ export const useSignup = () => {
 
         if (!response.ok) {
             setIsLoading(false);
-            setErrorMessage(json.error);
+            dispatchError(setError({ message: json.error }));
             throw Error(json.error)
         }
 
@@ -50,7 +50,7 @@ export const useSignup = () => {
             if (!response.ok) {
                 const json = await response.json();
                 console.log(json.error);
-                setErrorMessage(json.error);
+                dispatchError(setError({ message: json.error }));
                 return;
             }
             const json = await response.json();
@@ -62,9 +62,9 @@ export const useSignup = () => {
             }
 
         } catch (error) {
-            setErrorMessage(error.message);
+            dispatchError(setError({ message: error.message }));
         }
     }
 
-    return { signup, signUpWithGoogleAuth, isLoading, errorMessage, setErrorMessage, setIsLoading }
+    return { signup, signUpWithGoogleAuth, isLoading, setIsLoading }
 };
