@@ -127,7 +127,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
 
         if (bookToUpdate) {
             updateBook(bookToUpdate)
-                .then(scrollOnError) // Scroll after the asynchronous updateBook operation completes
+                .then(scrollOnError)
                 .catch((error) => {
                     console.error('Error updating book:', error);
                 });
