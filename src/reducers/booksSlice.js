@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { setError, clearError } from '../reducers/errorSlice';
+import { setError } from '../reducers/errorSlice';
 
 export const fetchAllBooks = createAsyncThunk("book/fetchAllBooks", async (user, thunkAPI) => {
     try {

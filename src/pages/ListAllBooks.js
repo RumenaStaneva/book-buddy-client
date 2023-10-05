@@ -29,7 +29,6 @@ function ListAllBooks() {
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [searchTerm, setSearchTerm] = useState('');
-    // const [errorMessage, setErrorMessage] = useState('');
     const query = useSelector((state) => state.filters.query);
     const category = useSelector((state) => state.filters.category);
     const limit = useSelector((state) => state.filters.limit)

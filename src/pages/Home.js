@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
 import Error from '../components/Error';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
@@ -17,14 +17,13 @@ function Home() {
 
     const [title, setTitle] = useState('');
     const [books, setBooks] = useState([]);
-    const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
     const PAGE_SIZE = 10;
     const dispatchError = useDispatch();
-
+    const { errorMessage } = useSelector((state) => state.error)
     useEffect(() => {
         document.title = 'Home';
     }, []);
@@ -70,7 +69,7 @@ function Home() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [dispatchError]);
 
     useEffect(() => {
         if (lastSearchedTitle) {

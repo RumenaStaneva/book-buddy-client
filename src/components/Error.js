@@ -6,7 +6,7 @@ import { clearError } from '../reducers/errorSlice';
 
 const Error = React.forwardRef((props, ref) => {
     const dispatchError = useDispatch();
-    const { errorMessage, hasError } = useSelector((state) => state.error)
+    const { errorMessage, hasError } = useSelector((state) => state.error);
 
     return (
         hasError ?

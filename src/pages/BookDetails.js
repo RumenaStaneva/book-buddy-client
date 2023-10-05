@@ -50,7 +50,7 @@ function BookDetails() {
         setIsLoading(false);
       }
     },
-    [user, params.bookId],
+    [user, params.bookId, dispatchError],
   )
 
   useEffect(() => {
