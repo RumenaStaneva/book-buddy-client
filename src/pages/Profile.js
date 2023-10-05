@@ -5,7 +5,7 @@ import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import Button from '../components/Button';
 import Error from '../components/Error';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import '../styles/Profile.css'
 
@@ -19,7 +19,6 @@ function Profile() {
     const { user, dispatch } = useAuthContext();
     const [username, setUsername] = useState('');
     const dispatchError = useDispatch();
-    const { errorMessage, hasError } = useSelector((state) => state.error)
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -40,12 +39,13 @@ function Profile() {
             setBio(data.userProfile.bio);
             setUsername(data.userProfile.username)
             setIsLoading(false);
+            dispatchError(clearError());
         } catch (error) {
             dispatchError(setError({ message: `Error fetching user data: ${error}` }));
             console.error('Error fetching user data: ', error);
             setIsLoading(false);
         }
-    }, [user]);
+    }, [user, dispatchError]);
 
     useEffect(() => {
         if (user && user.token) {
@@ -105,9 +105,7 @@ function Profile() {
                     </div>
                 ) : (
                     <div className="profile__content">
-                        {errorMessage.length > 0 ? (
-                            <Error message={hasError ? errorMessage : ''} onClose={() => dispatchError(clearError())} />
-                        ) : null}
+                        <Error />
                         <h1>User Profile</h1>
                         <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
 

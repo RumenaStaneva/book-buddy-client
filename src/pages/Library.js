@@ -10,8 +10,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import categoryColors from "../constants/categoryColors";
 import { GiBookmarklet } from "react-icons/gi";
-
-
 import 'swiper/css';
 import 'swiper/css/pagination';
 import CardContent from '@mui/material/CardContent';
@@ -26,7 +24,7 @@ function Library() {
     const [successMessage, setSuccessMessage] = useState('');
     const { user } = useAuthContext();
     const dispatchRedux = useDispatch();
-    const { wantToReadBooks, currentlyReadingBooks, readBooks, isLoading, errorMessage } = useSelector((state) => state.books);
+    const { wantToReadBooks, currentlyReadingBooks, readBooks, isLoading } = useSelector((state) => state.books);
     useEffect(() => {
         dispatchRedux(fetchAllBooks(user));
     }, [dispatchRedux, user]);
@@ -69,11 +67,7 @@ function Library() {
                                 <p>{successMessage}</p>
                             </div>
                             : null}
-                        {errorMessage.length > 0 ? (
-                            <Error message={errorMessage}
-                                onClose={() => dispatchRedux(setErrorMessage(''))}
-                            />
-                        ) : null}
+                        <Error />
                         {!currentlyReadingBooks.length > 0 && !wantToReadBooks.length > 0 && !readBooks.length > 0 ?
                             <div className='shelf-header d-flex' style={{ 'marginBottom': '60px', 'justifyContent': 'center' }}>
                                 <p>Currently there are no books in your library. You can search and add one from <NavLink to={'/'}>here.</NavLink></p>
@@ -114,7 +108,6 @@ function Library() {
                                                         <LibraryBook
                                                             book={book}
                                                             setSuccessMessage={setSuccessMessage}
-                                                        // fetchBooks={fetchBooks}
                                                         />
                                                     </SwiperSlide>
                                                 ))

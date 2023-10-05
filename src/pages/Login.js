@@ -6,18 +6,21 @@ import { useLogin } from '../hooks/useLogin';
 import '../styles/AuthenticationForms.css'
 import Error from '../components/Error';
 import { GoogleLogin } from '@react-oauth/google';
+import { useDispatch } from "react-redux";
+import { setError } from '../reducers/errorSlice';
 
 function Login() {
     const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { login, loginWithGoogleAuth, errorMessage, isLoading, setErrorMessage } = useLogin();
+    const { login, loginWithGoogleAuth, isLoading } = useLogin();
+    const dispatchError = useDispatch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await login(emailOrUsername, password);
         } catch (error) {
-            setErrorMessage(error)
+            dispatchError(setError({ message: error }));
         }
     }
 
@@ -25,7 +28,7 @@ function Login() {
         try {
             await loginWithGoogleAuth(res);
         } catch (error) {
-            setErrorMessage(error.message)
+            dispatchError(setError({ message: error.message }));
         }
     }
 
@@ -50,11 +53,7 @@ function Login() {
                             <label htmlFor="password">Password</label>
                             <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
-
-                        {errorMessage.length > 0 ? (
-                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                        ) : null}
-
+                        <Error />
                         <Button type='submit' className='btn--cta' disabled={isLoading}>Sign in</Button>
                         <p className='form-switch'>I don’t have an account ? <Link href="/users/sign-up">Sign up</Link></p>
                         <div className="google-auth-btn__container">
@@ -62,7 +61,7 @@ function Login() {
                                 buttonText="Login with Google"
                                 onSuccess={(response) => {
                                     loginWithGoogle(response);
-                                }} onError={error => setErrorMessage(error)} />
+                                }} onError={error => dispatchError(setError({ message: error }))} />
                         </div>
                     </form>
                 </div>
