@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Error from '../components/Error';
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllBooks, setErrorMessage } from '../reducers/booksSlice';
+import { fetchAllBooks } from '../reducers/booksSlice';
 
 function Library() {
     const [successMessage, setSuccessMessage] = useState('');

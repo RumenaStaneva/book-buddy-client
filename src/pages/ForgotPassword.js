@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
+import Error from '../components/Error';
+import { useDispatch } from "react-redux";
+import { setError, clearError } from '../reducers/errorSlice';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
+    const dispatchError = useDispatch();
 
     const handleResetRequest = async (e) => {
         e.preventDefault();
@@ -22,14 +25,14 @@ const ForgotPassword = () => {
             if (response.ok) {
                 const data = await response.json();
                 setMessage(data.message);
-                setError('');
+                dispatchError(clearError());
             } else {
                 setMessage('');
-                setError('Error: Unable to request password reset.');
+                dispatchError(setError({ message: 'Error: Unable to request password reset.' }));
             }
         } catch (err) {
             setMessage('');
-            setError('Error: Unable to request password reset.');
+            dispatchError(setError({ message: 'Error: Unable to request password reset.' }));
             console.log(err);
         }
     };
@@ -58,11 +61,7 @@ const ForgotPassword = () => {
                         {message && <div className="success-message__container">
                             <p> {message} </p>
                         </div>}
-                        {error &&
-                            <div className="error-message__container">
-                                <p className="error">{error}</p>
-                            </div>
-                        }
+                        <Error />
                         <p className='form-switch'><Link to="/users/login">Back to Login</Link></p>
                     </form>
 

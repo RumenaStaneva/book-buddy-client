@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { setError, clearError } from '../reducers/errorSlice';
 
 export const fetchAllBooks = createAsyncThunk("book/fetchAllBooks", async (user, thunkAPI) => {
     try {
@@ -8,10 +9,10 @@ export const fetchAllBooks = createAsyncThunk("book/fetchAllBooks", async (user,
             },
         });
         const data = await response.json();
-        // console.log('datad', data);
         return data;
     } catch (error) {
         console.log(error);
+        thunkAPI.dispatch(setError({ message: `Error fetching books: ${error.message}` }));
         throw new Error(error.message);
     }
 });
