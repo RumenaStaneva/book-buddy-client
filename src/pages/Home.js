@@ -8,6 +8,8 @@ import Box from '@mui/material/Box';
 import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
 import Error from '../components/Error';
+import { useDispatch, useSelector } from "react-redux";
+import { setError, clearError } from '../reducers/errorSlice';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
 
@@ -15,13 +17,13 @@ function Home() {
 
     const [title, setTitle] = useState('');
     const [books, setBooks] = useState([]);
-    const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
     const PAGE_SIZE = 10;
-
+    const dispatchError = useDispatch();
+    const { errorMessage } = useSelector((state) => state.error)
     useEffect(() => {
         document.title = 'Home';
     }, []);
@@ -29,14 +31,14 @@ function Home() {
     const handleChange = (e) => {
         const title = e.target.value;
         setTitle(title);
-        setErrorMessage('');
+        dispatchError(clearError());
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (title === '' || title === undefined || title === null) {
-            setErrorMessage('Please enter a title or author.');
+            dispatchError(setError({ message: 'Please enter a title or author.' }));
         } else {
             setLastSearchedTitle(title);
             setCurrentPage(1);
@@ -62,12 +64,12 @@ function Home() {
             setBooks(response.data.items);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
-            setErrorMessage('Error fetching books: ', error);
+            dispatchError(setError({ message: `Error fetching books: ${error})` }));
             console.error('Error fetching books: ', error);
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [dispatchError]);
 
     useEffect(() => {
         if (lastSearchedTitle) {
@@ -137,9 +139,7 @@ function Home() {
                             variants={imageVariants}
                             src={require('../images/logo-big.png')}
                             alt="Logo" />
-                        {errorMessage.length > 0 ? (
-                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                        ) : null}
+                        <Error />
                         <div className='d-flex'>
                             <ShakeableTextField
                                 id="outlined-basic"

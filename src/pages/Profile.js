@@ -5,6 +5,8 @@ import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import Button from '../components/Button';
 import Error from '../components/Error';
+import { useDispatch } from "react-redux";
+import { setError, clearError } from '../reducers/errorSlice';
 import '../styles/Profile.css'
 
 
@@ -16,7 +18,7 @@ function Profile() {
     const [hiddenUsername, setHiddenUsername] = useState(true);
     const { user, dispatch } = useAuthContext();
     const [username, setUsername] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const dispatchError = useDispatch();
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -27,7 +29,7 @@ function Profile() {
             });
 
             if (response.status === 401) {
-                setErrorMessage('Unauthorized access');
+                dispatchError(setError({ message: 'Unauthorized access' }));
                 console.error('Unauthorized access');
                 return;
             }
@@ -37,12 +39,13 @@ function Profile() {
             setBio(data.userProfile.bio);
             setUsername(data.userProfile.username)
             setIsLoading(false);
+            dispatchError(clearError());
         } catch (error) {
-            setErrorMessage('Error fetching user data: ', error);
+            dispatchError(setError({ message: `Error fetching user data: ${error}` }));
             console.error('Error fetching user data: ', error);
             setIsLoading(false);
         }
-    }, [user]);
+    }, [user, dispatchError]);
 
     useEffect(() => {
         if (user && user.token) {
@@ -61,7 +64,7 @@ function Profile() {
                 body: JSON.stringify({ bio: bio, username: username }),
             });
             if (response.status === 401) {
-                setErrorMessage('Unauthorized access');
+                dispatchError(setError({ message: 'Unauthorized access' }));
                 console.error('Unauthorized access');
                 return;
             }
@@ -69,18 +72,18 @@ function Profile() {
             setHiddenUsername(true);
             if (!response.ok) {
                 const errorData = await response.json();
-                setErrorMessage(`Error updating username: ${errorData.error}`);
+                dispatchError(setError({ message: `Error updating username: ${errorData.error}` }));
                 return;
             } else {
                 const localstorageUser = JSON.parse(localStorage.getItem('user'));
                 localstorageUser.username = username;
                 localStorage.setItem('user', JSON.stringify(localstorageUser));
                 dispatch({ type: 'LOGIN', payload: localstorageUser });
-                setErrorMessage('');
+                dispatchError(clearError());
             }
             fetchUserData();
         } catch (error) {
-            setErrorMessage(error);
+            dispatchError(setError({ message: `Error updating username: ${error}` }));
             console.error('Error updating username: ', error);
         }
     };
@@ -102,9 +105,7 @@ function Profile() {
                     </div>
                 ) : (
                     <div className="profile__content">
-                        {errorMessage.length > 0 ? (
-                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                        ) : null}
+                        <Error />
                         <h1>User Profile</h1>
                         <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
 
@@ -112,7 +113,6 @@ function Profile() {
                             <label>Email: </label>
                             <div className="profile__info" id="email">{userData.email}</div>
                         </div>
-
                         <div className="profile__field">
                             <label>Bio: </label>
                             {hiddenBio && !bio.length > 0 ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
@@ -150,7 +150,9 @@ function Profile() {
                                 Update Information
                             </Button>
                         )}
+
                     </div>
+
                 )}
             </div>
         </>

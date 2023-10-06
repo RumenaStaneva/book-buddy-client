@@ -45,6 +45,10 @@
 .book-description {
     margin-top: 20px;
     font-size: 1.1rem;
+    overflow-y: auto;
+    max-height: 200px;
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .edit-book__icon {

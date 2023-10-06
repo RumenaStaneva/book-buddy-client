@@ -12,10 +12,8 @@ import '../styles/ListAllBooks.css'
 import Modal from '../components/Dialog'
 import Error from "../components/Error";
 import { useSelector, useDispatch } from 'react-redux';
-
 import { setCategory, setSearchQuery, setLimit } from '../reducers/filtersSlice';
-
-// import store from "../store";
+import { clearError, setError } from "../reducers/errorSlice";
 
 function ListAllBooks() {
     const location = useLocation();
@@ -31,13 +29,12 @@ function ListAllBooks() {
     const [newShelf, setNewShelf] = useState();
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [searchTerm, setSearchTerm] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-
     const query = useSelector((state) => state.filters.query);
     const category = useSelector((state) => state.filters.category);
     const limit = useSelector((state) => state.filters.limit)
 
     const dispatch = useDispatch();
+    const dispatchError = useDispatch();
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -75,23 +72,24 @@ function ListAllBooks() {
                 });
 
                 if (!response.ok) {
-                    setErrorMessage('Network response was not ok');
-                    throw new Error('Network response was not ok');
+                    dispatchError(setError({ message: 'Network connection failed' }))
+                    throw new Error('Network connection failed');
                 }
 
                 const data = await response.json();
                 setIsLoading(false);
                 setBooks(data.books);
                 setTotalPages(data.totalPages);
+                dispatchError(clearError());
                 return response;
             } catch (error) {
-                setErrorMessage('Error fetching user data: ', error);
+                dispatchError(setError({ message: `Error fetching user data: ${error}` }))
                 console.error('Error fetching user data: ', error);
                 setIsLoading(false);
                 return null;
             }
         },
-        [user, shelfNum, page, limit, category, query],
+        [user, shelfNum, page, limit, category, query, dispatchError],
     )
     useEffect(() => {
         if (user) {
@@ -126,6 +124,7 @@ function ListAllBooks() {
             setIsOpen(false);
             fetchBooks();
         } catch (error) {
+            dispatchError(setError({ message: `Error changing shelf: ${error}` }));
             console.error('Error changing shelf:', error);
         }
     }
@@ -149,6 +148,7 @@ function ListAllBooks() {
         try {
             await fetchBooks();
         } catch (error) {
+            dispatchError(setError({ message: `Error fetching books: ${error}` }));
             console.error('Error fetching books:', error);
         }
     };
@@ -212,9 +212,7 @@ function ListAllBooks() {
                         </div>
 
                         <div className="books__container books-colorful__container">
-                            {errorMessage.length > 0 ? (
-                                <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                            ) : null}
+                            <Error />
                             {books.map(book => {
                                 const categoryColor = categoryColors[book.category] || '#FFFFFF';
                                 const bookStyle = {
