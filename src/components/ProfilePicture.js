@@ -29,6 +29,31 @@ function ProfilePicture() {
     }
 
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/upload-profile-picture`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                    // "Content-Type": "multipart/form-data",
+                },
+                body: 'ksksks'
+            });
+
+            if (response.status === 401) {
+                dispatchError(setError({ message: 'Unauthorized access' }));
+                console.error('Unauthorized access');
+                return;
+            }
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+            dispatchError(setError({ message: `Error uploading profile picture ${error}` }))
+        }
+    }
 
     return (
         <>
@@ -70,6 +95,7 @@ function ProfilePicture() {
                         }}
                     />
                 </div>
+                <button type="submit" onClick={handleSubmit}>Add picture</button>
             </form >
         </>
     )
