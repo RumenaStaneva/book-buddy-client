@@ -8,6 +8,7 @@ import Error from '../components/Error';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import '../styles/Profile.css'
+import ProfilePicture from '../components/ProfilePicture';
 
 
 function Profile() {
@@ -104,54 +105,60 @@ function Profile() {
                         <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                     </div>
                 ) : (
-                    <div className="profile__content">
-                        <Error />
-                        <h1>User Profile</h1>
-                        <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
+                    <>
+                        <div className="profile__content">
+                            <Error />
+                            <h1>User Profile</h1>
+                            <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
 
-                        <div className="profile__field">
-                            <label>Email: </label>
-                            <div className="profile__info" id="email">{userData.email}</div>
-                        </div>
-                        <div className="profile__field">
-                            <label>Bio: </label>
-                            {hiddenBio && !bio.length > 0 ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
-                            <div onClick={() => setHiddenBio(false)} className="profile__clickable" tabIndex="0">
-                                {!hiddenBio ? null : <span className="hidden">{bio}</span>}
+                            <div className="profile__field">
+                                <label>Email: </label>
+                                <div className="profile__info" id="email">{userData.email}</div>
                             </div>
-                            <textarea
-                                rows="4"
-                                cols="50"
-                                value={bio}
-                                onChange={(e) => setBio(e.target.value)}
-                                {...(hiddenBio ? { hidden: true } : {})}
-                                className={`profile__textarea ${hiddenBio ? 'hidden' : ''}`}
-                                aria-labelledby="bio"
-                            />
-                        </div>
-
-                        <div className="profile__field">
-                            <label>Username: </label>
-                            <div onClick={() => setHiddenUsername(false)} className="profile__clickable" tabIndex="0">
-                                {!hiddenUsername ? null : <span className="hidden">{username}</span>}
+                            <div className="profile__field">
+                                <label>Bio: </label>
+                                {hiddenBio && !bio.length > 0 ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
+                                <div onClick={() => setHiddenBio(false)} className="profile__clickable" tabIndex="0">
+                                    {!hiddenBio ? null : <span className="hidden">{bio}</span>}
+                                </div>
+                                <textarea
+                                    rows="4"
+                                    cols="50"
+                                    value={bio}
+                                    onChange={(e) => setBio(e.target.value)}
+                                    {...(hiddenBio ? { hidden: true } : {})}
+                                    className={`profile__textarea ${hiddenBio ? 'hidden' : ''}`}
+                                    aria-labelledby="bio"
+                                />
                             </div>
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                {...(hiddenUsername ? { hidden: true } : {})}
-                                className={`profile__input ${hiddenUsername ? 'hidden' : ''}`}
-                                aria-labelledby="username"
-                            />
+
+                            <div className="profile__field">
+                                <label>Username: </label>
+                                <div onClick={() => setHiddenUsername(false)} className="profile__clickable" tabIndex="0">
+                                    {!hiddenUsername ? null : <span className="hidden">{username}</span>}
+                                </div>
+                                <input
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    {...(hiddenUsername ? { hidden: true } : {})}
+                                    className={`profile__input ${hiddenUsername ? 'hidden' : ''}`}
+                                    aria-labelledby="username"
+                                />
+                            </div>
+
+                            {(username !== userData.username || bio !== userData.bio) && (
+                                <Button onClick={handleUpdateInformation} className="update__button">
+                                    Update Information
+                                </Button>
+                            )}
+
                         </div>
+                        <div className="profile-picture">
+                            <ProfilePicture />
+                        </div>
+                    </>
 
-                        {(username !== userData.username || bio !== userData.bio) && (
-                            <Button onClick={handleUpdateInformation} className="update__button">
-                                Update Information
-                            </Button>
-                        )}
-
-                    </div>
 
                 )}
             </div>
