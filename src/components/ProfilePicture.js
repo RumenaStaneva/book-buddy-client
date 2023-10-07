@@ -20,7 +20,8 @@ function ProfilePicture() {
             current.file = file;
             reader.onload = (e) => {
                 const imageDataUrl = reader.result;
-                console.log(imageDataUrl);
+                // console.log(imageDataUrl);
+                setEncodedImage(imageDataUrl);
                 current.src = e.target.result;
             }
             reader.readAsDataURL(file);
@@ -31,16 +32,17 @@ function ProfilePicture() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-
+        console.log(encodedImage);
+        const formData = new FormData();
+        formData.append('profilePicture', encodedImage);
+        console.log('form data', formData);
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/upload-profile-picture`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${user.token}`,
-                    // "Content-Type": "multipart/form-data",
                 },
-                body: 'ksksks'
+                body: formData,
             });
 
             if (response.status === 401) {
@@ -64,6 +66,7 @@ function ProfilePicture() {
                     alignItems: "center",
                     justifyContent: "center"
                 }}
+                onSubmit={(e) => e.preventDefault()}
             >
                 <div style={{ position: 'relative', width: '100%' }}>
                     <label htmlFor="profile-picture-uploader" style={{ position: 'absolute', left: 0, right: 0, display: imageUploaded ? 'none' : '' }}>Click to add your image</label>
@@ -95,7 +98,7 @@ function ProfilePicture() {
                         }}
                     />
                 </div>
-                <button type="submit" onClick={handleSubmit}>Add picture</button>
+                <button type="submit" onClick={(e) => handleSubmit(e)}>Add picture</button>
             </form >
         </>
     )
