@@ -67,6 +67,7 @@ const NavBar = () => {
                 <ul className='nav__list' role='menubar'>
                     {user && (
                         <>
+                            {user.profilePictureUrl && <img width={30} height={30} src={user.profilePictureUrl} alt="Profile" />}
                             <p className='nav__username'>Hi <a href='/users/profile'>{user.username !== '' ? user.username : user.email.split('@')[0]}</a></p>
                             <li className='nav__item'>
                                 <NavLink onClick={handleClick} className='nav__link' to='/'>Logout</NavLink>
