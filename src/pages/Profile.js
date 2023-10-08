@@ -15,12 +15,12 @@ function Profile() {
     const [userData, setUserData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [bio, setBio] = useState('');
-    const [profileImage, setProfileImage] = useState('');
     const [hiddenBio, setHiddenBio] = useState(true);
     const [hiddenUsername, setHiddenUsername] = useState(true);
     const { user, dispatch } = useAuthContext();
     const [username, setUsername] = useState('');
     const dispatchError = useDispatch();
+    const [isEditingProfile, setIsEditingProfile] = useState(false);
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -40,7 +40,6 @@ function Profile() {
             setUserData(data.userProfile);
             setBio(data.userProfile.bio);
             setUsername(data.userProfile.username);
-            setProfileImage(data.userProfile.profilePicture)
             setIsLoading(false);
             dispatchError(clearError());
         } catch (error) {
@@ -94,6 +93,10 @@ function Profile() {
         document.title = `User's profile`;
     }, []);
 
+    const handleProfileClick = () => {
+        setIsEditingProfile(!isEditingProfile);
+    };
+
     return (
         <>
             <NavBar />
@@ -107,9 +110,19 @@ function Profile() {
                     </div>
                 ) : (
                     <>
+
+                        <Error />
                         <div className="profile__content">
-                            <Error />
                             <h1>User Profile</h1>
+                            <div className='profile__picture-container'>
+                                <button className='change-picture__btn' onClick={handleProfileClick}>
+
+                                    <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
+                                        className={`profile__profile-picture ${isEditingProfile ? 'editing' : ''}`}
+                                    />
+                                </button>
+                            </div>
+
                             <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
 
                             <div className="profile__field">
@@ -155,9 +168,11 @@ function Profile() {
                             )}
 
                         </div>
-                        <div className="profile-picture">
-                            <ProfilePicture />
-                        </div>
+                        {isEditingProfile && (
+                            <div className="profile-picture">
+                                <ProfilePicture handleProfileClick={handleProfileClick} />
+                            </div>
+                        )}
                     </>
 
 
