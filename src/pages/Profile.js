@@ -15,6 +15,7 @@ function Profile() {
     const [userData, setUserData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [bio, setBio] = useState('');
+    const [profileImage, setProfileImage] = useState('');
     const [hiddenBio, setHiddenBio] = useState(true);
     const [hiddenUsername, setHiddenUsername] = useState(true);
     const { user, dispatch } = useAuthContext();
@@ -38,7 +39,8 @@ function Profile() {
             const data = await response.json();
             setUserData(data.userProfile);
             setBio(data.userProfile.bio);
-            setUsername(data.userProfile.username)
+            setUsername(data.userProfile.username);
+            setProfileImage(data.userProfile.profilePicture)
             setIsLoading(false);
             dispatchError(clearError());
         } catch (error) {
@@ -53,7 +55,6 @@ function Profile() {
             fetchUserData();
         }
     }, [user, fetchUserData]);
-
     const handleUpdateInformation = async () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/update-profile-info`, {
