@@ -3,6 +3,7 @@ import Countdown from "../components/Countdown";
 import Button from "../components/Button";
 import { useState } from "react";
 import Calendar from "../components/Calendar";
+import ReadingTimeTable from "../components/ReadingTimeTable";
 
 const TimeSwap = () => {
     // Set the total seconds for the countdown
@@ -28,6 +29,8 @@ const TimeSwap = () => {
             <Countdown seconds={totalSeconds} />
 
             <Calendar />
+
+            <ReadingTimeTable />
         </>
     );
 };

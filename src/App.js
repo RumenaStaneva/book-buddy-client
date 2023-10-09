@@ -26,7 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/time-swap" element={user ? <TimeSwap /> : <Navigate to="users/login" />} />
+        <Route path="/time-swap" element={!user ? <Login /> : <TimeSwap />} />
         <Route path="/users/login" element={!user ? <Login /> : <Navigate to="/books/library" />} />
         <Route path="/users/sign-up" element={!user ? <SignUp /> : <Navigate to="/" />} />
         <Route path="/users/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/books/library" />} />
