@@ -120,8 +120,8 @@
     height: 150px;
     z-index: 2;
     border-radius: 50%;
-    right: 0;
-    top: 0;
+    right: 10px;
+    top: 5px;
 }
 
 .profile__picture-container .change-picture__btn::before {
@@ -191,8 +191,8 @@
 }
 
 .image-container {
-    height: 400px;
-    width: 400px;
+    height: 200px;
+    width: 250px;
     border: 2px dashed black;
     margin-bottom: 20px;
     cursor: pointer;

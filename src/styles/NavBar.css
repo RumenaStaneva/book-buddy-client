@@ -94,6 +94,13 @@
 
 .nav__profile-picture img {
     border-radius: 50%;
+    transition: box-shadow 0.3s ease;
+
+}
+
+.nav__profile-picture img:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+
 }
 
 .nav__burger {
