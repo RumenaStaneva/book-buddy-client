@@ -8,6 +8,7 @@ import Error from '../components/Error';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import '../styles/Profile.css'
+import ProfilePicture from '../components/ProfilePicture';
 
 
 function Profile() {
@@ -19,6 +20,7 @@ function Profile() {
     const { user, dispatch } = useAuthContext();
     const [username, setUsername] = useState('');
     const dispatchError = useDispatch();
+    const [isEditingProfile, setIsEditingProfile] = useState(false);
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -37,7 +39,7 @@ function Profile() {
             const data = await response.json();
             setUserData(data.userProfile);
             setBio(data.userProfile.bio);
-            setUsername(data.userProfile.username)
+            setUsername(data.userProfile.username);
             setIsLoading(false);
             dispatchError(clearError());
         } catch (error) {
@@ -52,7 +54,6 @@ function Profile() {
             fetchUserData();
         }
     }, [user, fetchUserData]);
-
     const handleUpdateInformation = async () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/update-profile-info`, {
@@ -92,6 +93,10 @@ function Profile() {
         document.title = `User's profile`;
     }, []);
 
+    const handleProfileClick = () => {
+        setIsEditingProfile(!isEditingProfile);
+    };
+
     return (
         <>
             <NavBar />
@@ -104,54 +109,72 @@ function Profile() {
                         <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                     </div>
                 ) : (
-                    <div className="profile__content">
+                    <>
+
                         <Error />
-                        <h1>User Profile</h1>
-                        <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
+                        <div className="profile__content">
+                            <h1>User Profile</h1>
+                            <div className='profile__picture-container'>
+                                <button className='change-picture__btn' onClick={handleProfileClick}>
 
-                        <div className="profile__field">
-                            <label>Email: </label>
-                            <div className="profile__info" id="email">{userData.email}</div>
-                        </div>
-                        <div className="profile__field">
-                            <label>Bio: </label>
-                            {hiddenBio && !bio.length > 0 ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
-                            <div onClick={() => setHiddenBio(false)} className="profile__clickable" tabIndex="0">
-                                {!hiddenBio ? null : <span className="hidden">{bio}</span>}
+                                    <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
+                                        className={`profile__profile-picture ${isEditingProfile ? 'editing' : ''}`}
+                                    />
+                                </button>
                             </div>
-                            <textarea
-                                rows="4"
-                                cols="50"
-                                value={bio}
-                                onChange={(e) => setBio(e.target.value)}
-                                {...(hiddenBio ? { hidden: true } : {})}
-                                className={`profile__textarea ${hiddenBio ? 'hidden' : ''}`}
-                                aria-labelledby="bio"
-                            />
-                        </div>
 
-                        <div className="profile__field">
-                            <label>Username: </label>
-                            <div onClick={() => setHiddenUsername(false)} className="profile__clickable" tabIndex="0">
-                                {!hiddenUsername ? null : <span className="hidden">{username}</span>}
+                            <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
+
+                            <div className="profile__field">
+                                <label>Email: </label>
+                                <div className="profile__info" id="email">{userData.email}</div>
                             </div>
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                {...(hiddenUsername ? { hidden: true } : {})}
-                                className={`profile__input ${hiddenUsername ? 'hidden' : ''}`}
-                                aria-labelledby="username"
-                            />
-                        </div>
+                            <div className="profile__field">
+                                <label>Bio: </label>
+                                {hiddenBio && !bio.length > 0 ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
+                                <div onClick={() => setHiddenBio(false)} className="profile__clickable" tabIndex="0">
+                                    {!hiddenBio ? null : <span className="hidden">{bio}</span>}
+                                </div>
+                                <textarea
+                                    rows="4"
+                                    cols="50"
+                                    value={bio}
+                                    onChange={(e) => setBio(e.target.value)}
+                                    {...(hiddenBio ? { hidden: true } : {})}
+                                    className={`profile__textarea ${hiddenBio ? 'hidden' : ''}`}
+                                    aria-labelledby="bio"
+                                />
+                            </div>
 
-                        {(username !== userData.username || bio !== userData.bio) && (
-                            <Button onClick={handleUpdateInformation} className="update__button">
-                                Update Information
-                            </Button>
+                            <div className="profile__field">
+                                <label>Username: </label>
+                                <div onClick={() => setHiddenUsername(false)} className="profile__clickable" tabIndex="0">
+                                    {!hiddenUsername ? null : <span className="hidden">{username}</span>}
+                                </div>
+                                <input
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    {...(hiddenUsername ? { hidden: true } : {})}
+                                    className={`profile__input ${hiddenUsername ? 'hidden' : ''}`}
+                                    aria-labelledby="username"
+                                />
+                            </div>
+
+                            {(username !== userData.username || bio !== userData.bio) && (
+                                <Button onClick={handleUpdateInformation} className="update__button">
+                                    Update Information
+                                </Button>
+                            )}
+
+                        </div>
+                        {isEditingProfile && (
+                            <div className="profile-picture">
+                                <ProfilePicture handleProfileClick={handleProfileClick} />
+                            </div>
                         )}
+                    </>
 
-                    </div>
 
                 )}
             </div>

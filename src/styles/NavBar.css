@@ -1,5 +1,5 @@
 .nav__container {
-    padding: 20px 25px;
+    padding: 10px 25px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -88,7 +88,20 @@
     color: #fff;
 }
 
-/* Your existing styles */
+.nav__profile-picture {
+    margin-right: 10px;
+}
+
+.nav__profile-picture img {
+    border-radius: 50%;
+    transition: box-shadow 0.3s ease;
+
+}
+
+.nav__profile-picture img:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+
+}
 
 .nav__burger {
     display: none;
