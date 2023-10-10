@@ -5,6 +5,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import Error from './Error';
+import '../styles/Calendar.css'
 const { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks } = require('date-fns');
 
 const Calendar = () => {

@@ -1,0 +1,80 @@
+.calendar-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.input-field.error {
+    border-color: red;
+}
+
+.input-field label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+@media (max-width: 1350px) {
+    .input-fields {
+        flex-wrap: wrap;
+    }
+
+    .input-field {
+        flex: 1 1 calc(50% - 20px);
+        /* Adjust the width as needed */
+        margin: 10px;
+    }
+}
+
+/* CSS for smaller screens (including down to 768px width) */
+@media (max-width: 768px) {
+    .input-field {
+        flex: 1 1 calc(100% - 20px);
+        /* Adjust the width as needed */
+    }
+}

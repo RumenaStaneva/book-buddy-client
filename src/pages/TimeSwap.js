@@ -21,12 +21,12 @@ const TimeSwap = () => {
     return (
         <>
             <NavBar />
-            <form onSubmit={handleSubmit}>
+            {/* <form onSubmit={handleSubmit}>
                 <input type="number" value={seconds} onChange={handleChange} />
                 <Button type="submit" onClick={handleSubmit}>Submit</Button>
-            </form>
+            </form> */}
 
-            <Countdown seconds={totalSeconds} />
+            {/* <Countdown seconds={totalSeconds} /> */}
 
             <Calendar />
 
