@@ -89,3 +89,7 @@ textarea {
 .fw-600 {
     font-weight: 600;
 }
+
+.input-field.error input {
+    border: 1px solid red;
+}

@@ -1,74 +1,78 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Cleave from 'cleave.js/react';
+import Spinner from 'react-spinner-material';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import Error from './Error';
-
-
 const { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks } = require('date-fns');
 
 const Calendar = () => {
     const [screenTimeData, setScreenTimeData] = useState(Array(7).fill({ date: '', time: '00:00' }));
-    const [daysOfWeek, setDaysOfWeek] = useState([]);
     const [datesFromLastWeek, setDatesFromLastWeek] = useState([]);
+    const [invalidInputs, setInvalidInputs] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
     const dispatchError = useDispatch();
 
-    const handleInputChange = (index, value, dateOfWeek) => {
-        console.log(dateOfWeek);
-        const newData = [...screenTimeData];
-        newData[index] = value;
-        setScreenTimeData(newData);
-    };
     //get the days for the last week and add them in daysOfWeek
     useEffect(() => {
-        // Get the current date (replace this with actual current date)
         const currentDate = new Date();
 
-        // Get the start and end of the last week (Monday to Sunday)
+        //the start and end of the last week (Monday to Sunday)
         const lastWeekStart = startOfWeek(subWeeks(currentDate, 1), { weekStartsOn: 1 });
         const lastWeekEnd = endOfWeek(subWeeks(currentDate, 1), { weekStartsOn: 1 });
-
-        // Get all the dates from Monday to Sunday of the last week
         const datesFromLastWeek = eachDayOfInterval({ start: lastWeekStart, end: lastWeekEnd });
-
-        console.log(datesFromLastWeek);
+        setDatesFromLastWeek(datesFromLastWeek);
         const formattedDates = datesFromLastWeek.map(date => format(date, 'MMMM dd, yyyy'));
-
-        setDatesFromLastWeek(formattedDates);
 
         setScreenTimeData(prevState => {
             return prevState.map((item, index) => {
+                console.log(item.time);
                 return {
-                    date: formattedDates[index]
+                    date: formattedDates[index],
+                    time: item.time
                 };
             });
         });
     }, []);
+    const handleInputChange = (index, value) => {
+        console.log(index, value);
+        const newData = [...screenTimeData];
+        newData[index] = {
+            ...newData[index],
+            time: value
+        };
+        setScreenTimeData(newData);
+    };
 
+    const convertToSeconds = (time, index) => {
+        const timePattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
-    const convertToSeconds = (time) => {
-        console.log(time);
-        const [hours, minutes] = time.split(':');
-        return parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60;
+        if (!timePattern.test(time)) {
+            setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, index]);
+            throw new window.Error('Invalid time format. Please use HH:MM format.');
+        } else {
+            dispatchError(clearError());
+            setInvalidInputs((prevInvalidInputs) =>
+                prevInvalidInputs.filter((item) => item !== index)
+            );
+            const [hours, minutes] = time.split(':');
+            return parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60;
+        }
+
     };
 
     const saveScreenTime = async () => {
-        const screenTimeInSeconds = screenTimeData.map((time, index) => {
-            const selectedDate = new Date();
-            console.log(selectedDate);
-            selectedDate.setDate(selectedDate.getDate() - 7 + index);
-            const timestamp = selectedDate.getTime();
-            console.log(timestamp);
-            return {
-                date: daysOfWeek[screenTimeData.indexOf(time)],
-                timeInSecond: convertToSeconds(time)
-            }
-        });
-
-        // console.log(screenTimeInSeconds);
+        setIsLoading(true);
         try {
+            const formattedDates = datesFromLastWeek.map(date => format(date, 'yyyy/MM/dd'));
+            const screenTimeInSeconds = screenTimeData.map((item, index) => {
+                return {
+                    date: formattedDates[index],
+                    timeInSecond: convertToSeconds(item.time, index)
+                }
+            });
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/save-time`, {
                 method: 'POST',
                 headers: {
@@ -83,10 +87,12 @@ const Calendar = () => {
                 throw new Error(data.error);
             }
             console.log('hurray' + data.savedScreenTimeData);
+            setIsLoading(false);
+            dispatchError(clearError());
         } catch (error) {
+            setIsLoading(false);
             dispatchError(setError({ message: error.message }));
         }
-
     };
 
 
@@ -94,21 +100,30 @@ const Calendar = () => {
 
     return (
         <div className="calendar-container">
-            <Error />
-            <div className="input-fields d-flex">
-                {screenTimeData.map((item, index) => (
-                    <div key={index} className="input-field">
-                        <label>{item.date}</label>
-                        <Cleave
-                            options={{ time: true, timePattern: ['h', 'm'] }}
-                            placeholder="Enter time in HH:MM format"
-                            value={item.time}
-                            onChange={(e) => handleInputChange(index, e.target.value)}
-                        />
+            {isLoading ?
+                (<div className='spinner__container'>
+                    <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                </div>) :
+                <>
+                    <Error />
+
+                    <div className="input-fields d-flex">
+                        {screenTimeData.map((item, index) => (
+                            <div key={index} className={`input-field ${invalidInputs.includes(index) ? 'error' : ''}`}>
+                                <label>{item.date}</label>
+                                <Cleave
+                                    options={{ time: true, timePattern: ['h', 'm'] }}
+                                    placeholder="Enter time in HH:MM format"
+                                    value={item.time}
+                                    onChange={(e) => handleInputChange(index, e.target.value)}
+                                />
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
-            <button onClick={saveScreenTime}>Save Screen Time</button>
+                    <button onClick={saveScreenTime}>Save Screen Time</button>
+                </>
+
+            }
         </div>
     );
 };
