@@ -7,12 +7,14 @@ import { setError, clearError } from '../reducers/errorSlice';
 
 
 const ReadingTimeTable = () => {
-    const [readingTimeData, setReadingTimeData] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+    const [readingTimeData, setReadingTimeData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
     const dispatchError = useDispatch();
 
     const fetchUserData = useCallback(async () => {
+        const currentDate = new Date();
+        setIsLoading(true);
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time`, {
                 headers: {
@@ -28,7 +30,7 @@ const ReadingTimeTable = () => {
 
             const data = await response.json();
             console.log(data);
-            setReadingTimeData(data)
+            setReadingTimeData(data.readingTimePerDay);
             setIsLoading(false);
             dispatchError(clearError());
         } catch (error) {
@@ -44,25 +46,32 @@ const ReadingTimeTable = () => {
         }
     }, [user, fetchUserData]);
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Reading Time Goal (in seconds)</th>
-                </tr>
-            </thead>
-            <tbody>
-                {/* {readingTimeData.map((data, index) => (
-                    <tr key={index}>
-                        <td>{data.date}</td>
-                        <td>{data.screenTimeInSeconds}</td>
-                        <td>{data.goalAchievedForTheDay}</td>
-                        <td>{data.weeklyGoalAveragePerDay}</td>
-                        <td>{data.timeInSecondsForTheDayReading}</td>
-                    </tr>
-                ))} */}
-            </tbody>
-        </table>
+        isLoading ?
+            (<div className='spinner__container'>
+                <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+            </div>)
+            : <>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reading Time Goal (in seconds)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {readingTimeData.length > 0 ?
+                            readingTimeData.map((data, index) => (
+                                <tr key={index}>
+                                    <td>{data.date}</td>
+                                    <td>{data.screenTimeInSeconds}</td>
+                                    <td>{data.goalAchievedForTheDay}</td>
+                                    <td>{data.weeklyGoalAveragePerDay}</td>
+                                    <td>{data.timeInSecondsForTheDayReading}</td>
+                                </tr>
+                            )) : null}
+                    </tbody>
+                </table>
+            </>
     );
 };
 
