@@ -200,6 +200,25 @@
     z-index: 11;
 }
 
+.confirmation-dialog {
+    color: #ff6700;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #ff6700;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    position: relative;
+    min-width: 350px;
+}
+
+.input-field.confirmation-dialog-shown input {
+    border: 1px solid indianred;
+}
+
 @media (max-width: 768px) {
     .modal {
         width: 90%;

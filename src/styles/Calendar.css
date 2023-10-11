@@ -59,17 +59,17 @@ button:hover {
     background-color: #45a049;
 }
 
-@media (max-width: 1350px) {
-    .input-fields {
-        flex-wrap: wrap;
-    }
-
-    .input-field {
-        flex: 1 1 calc(50% - 20px);
-        /* Adjust the width as needed */
-        margin: 10px;
-    }
+.input-fields {
+    flex-wrap: wrap;
 }
+
+.input-field {
+    flex: 1 1 calc(50% - 20px);
+    /* Adjust the width as needed */
+    margin: 10px;
+}
+
+@media (max-width: 1350px) {}
 
 /* CSS for smaller screens (including down to 768px width) */
 @media (max-width: 768px) {

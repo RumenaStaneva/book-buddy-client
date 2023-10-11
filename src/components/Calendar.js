@@ -18,25 +18,50 @@ const Calendar = () => {
 
     //get the days for the last week and add them in daysOfWeek
     useEffect(() => {
-        const currentDate = new Date();
+        const getWeekDates = async () => {
+            setIsLoading(true);
+            try {
+                const currentDate = new Date();
+                const lastWeekStart = startOfWeek(subWeeks(currentDate, 1), { weekStartsOn: 1 });
+                const lastWeekEnd = endOfWeek(subWeeks(currentDate, 1), { weekStartsOn: 1 });
+                const datesFromLastWeek = eachDayOfInterval({ start: lastWeekStart, end: lastWeekEnd });
+                setDatesFromLastWeek(datesFromLastWeek);
+                const formattedDates = datesFromLastWeek.map(date => format(date, 'MMMM dd, yyyy'));
 
-        //the start and end of the last week (Monday to Sunday)
-        const lastWeekStart = startOfWeek(subWeeks(currentDate, 1), { weekStartsOn: 1 });
-        const lastWeekEnd = endOfWeek(subWeeks(currentDate, 1), { weekStartsOn: 1 });
-        const datesFromLastWeek = eachDayOfInterval({ start: lastWeekStart, end: lastWeekEnd });
-        setDatesFromLastWeek(datesFromLastWeek);
-        const formattedDates = datesFromLastWeek.map(date => format(date, 'MMMM dd, yyyy'));
+                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/week-dates`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${user.token}`,
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('data', data);
+                    setScreenTimeData(prevState => {
+                        return prevState.map((item, index) => {
+                            return {
+                                date: data.weekDates[index],
+                                time: item.time // Assuming the response structure contains time data
+                            };
+                        });
+                    });
+                    setIsLoading(false);
+                } else {
+                    setIsLoading(false);
+                    throw new Error('Error fetching week dates' + response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                setIsLoading(false);
+                dispatchError(setError({ message: error.message }));
+            }
+        };
 
-        setScreenTimeData(prevState => {
-            return prevState.map((item, index) => {
-                console.log(item.time);
-                return {
-                    date: formattedDates[index],
-                    time: item.time
-                };
-            });
-        });
+        getWeekDates();
     }, []);
+
+
     const handleInputChange = (index, value) => {
         console.log(index, value);
         const newData = [...screenTimeData];
@@ -87,7 +112,14 @@ const Calendar = () => {
             if (!response.ok) {
                 throw new Error(data.error);
             }
-            console.log('hurray' + data.savedScreenTimeData);
+            console.log('hurray');
+            data.savedScreenTimeData.forEach(element => {
+                console.log(element);
+            });
+            data.savedReadingTimeData.forEach(element => {
+                console.log(element);
+            });
+            // console.log(data.saveScreenTime);
             setIsLoading(false);
             dispatchError(clearError());
         } catch (error) {
