@@ -147,16 +147,10 @@ const AddScreenTimeModal = ({ setIsOpen, checkScreenTimeData }) => {
 
             const data = await response.json();
             if (!response.ok) {
-                throw new Error(data.error);
+                throw new window.Error(data.error);
             }
             console.log('hurray');
-            data.savedScreenTimeData.forEach(element => {
-                console.log(element);
-            });
-            data.savedReadingTimeData.forEach(element => {
-                console.log(element);
-            });
-            // console.log(data.saveScreenTime);
+
             setShowConfirmationDialog(false);
             setIsLoading(false);
             dispatchError(clearError());
@@ -164,6 +158,7 @@ const AddScreenTimeModal = ({ setIsOpen, checkScreenTimeData }) => {
             checkScreenTimeData();
         } catch (error) {
             setIsLoading(false);
+            console.log(error);
             dispatchError(setError({ message: error.message }));
         }
     };
