@@ -41,6 +41,7 @@ const TimeSwap = () => {
                 const data = await response.json();
                 if (data.readingTimePerDay.length > 0) {
                     setReadingTimeData(data.readingTimePerDay);
+                    setHasScreenTimeData(true);
                     setHasAlreadyAddedScreenTime(true);
                 }
             } else {
@@ -53,7 +54,6 @@ const TimeSwap = () => {
         }
     }, [user.token]);
     useEffect(() => {
-
         checkScreenTimeData();
     }, [user.token, checkScreenTimeData]);
 
@@ -71,7 +71,7 @@ const TimeSwap = () => {
                     const data = await response.json();
                     setHasScreenTimeData(data.hasScreenTimeData);
                 } else {
-                    // Handle error cases
+                    throw new Error('Error checking screen time data existence');
                 }
             } catch (error) {
                 console.error('Error fetching user screen time data: ', error);
@@ -81,10 +81,6 @@ const TimeSwap = () => {
         fetchData();
     }, [user.token]);
 
-
-    if (!hasScreenTimeData) {
-        return <TimeSwapInformationPage />;
-    }
 
     return (
         <>
@@ -96,10 +92,14 @@ const TimeSwap = () => {
             </form> */}
 
             {/* <Countdown seconds={totalSeconds} /> */}
-            {hasAlreadyAddedScreenTime ?
-                <ReadingTimeTable readingTimeData={readingTimeData} />
+            {!hasScreenTimeData ?
+                <TimeSwapInformationPage setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
                 :
-                <Button onClick={() => setIsOpenAddScreenTime(true)}>Add your screen time for the previous week</Button>
+                hasAlreadyAddedScreenTime ?
+                    <ReadingTimeTable readingTimeData={readingTimeData} />
+                    :
+                    <Button onClick={() => setIsOpenAddScreenTime(true)}>Add your screen time for the previous week</Button>
+
             }
         </>
     );
