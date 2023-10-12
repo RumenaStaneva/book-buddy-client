@@ -57,6 +57,10 @@
     color: #5E81AC;
 }
 
+.nav__login-register {
+    padding: 10px 0;
+}
+
 .nav__login-register .nav__item a {
     padding: 10px;
     background-color: #D92868;

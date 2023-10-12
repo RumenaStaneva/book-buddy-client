@@ -59,6 +59,14 @@ const ReadingTimeTable = () => {
         const formattedDate = `${day}.${month}.${year}`;
         return formattedDate;
     }
+
+    function convertSecondsToHoursMinutes(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const formattedHours = String(hours).padStart(2, '0');
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        return `${formattedHours}:${formattedMinutes}`;
+    }
     return (
         isLoading ?
             (<div className='spinner__container'>
@@ -71,7 +79,7 @@ const ReadingTimeTable = () => {
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Reading Time (in seconds)</th>
+                            <th>Screen Time for the Day</th>
                             <th>Goal Achieved</th>
                             <th>Weekly Goal Average</th>
                             <th>Reading Time for the Day</th>
@@ -82,10 +90,10 @@ const ReadingTimeTable = () => {
                             readingTimeData.map((data, index) => (
                                 <tr key={index}>
                                     <td>{formatDate(data.date)}</td>
-                                    <td>{data.screenTimeInSeconds}</td>
+                                    <td>{convertSecondsToHoursMinutes(data.screenTimeInSeconds)}</td>
                                     <td>{data.goalAchievedForTheDay ? 'yes' : 'no'}</td>
-                                    <td>{data.weeklyGoalAveragePerDay}</td>
-                                    <td>{data.timeInSecondsForTheDayReading}</td>
+                                    <td>{convertSecondsToHoursMinutes(data.weeklyGoalAveragePerDay)}</td>
+                                    <td>{convertSecondsToHoursMinutes(data.timeInSecondsForTheDayReading)}</td>
                                 </tr>
                             )) : null}
                     </tbody>
