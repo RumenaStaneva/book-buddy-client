@@ -7,6 +7,7 @@ import Calendar from "../components/Calendar";
 import ReadingTimeTable from "../components/ReadingTimeTable";
 import AddScreenTimeModal from "../components/AddScreenTimeModal";
 import TimeSwapInformationPage from "./TimeSwapInformationPage";
+import WeeklyDashboard from "../components/WeeklyDashboard";
 
 const TimeSwap = () => {
     const [hasScreenTimeData, setHasScreenTimeData] = useState(false);
@@ -53,6 +54,7 @@ const TimeSwap = () => {
             console.error('Error:', error);
         }
     }, [user.token]);
+
     useEffect(() => {
         checkScreenTimeData();
     }, [user.token, checkScreenTimeData]);
@@ -96,7 +98,8 @@ const TimeSwap = () => {
                 <TimeSwapInformationPage setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
                 :
                 hasAlreadyAddedScreenTime ?
-                    <ReadingTimeTable readingTimeData={readingTimeData} />
+                    // <ReadingTimeTable readingTimeData={readingTimeData} />
+                    <WeeklyDashboard />
                     :
                     <Button onClick={() => setIsOpenAddScreenTime(true)}>Add your screen time for the previous week</Button>
 

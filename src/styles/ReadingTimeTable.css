@@ -1,11 +1,3 @@
-/* Add these styles to your CSS file */
-
-.table-container {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
 .table-container th,
 .table-container td {
     border: 1px solid #ddd;
@@ -33,4 +25,51 @@ h1 {
 h2 {
     font-size: 20px;
     margin-bottom: 10px;
+}
+
+
+/* styles to stay */
+
+.table-container {
+    margin-top: 20px;
+    padding: 2px;
+    border: 1px solid #ccc;
+    overflow-x: auto;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-around;
+    background-color: #fff;
+    padding: 10px;
+}
+
+
+.header-cell {
+    text-align: center;
+    border-right: 1px solid #ccc;
+    padding: 0 10px;
+    flex: 1;
+}
+
+.header-cell:last-child {
+    border-right: none;
+}
+
+.header-cell.disabled {
+    background-color: #ccc;
+    color: #666;
+}
+
+.header-cell.today {
+    background-color: #ffcc00;
+}
+
+.header-cell.future {
+    background-color: antiquewhite;
+}
+
+
+.day-of-week {
+    font-weight: bold;
 }

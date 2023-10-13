@@ -4,19 +4,19 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import Error from '../components/Error';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
-import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parseISO } from 'date-fns';
+// import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parseISO } from 'date-fns';
 import '../styles/ReadingTimeTable.css'
 
 const ReadingTimeTable = () => {
     const [readingTimeData, setReadingTimeData] = useState([]);
     const [month, setMonth] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-
+    const [startWeek, setStartWeek] = useState('');
+    const [endWeek, setEndWeek] = useState('');
     const { user } = useAuthContext();
     const dispatchError = useDispatch();
 
-    const fetchUserData = useCallback(async () => {
-        const currentDate = new Date();
+    const fetchReadingTime = useCallback(async () => {
         setIsLoading(true);
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time`, {
@@ -35,6 +35,8 @@ const ReadingTimeTable = () => {
             console.log(data);
             setReadingTimeData(data.readingTimePerDay);
             setMonth(new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date(data.readingTimePerDay[0].date)));
+            setStartWeek(formatDateDDMM(data.readingTimePerDay[0].date));
+            setEndWeek(formatDateDDMM(data.readingTimePerDay[6].date));
             setIsLoading(false);
             dispatchError(clearError());
         } catch (error) {
@@ -46,17 +48,26 @@ const ReadingTimeTable = () => {
 
     useEffect(() => {
         if (user && user.token) {
-            fetchUserData();
+            fetchReadingTime();
         }
-    }, [user, fetchUserData]);
+    }, [user, fetchReadingTime]);
 
-    const formatDate = (date) => {
+    const formatDateDDMMYYYY = (date) => {
         const inputDate = new Date(date);
         const day = inputDate.getUTCDate().toString().padStart(2, '0');
         const month = (inputDate.getUTCMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
         const year = inputDate.getUTCFullYear().toString();
 
         const formattedDate = `${day}.${month}.${year}`;
+        return formattedDate;
+    }
+
+    const formatDateDDMM = (date) => {
+        const inputDate = new Date(date);
+        const day = inputDate.getUTCDate().toString().padStart(2, '0');
+        const month = (inputDate.getUTCMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+
+        const formattedDate = `${day}.${month}`;
         return formattedDate;
     }
 
@@ -67,13 +78,16 @@ const ReadingTimeTable = () => {
         const formattedMinutes = String(minutes).padStart(2, '0');
         return `${formattedHours}:${formattedMinutes}`;
     }
+
+    // console.log(formatDate(readingTimeData[0].date))
+    // formatDate(readingTimeData[6].date)
     return (
         isLoading ?
             (<div className='spinner__container'>
                 <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
             </div>)
             : <>
-                <h1>{month}</h1>
+                <h1>{month} {startWeek} - {endWeek}</h1>
                 <h2>Reading Time Summary</h2>
                 <table className="table-container">
                     <thead>
@@ -89,7 +103,7 @@ const ReadingTimeTable = () => {
                         {readingTimeData.length > 0 ?
                             readingTimeData.map((data, index) => (
                                 <tr key={index}>
-                                    <td>{formatDate(data.date)}</td>
+                                    <td>{formatDateDDMMYYYY(data.date)}</td>
                                     <td>{convertSecondsToHoursMinutes(data.screenTimeInSeconds)}</td>
                                     <td>{data.goalAchievedForTheDay ? 'yes' : 'no'}</td>
                                     <td>{convertSecondsToHoursMinutes(data.weeklyGoalAveragePerDay)}</td>
