@@ -24,9 +24,10 @@ function Home() {
     const PAGE_SIZE = 10;
     const dispatchError = useDispatch();
     const { errorMessage } = useSelector((state) => state.error)
-    useEffect(() => {
-        document.title = 'Home';
-    }, []);
+    // useEffect(() => {
+    //     console.log('AuthContextProvider useEffect triggered');
+    //     document.title = 'Home';
+    // }, []);
 
     const handleChange = (e) => {
         const title = e.target.value;

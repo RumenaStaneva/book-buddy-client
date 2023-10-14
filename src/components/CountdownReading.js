@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from "react-redux";
+import { fetchReadingTime } from '../reducers/readingTimeForTodaySlice';
 import { fetchAllBooks } from '../reducers/booksSlice';
-import { fetchReadingTime, setTimeInSecondsForTheDayReading, setScreenTimeInSeconds } from '../reducers/readingTimeForTodaySlice';
 import { useAuthContext } from "../hooks/useAuthContext";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -17,15 +17,21 @@ import 'swiper/css/navigation';
 
 const CountdownReading = () => {
     const { user } = useAuthContext();
-    const dispatch = useDispatch();
+    const dispatchBooks = useDispatch();
+    const dispatchReadingTime = useDispatch();
     // const dispatchReadingTime = useDispatch();
     const { currentlyReadingBooks, isLoading } = useSelector((state) => state.books);
     const { data, screenTimeInSeconds } = useSelector((state) => state.readingTimeForToday)
+    //todo understand why it is fetched 2 times to BE
+
     useEffect(() => {
         console.log('Fetching data...');
-        dispatch(fetchAllBooks(user));
-        dispatch(fetchReadingTime(user));
-    }, [dispatch, user]);
+        dispatchBooks(fetchAllBooks(user));
+        dispatchReadingTime(fetchReadingTime(user));
+    }, [dispatchBooks, dispatchReadingTime, user]);
+
+
+
 
 
 

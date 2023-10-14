@@ -19,6 +19,7 @@ const ReadingTimeTable = () => {
     const fetchReadingTime = useCallback(async () => {
         setIsLoading(true);
         try {
+            //todo fix not correct path
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,

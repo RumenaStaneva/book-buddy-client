@@ -20,7 +20,6 @@ import ResetPassword from './pages/ResetPassword';
 function App() {
 
   const { user } = useAuthContext();
-
   return (
     <>
       <Routes>

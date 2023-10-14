@@ -13,7 +13,7 @@ export const fetchReadingTime = createAsyncThunk(
         const formattedEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/get-reading-time?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 }
