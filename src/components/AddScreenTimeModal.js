@@ -44,7 +44,7 @@ const AddScreenTimeModal = ({ setIsOpen, checkScreenTimeData }) => {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('data', data);
+                    // console.log('data', data);
                     setScreenTimeData(prevState => {
                         return prevState.map((item, index) => {
                             return {
@@ -74,7 +74,6 @@ const AddScreenTimeModal = ({ setIsOpen, checkScreenTimeData }) => {
 
 
     const handleInputChange = (index, value) => {
-        console.log(index, value);
         const newData = [...screenTimeData];
         newData[index] = {
             ...newData[index],
@@ -149,7 +148,6 @@ const AddScreenTimeModal = ({ setIsOpen, checkScreenTimeData }) => {
             if (!response.ok) {
                 throw new window.Error(data.error);
             }
-            console.log('hurray');
 
             setShowConfirmationDialog(false);
             setIsLoading(false);

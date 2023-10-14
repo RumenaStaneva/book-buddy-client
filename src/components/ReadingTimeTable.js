@@ -32,7 +32,6 @@ const ReadingTimeTable = () => {
             }
 
             const data = await response.json();
-            console.log(data);
             setReadingTimeData(data.readingTimePerDay);
             setMonth(new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date(data.readingTimePerDay[0].date)));
             setStartWeek(formatDateDDMM(data.readingTimePerDay[0].date));

@@ -1,32 +1,27 @@
 import NavBar from "../components/NavBar";
-import Countdown from "../components/Countdown";
+// import Countdown from "../components/Countdown";
 import Button from "../components/Button";
 import { useState, useEffect, useCallback } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import Calendar from "../components/Calendar";
-import ReadingTimeTable from "../components/ReadingTimeTable";
+import Spinner from 'react-spinner-material';
+// import Calendar from "../components/Calendar";
+// import ReadingTimeTable from "../components/ReadingTimeTable";
 import AddScreenTimeModal from "../components/AddScreenTimeModal";
 import TimeSwapInformationPage from "./TimeSwapInformationPage";
 import WeeklyDashboard from "../components/WeeklyDashboard";
+import { setReadingTimeForToday } from "../reducers/readingTimeForTodaySlice";
 
 const TimeSwap = () => {
     const [hasScreenTimeData, setHasScreenTimeData] = useState(false);
 
     const [isOpenAddScreenTime, setIsOpenAddScreenTime] = useState(false);
     const [hasAlreadyAddedScreenTime, setHasAlreadyAddedScreenTime] = useState(false);
-    const [readingTimeData, setReadingTimeData] = useState();
-    // Set the total seconds for the countdown
-    const [seconds, setSeconds] = useState(0);
-    const [totalSeconds, setTotalSeconds] = useState(0);
+    // const [readingTimeData, setReadingTimeData] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+
     const { user } = useAuthContext();
-    const handleChange = (e) => {
-        setSeconds(e.target.value);
-    }
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setTotalSeconds(seconds);
-        setSeconds(0);
-    }
+
+
 
     const checkScreenTimeData = useCallback(async () => {
         try {
@@ -41,7 +36,7 @@ const TimeSwap = () => {
             if (response.ok) {
                 const data = await response.json();
                 if (data.readingTimePerDay.length > 0) {
-                    setReadingTimeData(data.readingTimePerDay);
+                    // setReadingTimeData(data.readingTimePerDay);
                     setHasScreenTimeData(true);
                     setHasAlreadyAddedScreenTime(true);
                 }
@@ -49,62 +44,46 @@ const TimeSwap = () => {
                 setHasAlreadyAddedScreenTime(false);
                 throw new Error('Error checking screen time data existence');
             }
+            setIsLoading(false);
+
         } catch (error) {
             setHasAlreadyAddedScreenTime(false);
             console.error('Error:', error);
+            setIsLoading(false);
+
         }
     }, [user.token]);
 
     useEffect(() => {
-        checkScreenTimeData();
-    }, [user.token, checkScreenTimeData]);
-
-
-    useEffect(() => {
         const fetchData = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/user-screen-time-data`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setHasScreenTimeData(data.hasScreenTimeData);
-                } else {
-                    throw new Error('Error checking screen time data existence');
-                }
-            } catch (error) {
-                console.error('Error fetching user screen time data: ', error);
-            }
+            setIsLoading(true);
+            await checkScreenTimeData();
+            setIsLoading(false);
         };
 
         fetchData();
-    }, [user.token]);
-
+    }, [user.token, checkScreenTimeData]);
 
     return (
         <>
             <NavBar />
-            {isOpenAddScreenTime && <AddScreenTimeModal setIsOpen={setIsOpenAddScreenTime} checkScreenTimeData={checkScreenTimeData} />}
-            {/* <form onSubmit={handleSubmit}>
-                <input type="number" value={seconds} onChange={handleChange} />a
-                <Button type="submit" onClick={handleSubmit}>Submit</Button>
-            </form> */}
+            {isLoading ? (
+                <div className='spinner__container'>
+                    <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                </div>
+            ) : (
+                <>
+                    {isOpenAddScreenTime && <AddScreenTimeModal setIsOpen={setIsOpenAddScreenTime} checkScreenTimeData={checkScreenTimeData} />}
 
-            {/* <Countdown seconds={totalSeconds} /> */}
-            {!hasScreenTimeData ?
-                <TimeSwapInformationPage setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
-                :
-                hasAlreadyAddedScreenTime ?
-                    // <ReadingTimeTable readingTimeData={readingTimeData} />
-                    <WeeklyDashboard />
-                    :
-                    <Button onClick={() => setIsOpenAddScreenTime(true)}>Add your screen time for the previous week</Button>
-
-            }
+                    {!hasScreenTimeData ? (
+                        <TimeSwapInformationPage setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
+                    ) :
+                        <WeeklyDashboard />
+                    }
+                </>
+            )}
         </>
+
     );
 };
 

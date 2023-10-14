@@ -37,7 +37,6 @@ const Calendar = () => {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('data', data);
                     setScreenTimeData(prevState => {
                         return prevState.map((item, index) => {
                             return {

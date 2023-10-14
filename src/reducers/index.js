@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { filtersSlice } from './filtersSlice';
 import { booksSlice } from './booksSlice';
 import errorSlice from './errorSlice';
+import { readingTimeForTodaySlice } from './readingTimeForTodaySlice';
 
 const rootReducer = combineReducers({
     search: filtersSlice.actions.setSearchQuery,
@@ -9,7 +10,12 @@ const rootReducer = combineReducers({
     limit: filtersSlice.actions.setLimit,
     books: booksSlice.reducer,
     setError: errorSlice.actions.setError,
-    clearError: errorSlice.actions.clearError
+    clearError: errorSlice.actions.clearError,
+
+    setReadingTimeForToday: readingTimeForTodaySlice.reducer,
+    setScreenTimeInSeconds: readingTimeForTodaySlice.actions.setScreenTimeInSeconds,
+    setWeeklyGoalAveragePerDay: readingTimeForTodaySlice.actions.setWeeklyGoalAveragePerDay,
+    setTimeInSecondsForTheDayReading: readingTimeForTodaySlice.actions.setTimeInSecondsForTheDayReading
 
 });
 

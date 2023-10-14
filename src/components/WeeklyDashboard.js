@@ -44,7 +44,7 @@ const WeeklyDashboard = () => {
             }
 
             const data = await response.json();
-            console.log(data);
+            // console.log('readingTimePerDay', data);
             setReadingTimeData(data.readingTimePerDay);
             // setMonth(new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date(data.readingTimePerDay[0].date)));
             // setStartWeek(formatDateDDMM(data.readingTimePerDay[0].date));
@@ -137,6 +137,8 @@ const WeeklyDashboard = () => {
         );
     }
 
+    //TODO add logic and design when user has not added data for this week
+
     return (
         isLoading ?
             (<div className='spinner__container'>
@@ -161,9 +163,9 @@ const WeeklyDashboard = () => {
                                     </Tab >
                                 )
                             })}
-                        <div className="header-cell total-cell">
+                        {/* <div className="header-cell total-cell">
                             <Tab label="Total Time" value="total" />
-                        </div>
+                        </div> */}
                     </Tabs>
                     {selectedDate === formatDateDDMM(new Date()) ?
                         <CountdownReading />

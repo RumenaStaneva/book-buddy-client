@@ -19,14 +19,12 @@ function LibraryBook({ book, setSuccessMessage }) {
     const { user } = useAuthContext();
     const dispatchRedux = useDispatch();
     const dispatchError = useDispatch();
-
     const bookTotalPages = book.pageCount;
 
     const updateProgress = async (currentBook) => {
         try {
             const mutableBook = { ...currentBook };
             mutableBook.progress = parseInt(bookPageProgress);
-            console.log(mutableBook.progress);
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
