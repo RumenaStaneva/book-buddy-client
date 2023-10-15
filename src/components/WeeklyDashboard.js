@@ -1,24 +1,22 @@
 import { useState, useEffect } from "react";
 import Spinner from 'react-spinner-material';
 import Error from '../components/Error';
-import { useDispatch } from "react-redux";
-import { setError, clearError } from '../reducers/errorSlice';
 import '../styles/ReadingTimeTable.css'
 import CountdownReading from "./CountdownReading";
-import Timer from "./Timer";
+import { useSelector } from "react-redux";
 
 
 // import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse, addWeeks } from 'date-fns';
 
 
 
-const WeeklyDashboard = ({ days }) => {
-    const [readingTimeData, setReadingTimeData] = useState(days);
-    // const [month, setMonth] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    // const [startWeek, setStartWeek] = useState('');
-    // const [endWeek, setEndWeek] = useState('');
-    const dispatchError = useDispatch();
+const WeeklyDashboard = ({ readingTimeData }) => {
+    const [selectedTab, setSelectedTab] = useState(0);
+    // const [isLoading, setIsLoading] = useState(false);
+
+    const { currentlyReadingBooks } = useSelector((state) => state.books);
+    const isLoadingBooks = useSelector((state) => state.books.isLoading);
+    const { screenTimeInSeconds } = useSelector((state) => state.readingTimeForToday)
 
     function convertSecondsToHoursMinutes(seconds) {
         const hours = Math.floor(seconds / 3600);
@@ -46,7 +44,6 @@ const WeeklyDashboard = ({ days }) => {
         // set time to midnight for both dates
         cellDate.setUTCHours(0, 0, 0, 0);
         currentDate.setUTCHours(0, 0, 0, 0);
-
         if (cellDate < currentDate) {
             return 'disabled';
         } else if (cellDate.toISOString().split('T')[0] === currentDate.toISOString().split('T')[0]) {
@@ -56,17 +53,16 @@ const WeeklyDashboard = ({ days }) => {
         }
     }
 
-
     function formatDateDDMMWithDayOfWeek(dateString) {
         const inputDate = new Date(dateString);
         const day = inputDate.getUTCDate().toString().padStart(2, '0');
         const month = (inputDate.getUTCMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
         const weekDay = getDayOfWeek(dateString)
         return (
-            <div>
+            <>
                 <p>{`${day}.${month}`}</p>
                 <p>{weekDay}</p>
-            </div>
+            </>
         );
     }
 
@@ -80,7 +76,6 @@ const WeeklyDashboard = ({ days }) => {
 
     //TODO add logic and design when user has not added data for this week
 
-    const [selectedTab, setSelectedTab] = useState(0);
     useEffect(() => {
         const currentIndex = readingTimeData.findIndex(data => formatDateDDMM(data.date) === formatDateDDMM(new Date()));
         setSelectedTab(currentIndex !== -1 ? currentIndex : 0);
@@ -91,7 +86,7 @@ const WeeklyDashboard = ({ days }) => {
     };
 
     return (
-        isLoading ?
+        isLoadingBooks ?
             (<div className='spinner__container'>
                 <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
             </div>)
@@ -120,7 +115,7 @@ const WeeklyDashboard = ({ days }) => {
                             {selectedTab !== null && (
                                 <div className="tab-panel-content">
                                     {formatDateDDMM(readingTimeData[selectedTab].date) === formatDateDDMM(new Date()) ? (
-                                        <CountdownReading />
+                                        <CountdownReading currentlyReadingBooks={currentlyReadingBooks} screenTimeInSeconds={screenTimeInSeconds} isLoadingBooks={isLoadingBooks} />
                                     ) : (
                                         <div>
                                             <p>Today you need to read {convertSecondsToHoursMinutes(readingTimeData[selectedTab].screenTimeInSeconds)}</p>

@@ -50,6 +50,12 @@ h2 {
     border-right: 1px solid #ccc;
     padding: 0 10px;
     flex: 1;
+    cursor: pointer;
+}
+
+.header-cell.active {
+    color: #D92868;
+    font-weight: 600;
 }
 
 .header-cell:last-child {
@@ -68,7 +74,6 @@ h2 {
 .header-cell.future {
     background-color: antiquewhite;
 }
-
 
 .day-of-week {
     font-weight: bold;

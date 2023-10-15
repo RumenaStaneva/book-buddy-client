@@ -1,16 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { setError } from './errorSlice';
-import { format } from 'date-fns';
+import { startOfWeek, endOfWeek, format } from 'date-fns';
 
 
 //get the reading time
-export const fetchReadingTime = createAsyncThunk(
-    'readingTime/fetchReadingTime',
+export const fetchReadingTimeForTheWeek = createAsyncThunk(
+    'readingTime/fetchReadingTimeForTheWeek',
     async (user, thunkAPI) => {
-        const startDate = new Date().setHours(0, 0, 0, 0);
-        const endDate = new Date().setHours(0, 0, 0, 0);
-        const formattedStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
-        const formattedEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
+        // const startDate = new Date().setHours(0, 0, 0, 0);
+        // const endDate = new Date().setHours(0, 0, 0, 0);
+        // const formattedStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
+        // const formattedEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
+
+        const today = new Date().setHours(0, 0, 0, 0);
+        const startOfWeekDay = startOfWeek(today, { weekStartsOn: 1 });
+        const lastWeekEnd = endOfWeek(today, { weekStartsOn: 2 }); // it is 2 cuz it returns to saturday without sunday
+
+        const formattedStartDate = format(startOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
+        const formattedEndDate = format(lastWeekEnd, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
 
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
@@ -64,7 +71,8 @@ export const fetchReadingTime = createAsyncThunk(
 
 
 const initialState = {
-    data: null,
+    currentWeekData: null,
+    currentWeekDates: null,
     errorMessage: '',
     isLoading: false,
     screenTimeInSeconds: 0,
@@ -87,14 +95,18 @@ const options = {
         },
     },
     extraReducers: {
-        [fetchReadingTime.pending]: (state, action) => {
+        [fetchReadingTimeForTheWeek.pending]: (state, action) => {
             state.isLoading = true;
             state.errorMessage = '';
         },
-        [fetchReadingTime.fulfilled]: (state, action) => {
+        [fetchReadingTimeForTheWeek.fulfilled]: (state, action) => {
             const readingTimeObject = action.payload;
             const { screenTimeInSeconds, weeklyGoalAveragePerDay, timeInSecondsForTheDayReading } = readingTimeObject.readingTime[0];
-            state.data = readingTimeObject;
+            const currentWeekDates = readingTimeObject.readingTime.map(item => item.date);
+
+            // Update the state with the dates and other relevant data
+            state.currentWeekData = readingTimeObject.readingTime;
+            state.currentWeekDates = currentWeekDates;
             state.isLoading = false;
             state.errorMessage = '';
             state.screenTimeInSeconds = screenTimeInSeconds;
@@ -103,7 +115,7 @@ const options = {
             state.isLoading = false;
             state.errorMessage = '';
         },
-        [fetchReadingTime.rejected]: (state, action) => {
+        [fetchReadingTimeForTheWeek.rejected]: (state, action) => {
             state.isLoading = false;
             state.errorMessage = action.payload;
         },
