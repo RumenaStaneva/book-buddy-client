@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Button from './Button';
+import UpdateBookProgressModal from './UpdateBookProgressModal';
+import { setTimerStarted } from '../reducers/timerSlice';
+import { useDispatch } from 'react-redux';
 
-const Countdown = ({ seconds }) => {
-    const [timeLeft, setTimeLeft] = useState(seconds);
+const Countdown = ({ readingTimeSeconds }) => {
+    const [timeLeft, setTimeLeft] = useState(readingTimeSeconds);
     const [timerActive, setTimerActive] = useState(false);
     const [timerFinished, setTimerFinished] = useState(false);
+    const dispatch = useDispatch();
 
     const updateTimer = () => {
         setTimeLeft((prevTime) => {
             if (prevTime > 0) {
                 return prevTime - 1;
             } else {
+                dispatch(setTimerStarted(false));
                 setTimerActive(false);
                 setTimerFinished(true);
                 setTimeLeft(0);
@@ -19,8 +24,8 @@ const Countdown = ({ seconds }) => {
     };
 
     useEffect(() => {
-        setTimeLeft(seconds);
-    }, [seconds])
+        setTimeLeft(readingTimeSeconds);
+    }, [readingTimeSeconds])
 
     useEffect(() => {
         let interval;
@@ -41,11 +46,12 @@ const Countdown = ({ seconds }) => {
     };
 
     const startTimer = () => {
-        console.log('start');
+        dispatch(setTimerStarted(true));
         setTimerActive(true);
     };
 
     const stopTimer = () => {
+        dispatch(setTimerStarted(false));
         setTimerActive(false);
     };
 

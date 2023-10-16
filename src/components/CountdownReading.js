@@ -1,4 +1,3 @@
-// import { useAuthContext } from "../hooks/useAuthContext";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import LibraryBook from './LibraryBook';
@@ -10,10 +9,13 @@ import '../styles/CountdownReading.css'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-
+import Countdown from './Countdown';
+import { useState } from 'react';
+import { setTimerStarted } from '../reducers/timerSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadingBooks }) => {
-
+    const { timerStarted } = useSelector((state) => state.timer);
 
     return (
         isLoadingBooks ?
@@ -25,7 +27,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
 
                 <div className='d-flex reading-countdown__container'>
                     <div className='countdown-timer__container'>
-                        <Timer readingTimeSeconds={screenTimeInSeconds} />
+                        <Countdown readingTimeSeconds={screenTimeInSeconds} />
                     </div>
                     <div className='swiper-books__container'>
                         {currentlyReadingBooks ?
@@ -33,9 +35,9 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                 pagination={{
                                     type: 'fraction',
                                 }}
-                                navigation={true}
+                                navigation={!timerStarted ? true : false}
                                 modules={[Pagination, Navigation]}
-                                preventClicks={false}
+                                preventClicks={!timerStarted ? true : false}
                                 width={400}
 
                             >
