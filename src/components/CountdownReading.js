@@ -15,7 +15,17 @@ import { setTimerStarted } from '../reducers/timerSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
 const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadingBooks }) => {
+    const [chosenBookForReading, setChosenBookForReading] = useState();
+    const [activeIndex, setActiveIndex] = useState(0);
     const { timerStarted } = useSelector((state) => state.timer);
+
+    // const handleSlideChange = (swiper) => {
+    //     // Get the active slide index
+    //     const activeIndex = swiper.activeIndex;
+    //     // Call the setActiveIndex callback with the active slide index
+    //     console.log(activeIndex);
+    //     setActiveIndex(activeIndex);
+    // };
 
     return (
         isLoadingBooks ?
@@ -27,7 +37,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
 
                 <div className='d-flex reading-countdown__container'>
                     <div className='countdown-timer__container'>
-                        <Countdown readingTimeSeconds={screenTimeInSeconds} />
+                        <Countdown readingTimeSeconds={screenTimeInSeconds} currentlyReadingBooks={currentlyReadingBooks} activeIndex={activeIndex} />
                     </div>
                     <div className='swiper-books__container'>
                         {currentlyReadingBooks ?
@@ -39,7 +49,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                 modules={[Pagination, Navigation]}
                                 preventClicks={!timerStarted ? true : false}
                                 width={550}
-
+                                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                             >
                                 {currentlyReadingBooks.map(book => {
                                     return (

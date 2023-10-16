@@ -11,13 +11,13 @@ import Error from './Error';
 import { useDispatch } from "react-redux";
 import { fetchAllBooks, calculateProgress } from '../reducers/booksSlice';
 import { clearError, setError } from '../reducers/errorSlice';
+import { setCurrentlyReadingBook } from '../reducers/timerSlice';
 
 function CountdownBook({ book, setSuccessMessage }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
     const { user } = useAuthContext();
-    const dispatchRedux = useDispatch();
     const dispatchError = useDispatch();
     const bookTotalPages = book.pageCount;
 

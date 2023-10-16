@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import Button from './Button';
 import UpdateBookProgressModal from './UpdateBookProgressModal';
-import { setTimerStarted } from '../reducers/timerSlice';
 import { useDispatch } from 'react-redux';
+import { setTimerStarted, setCurrentlyReadingBook } from '../reducers/timerSlice';
 import '../styles/Countdown.css'
 
-const Countdown = ({ readingTimeSeconds }) => {
+const Countdown = ({ readingTimeSeconds, currentlyReadingBooks, activeIndex }) => {
     const [timeLeft, setTimeLeft] = useState(readingTimeSeconds);
     const [timerActive, setTimerActive] = useState(false);
     const [timerFinished, setTimerFinished] = useState(false);
@@ -47,6 +47,13 @@ const Countdown = ({ readingTimeSeconds }) => {
     };
 
     const startTimer = () => {
+        // Assuming you have a variable to store the active slide index, e.g., activeSlideIndex
+        // const activeSlideIndex = swiper.activeIndex; // Get the active slide index using Swiper's API
+
+        // Set the currently reading book based on the active slide index using Redux action
+        dispatch(setCurrentlyReadingBook(currentlyReadingBooks[activeIndex]));
+
+
         dispatch(setTimerStarted(true));
         setTimerActive(true);
     };
