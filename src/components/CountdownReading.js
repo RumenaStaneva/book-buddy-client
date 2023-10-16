@@ -19,14 +19,6 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
     const [activeIndex, setActiveIndex] = useState(0);
     const { timerStarted } = useSelector((state) => state.timer);
 
-    // const handleSlideChange = (swiper) => {
-    //     // Get the active slide index
-    //     const activeIndex = swiper.activeIndex;
-    //     // Call the setActiveIndex callback with the active slide index
-    //     console.log(activeIndex);
-    //     setActiveIndex(activeIndex);
-    // };
-
     return (
         isLoadingBooks ?
             (<div className='spinner__container'>
@@ -50,6 +42,9 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                 preventClicks={!timerStarted ? true : false}
                                 width={550}
                                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                                allowTouchMove={!timerStarted ? true : false}
+                                allowSlideNext={!timerStarted ? true : false}
+                                allowSlidePrev={!timerStarted ? true : false}
                             >
                                 {currentlyReadingBooks.map(book => {
                                     return (
