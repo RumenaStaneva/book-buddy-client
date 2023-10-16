@@ -5,7 +5,7 @@ import Spinner from 'react-spinner-material';
 import AddScreenTimeModal from "../components/AddScreenTimeModal";
 import TimeSwapInformationPage from "./TimeSwapInformationPage";
 import WeeklyDashboard from "../components/WeeklyDashboard";
-import { fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
+import { fetchHasReadingTimeAnytime, fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
 import { fetchAllBooks } from "../reducers/booksSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,16 +17,20 @@ const TimeSwap = () => {
     const dispatchBooks = useDispatch();
     const dispatchReadingTime = useDispatch();
     // const { currentlyReadingBooks } = useSelector((state) => state.books);
-    const { currentWeekData, currentWeekDates } = useSelector((state) => state.readingTimeForToday);
+    const { currentWeekData, currentWeekDates, hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
     // const { screenTimeInSeconds } = useSelector((state) => state.readingTimeForToday);
 
     useEffect(() => {
         console.log('Fetching data...');
+        dispatchReadingTime(fetchHasReadingTimeAnytime(user));
+        // if (hasReadingTimeAnytime) {
         dispatchBooks(fetchAllBooks(user));
         dispatchReadingTime(fetchReadingTimeForTheWeek(user));
+        // }
     }, [dispatchBooks, dispatchReadingTime, user]);
-
+    console.log('currentWeekData', currentWeekData);
+    console.log('currentWeekDates', currentWeekDates);
     return (
         <>
             <NavBar />
@@ -38,10 +42,11 @@ const TimeSwap = () => {
                 <>
                     {isOpenAddScreenTime && <AddScreenTimeModal setIsOpen={setIsOpenAddScreenTime} />}
 
-                    {!currentWeekDates ? (
+
+                    {!hasReadingTimeAnytime ? (
                         <TimeSwapInformationPage setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
                     ) :
-                        <WeeklyDashboard readingTimeData={currentWeekData} />
+                        <WeeklyDashboard readingTimeData={currentWeekData} setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
                     }
                 </>
             )}

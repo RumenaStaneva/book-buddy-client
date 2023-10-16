@@ -7,15 +7,12 @@ import { startOfWeek, endOfWeek, format } from 'date-fns';
 export const fetchReadingTimeForTheWeek = createAsyncThunk(
     'readingTime/fetchReadingTimeForTheWeek',
     async (user, thunkAPI) => {
-        // const startDate = new Date().setHours(0, 0, 0, 0);
-        // const endDate = new Date().setHours(0, 0, 0, 0);
-        // const formattedStartDate = format(startDate, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
-        // const formattedEndDate = format(endDate, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
 
         const today = new Date().setHours(0, 0, 0, 0);
         const startOfWeekDay = startOfWeek(today, { weekStartsOn: 1 });
-        const lastWeekEnd = endOfWeek(today, { weekStartsOn: 2 }); // it is 2 cuz it returns to saturday without sunday
-
+        const lastWeekEnd = endOfWeek(today, { weekStartsOn: 1 });
+        // console.log('startOfWeekDay', startOfWeekDay);
+        // console.log('lastWeekEnd', lastWeekEnd);
         const formattedStartDate = format(startOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
         const formattedEndDate = format(lastWeekEnd, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'auto' });
 
@@ -31,11 +28,33 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
             }
 
             const data = await response.json();
-            // console.log(data);
             return data;
         } catch (error) {
             console.error(error);
-            thunkAPI.dispatch(setError({ message: error.message }));
+            throw error;
+        }
+    }
+);
+
+export const fetchHasReadingTimeAnytime = createAsyncThunk(
+    'readingTime/fetchHasReadingTimeAnytime',
+    async (user, thunkAPI) => {
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time-anytime`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error fetching reading time: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error(error);
             throw error;
         }
     }
@@ -73,6 +92,7 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
 const initialState = {
     currentWeekData: null,
     currentWeekDates: null,
+    hasReadingTimeAnytime: false,
     errorMessage: '',
     isLoading: false,
     screenTimeInSeconds: 0,
@@ -101,21 +121,35 @@ const options = {
         },
         [fetchReadingTimeForTheWeek.fulfilled]: (state, action) => {
             const readingTimeObject = action.payload;
-            const { screenTimeInSeconds, weeklyGoalAveragePerDay, timeInSecondsForTheDayReading } = readingTimeObject.readingTime[0];
-            const currentWeekDates = readingTimeObject.readingTime.map(item => item.date);
-
-            // Update the state with the dates and other relevant data
-            state.currentWeekData = readingTimeObject.readingTime;
-            state.currentWeekDates = currentWeekDates;
-            state.isLoading = false;
-            state.errorMessage = '';
-            state.screenTimeInSeconds = screenTimeInSeconds;
-            state.weeklyGoalAveragePerDay = weeklyGoalAveragePerDay;
-            state.timeInSecondsForTheDayReading = timeInSecondsForTheDayReading;
+            console.log('readingTimeObject', readingTimeObject);
+            if (readingTimeObject.readingTime.length > 0) {
+                const { screenTimeInSeconds, weeklyGoalAveragePerDay, timeInSecondsForTheDayReading } = readingTimeObject.readingTime[0];
+                const currentWeekDates = readingTimeObject.readingTime.map(item => item.date);
+                state.currentWeekData = readingTimeObject.readingTime;
+                state.currentWeekDates = currentWeekDates;
+                state.isLoading = false;
+                state.errorMessage = '';
+                state.screenTimeInSeconds = screenTimeInSeconds;
+                state.weeklyGoalAveragePerDay = weeklyGoalAveragePerDay;
+                state.timeInSecondsForTheDayReading = timeInSecondsForTheDayReading;
+            }
             state.isLoading = false;
             state.errorMessage = '';
         },
         [fetchReadingTimeForTheWeek.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.errorMessage = action.payload;
+        },
+        [fetchHasReadingTimeAnytime.pending]: (state, action) => {
+            state.isLoading = true;
+            state.errorMessage = '';
+        },
+        [fetchHasReadingTimeAnytime.fulfilled]: (state, action) => {
+            state.hasReadingTimeAnytime = action.payload.hasReadingTime
+            state.isLoading = false;
+            state.errorMessage = '';
+        },
+        [fetchHasReadingTimeAnytime.rejected]: (state, action) => {
             state.isLoading = false;
             state.errorMessage = action.payload;
         },
