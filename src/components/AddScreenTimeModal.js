@@ -9,9 +9,10 @@ import '../styles/Calendar.css'
 import Modal from './Dialog'
 import Error from './Error'
 import ConfirmationDialog from './ConfirmationDialog';
+import { fetchHasReadingTimeAnytime, fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse } from 'date-fns';
 
-const AddScreenTimeModal = ({ setIsOpen, checkScreenTimeData }) => {
+const AddScreenTimeModal = ({ setIsOpen }) => {
     const [screenTimeData, setScreenTimeData] = useState(Array(7).fill({ date: '', time: '00:00' }));
     const [datesFromLastWeek, setDatesFromLastWeek] = useState([]);
     const [invalidInputs, setInvalidInputs] = useState([]);
@@ -22,6 +23,8 @@ const AddScreenTimeModal = ({ setIsOpen, checkScreenTimeData }) => {
     const [confirmedInputIndex, setConfirmedInputIndex] = useState(null);
     const { user } = useAuthContext();
     const dispatchError = useDispatch();
+    const dispatchReadingTime = useDispatch();
+
 
     //get the days for the last week and add them in daysOfWeek
     useEffect(() => {
@@ -153,7 +156,8 @@ const AddScreenTimeModal = ({ setIsOpen, checkScreenTimeData }) => {
             setIsLoading(false);
             dispatchError(clearError());
             setIsOpen(false);
-            checkScreenTimeData();
+            dispatchReadingTime(fetchReadingTimeForTheWeek(user));
+
         } catch (error) {
             setIsLoading(false);
             console.log(error);

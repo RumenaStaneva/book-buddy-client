@@ -4,16 +4,15 @@ import Error from '../components/Error';
 import '../styles/ReadingTimeTable.css'
 import CountdownReading from "./CountdownReading";
 import { useSelector } from "react-redux";
+import { Button } from "@mui/material";
 
 
 // import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse, addWeeks } from 'date-fns';
 
 
 
-const WeeklyDashboard = ({ readingTimeData }) => {
+const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
     const [selectedTab, setSelectedTab] = useState(0);
-    // const [isLoading, setIsLoading] = useState(false);
-
     const { currentlyReadingBooks } = useSelector((state) => state.books);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
     const { screenTimeInSeconds } = useSelector((state) => state.readingTimeForToday)
@@ -74,11 +73,11 @@ const WeeklyDashboard = ({ readingTimeData }) => {
         return formattedDate;
     }
 
-    //TODO add logic and design when user has not added data for this week
-
     useEffect(() => {
-        const currentIndex = readingTimeData.findIndex(data => formatDateDDMM(data.date) === formatDateDDMM(new Date()));
-        setSelectedTab(currentIndex !== -1 ? currentIndex : 0);
+        if (readingTimeData) {
+            const currentIndex = readingTimeData.findIndex(data => formatDateDDMM(data.date) === formatDateDDMM(new Date()));
+            setSelectedTab(currentIndex !== -1 ? currentIndex : 0);
+        }
     }, [readingTimeData]);
 
     const handleTabClick = (index) => {
@@ -86,18 +85,23 @@ const WeeklyDashboard = ({ readingTimeData }) => {
     };
 
     return (
-        isLoadingBooks ?
-            (<div className='spinner__container'>
+        isLoadingBooks ? (
+            <div className='spinner__container'>
                 <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
-            </div>)
-            : <>
-                <Error />
-                <div className="table-container">
-
-                    <div className="tabs-container">
-                        <div className="tab-headers header-row d-flex">
-                            {readingTimeData.length > 0 &&
-                                readingTimeData.map((data, index) => {
+            </div>
+        ) : (
+            !readingTimeData ? (
+                <>
+                    <h1>No reading time data for this week</h1>
+                    <Button onClick={() => setIsOpenAddScreenTime(true)}>Add from here</Button>
+                </>
+            ) : (
+                <>
+                    <Error />
+                    <div className="table-container">
+                        <div className="tabs-container">
+                            <div className="tab-headers header-row d-flex">
+                                {readingTimeData.map((data, index) => {
                                     const cellClassName = `header-cell ${getCellClassName(data.date)}`;
                                     const tabContent = formatDateDDMMWithDayOfWeek(data.date);
                                     return (
@@ -110,29 +114,28 @@ const WeeklyDashboard = ({ readingTimeData }) => {
                                         </div>
                                     );
                                 })}
-                        </div>
-                        <div className="tab-content">
-                            {selectedTab !== null && (
-                                <div className="tab-panel-content">
-                                    {formatDateDDMM(readingTimeData[selectedTab].date) === formatDateDDMM(new Date()) ? (
-                                        <CountdownReading currentlyReadingBooks={currentlyReadingBooks} screenTimeInSeconds={screenTimeInSeconds} isLoadingBooks={isLoadingBooks} />
-                                    ) : (
-                                        <div>
-                                            <p>Today you need to read {convertSecondsToHoursMinutes(readingTimeData[selectedTab].screenTimeInSeconds)}</p>
-                                            <p>Time you have spend reading {convertSecondsToHoursMinutes(readingTimeData[selectedTab].timeInSecondsForTheDayReading)}</p>
-                                        </div>
-                                    )}
-
-                                </div>
-                            )}
+                            </div>
+                            <div className="tab-content">
+                                {selectedTab !== null && (
+                                    <div className="tab-panel-content">
+                                        {formatDateDDMM(readingTimeData[selectedTab].date) === formatDateDDMM(new Date()) ? (
+                                            <CountdownReading currentlyReadingBooks={currentlyReadingBooks} screenTimeInSeconds={screenTimeInSeconds} isLoadingBooks={isLoadingBooks} />
+                                        ) : (
+                                            <div>
+                                                <p>Today you need to read {convertSecondsToHoursMinutes(readingTimeData[selectedTab].screenTimeInSeconds)}</p>
+                                                <p>Time you have spent reading {convertSecondsToHoursMinutes(readingTimeData[selectedTab].timeInSecondsForTheDayReading)}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div >
-
-
-            </>
-
+                </>
+            )
+        )
     );
+
 };
 
 
