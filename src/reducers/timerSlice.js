@@ -10,6 +10,7 @@ const options = {
     initialState: initialState,
     reducers: {
         setCurrentlyReadingBook: (state, action) => {
+            console.log('action.payload', action.payload);
             state.currentlyReadingBook = action.payload;
         },
         setTimerStarted: (state, action) => {

@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import Button from './Button';
 import UpdateBookProgressModal from './UpdateBookProgressModal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setTimerStarted, setCurrentlyReadingBook } from '../reducers/timerSlice';
 import '../styles/Countdown.css'
 
 const Countdown = ({ readingTimeSeconds, currentlyReadingBooks, activeIndex }) => {
     const [timeLeft, setTimeLeft] = useState(readingTimeSeconds);
+    const [updateProgressModalIsOpen, setUpdateProgressModalIsOpen] = useState(false);
     const [timerActive, setTimerActive] = useState(false);
     const [timerFinished, setTimerFinished] = useState(false);
     const dispatch = useDispatch();
+    const { timerStarted } = useSelector((state) => state.timer);
 
     const updateTimer = () => {
         setTimeLeft((prevTime) => {
@@ -19,6 +21,7 @@ const Countdown = ({ readingTimeSeconds, currentlyReadingBooks, activeIndex }) =
                 dispatch(setTimerStarted(false));
                 setTimerActive(false);
                 setTimerFinished(true);
+                setUpdateProgressModalIsOpen(true);
                 setTimeLeft(0);
             }
         })
@@ -47,24 +50,21 @@ const Countdown = ({ readingTimeSeconds, currentlyReadingBooks, activeIndex }) =
     };
 
     const startTimer = () => {
-        // Assuming you have a variable to store the active slide index, e.g., activeSlideIndex
-        // const activeSlideIndex = swiper.activeIndex; // Get the active slide index using Swiper's API
-
-        // Set the currently reading book based on the active slide index using Redux action
         dispatch(setCurrentlyReadingBook(currentlyReadingBooks[activeIndex]));
-
-
         dispatch(setTimerStarted(true));
         setTimerActive(true);
     };
 
     const stopTimer = () => {
         dispatch(setTimerStarted(false));
+        setUpdateProgressModalIsOpen(true);
         setTimerActive(false);
     };
 
     return (
         <div>
+            {updateProgressModalIsOpen && <UpdateBookProgressModal setIsOpen={setUpdateProgressModalIsOpen} timerFinished={timerFinished} />}
+
             {timerFinished ? (
                 <h2>Countdown Timer has finished!</h2>
             ) : (
@@ -74,8 +74,8 @@ const Countdown = ({ readingTimeSeconds, currentlyReadingBooks, activeIndex }) =
                 <Button onClick={() => setTimerFinished(false)}>Reset</Button>
             ) : (
                 <>
-                    <Button onClick={startTimer}>Start</Button>
-                    <Button onClick={stopTimer}>Stop</Button>
+                    <Button disabled={timerStarted} onClick={startTimer}>Start</Button>
+                    <Button disabled={!timerStarted} onClick={stopTimer}>Stop</Button>
                     <p>Time Remaining: {formatTime(timeLeft)}</p>
                 </>
             )}
