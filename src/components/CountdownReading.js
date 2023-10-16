@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
-import LibraryBook from './LibraryBook';
+import CountdownBook from './CountdownBook';
 import Spinner from 'react-spinner-material';
 
 
@@ -38,15 +38,16 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                 navigation={!timerStarted ? true : false}
                                 modules={[Pagination, Navigation]}
                                 preventClicks={!timerStarted ? true : false}
-                                width={400}
+                                width={550}
 
                             >
                                 {currentlyReadingBooks.map(book => {
                                     return (
                                         <SwiperSlide
                                             key={book._id}
+                                            className='countdown__container'
                                         >
-                                            <LibraryBook book={book} />
+                                            <CountdownBook book={book} />
                                         </SwiperSlide>)
                                 })}
                             </Swiper>

@@ -121,7 +121,6 @@ const options = {
         },
         [fetchReadingTimeForTheWeek.fulfilled]: (state, action) => {
             const readingTimeObject = action.payload;
-            console.log('readingTimeObject', readingTimeObject);
             if (readingTimeObject.readingTime.length > 0) {
                 const { screenTimeInSeconds, weeklyGoalAveragePerDay, timeInSecondsForTheDayReading } = readingTimeObject.readingTime[0];
                 const currentWeekDates = readingTimeObject.readingTime.map(item => item.date);

@@ -3,6 +3,7 @@ import Button from './Button';
 import UpdateBookProgressModal from './UpdateBookProgressModal';
 import { setTimerStarted } from '../reducers/timerSlice';
 import { useDispatch } from 'react-redux';
+import '../styles/Countdown.css'
 
 const Countdown = ({ readingTimeSeconds }) => {
     const [timeLeft, setTimeLeft] = useState(readingTimeSeconds);

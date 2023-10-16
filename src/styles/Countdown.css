@@ -1,0 +1,36 @@
+.swiper-books__container {
+    width: 550px;
+}
+
+.countdown__container .book {
+    max-width: 550px;
+    max-height: 600px;
+    height: 100%;
+    padding: 0 40px;
+    margin-bottom: 40px;
+}
+
+.countdown__container .book__details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(237, 201, 191, 0.44);
+    border-radius: 10px;
+    margin-left: 10px;
+    height: 600px;
+}
+
+.countdown__container .book__details .title-author__container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.countdown__container .book__details .book__title {
+    text-align: center;
+    padding: 5px;
+}
+
+.countdown__container .book__details .book__image {
+    max-height: 430px;
+}
