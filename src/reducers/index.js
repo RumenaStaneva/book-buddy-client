@@ -14,9 +14,9 @@ const rootReducer = combineReducers({
     clearError: errorSlice.actions.clearError,
 
     setReadingTimeForToday: readingTimeForTodaySlice.reducer,
-    setScreenTimeInSeconds: readingTimeForTodaySlice.actions.setScreenTimeInSeconds,
     setWeeklyGoalAveragePerDay: readingTimeForTodaySlice.actions.setWeeklyGoalAveragePerDay,
     setTimeInSecondsForTheDayReading: readingTimeForTodaySlice.actions.setTimeInSecondsForTheDayReading,
+    setTimeInSecondsLeftForAchievingReadingGoals: readingTimeForTodaySlice.actions.setTimeInSecondsLeftForAchievingReadingGoals,
     currentBookReading: timerSlice.actions.setCurrentlyReadingBook,
     timerStarted: timerSlice.actions.setTimerStarted
 

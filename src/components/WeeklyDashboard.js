@@ -5,6 +5,8 @@ import '../styles/ReadingTimeTable.css'
 import CountdownReading from "./CountdownReading";
 import { useSelector } from "react-redux";
 import { Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setDateToday } from "../reducers/readingTimeForTodaySlice";
 
 
 // import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse, addWeeks } from 'date-fns';
@@ -15,7 +17,8 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const { currentlyReadingBooks } = useSelector((state) => state.books);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
-    const { screenTimeInSeconds } = useSelector((state) => state.readingTimeForToday)
+    const { screenTimeInSeconds } = useSelector((state) => state.readingTimeForToday);
+    const dispatch = useDispatch();
 
     function convertSecondsToHoursMinutes(seconds) {
         const hours = Math.floor(seconds / 3600);

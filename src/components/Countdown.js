@@ -3,15 +3,21 @@ import Button from './Button';
 import UpdateBookProgressModal from './UpdateBookProgressModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTimerStarted, setCurrentlyReadingBook } from '../reducers/timerSlice';
+import { setTimeInSecondsLeftForAchievingReadingGoal, setTimeInSecondsForTheDayReading, updateReadingDataInDatabase } from '../reducers/readingTimeForTodaySlice'
 import '../styles/Countdown.css'
+import { startOfDay, format, formatISO } from 'date-fns';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const Countdown = ({ readingTimeSeconds, currentlyReadingBooks, activeIndex }) => {
-    const [timeLeft, setTimeLeft] = useState(readingTimeSeconds);
+    const dispatch = useDispatch();
+    const { timerStarted } = useSelector((state) => state.timer);
+    const { dateToday, timeInSecondsLeftForAchievingReadingGoal, timeInSecondsForTheDayReading } = useSelector((state) => state.readingTimeForToday);
+    const { user } = useAuthContext();
+
+    const [timeLeft, setTimeLeft] = useState(timeInSecondsLeftForAchievingReadingGoal);
     const [updateProgressModalIsOpen, setUpdateProgressModalIsOpen] = useState(false);
     const [timerActive, setTimerActive] = useState(false);
     const [timerFinished, setTimerFinished] = useState(false);
-    const dispatch = useDispatch();
-    const { timerStarted } = useSelector((state) => state.timer);
 
     const updateTimer = () => {
         setTimeLeft((prevTime) => {
@@ -28,8 +34,8 @@ const Countdown = ({ readingTimeSeconds, currentlyReadingBooks, activeIndex }) =
     };
 
     useEffect(() => {
-        setTimeLeft(readingTimeSeconds);
-    }, [readingTimeSeconds])
+        setTimeLeft(timeInSecondsLeftForAchievingReadingGoal);
+    }, [timeInSecondsLeftForAchievingReadingGoal]);
 
     useEffect(() => {
         let interval;
@@ -56,6 +62,11 @@ const Countdown = ({ readingTimeSeconds, currentlyReadingBooks, activeIndex }) =
     };
 
     const stopTimer = () => {
+        dispatch(setTimeInSecondsLeftForAchievingReadingGoal(timeLeft));
+        const readingTime = readingTimeSeconds - timeLeft;
+        dispatch(setTimeInSecondsForTheDayReading(readingTime));
+
+        dispatch(updateReadingDataInDatabase({ date: dateToday, timeInSecondsLeftForAchievingReadingGoal: timeLeft, timeInSecondsForTheDayReading: readingTime, user }))
         dispatch(setTimerStarted(false));
         setUpdateProgressModalIsOpen(true);
         setTimerActive(false);
@@ -77,6 +88,7 @@ const Countdown = ({ readingTimeSeconds, currentlyReadingBooks, activeIndex }) =
                     <Button disabled={timerStarted} onClick={startTimer}>Start</Button>
                     <Button disabled={!timerStarted} onClick={stopTimer}>Stop</Button>
                     <p>Time Remaining: {formatTime(timeLeft)}</p>
+                    <p>Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
                 </>
             )}
         </div>
