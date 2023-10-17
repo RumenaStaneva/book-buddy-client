@@ -7,7 +7,7 @@ import { setError } from '../reducers/errorSlice';
 import Button from "./Button";
 import Modal from './Dialog'
 import Error from "./Error";
-import { setCurrentlyReadingBook, setSuccessMessage } from '../reducers/timerSlice';
+import { setCurrentlyReadingBook, setSuccessMessage, setTimerStarted } from '../reducers/timerSlice';
 import { fetchAllBooks } from '../reducers/booksSlice';
 
 const UpdateBookProgressModal = ({ setIsOpen, timerFinished }) => {
@@ -38,8 +38,10 @@ const UpdateBookProgressModal = ({ setIsOpen, timerFinished }) => {
             dispatch(setCurrentlyReadingBook(updatedBook));
             setUpdatedPageProgress(updatedBook.progress);
             dispatch(fetchAllBooks(user));
-            dispatch(setSuccessMessage(`${data.book.title} sucessfully read`));
-            localStorage.setItem('activeIndex', 0)
+            if (data.book.progress >= data.book.pageCount) {
+                dispatch(setSuccessMessage(`Hurray, you successfully read ${data.book.title}`));
+                localStorage.setItem('activeIndex', 0);
+            }
         } catch (error) {
             dispatchError(setError({ message: `Error updating book: ${error}` }));
             console.error('Error updating book:', error);

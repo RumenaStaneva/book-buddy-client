@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     currentlyReadingBook: null,
     timerStarted: false,
-    successMessage: ','
+    successMessage: ''
 };
 
 const options = {
@@ -18,11 +18,14 @@ const options = {
         },
         setSuccessMessage: (state, action) => {
             state.successMessage = action.payload;
-        }
+        },
+        clearSuccessMessage: (state) => {
+            state.successMessage = '';
+        },
 
     }
 }
 export const timerSlice = createSlice(options);
-export const { setCurrentlyReadingBook, setTimerStarted, setSuccessMessage } = timerSlice.actions;
+export const { setCurrentlyReadingBook, setTimerStarted, setSuccessMessage, clearSuccessMessage } = timerSlice.actions;
 
 export default timerSlice.reducer;

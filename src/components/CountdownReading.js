@@ -2,14 +2,16 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import CountdownBook from './CountdownBook';
 import Spinner from 'react-spinner-material';
-
+import Button from './Button';
+import { IoIosClose } from 'react-icons/io';
 import '../styles/CountdownReading.css'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import Countdown from './Countdown';
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearSuccessMessage } from '../reducers/timerSlice';
 
 const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadingBooks }) => {
     const [activeIndex, setActiveIndex] = useState(() => {
@@ -18,7 +20,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
     const { timerStarted, successMessage } = useSelector((state) => state.timer);
     const [swiperReady, setSwiperReady] = useState(false);
     const swiperRef = useRef(null);
-
+    const dispatch = useDispatch();
     //set index for swipe to last read book
     useEffect(() => {
         localStorage.setItem('activeIndex', activeIndex);
@@ -48,6 +50,10 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                     {successMessage.length > 0 ?
                         <div className='success-message__container'>
                             <p>{successMessage}</p>
+
+                            <Button className="close-btn" onClick={() => dispatch(clearSuccessMessage())}>
+                                <IoIosClose />
+                            </Button>
                         </div>
                         : null}
                     <div className='d-flex reading-countdown__container'>
@@ -79,8 +85,8 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                         return (
                                             <SwiperSlide
                                                 key={book._id}
-                                                className='countdown__container'
-                                                active={index === activeIndex}
+                                                className={`countdown__container ${index === activeIndex ? 'swiper-slide-active' : ''}`}
+
                                             >
                                                 <CountdownBook book={book} />
                                             </SwiperSlide>)
