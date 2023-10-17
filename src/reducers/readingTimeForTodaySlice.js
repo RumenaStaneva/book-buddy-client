@@ -15,8 +15,8 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
         // console.log('lastWeekEnd', lastWeekEnd);
         const formattedStartDate = format(startOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
         const formattedEndDate = format(lastWeekEnd, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
-        console.log('formattedStartDate', formattedStartDate);
-        console.log('formattedEndDate', formattedEndDate);
+        // console.log('formattedStartDate', formattedStartDate);
+        // console.log('formattedEndDate', formattedEndDate);
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
                 headers: {
@@ -64,7 +64,6 @@ export const fetchHasReadingTimeAnytime = createAsyncThunk(
 export const updateReadingDataInDatabase = createAsyncThunk(
     'readingTime/updateReadingDataInDatabase',
     async ({ date, timeInSecondsLeftForAchievingReadingGoal, timeInSecondsForTheDayReading, user }, thunkAPI) => {
-        console.log(date, timeInSecondsLeftForAchievingReadingGoal, timeInSecondsForTheDayReading, user.token);
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/update-reading-time`, {
                 method: 'PUT',
@@ -132,7 +131,6 @@ const options = {
                     return dateObject.toISOString(); // Convert to ISO string to keep the UTC format
                 });
 
-                // console.log('currentWeekDates', currentWeekDates);
 
                 state.currentWeekData = readingTimeObject.readingTime;
                 state.currentWeekDates = currentWeekDates;
@@ -180,10 +178,6 @@ const options = {
             state.errorMessage = '';
         },
         [updateReadingDataInDatabase.fulfilled]: (state, action) => {
-            console.log('muahahahahahhahahahahahah');
-            // const { timeInSecondsForTheDayReading, timeInSecondsLeftForAchievingReadingGoal } = action.payload.updatedReadingTimeRecord;
-            // state.timeInSecondsForTheDayReading = timeInSecondsForTheDayReading;
-            // state.timeInSecondsLeftForAchievingReadingGoal = timeInSecondsLeftForAchievingReadingGoal;
             state.isLoading = false;
             state.errorMessage = '';
         },

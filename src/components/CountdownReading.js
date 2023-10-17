@@ -4,7 +4,6 @@ import CountdownBook from './CountdownBook';
 import Spinner from 'react-spinner-material';
 
 
-import Timer from './Timer';
 import '../styles/CountdownReading.css'
 import 'swiper/css';
 import 'swiper/css/pagination';

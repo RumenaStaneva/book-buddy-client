@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setError } from '../reducers/errorSlice';
 
 export const fetchAllBooks = createAsyncThunk("book/fetchAllBooks", async (user, thunkAPI) => {
-    // console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     try {
         const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/library`, {
             headers: {

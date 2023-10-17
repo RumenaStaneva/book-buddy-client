@@ -79,8 +79,6 @@ const ReadingTimeTable = () => {
         return `${formattedHours}:${formattedMinutes}`;
     }
 
-    // console.log(formatDate(readingTimeData[0].date))
-    // formatDate(readingTimeData[6].date)
     return (
         isLoading ?
             (<div className='spinner__container'>
