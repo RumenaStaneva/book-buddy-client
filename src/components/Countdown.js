@@ -10,7 +10,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 
 const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) => {
     const dispatch = useDispatch();
-    const { timerStarted } = useSelector((state) => state.timer);
+    const { timerStarted, currentlyReadingBook } = useSelector((state) => state.timer);
     const { dateToday, timeInSecondsLeftForAchievingReadingGoal, timeInSecondsForTheDayReading, weeklyGoalAveragePerDay, totalReadingGoalForTheDay } = useSelector((state) => state.readingTimeForToday);
     const { user } = useAuthContext();
     const [timeLeft, setTimeLeft] = useState(timeInSecondsLeftForAchievingReadingGoal);
@@ -25,7 +25,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     const updateTimer = useCallback(() => {
         setTimeLeft((prevTime) => {
             if (prevTime > 0) {
-                setTimePassed((prevTimePassed) => prevTimePassed + 0.5); // Update time passed every second, why it is 0.5 no idea if it is one it doubles || this is possible to break 
+                setTimePassed((prevTimePassed) => prevTimePassed + 0.5); // Update time passed every second, why it is 0.5 no idea if it is one it doubless
                 return prevTime - 1;
             } else {
                 dispatch(setTimerStarted(false));
@@ -75,7 +75,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     const stopTimer = () => {
         dispatch(setTimeInSecondsLeftForAchievingReadingGoal(timeLeft));
         const currentTimePassed = timePassed;
-        dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: currentTimePassed, user }))
+        dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: currentTimePassed, user, currentlyReadingBook }))
         dispatch(setTimerStarted(false));
         setUpdateProgressModalIsOpen(true);
         setTimerActive(false);

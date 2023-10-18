@@ -65,8 +65,8 @@ export const fetchHasReadingTimeAnytime = createAsyncThunk(
 
 export const updateReadingDataInDatabase = createAsyncThunk(
     'readingTime/updateReadingDataInDatabase',
-    async ({ date, totalReadingGoalForTheDay, timeInSecondsForTheDayReading, user }, thunkAPI) => {
-        // console.log('in slice ', date, timeInSecondsForTheDayReading, user);
+    async ({ date, totalReadingGoalForTheDay, timeInSecondsForTheDayReading, user, currentlyReadingBook }, thunkAPI) => {
+        // console.log('in slice ', date, timeInSecondsForTheDayReading, user, currentlyReadingBook);
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/update-reading-time`, {
                 method: 'PUT',
@@ -78,9 +78,11 @@ export const updateReadingDataInDatabase = createAsyncThunk(
                     date,
                     totalReadingGoalForTheDay,
                     timeInSecondsForTheDayReading,
+                    currentlyReadingBookId: currentlyReadingBook._id
                 }),
             });
             const data = await response.json();
+            console.log(data);
             return data;
         } catch (error) {
             thunkAPI.dispatch(setError({ message: `Error fetching reading time in the database: ${error.message}` }));
@@ -183,6 +185,7 @@ const options = {
             state.errorMessage = '';
         },
         [updateReadingDataInDatabase.fulfilled]: (state, action) => {
+            // console.log('action.payload', action.payload);
             const data = action.payload.updatedReadingTimeRecord;
             state.goalAchievedForTheDay = data.goalAchievedForTheDay;
             state.timeInSecondsForTheDayReading = data.timeInSecondsForTheDayReading;
