@@ -78,7 +78,7 @@ export const updateReadingDataInDatabase = createAsyncThunk(
                     date,
                     totalReadingGoalForTheDay,
                     timeInSecondsForTheDayReading,
-                    currentlyReadingBookId: currentlyReadingBook._id
+                    currentlyReadingBookId: currentlyReadingBook ? currentlyReadingBook._id : null
                 }),
             });
             const data = await response.json();

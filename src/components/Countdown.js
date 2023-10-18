@@ -7,6 +7,8 @@ import { setTimerStarted, setCurrentlyReadingBook } from '../reducers/timerSlice
 import { setTimeInSecondsLeftForAchievingReadingGoal, updateReadingDataInDatabase } from '../reducers/readingTimeForTodaySlice'
 import '../styles/Countdown.css'
 import { useAuthContext } from '../hooks/useAuthContext';
+import { clearError, setError } from '../reducers/errorSlice';
+import Error from './Error';
 
 const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) => {
     const dispatch = useDispatch();
@@ -70,6 +72,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
         dispatch(setCurrentlyReadingBook(currentlyReadingBooks[activeIndex]));
         dispatch(setTimerStarted(true));
         setTimerActive(true);
+        dispatch(clearError());
     };
 
     const stopTimer = () => {
@@ -82,84 +85,94 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     };
 
     const changeTime = (newTime) => {
-        dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay: newTime, timeInSecondsForTheDayReading: timePassed, user }));
+        if (newTime <= totalReadingGoalForTheDay) {
+            dispatch(setError({ message: 'You can not set lower goal than your current spend time reading' }))
+            return;
+        }
+        dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay: newTime, timeInSecondsForTheDayReading: timePassed, user, currentlyReadingBook }));
         setIsChangeGoalVisible(false);
     }
 
     return (
-        <div className="countdown-container">
-            {updateProgressModalIsOpen && <UpdateBookProgressModal setIsOpen={setUpdateProgressModalIsOpen} timerFinished={timerFinished} />}
+        <>
+            <Error />
+            <div className="countdown-container">
+                {updateProgressModalIsOpen && <UpdateBookProgressModal setIsOpen={setUpdateProgressModalIsOpen} timerFinished={timerFinished} />}
 
-            {timerFinished ? (
-                <h2 className="countdown-message">Countdown Timer has finished!</h2>
-            ) : (
-                <h2 className="countdown-message">Countdown: {formatTime(timeLeft)}</h2>
-            )}
+                {timerFinished ? (
+                    <h2 className="countdown-message">Countdown Timer has finished!</h2>
+                ) : (
+                    <h2 className="countdown-message">Countdown: {formatTime(timeLeft)}</h2>
+                )}
 
-            {timerFinished ? (
-                <Button onClick={() => setTimerFinished(false)} className="cta-btn">
-                    Reset Timer
-                </Button>
-            ) : (
-                <>
-                    {!timerStarted &&
-                        <div className="goal-section">
-                            <p>Is your goal for today too high?</p>
-                            <Button className="cta-btn" onClick={() => setIsChangeGoalVisible(!isChangeGoalVisible)}>Adjust Goal</Button>
-                        </div>
-                    }
+                {timerFinished ? (
+                    <Button onClick={() => setTimerFinished(false)} className="cta-btn">
+                        Reset Timer
+                    </Button>
+                ) : (
+                    <>
+                        {!timerStarted &&
+                            <div className="goal-section">
+                                <p>Is your goal for today too high?</p>
+                                <Button className="cta-btn" onClick={() => {
+                                    setIsChangeGoalVisible(!isChangeGoalVisible);
+                                    dispatch(clearError());
+                                }}>Adjust Goal</Button>
+                            </div>
+                        }
 
-                    {isChangeGoalVisible &&
-                        <div className="goal-section">
-                            <p>Choose an achievable goal:</p>
-                            <div className='d-flex'>
-                                <div className='goal__subsection'>
-                                    <p>Screen time spent last week:</p>
-                                    <Button className="goal-button" onClick={() => changeTime(screenTimeSeconds)}>{formatTime(screenTimeSeconds)}</Button>
-                                </div>
-                                <div className='goal__subsection'>
-                                    <p>Your weekly average:</p>
-                                    <Button className="goal-button" onClick={() => changeTime(weeklyGoalAveragePerDay)}>{formatTime(weeklyGoalAveragePerDay)}</Button>
-                                </div>
-                                <div className='goal__subsection'>
-                                    <p>Add custom reading time:</p>
-                                    <Cleave
-                                        ref={cleaveInputRef}
-                                        className="goal-input"
-                                        options={{ time: true, timePattern: ['h', 'm'] }}
-                                        placeholder="Enter time in HH:MM format"
-                                        value={formattedTime}
-                                        onChange={(e) => setFormattedTime(e.target.value)}
+                        {isChangeGoalVisible &&
+                            <div className="goal-section">
+                                <p>Choose an achievable goal:</p>
+                                <div className='d-flex'>
+                                    <div className='goal__subsection'>
+                                        <p>Screen time spent last week:</p>
+                                        <Button className="goal-button" onClick={() => changeTime(screenTimeSeconds)}>{formatTime(screenTimeSeconds)}</Button>
+                                    </div>
+                                    <div className='goal__subsection'>
+                                        <p>Your weekly average:</p>
+                                        <Button className="goal-button" onClick={() => changeTime(weeklyGoalAveragePerDay)}>{formatTime(weeklyGoalAveragePerDay)}</Button>
+                                    </div>
+                                    <div className='goal__subsection'>
+                                        <p>Add custom reading time:</p>
+                                        <Cleave
+                                            ref={cleaveInputRef}
+                                            className="goal-input"
+                                            options={{ time: true, timePattern: ['h', 'm'] }}
+                                            placeholder="Enter time in HH:MM format"
+                                            value={formattedTime}
+                                            onChange={(e) => setFormattedTime(e.target.value)}
 
-                                    />
-                                    <Button onClick={() => {
-                                        const timeArray = formattedTime.split(':');
-                                        const hours = parseInt(timeArray[0]) || 0;
-                                        const minutes = parseInt(timeArray[1]) || 0;
-                                        const seconds = (hours * 3600) + (minutes * 60);
-                                        changeTime(seconds);
-                                    }}>Set</Button>
+                                        />
+                                        <Button onClick={() => {
+                                            const timeArray = formattedTime.split(':');
+                                            const hours = parseInt(timeArray[0]) || 0;
+                                            const minutes = parseInt(timeArray[1]) || 0;
+                                            const seconds = (hours * 3600) + (minutes * 60);
+                                            changeTime(seconds);
+                                        }}>Set</Button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                    {!isChangeGoalVisible &&
-                        <div className="countdown__action-buttons d-flex">
-                            <Button disabled={timerStarted} onClick={startTimer} className="cta-btn">
-                                Start Timer
-                            </Button>
-                            <Button disabled={!timerStarted} onClick={stopTimer} className="cta-btn">
-                                Stop Timer
-                            </Button>
-                        </div>
-                    }
+                        }
+                        {!isChangeGoalVisible &&
+                            <div className="countdown__action-buttons d-flex">
+                                <Button disabled={timerStarted} onClick={startTimer} className="cta-btn">
+                                    Start Timer
+                                </Button>
+                                <Button disabled={!timerStarted} onClick={stopTimer} className="cta-btn">
+                                    Stop Timer
+                                </Button>
+                            </div>
+                        }
 
-                    {!timerStarted &&
-                        <p className="time-info">Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
-                    }
-                </>
-            )}
-        </div>
+                        {!timerStarted &&
+                            <p className="time-info">Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
+                        }
+                    </>
+                )}
+            </div>
+        </>
 
     )
 }

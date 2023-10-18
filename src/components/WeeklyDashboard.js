@@ -104,7 +104,7 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                 </>
             ) : (
                 <>
-                    <Error />
+                    {/* <Error /> */}
                     <div className="table-container">
                         <div className="tabs-container">
                             <div className="tab-headers header-row d-flex">
