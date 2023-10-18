@@ -45,27 +45,12 @@
     margin-bottom: 5px;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
 .input-fields {
     flex-wrap: wrap;
 }
 
 .input-field {
     flex: 1 1 calc(50% - 20px);
-    /* Adjust the width as needed */
     margin: 10px;
 }
 

@@ -17,15 +17,19 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const { currentlyReadingBooks } = useSelector((state) => state.books);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
-    const { screenTimeInSeconds } = useSelector((state) => state.readingTimeForToday);
+    const { screenTimeInSeconds, weeklyGoalAveragePerDay } = useSelector((state) => state.readingTimeForToday);
     const dispatch = useDispatch();
 
-    function convertSecondsToHoursMinutes(seconds) {
+    function convertSecondsToHoursMinutesSeconds(seconds) {
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
+        const remainingSeconds = seconds % 60;
+
         const formattedHours = String(hours).padStart(2, '0');
         const formattedMinutes = String(minutes).padStart(2, '0');
-        return `${formattedHours}:${formattedMinutes}`;
+        const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+
+        return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
     }
 
     function getDayOfWeek(dateString) {
@@ -125,8 +129,8 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                                             <CountdownReading currentlyReadingBooks={currentlyReadingBooks} screenTimeInSeconds={screenTimeInSeconds} isLoadingBooks={isLoadingBooks} />
                                         ) : (
                                             <div>
-                                                <p>Today you need to read {convertSecondsToHoursMinutes(readingTimeData[selectedTab].screenTimeInSeconds)}</p>
-                                                <p>Time you have spent reading {convertSecondsToHoursMinutes(readingTimeData[selectedTab].timeInSecondsForTheDayReading)}</p>
+                                                <p>Today you need to read {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].screenTimeInSeconds)}</p>
+                                                <p>Time you have spent reading {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].timeInSecondsForTheDayReading)}</p>
                                             </div>
                                         )}
                                     </div>

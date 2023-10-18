@@ -21,7 +21,6 @@ const UpdateBookProgressModal = ({ setIsOpen, timerFinished }) => {
         const updatedBook = { ...currentlyReadingBook };
         try {
             updatedBook.progress = parseInt(updatedPageProgress);
-            console.log('updatedBook', updatedBook);
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {

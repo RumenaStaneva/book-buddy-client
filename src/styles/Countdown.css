@@ -34,3 +34,44 @@
 .countdown__container .book__details .book__image {
     max-height: 430px;
 }
+
+.countdown-section {
+    width: 300px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.countdown-message {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+
+.goal-section {
+    margin-bottom: 20px;
+}
+
+.goal-button {
+    border: 1px solid #D92868;
+    border-radius: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: rgba(237, 201, 191, 0.44);
+    cursor: pointer;
+}
+
+.goal-input {
+    width: 60px;
+}
+
+.action-buttons {
+    margin-top: 20px;
+}
+
+.time-info {
+    margin-top: 10px;
+}

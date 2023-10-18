@@ -30,7 +30,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
         if (swiperRef.current && !swiperReady) {
             setSwiperReady(true);
         }
-    }, [swiperRef.current]);
+    }, [swiperReady]);
 
     //slide to last read book
     useEffect(() => {
@@ -58,7 +58,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                         : null}
                     <div className='d-flex reading-countdown__container'>
                         <div className='countdown-timer__container'>
-                            <Countdown readingTimeSeconds={screenTimeInSeconds} currentlyReadingBooks={currentlyReadingBooks} activeIndex={activeIndex} />
+                            <Countdown screenTimeSeconds={screenTimeInSeconds} currentlyReadingBooks={currentlyReadingBooks} activeIndex={activeIndex} />
                         </div>
                         <div className='swiper-books__container'>
                             {currentlyReadingBooks ?

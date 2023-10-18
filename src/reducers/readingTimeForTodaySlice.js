@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { setError } from './errorSlice';
-import { startOfWeek, endOfWeek, format, isToday, parseISO } from 'date-fns';
+import { startOfWeek, endOfWeek, format, } from 'date-fns';
 
 
 //get the reading time
@@ -32,7 +32,8 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
             return data;
         } catch (error) {
             console.error(error);
-            throw error;
+            thunkAPI.dispatch(setError({ message: `Error updating time: ${error.message}` }));
+            throw new Error(error.message);
         }
     }
 );
@@ -56,14 +57,16 @@ export const fetchHasReadingTimeAnytime = createAsyncThunk(
             return data;
         } catch (error) {
             console.error(error);
-            throw error;
+            thunkAPI.dispatch(setError({ message: `Error updating reading time in the database: ${error.message}` }));
+            throw new Error(error.message);
         }
     }
 );
 
 export const updateReadingDataInDatabase = createAsyncThunk(
     'readingTime/updateReadingDataInDatabase',
-    async ({ date, timeInSecondsLeftForAchievingReadingGoal, timeInSecondsForTheDayReading, user }, thunkAPI) => {
+    async ({ date, totalReadingGoalForTheDay, timeInSecondsForTheDayReading, user }, thunkAPI) => {
+        // console.log('in slice ', date, timeInSecondsForTheDayReading, user);
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/update-reading-time`, {
                 method: 'PUT',
@@ -73,15 +76,15 @@ export const updateReadingDataInDatabase = createAsyncThunk(
                 },
                 body: JSON.stringify({
                     date,
-                    timeInSecondsLeftForAchievingReadingGoal,
+                    totalReadingGoalForTheDay,
                     timeInSecondsForTheDayReading,
                 }),
             });
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error('Error updating reading time in the database:', error);
-            throw error;
+            thunkAPI.dispatch(setError({ message: `Error fetching reading time in the database: ${error.message}` }));
+            throw new Error(error.message);
         }
     }
 );
@@ -97,6 +100,7 @@ const initialState = {
     screenTimeInSeconds: 0,
     weeklyGoalAveragePerDay: 0,
     timeInSecondsForTheDayReading: 0,
+    totalReadingGoalForTheDay: 0,
     timeInSecondsLeftForAchievingReadingGoal: 0,
 };
 
@@ -148,6 +152,7 @@ const options = {
                     state.weeklyGoalAveragePerDay = readingTimeObject.readingTime[todayIndex].weeklyGoalAveragePerDay;
                     state.timeInSecondsForTheDayReading = readingTimeObject.readingTime[todayIndex].timeInSecondsForTheDayReading;
                     state.timeInSecondsLeftForAchievingReadingGoal = readingTimeObject.readingTime[todayIndex].timeInSecondsLeftForAchievingReadingGoal;
+                    state.totalReadingGoalForTheDay = readingTimeObject.readingTime[todayIndex].totalReadingGoalForTheDay;
                 }
 
                 state.isLoading = false;
@@ -178,6 +183,11 @@ const options = {
             state.errorMessage = '';
         },
         [updateReadingDataInDatabase.fulfilled]: (state, action) => {
+            const data = action.payload.updatedReadingTimeRecord;
+            state.goalAchievedForTheDay = data.goalAchievedForTheDay;
+            state.timeInSecondsForTheDayReading = data.timeInSecondsForTheDayReading;
+            state.timeInSecondsLeftForAchievingReadingGoal = data.timeInSecondsLeftForAchievingReadingGoal;
+            state.totalReadingGoalForTheDay = data.totalReadingGoalForTheDay;
             state.isLoading = false;
             state.errorMessage = '';
         },
