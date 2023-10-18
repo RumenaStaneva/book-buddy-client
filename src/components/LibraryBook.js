@@ -21,10 +21,14 @@ function LibraryBook({ book, setSuccessMessage }) {
     const dispatchError = useDispatch();
     const bookTotalPages = book.pageCount;
 
-    const updateProgress = async (currentBook) => {
+    const updateProgress = async (currentBook, bookRead) => {
         try {
             const mutableBook = { ...currentBook };
-            mutableBook.progress = parseInt(bookPageProgress);
+            if (bookRead) {
+                mutableBook.progress = mutableBook.pageCount;
+            } else {
+                mutableBook.progress = parseInt(bookPageProgress);
+            }
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
@@ -111,7 +115,10 @@ function LibraryBook({ book, setSuccessMessage }) {
                                                 onChange={(e) => setBookPageProgress(e.target.value)}
                                             />
                                         </div>
-                                        <Button className='cta-btn' type='submit' onClick={() => updateProgress(book)}>Update</Button>
+                                        <div className="d-flex">
+                                            <Button className='cta-btn btn-sm cta-btn__alt' onClick={() => updateProgress(book, true)}>I've read this book</Button>
+                                            <Button className='cta-btn btn-sm' type='submit' onClick={() => updateProgress(book)}>Update</Button>
+                                        </div>
                                     </>
                                 ) : (
                                     <>

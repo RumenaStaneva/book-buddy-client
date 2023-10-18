@@ -20,12 +20,14 @@ const TimeSwap = () => {
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
 
     useEffect(() => {
+        document.title = 'TimeSwap';
+    }, []);
+
+    useEffect(() => {
         dispatchReadingTime(fetchHasReadingTimeAnytime(user));
         dispatchBooks(fetchAllBooks(user));
         dispatchReadingTime(fetchReadingTimeForTheWeek(user));
     }, [dispatchBooks, dispatchReadingTime, user]);
-    // console.log('currentWeekData', currentWeekData);
-    // console.log('currentWeekDates', currentWeekDates);
     return (
         <>
             <NavBar />

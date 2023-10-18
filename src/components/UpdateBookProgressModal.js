@@ -17,10 +17,14 @@ const UpdateBookProgressModal = ({ setIsOpen, timerFinished }) => {
     const dispatchError = useDispatch();
     const dispatch = useDispatch();
 
-    const updateBook = async () => {
+    const updateBook = async (bookRead) => {
         const updatedBook = { ...currentlyReadingBook };
         try {
-            updatedBook.progress = parseInt(updatedPageProgress);
+            if (bookRead) {
+                updatedBook.progress = updatedBook.pageCount
+            } else {
+                updatedBook.progress = parseInt(updatedPageProgress);
+            }
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
@@ -61,9 +65,13 @@ const UpdateBookProgressModal = ({ setIsOpen, timerFinished }) => {
             content={
                 <div>
                     <Error />
-                    <div className="">
-                        <input type="number" value={updatedPageProgress} onClick={handleUpdateProgressClick} onChange={(e) => setUpdatedPageProgress(e.target.value)} />
-                        <Button onClick={updateBook} className='cta-btn btn-sm cta-btn__alt'>Update</Button>
+                    <div className="update-book__content">
+                        <label htmlFor="book-page-progress">Add your last read page:</label>
+                        <input name='book-page-progress' type="number" value={updatedPageProgress} onClick={handleUpdateProgressClick} onChange={(e) => setUpdatedPageProgress(e.target.value)} />
+                        <div className="d-flex">
+                            <Button className='cta-btn btn-sm cta-btn__alt' onClick={() => updateBook(true)}>I've read this book</Button>
+                            <Button onClick={updateBook} className='cta-btn btn-sm'>Update</Button>
+                        </div>
                     </div>
                 </div>
             }

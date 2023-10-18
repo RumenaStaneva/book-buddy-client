@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../components/Header';
 import BookList from '../components/BookList';
 import axios from "axios";
@@ -23,11 +23,10 @@ function Home() {
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
     const PAGE_SIZE = 10;
     const dispatchError = useDispatch();
-    const { errorMessage } = useSelector((state) => state.error)
-    // useEffect(() => {
-    //     console.log('AuthContextProvider useEffect triggered');
-    //     document.title = 'Home';
-    // }, []);
+    const { errorMessage } = useSelector((state) => state.error);
+    useEffect(() => {
+        document.title = 'Home';
+    }, []);
 
     const handleChange = (e) => {
         const title = e.target.value;
