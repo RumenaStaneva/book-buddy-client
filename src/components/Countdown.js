@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import useSound from 'use-sound';
+import startSfx from '../sounds/start.mp3'
+import stopSfx from '../sounds/stop.mp3'
+import endSfx from '../sounds/end.mp3'
 import Cleave from 'cleave.js/react';
 import Button from './Button';
 import UpdateBookProgressModal from './UpdateBookProgressModal';
@@ -24,6 +28,9 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     const [formattedTime, setFormattedTime] = useState('');
     const cleaveInputRef = useRef(null);
     const [timerReset, setTimerReset] = useState(false);
+    const [playStartSound] = useSound(startSfx);
+    const [playStopSound] = useSound(stopSfx);
+    const [playEndSound] = useSound(endSfx);
 
     const updateTimer = useCallback(() => {
         if (timerActive && timeLeft > 0) {
@@ -40,11 +47,11 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
             setTimerActive(false);
             dispatch(setTimerStarted(false));
             setTimerFinished(true);
-            dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: timePassed, user, currentlyReadingBook }));
+            playEndSound();
         } else if (timeLeft <= 0 && timerActive && timerMode === "increment") {
             setTimePassed(prevTimePassed => prevTimePassed + 1);
         }
-    }, [timeLeft, timerActive, dateToday, totalReadingGoalForTheDay, user, currentlyReadingBook, updateReadingDataInDatabase]);
+    }, [timeLeft, timerActive, dispatch, playEndSound, timerMode]);
 
     useEffect(() => {
         const timerInterval = setInterval(updateTimer, 1000);
@@ -75,8 +82,9 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     useEffect(() => {
         if (goalAchievedForTheDay) {
             dispatch(setTimerMode("increment"));
+            dispatch(setGoalAchievedForTheDay(true))
         }
-    }, [])
+    }, [dispatch, goalAchievedForTheDay])
 
 
     const formatTime = (time) => {
@@ -88,6 +96,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     };
 
     const startTimer = () => {
+        playStartSound();
         setIsChangeGoalVisible(false);
         dispatch(setCurrentlyReadingBook(currentlyReadingBooks[activeIndex]));
         dispatch(setTimerStarted(true));
@@ -96,6 +105,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     };
 
     const stopTimer = () => {
+        playStopSound();
         if (timerMode === "decrement") {
 
             dispatch(setTimeInSecondsLeftForAchievingReadingGoal(timeLeft));
@@ -126,7 +136,8 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
         setTimerActive(true);
         dispatch(setTimerMode("increment"));
         setTimerReset(true);
-        dispatch(setGoalAchievedForTheDay(true))
+        dispatch(setGoalAchievedForTheDay(true));
+        playStartSound();
     };
 
     useEffect(() => {
@@ -135,14 +146,13 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
             setTimePassed(0);
             setTimerFinished(false);
             dispatch(setTimerStarted(true));
-            // setTimerReset(false);
         }
-    }, [timerReset]);
+    }, [timerReset, dispatch]);
 
-    console.log('timeLeft', timeLeft);
-    console.log('timerActive', timerActive);
-    console.log(timerMode);
-    console.log('timePassed', timePassed);
+    // console.log('timeLeft', timeLeft);
+    // console.log('timerActive', timerActive);
+    // console.log(timerMode);
+    // console.log('timePassed', timePassed);
 
     return (
         <>
@@ -157,7 +167,10 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                     timerMode === "decrement" ?
                         <h2 className="countdown-message">Countdown: {formatTime(timeLeft)}</h2>
                         :
-                        <h2 className="countdown-message">Time passed: {formatTime(timePassed)}</h2>
+                        timerStarted ?
+                            <h2 className="countdown-message">{formatTime(timePassed)}</h2>
+                            :
+                            <h2 className="countdown-message">Time passed: {formatTime(timePassed - totalReadingGoalForTheDay)}</h2>
 
                 )}
 
@@ -222,9 +235,9 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                             </div>
                         }
 
-                        {/* {!timerStarted &&
+                        {!timerStarted &&
                             <p className="time-info">Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
-                        } */}
+                        }
                     </>
                 )}
             </div>
