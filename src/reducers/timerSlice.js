@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     currentlyReadingBook: null,
     timerStarted: false,
-    successMessage: ''
+    successMessage: '',
+    timerMode: "decrement",
 };
 
 const options = {
@@ -16,6 +17,9 @@ const options = {
         setTimerStarted: (state, action) => {
             state.timerStarted = action.payload;
         },
+        setTimerMode: (state, action) => {
+            state.timerMode = action.payload;
+        },
         setSuccessMessage: (state, action) => {
             state.successMessage = action.payload;
         },
@@ -26,6 +30,6 @@ const options = {
     }
 }
 export const timerSlice = createSlice(options);
-export const { setCurrentlyReadingBook, setTimerStarted, setSuccessMessage, clearSuccessMessage } = timerSlice.actions;
+export const { setCurrentlyReadingBook, setTimerStarted, setSuccessMessage, clearSuccessMessage, setTimerMode } = timerSlice.actions;
 
 export default timerSlice.reducer;

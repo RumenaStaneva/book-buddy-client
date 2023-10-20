@@ -3,8 +3,8 @@ import Cleave from 'cleave.js/react';
 import Button from './Button';
 import UpdateBookProgressModal from './UpdateBookProgressModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTimerStarted, setCurrentlyReadingBook } from '../reducers/timerSlice';
-import { setTimeInSecondsLeftForAchievingReadingGoal, updateReadingDataInDatabase } from '../reducers/readingTimeForTodaySlice'
+import { setTimerStarted, setCurrentlyReadingBook, setTimerMode } from '../reducers/timerSlice';
+import { setTimeInSecondsLeftForAchievingReadingGoal, updateReadingDataInDatabase, setGoalAchievedForTheDay } from '../reducers/readingTimeForTodaySlice'
 import '../styles/Countdown.css'
 import { useAuthContext } from '../hooks/useAuthContext';
 import { clearError, setError } from '../reducers/errorSlice';
@@ -12,8 +12,8 @@ import Error from './Error';
 
 const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) => {
     const dispatch = useDispatch();
-    const { timerStarted, currentlyReadingBook } = useSelector((state) => state.timer);
-    const { dateToday, timeInSecondsLeftForAchievingReadingGoal, timeInSecondsForTheDayReading, weeklyGoalAveragePerDay, totalReadingGoalForTheDay } = useSelector((state) => state.readingTimeForToday);
+    const { timerStarted, currentlyReadingBook, timerMode } = useSelector((state) => state.timer);
+    const { dateToday, timeInSecondsLeftForAchievingReadingGoal, timeInSecondsForTheDayReading, weeklyGoalAveragePerDay, totalReadingGoalForTheDay, goalAchievedForTheDay } = useSelector((state) => state.readingTimeForToday);
     const { user } = useAuthContext();
     const [timeLeft, setTimeLeft] = useState(timeInSecondsLeftForAchievingReadingGoal);
     const [updateProgressModalIsOpen, setUpdateProgressModalIsOpen] = useState(false);
@@ -23,22 +23,36 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     const [timePassed, setTimePassed] = useState(timeInSecondsForTheDayReading);
     const [formattedTime, setFormattedTime] = useState('');
     const cleaveInputRef = useRef(null);
+    const [timerReset, setTimerReset] = useState(false);
 
     const updateTimer = useCallback(() => {
-        setTimeLeft((prevTime) => {
-            if (prevTime > 0) {
-                setTimePassed((prevTimePassed) => prevTimePassed + 0.5); // Update time passed every second, why it is 0.5 no idea if it is one it doubless
-                return prevTime - 1;
-            } else {
-                dispatch(setTimerStarted(false));
-                setTimerActive(false);
-                setTimerFinished(true);
-                setUpdateProgressModalIsOpen(true);
-                setTimeLeft(0);
-                return 0;
-            }
-        })
-    }, [setTimePassed, dispatch, setTimerActive, setTimerFinished, setUpdateProgressModalIsOpen]);
+        if (timerActive && timeLeft > 0) {
+            setTimeLeft(prevTime => {
+                if (timerMode === "decrement") {
+                    return prevTime - 1;
+                }
+                else {
+                    return prevTime + 1;
+                }
+            });
+            setTimePassed(prevTimePassed => prevTimePassed + 1);
+        } else if (timeLeft <= 0 && timerActive && timerMode === "decrement") {
+            setTimerActive(false);
+            dispatch(setTimerStarted(false));
+            setTimerFinished(true);
+            dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: timePassed, user, currentlyReadingBook }));
+        } else if (timeLeft <= 0 && timerActive && timerMode === "increment") {
+            setTimePassed(prevTimePassed => prevTimePassed + 1);
+        }
+    }, [timeLeft, timerActive, dateToday, totalReadingGoalForTheDay, user, currentlyReadingBook, updateReadingDataInDatabase]);
+
+    useEffect(() => {
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Cleanup interval on component unmount or timer reset
+        return () => clearInterval(timerInterval);
+    }, [updateTimer]);
+
 
     useEffect(() => {
         setTimeLeft(timeInSecondsLeftForAchievingReadingGoal);
@@ -50,14 +64,20 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     }, [timeInSecondsForTheDayReading]);
 
     useEffect(() => {
-        let interval;
-        if (timerActive) {
-            interval = setInterval(updateTimer, 1000);
-        } else {
-            clearInterval(interval); // Clear interval if the timer is stopped
+        if (timerFinished) {
+            dispatch(setTimeInSecondsLeftForAchievingReadingGoal(0));
+            dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: timePassed, user, currentlyReadingBook }));
+            setTimeLeft(0);
+            setTimerActive(false);
         }
-        return () => clearInterval(interval);
-    }, [timerActive, updateTimer]);
+    }, [timerFinished, timePassed, dispatch, dateToday, totalReadingGoalForTheDay, user, currentlyReadingBook]);
+
+    useEffect(() => {
+        if (goalAchievedForTheDay) {
+            dispatch(setTimerMode("increment"));
+        }
+    }, [])
+
 
     const formatTime = (time) => {
         const hours = Math.floor(time / 3600);
@@ -76,22 +96,53 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     };
 
     const stopTimer = () => {
-        dispatch(setTimeInSecondsLeftForAchievingReadingGoal(timeLeft));
-        const currentTimePassed = timePassed;
-        dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: currentTimePassed, user, currentlyReadingBook }))
+        if (timerMode === "decrement") {
+
+            dispatch(setTimeInSecondsLeftForAchievingReadingGoal(timeLeft));
+            const currentTimePassed = timePassed;
+            dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: currentTimePassed, user, currentlyReadingBook }))
+        } else {
+            dispatch(updateReadingDataInDatabase({
+                date: dateToday, totalReadingGoalForTheDay,
+                timeInSecondsForTheDayReading: timeInSecondsLeftForAchievingReadingGoal + timePassed, // hadded the new time to the previous time read
+                user, currentlyReadingBook
+            }))
+        }
         dispatch(setTimerStarted(false));
         setUpdateProgressModalIsOpen(true);
         setTimerActive(false);
     };
 
     const changeTime = (newTime) => {
-        if (newTime <= totalReadingGoalForTheDay) {
+        if (newTime <= timeInSecondsForTheDayReading) {
             dispatch(setError({ message: 'You can not set lower goal than your current spend time reading' }))
             return;
         }
         dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay: newTime, timeInSecondsForTheDayReading: timePassed, user, currentlyReadingBook }));
         setIsChangeGoalVisible(false);
     }
+
+    const handleResetTimerIncrement = () => {
+        setTimerActive(true);
+        dispatch(setTimerMode("increment"));
+        setTimerReset(true);
+        dispatch(setGoalAchievedForTheDay(true))
+    };
+
+    useEffect(() => {
+        if (timerReset) {
+            setTimeLeft(0);
+            setTimePassed(0);
+            setTimerFinished(false);
+            dispatch(setTimerStarted(true));
+            // setTimerReset(false);
+        }
+    }, [timerReset]);
+
+    console.log('timeLeft', timeLeft);
+    console.log('timerActive', timerActive);
+    console.log(timerMode);
+    console.log('timePassed', timePassed);
 
     return (
         <>
@@ -102,16 +153,21 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                 {timerFinished ? (
                     <h2 className="countdown-message">Countdown Timer has finished!</h2>
                 ) : (
-                    <h2 className="countdown-message">Countdown: {formatTime(timeLeft)}</h2>
+
+                    timerMode === "decrement" ?
+                        <h2 className="countdown-message">Countdown: {formatTime(timeLeft)}</h2>
+                        :
+                        <h2 className="countdown-message">Time passed: {formatTime(timePassed)}</h2>
+
                 )}
 
                 {timerFinished ? (
-                    <Button onClick={() => setTimerFinished(false)} className="cta-btn">
+                    <Button onClick={handleResetTimerIncrement} className="cta-btn">
                         Reset Timer
                     </Button>
                 ) : (
                     <>
-                        {!timerStarted &&
+                        {!timerStarted && !goalAchievedForTheDay &&
                             <div className="goal-section">
                                 <p>Is your goal for today too high?</p>
                                 <Button className="cta-btn" onClick={() => {
@@ -121,7 +177,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                             </div>
                         }
 
-                        {isChangeGoalVisible &&
+                        {isChangeGoalVisible && !goalAchievedForTheDay &&
                             <div className="goal-section">
                                 <p>Choose an achievable goal:</p>
                                 <div className='d-flex'>
@@ -166,9 +222,9 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                             </div>
                         }
 
-                        {!timerStarted &&
+                        {/* {!timerStarted &&
                             <p className="time-info">Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
-                        }
+                        } */}
                     </>
                 )}
             </div>

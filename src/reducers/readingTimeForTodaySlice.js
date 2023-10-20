@@ -101,6 +101,7 @@ const initialState = {
     dateToday: null,
     screenTimeInSeconds: 0,
     weeklyGoalAveragePerDay: 0,
+    goalAchievedForTheDay: false,
     timeInSecondsForTheDayReading: 0,
     totalReadingGoalForTheDay: 0,
     timeInSecondsLeftForAchievingReadingGoal: 0,
@@ -121,6 +122,9 @@ const options = {
         },
         setDateToday: (state, action) => {
             state.dateToday = action.payload;
+        },
+        setGoalAchievedForTheDay: (state, action) => {
+            state.goalAchievedForTheDay = action.payload;
         },
     },
     extraReducers: {
@@ -150,11 +154,15 @@ const options = {
                 // Set today's date properties in the state
                 if (todayIndex !== -1) {
                     state.dateToday = currentWeekDates[todayIndex];
+                    console.log('readingTimeObject.readingTime[todayIndex]', readingTimeObject.readingTime[todayIndex]);
+
                     state.screenTimeInSeconds = readingTimeObject.readingTime[todayIndex].screenTimeInSeconds;
                     state.weeklyGoalAveragePerDay = readingTimeObject.readingTime[todayIndex].weeklyGoalAveragePerDay;
                     state.timeInSecondsForTheDayReading = readingTimeObject.readingTime[todayIndex].timeInSecondsForTheDayReading;
                     state.timeInSecondsLeftForAchievingReadingGoal = readingTimeObject.readingTime[todayIndex].timeInSecondsLeftForAchievingReadingGoal;
                     state.totalReadingGoalForTheDay = readingTimeObject.readingTime[todayIndex].totalReadingGoalForTheDay;
+                    console.log('readingTimeObject.readingTime[todayIndex].goalAchievedForTheDay', readingTimeObject.readingTime[todayIndex].goalAchievedForTheDay);
+                    state.goalAchievedForTheDay = readingTimeObject.readingTime[todayIndex].goalAchievedForTheDay;
                 }
 
                 state.isLoading = false;
@@ -188,6 +196,7 @@ const options = {
             // console.log('action.payload', action.payload);
             const data = action.payload.updatedReadingTimeRecord;
             state.goalAchievedForTheDay = data.goalAchievedForTheDay;
+            console.log('data.goalAchievedForTheDay', data.goalAchievedForTheDay);
             state.timeInSecondsForTheDayReading = data.timeInSecondsForTheDayReading;
             state.timeInSecondsLeftForAchievingReadingGoal = data.timeInSecondsLeftForAchievingReadingGoal;
             state.totalReadingGoalForTheDay = data.totalReadingGoalForTheDay;
@@ -201,6 +210,6 @@ const options = {
     },
 }
 export const readingTimeForTodaySlice = createSlice(options);
-export const { setWeeklyGoalAveragePerDay, setTimeInSecondsForTheDayReading, setTimeInSecondsLeftForAchievingReadingGoal, setDateToday } = readingTimeForTodaySlice.actions;
+export const { setWeeklyGoalAveragePerDay, setTimeInSecondsForTheDayReading, setTimeInSecondsLeftForAchievingReadingGoal, setDateToday, setGoalAchievedForTheDay } = readingTimeForTodaySlice.actions;
 
 export default readingTimeForTodaySlice.reducer;

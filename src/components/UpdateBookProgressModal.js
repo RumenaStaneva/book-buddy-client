@@ -70,7 +70,7 @@ const UpdateBookProgressModal = ({ setIsOpen, timerFinished }) => {
                         <input name='book-page-progress' type="number" value={updatedPageProgress} onClick={handleUpdateProgressClick} onChange={(e) => setUpdatedPageProgress(e.target.value)} />
                         <div className="d-flex">
                             <Button className='cta-btn btn-sm cta-btn__alt' onClick={() => updateBook(true)}>I've read this book</Button>
-                            <Button onClick={updateBook} className='cta-btn btn-sm'>Update</Button>
+                            <Button onClick={() => updateBook(false)} className='cta-btn btn-sm'>Update</Button>
                         </div>
                     </div>
                 </div>

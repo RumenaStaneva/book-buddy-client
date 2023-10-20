@@ -129,8 +129,10 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                                             <CountdownReading currentlyReadingBooks={currentlyReadingBooks} screenTimeInSeconds={screenTimeInSeconds} isLoadingBooks={isLoadingBooks} />
                                         ) : (
                                             <div>
-                                                <p>Today you need to read {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].screenTimeInSeconds)}</p>
+                                                <p>Your screen time  for the day {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].screenTimeInSeconds)}</p>
+                                                <p>Reading goal for the day {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].totalReadingGoalForTheDay)}</p>
                                                 <p>Time you have spent reading {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].timeInSecondsForTheDayReading)}</p>
+
                                             </div>
                                         )}
                                     </div>
