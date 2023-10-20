@@ -66,7 +66,8 @@ export const fetchHasReadingTimeAnytime = createAsyncThunk(
 export const updateReadingDataInDatabase = createAsyncThunk(
     'readingTime/updateReadingDataInDatabase',
     async ({ date, totalReadingGoalForTheDay, timeInSecondsForTheDayReading, user, currentlyReadingBook }, thunkAPI) => {
-        // console.log('in slice ', date, timeInSecondsForTheDayReading, user, currentlyReadingBook);
+        console.log('in slice ', date, timeInSecondsForTheDayReading, user, currentlyReadingBook);
+        console.log('updated called!!!');
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/update-reading-time`, {
                 method: 'PUT',
@@ -161,7 +162,7 @@ const options = {
                     state.timeInSecondsForTheDayReading = readingTimeObject.readingTime[todayIndex].timeInSecondsForTheDayReading;
                     state.timeInSecondsLeftForAchievingReadingGoal = readingTimeObject.readingTime[todayIndex].timeInSecondsLeftForAchievingReadingGoal;
                     state.totalReadingGoalForTheDay = readingTimeObject.readingTime[todayIndex].totalReadingGoalForTheDay;
-                    console.log('readingTimeObject.readingTime[todayIndex].goalAchievedForTheDay', readingTimeObject.readingTime[todayIndex].goalAchievedForTheDay);
+                    console.log('readingTimeObject.readingTime[todayIndex].timeInSecondsForTheDayReading', readingTimeObject.readingTime[todayIndex].timeInSecondsForTheDayReading);
                     state.goalAchievedForTheDay = readingTimeObject.readingTime[todayIndex].goalAchievedForTheDay;
                 }
 
@@ -196,8 +197,8 @@ const options = {
             // console.log('action.payload', action.payload);
             const data = action.payload.updatedReadingTimeRecord;
             state.goalAchievedForTheDay = data.goalAchievedForTheDay;
-            console.log('data.goalAchievedForTheDay', data.goalAchievedForTheDay);
             state.timeInSecondsForTheDayReading = data.timeInSecondsForTheDayReading;
+            console.log('data.timeInSecondsForTheDayReading', data.timeInSecondsForTheDayReading);
             state.timeInSecondsLeftForAchievingReadingGoal = data.timeInSecondsLeftForAchievingReadingGoal;
             state.totalReadingGoalForTheDay = data.totalReadingGoalForTheDay;
             state.isLoading = false;

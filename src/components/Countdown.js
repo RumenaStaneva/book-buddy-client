@@ -73,6 +73,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     useEffect(() => {
         if (timerFinished) {
             dispatch(setTimeInSecondsLeftForAchievingReadingGoal(0));
+            // uncomment?
             dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: timePassed, user, currentlyReadingBook }));
             setTimeLeft(0);
             setTimerActive(false);
@@ -106,6 +107,9 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
 
     const stopTimer = () => {
         playStopSound();
+        console.log('timePassed', timePassed);
+        console.log('timeInSecondsLeftForAchievingReadingGoal', timeInSecondsLeftForAchievingReadingGoal);
+        console.log('timeInSecondsLeftForAchievingReadingGoal + timePassed', timeInSecondsLeftForAchievingReadingGoal + timePassed);
         if (timerMode === "decrement") {
 
             dispatch(setTimeInSecondsLeftForAchievingReadingGoal(timeLeft));
@@ -143,7 +147,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     useEffect(() => {
         if (timerReset) {
             setTimeLeft(0);
-            setTimePassed(0);
+            // setTimePassed(0);
             setTimerFinished(false);
             dispatch(setTimerStarted(true));
         }
@@ -153,6 +157,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     // console.log('timerActive', timerActive);
     // console.log(timerMode);
     // console.log('timePassed', timePassed);
+    // console.log('timeInSecondsForTheDayReading', timeInSecondsForTheDayReading);
 
     return (
         <>
@@ -168,7 +173,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                         <h2 className="countdown-message">Countdown: {formatTime(timeLeft)}</h2>
                         :
                         timerStarted ?
-                            <h2 className="countdown-message">{formatTime(timePassed)}</h2>
+                            <h2 className="countdown-message">{formatTime(timePassed - totalReadingGoalForTheDay)}</h2>
                             :
                             <h2 className="countdown-message">Time passed: {formatTime(timePassed - totalReadingGoalForTheDay)}</h2>
 
