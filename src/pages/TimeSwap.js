@@ -16,7 +16,7 @@ const TimeSwap = () => {
     const { user } = useAuthContext();
     const dispatchBooks = useDispatch();
     const dispatchReadingTime = useDispatch();
-    const { currentWeekData, currentWeekDates, hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
+    const { currentWeekData, hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
 
     useEffect(() => {

@@ -12,6 +12,8 @@ import Countdown from './Countdown';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearSuccessMessage } from '../reducers/timerSlice';
+import LinearProgressWithLabel from './Progress'
+import { calculateProgress } from '../reducers/booksSlice';
 
 const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadingBooks }) => {
     const [activeIndex, setActiveIndex] = useState(() => {
@@ -83,13 +85,21 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                 >
                                     {currentlyReadingBooks.map((book, index) => {
                                         return (
-                                            <SwiperSlide
-                                                key={book._id}
-                                                className={`countdown__container ${index === activeIndex ? 'swiper-slide-active' : ''}`}
+                                            <>
+                                                <SwiperSlide
+                                                    key={book._id}
+                                                    className={`countdown__container ${index === activeIndex ? 'swiper-slide-active' : ''}`}
 
-                                            >
-                                                <CountdownBook book={book} />
-                                            </SwiperSlide>)
+                                                >
+
+                                                    <div className='book__progress'>
+                                                        <LinearProgressWithLabel value={calculateProgress(book.progress, book.pageCount)} />
+                                                    </div>
+
+                                                    <CountdownBook book={book} />
+                                                </SwiperSlide>
+                                            </>
+                                        )
                                     })}
                                 </Swiper>
                                 :

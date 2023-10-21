@@ -17,18 +17,6 @@
     background-color: #ddd;
 }
 
-h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-
-/* styles to stay */
 
 .table-container {
     margin-top: 20px;
@@ -42,6 +30,7 @@ h2 {
     justify-content: space-around;
     background-color: #fff;
     padding: 10px;
+    margin-bottom: 20px;
 }
 
 

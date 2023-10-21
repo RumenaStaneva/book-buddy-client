@@ -14,6 +14,8 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import { clearError, setError } from '../reducers/errorSlice';
 import Error from './Error';
 
+
+
 const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) => {
     const dispatch = useDispatch();
     const { timerStarted, currentlyReadingBook, timerMode } = useSelector((state) => state.timer);
@@ -170,7 +172,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                 ) : (
 
                     timerMode === "decrement" ?
-                        <h2 className="countdown-message">Countdown: {formatTime(timeLeft)}</h2>
+                        <h2 className="countdown-message">{timerStarted ? `Countdown: ${formatTime(timeLeft)}` : `Time left: ${formatTime(timeLeft)}`}</h2>
                         :
                         timerStarted ?
                             <h2 className="countdown-message">{formatTime(timePassed - totalReadingGoalForTheDay)}</h2>
