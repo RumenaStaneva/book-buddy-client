@@ -4,10 +4,10 @@
 
 .countdown__container .book {
     max-width: 550px;
-    max-height: 600px;
+    max-height: 620px;
     height: 100%;
     padding: 0 40px;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 .countdown__container .book__details {
@@ -18,7 +18,7 @@
     background-color: rgba(237, 201, 191, 0.44);
     border-radius: 10px;
     margin-left: 10px;
-    height: 600px;
+    height: 620px;
 }
 
 .countdown__container .book__details .title-author__container {
@@ -33,6 +33,14 @@
 
 .countdown__container .book__details .book__image {
     max-height: 430px;
+}
+
+.reading-countdown__container .book__progress {
+    padding: 0 42px 0 70px;
+    position: absolute;
+    width: 100%;
+    bottom: 50px;
+    z-index: 1;
 }
 
 .countdown-section {

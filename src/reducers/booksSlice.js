@@ -22,7 +22,7 @@ export const calculateProgress = (bookPageProgress, bookTotalPages) => {
     if (totalPagesNumber === 0) {
         return 0;
     }
-    return Math.floor((bookPageProgress / totalPagesNumber) * 100);
+    return Math.round((bookPageProgress / totalPagesNumber) * 100);
 };
 
 
