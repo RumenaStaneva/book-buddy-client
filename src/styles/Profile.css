@@ -1,4 +1,5 @@
-.profile__container {
+.profile__container,
+.chart__container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,7 +17,8 @@
     height: 300px;
 }
 
-.profile__content {
+.profile__content,
+.chart__content {
     background-color: #ffffff;
     padding: 15px;
     border-radius: 10px;
@@ -208,8 +210,14 @@
     margin-top: 20px;
 }
 
+.chart__content {
+    min-width: 700px;
+}
+
 @media (max-width: 576px) {
-    .profile__content {
+
+    .profile__content,
+    .chart__content {
         padding: 10px;
         max-width: 300px;
     }
@@ -220,5 +228,9 @@
 
     .profile__status {
         font-size: 16px;
+    }
+
+    .chart__container {
+        max-width: 300px;
     }
 }

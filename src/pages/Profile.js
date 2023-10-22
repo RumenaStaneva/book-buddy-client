@@ -5,23 +5,36 @@ import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import Button from '../components/Button';
 import Error from '../components/Error';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import '../styles/Profile.css'
 import ProfilePicture from '../components/ProfilePicture';
-
+import { fetchHasReadingTimeAnytime, fetchReadingTimeForTheWeek, setDataRange } from "../reducers/readingTimeForTodaySlice";
+import Chart from '../components/Chart';
+import Dropdown from '../components/Dropdown';
+import { format } from 'date-fns';
 
 function Profile() {
     const [userData, setUserData] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingGlobal, setIsLoadingGlobal] = useState(true);
     const [bio, setBio] = useState('');
     const [hiddenBio, setHiddenBio] = useState(true);
     const [hiddenUsername, setHiddenUsername] = useState(true);
     const { user, dispatch } = useAuthContext();
     const [username, setUsername] = useState('');
-    const dispatchError = useDispatch();
+    const dispatchRedux = useDispatch();
     const [isEditingProfile, setIsEditingProfile] = useState(false);
+    const { currentWeekData, hasReadingTimeAnytime, dataRange, isLoading } = useSelector((state) => state.readingTimeForToday);
+    const [screenData, setScreenData] = useState([]);
+    const [readingData, setReadingData] = useState([]);
+    const [readingGoal, setReadingGoal] = useState([]);
+    const [dates, setDates] = useState([]);
 
+    useEffect(() => {
+        dispatchRedux(fetchReadingTimeForTheWeek({ user, dataRange }));
+        dispatchRedux(fetchHasReadingTimeAnytime(user));
+
+    }, [dispatchRedux, user, dataRange])
     const fetchUserData = useCallback(async () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/profile`, {
@@ -31,7 +44,7 @@ function Profile() {
             });
 
             if (response.status === 401) {
-                dispatchError(setError({ message: 'Unauthorized access' }));
+                dispatchRedux(setError({ message: 'Unauthorized access' }));
                 console.error('Unauthorized access');
                 return;
             }
@@ -40,14 +53,14 @@ function Profile() {
             setUserData(data.userProfile);
             setBio(data.userProfile.bio);
             setUsername(data.userProfile.username);
-            setIsLoading(false);
-            dispatchError(clearError());
+            setIsLoadingGlobal(false);
+            dispatchRedux(clearError());
         } catch (error) {
-            dispatchError(setError({ message: `Error fetching user data: ${error}` }));
+            dispatchRedux(setError({ message: `Error fetching user data: ${error}` }));
             console.error('Error fetching user data: ', error);
-            setIsLoading(false);
+            setIsLoadingGlobal(false);
         }
-    }, [user, dispatchError]);
+    }, [user, dispatchRedux]);
 
     useEffect(() => {
         if (user && user.token) {
@@ -65,7 +78,7 @@ function Profile() {
                 body: JSON.stringify({ bio: bio, username: username }),
             });
             if (response.status === 401) {
-                dispatchError(setError({ message: 'Unauthorized access' }));
+                dispatchRedux(setError({ message: 'Unauthorized access' }));
                 console.error('Unauthorized access');
                 return;
             }
@@ -73,38 +86,61 @@ function Profile() {
             setHiddenUsername(true);
             if (!response.ok) {
                 const errorData = await response.json();
-                dispatchError(setError({ message: `Error updating username: ${errorData.error}` }));
+                dispatchRedux(setError({ message: `Error updating username: ${errorData.error}` }));
                 return;
             } else {
                 const localstorageUser = JSON.parse(localStorage.getItem('user'));
                 localstorageUser.username = username;
                 localStorage.setItem('user', JSON.stringify(localstorageUser));
                 dispatch({ type: 'LOGIN', payload: localstorageUser });
-                dispatchError(clearError());
+                dispatchRedux(clearError());
             }
             fetchUserData();
         } catch (error) {
-            dispatchError(setError({ message: `Error updating username: ${error}` }));
+            dispatchRedux(setError({ message: `Error updating username: ${error}` }));
             console.error('Error updating username: ', error);
         }
     };
 
     useEffect(() => {
         document.title = `User's profile`;
-    }, []);
+        if (currentWeekData) {
+            if (currentWeekData) {
+                const newScreenData = currentWeekData.map(day => day.screenTimeInSeconds);
+                const newReadingData = currentWeekData.map(day => day.timeInSecondsForTheDayReading);
+                const totalReadingGoalForTheDay = currentWeekData.map(day => day.totalReadingGoalForTheDay);
+                // const dates = currentWeekData.map(day => day.date);
+                const dates = currentWeekData.map(day => format(new Date(day.date), 'dd.MM.yyyy'));
+                console.log(dates);
+                setScreenData(newScreenData);
+                setReadingData(newReadingData);
+                setReadingGoal(totalReadingGoalForTheDay);
+                setDates(dates);
+            }
+        }
+    }, [dispatchRedux, user, currentWeekData]);
+
+    // useEffect(() => {
+    // }, [currentWeekData])
 
     const handleProfileClick = () => {
         setIsEditingProfile(!isEditingProfile);
     };
+    const handleCategorySelect = (selectedRange) => {
+        dispatchRedux(setDataRange(selectedRange));
+    };
+    const dropdownOptions = ['Current week', 'Last week', 'Last 3 weeks', 'Anytime'];
+    const labelsWeekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
 
     return (
         <>
             <NavBar />
             <div className="profile__container">
-                {isLoading ? null :
+                {isLoadingGlobal ? null :
                     <Header title={`${user.username !== '' ? username : user.email.split('@')[0]}'s profile`} />
                 }
-                {isLoading ? (
+                {isLoadingGlobal ? (
                     <div className='spinner__container'>
                         <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                     </div>
@@ -178,6 +214,38 @@ function Profile() {
 
                 )}
             </div>
+            {hasReadingTimeAnytime ? (
+                isLoading ? (
+                    <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                ) : (
+                    <div>
+                        {/* todo fix logic for anytime */}
+                        <Dropdown
+                            options={dropdownOptions}
+                            onSelect={handleCategorySelect}
+                            selectedOption={dataRange !== null ? dataRange : 'Pick a Time Frame'}
+                        />
+
+                        {currentWeekData && currentWeekData.length > 0 ? (
+                            <Chart
+                                screenData={screenData}
+                                readingData={readingData}
+                                readingGoal={readingGoal}
+                                labels={
+                                    dataRange === 'Last 3 weeks' || dataRange === 'Anytime'
+                                        ? dates
+                                        : labelsWeekDays
+                                }
+                            />
+                        ) : (
+                            <p>No data available for the chart.</p>
+                        )}
+                    </div>
+                )
+            ) : (
+                <p>No data available for the chart.</p>
+            )}
+
         </>
 
 

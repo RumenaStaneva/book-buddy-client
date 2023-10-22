@@ -1,23 +1,54 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { setError } from './errorSlice';
-import { startOfWeek, endOfWeek, format, } from 'date-fns';
+import { startOfWeek, endOfWeek, format, subWeeks } from 'date-fns';
 
 
 //get the reading time
 export const fetchReadingTimeForTheWeek = createAsyncThunk(
     'readingTime/fetchReadingTimeForTheWeek',
-    async (user, thunkAPI) => {
+    async ({ user, dataRange }, thunkAPI) => {
+        let formattedStartDate, formattedEndDate;
+        // console.log(dataRange);
 
-        const today = new Date().setHours(0, 0, 0, 0);
-        const startOfWeekDay = startOfWeek(today, { weekStartsOn: 1 });
-        const lastWeekEnd = endOfWeek(today, { weekStartsOn: 1 });
-        // console.log('startOfWeekDay', startOfWeekDay);
-        // console.log('lastWeekEnd', lastWeekEnd);
-        const formattedStartDate = format(startOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
-        const formattedEndDate = format(lastWeekEnd, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
-        // console.log('formattedStartDate', formattedStartDate);
-        // console.log('formattedEndDate', formattedEndDate);
+        switch (dataRange) {
+            case 'Current week': {
+                const today = new Date().setHours(0, 0, 0, 0);
+                const startOfWeekDay = startOfWeek(today, { weekStartsOn: 1 });
+                const endOfWeekDay = endOfWeek(today, { weekStartsOn: 1 });
+                formattedStartDate = format(startOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
+                formattedEndDate = format(endOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
+                console.log('startOfWeekDay', startOfWeekDay);
+                console.log('endOfWeekDay', endOfWeekDay);
+                break;
+            }
+            case 'Last week': {
+                const today = new Date().setHours(0, 0, 0, 0);
+                const startOfWeekDay = startOfWeek(subWeeks(today, 1), { weekStartsOn: 1 });
+                const endOfWeekDay = endOfWeek(subWeeks(today, 1), { weekStartsOn: 1 });
+                formattedStartDate = format(startOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
+                formattedEndDate = format(endOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
+                break;
+            }
+            case 'Last 3 weeks': {
+                const today = new Date().setHours(0, 0, 0, 0);
+                const endOfWeekDay = endOfWeek(today, { weekStartsOn: 1 });
+                const startOfWeekDay = endOfWeek(subWeeks(today, 3), { weekStartsOn: 1 });
+                formattedStartDate = format(startOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
+                formattedEndDate = format(endOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
+                console.log('startOfWeekDay', startOfWeekDay);
+                console.log('endOfWeekDay', endOfWeekDay);
+                break;
+            }
+            case 'Anytime':
+                formattedStartDate = 'anytime';
+                formattedEndDate = 'anytime';
+                break;
+            default:
+                throw new Error('Invalid data range');
+        }
+
         try {
+
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
@@ -29,10 +60,11 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
             }
 
             const data = await response.json();
+            console.log(data);
             return data;
         } catch (error) {
             console.error(error);
-            thunkAPI.dispatch(setError({ message: `Error updating time: ${error.message}` }));
+            thunkAPI.dispatch(setError({ message: `Error : ${error.message}` }));
             throw new Error(error.message);
         }
     }
@@ -92,6 +124,34 @@ export const updateReadingDataInDatabase = createAsyncThunk(
     }
 );
 
+// export const fetchReadingTimeForRange = createAsyncThunk(
+//     'readingTime/fetchReadingTimeForRange',
+//     async ({startDate,endDate, user}, thunkAPI) =>{
+//         try {
+//             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
+//                 headers: {
+//                     Authorization: `Bearer ${user.token}`,
+//                 },
+//                 body: {
+//                     startDate,
+//                     endDate
+//                 }
+//             });
+
+//             if (!response.ok) {
+//                 throw new Error(`Error fetching reading time: ${response.statusText}`);
+//             }
+
+//             const data = await response.json();
+//             return data;
+//         } catch (error) {
+//             console.error(error);
+//             thunkAPI.dispatch(setError({ message: `Error updating time: ${error.message}` }));
+//             throw new Error(error.message);
+//         }
+//     }
+// )
+
 
 const initialState = {
     currentWeekData: null,
@@ -106,6 +166,7 @@ const initialState = {
     timeInSecondsForTheDayReading: 0,
     totalReadingGoalForTheDay: 0,
     timeInSecondsLeftForAchievingReadingGoal: 0,
+    dataRange: 'Current week',
 };
 
 const options = {
@@ -127,6 +188,9 @@ const options = {
         setGoalAchievedForTheDay: (state, action) => {
             state.goalAchievedForTheDay = action.payload;
         },
+        setDataRange: (state, action) => {
+            state.dataRange = action.payload;
+        }
     },
     extraReducers: {
         [fetchReadingTimeForTheWeek.pending]: (state, action) => {
@@ -194,13 +258,14 @@ const options = {
             state.errorMessage = '';
         },
         [updateReadingDataInDatabase.fulfilled]: (state, action) => {
-            // console.log('action.payload', action.payload);
-            const data = action.payload.updatedReadingTimeRecord;
-            state.goalAchievedForTheDay = data.goalAchievedForTheDay;
-            state.timeInSecondsForTheDayReading = data.timeInSecondsForTheDayReading;
-            console.log('data.timeInSecondsForTheDayReading', data.timeInSecondsForTheDayReading);
-            state.timeInSecondsLeftForAchievingReadingGoal = data.timeInSecondsLeftForAchievingReadingGoal;
-            state.totalReadingGoalForTheDay = data.totalReadingGoalForTheDay;
+            console.log('action.payload', action.payload);
+            if (state.dataRange === 'Current week') {
+                const data = action.payload.updatedReadingTimeRecord;
+                state.goalAchievedForTheDay = data.goalAchievedForTheDay;
+                state.timeInSecondsForTheDayReading = data.timeInSecondsForTheDayReading;
+                state.timeInSecondsLeftForAchievingReadingGoal = data.timeInSecondsLeftForAchievingReadingGoal;
+                state.totalReadingGoalForTheDay = data.totalReadingGoalForTheDay;
+            }
             state.isLoading = false;
             state.errorMessage = '';
         },
@@ -211,6 +276,6 @@ const options = {
     },
 }
 export const readingTimeForTodaySlice = createSlice(options);
-export const { setWeeklyGoalAveragePerDay, setTimeInSecondsForTheDayReading, setTimeInSecondsLeftForAchievingReadingGoal, setDateToday, setGoalAchievedForTheDay } = readingTimeForTodaySlice.actions;
+export const { setWeeklyGoalAveragePerDay, setTimeInSecondsForTheDayReading, setTimeInSecondsLeftForAchievingReadingGoal, setDateToday, setGoalAchievedForTheDay, setDataRange } = readingTimeForTodaySlice.actions;
 
 export default readingTimeForTodaySlice.reducer;
