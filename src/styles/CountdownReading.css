@@ -1,0 +1,8 @@
+.reading-countdown__container {
+    align-items: center;
+    justify-content: center;
+}
+
+.countdown-timer__container {
+    width: 500px;
+}

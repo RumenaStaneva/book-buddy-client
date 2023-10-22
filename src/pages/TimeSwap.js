@@ -1,31 +1,54 @@
 import NavBar from "../components/NavBar";
-import Countdown from "../components/Countdown";
-import Button from "../components/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuthContext } from "../hooks/useAuthContext";
+import Spinner from 'react-spinner-material';
+import AddScreenTimeModal from "../components/AddScreenTimeModal";
+import TimeSwapInformationPage from "./TimeSwapInformationPage";
+import WeeklyDashboard from "../components/WeeklyDashboard";
+import { fetchHasReadingTimeAnytime, fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
+import { fetchAllBooks } from "../reducers/booksSlice";
+import { useDispatch, useSelector } from "react-redux";
+
+
 
 const TimeSwap = () => {
-    // Set the total seconds for the countdown
-    const [seconds, setSeconds] = useState(0);
-    const [totalSeconds, setTotalSeconds] = useState(0);
-    const handleChange = (e) => {
-        setSeconds(e.target.value);
-    }
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setTotalSeconds(seconds);
-        setSeconds(0);
-    }
+    const [isOpenAddScreenTime, setIsOpenAddScreenTime] = useState(false);
+    const { user } = useAuthContext();
+    const dispatchBooks = useDispatch();
+    const dispatchReadingTime = useDispatch();
+    const { currentWeekData, hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
+    const isLoadingBooks = useSelector((state) => state.books.isLoading);
 
+    useEffect(() => {
+        document.title = 'TimeSwap';
+    }, []);
+
+    useEffect(() => {
+        dispatchReadingTime(fetchHasReadingTimeAnytime(user));
+        dispatchBooks(fetchAllBooks(user));
+        dispatchReadingTime(fetchReadingTimeForTheWeek(user));
+    }, [dispatchBooks, dispatchReadingTime, user]);
     return (
         <>
             <NavBar />
-            <form onSubmit={handleSubmit}>
-                <input type="number" value={seconds} onChange={handleChange} />
-                <Button type="submit" onClick={handleSubmit}>Submit</Button>
+            {isLoadingBooks ? (
+                <div className='spinner__container'>
+                    <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                </div>
+            ) : (
+                <>
+                    {isOpenAddScreenTime && <AddScreenTimeModal setIsOpen={setIsOpenAddScreenTime} />}
 
-            </form>
-            <Countdown seconds={totalSeconds} />
+
+                    {!hasReadingTimeAnytime ? (
+                        <TimeSwapInformationPage setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
+                    ) :
+                        <WeeklyDashboard readingTimeData={currentWeekData} setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
+                    }
+                </>
+            )}
         </>
+
     );
 };
 

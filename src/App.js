@@ -20,13 +20,11 @@ import ResetPassword from './pages/ResetPassword';
 function App() {
 
   const { user } = useAuthContext();
-
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/time-swap" element={user ? <TimeSwap /> : <Navigate to="users/login" />} />
         <Route path="/users/login" element={!user ? <Login /> : <Navigate to="/books/library" />} />
         <Route path="/users/sign-up" element={!user ? <SignUp /> : <Navigate to="/" />} />
         <Route path="/users/forgot-password" element={!user ? <ForgotPassword /> : <Navigate to="/books/library" />} />
@@ -34,6 +32,7 @@ function App() {
         {user && (
           <>
             <Route path="/users/profile" element={<Profile />} />
+            <Route path="/time-swap" element={<TimeSwap />} />
             <Route path='/books/library' element={<Library />} />
             <Route path='/books/see-all' element={<ListAllBooks />} />
             <Route path='/books/book-details/:bookId' element={<BookDetails />} />

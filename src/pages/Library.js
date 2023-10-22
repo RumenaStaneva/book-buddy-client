@@ -191,7 +191,7 @@ function Library() {
                             readBooks ?
                                 <>
                                     <div className='shelf-header'>
-                                        <h2 className='shelf-title'>Already read</h2>
+                                        <h2 className='shelf-title'>Already read ({readBooks.length})</h2>
                                         <a href='/books/see-all?shelf=2' className='cta-btn'>See all</a>
                                     </div>
                                     <div className='books__container books-colorful__container'>

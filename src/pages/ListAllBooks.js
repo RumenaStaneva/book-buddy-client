@@ -34,7 +34,10 @@ function ListAllBooks() {
     const limit = useSelector((state) => state.filters.limit)
 
     const dispatch = useDispatch();
-    const dispatchError = useDispatch();
+
+    useEffect(() => {
+        document.title = 'Books in library';
+    }, []);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -72,7 +75,7 @@ function ListAllBooks() {
                 });
 
                 if (!response.ok) {
-                    dispatchError(setError({ message: 'Network connection failed' }))
+                    dispatch(setError({ message: 'Network connection failed' }))
                     throw new Error('Network connection failed');
                 }
 
@@ -80,16 +83,16 @@ function ListAllBooks() {
                 setIsLoading(false);
                 setBooks(data.books);
                 setTotalPages(data.totalPages);
-                dispatchError(clearError());
+                dispatch(clearError());
                 return response;
             } catch (error) {
-                dispatchError(setError({ message: `Error fetching user data: ${error}` }))
+                dispatch(setError({ message: `Error fetching user data: ${error}` }))
                 console.error('Error fetching user data: ', error);
                 setIsLoading(false);
                 return null;
             }
         },
-        [user, shelfNum, page, limit, category, query, dispatchError],
+        [user, shelfNum, page, limit, category, query, dispatch],
     )
     useEffect(() => {
         if (user) {
@@ -124,7 +127,7 @@ function ListAllBooks() {
             setIsOpen(false);
             fetchBooks();
         } catch (error) {
-            dispatchError(setError({ message: `Error changing shelf: ${error}` }));
+            dispatch(setError({ message: `Error changing shelf: ${error}` }));
             console.error('Error changing shelf:', error);
         }
     }
@@ -148,7 +151,7 @@ function ListAllBooks() {
         try {
             await fetchBooks();
         } catch (error) {
-            dispatchError(setError({ message: `Error fetching books: ${error}` }));
+            dispatch(setError({ message: `Error fetching books: ${error}` }));
             console.error('Error fetching books:', error);
         }
     };
