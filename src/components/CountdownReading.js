@@ -85,20 +85,18 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                 >
                                     {currentlyReadingBooks.map((book, index) => {
                                         return (
-                                            <>
-                                                <SwiperSlide
-                                                    key={book._id}
-                                                    className={`countdown__container ${index === activeIndex ? 'swiper-slide-active' : ''}`}
+                                            <SwiperSlide
+                                                key={book._id}
+                                                className={`countdown__container ${index === activeIndex ? 'swiper-slide-active' : ''}`}
 
-                                                >
+                                            >
 
-                                                    <div className='book__progress'>
-                                                        <LinearProgressWithLabel value={calculateProgress(book.progress, book.pageCount)} />
-                                                    </div>
+                                                <div className='book__progress' >
+                                                    <LinearProgressWithLabel value={calculateProgress(book.progress, book.pageCount)} />
+                                                </div>
 
-                                                    <CountdownBook book={book} />
-                                                </SwiperSlide>
-                                            </>
+                                                <CountdownBook book={book} />
+                                            </SwiperSlide>
                                         )
                                     })}
                                 </Swiper>
