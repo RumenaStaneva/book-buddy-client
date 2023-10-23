@@ -10,7 +10,7 @@ import { setError, clearError } from '../reducers/errorSlice';
 import '../styles/Profile.css'
 import ProfilePicture from '../components/ProfilePicture';
 import Diagram from '../components/Diagram';
-import { fetchHasReadingTimeAnytime, fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
+import { fetchHasReadingTimeAnytime } from "../reducers/readingTimeForTodaySlice";
 
 
 function Profile() {

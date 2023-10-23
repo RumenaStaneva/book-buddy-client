@@ -6,7 +6,7 @@ import { startOfWeek, endOfWeek, format, subWeeks } from 'date-fns';
 //get the reading time
 export const fetchReadingTimeForTheWeek = createAsyncThunk(
     'readingTime/fetchReadingTimeForTheWeek',
-    async ({ user, dataRange }, thunkAPI) => {
+    async ({ user, dataRange, startDate, endDate }, thunkAPI) => {
         let formattedStartDate, formattedEndDate;
         // console.log(dataRange);
 
@@ -39,9 +39,11 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
                 console.log('endOfWeekDay', endOfWeekDay);
                 break;
             }
-            case 'Anytime':
-                formattedStartDate = 'anytime';
-                formattedEndDate = 'anytime';
+            case 'Custom range':
+                const start = startDate;
+                const end = endDate;
+                formattedStartDate = format(start, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
+                formattedEndDate = format(end, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
                 break;
             default:
                 throw new Error('Invalid data range');
@@ -232,6 +234,9 @@ const options = {
 
                 state.isLoading = false;
                 state.errorMessage = '';
+            } else {
+                state.currentWeekData = [];
+                state.currentWeekDates = [];
             }
             state.isLoading = false;
             state.errorMessage = '';

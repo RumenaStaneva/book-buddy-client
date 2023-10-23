@@ -28,6 +28,7 @@
     "framer-motion": "^10.13.0",
     "react": "^18.2.0",
     "react-avatar-editor": "^13.0.0",
+    "react-calendar": "^4.6.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
