@@ -138,7 +138,7 @@ function Profile() {
                             </div>
                             <div className="profile__field">
                                 <label>Bio: </label>
-                                {hiddenBio && !bio.length > 0 ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
+                                {hiddenBio && !bio ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
                                 <div onClick={() => setHiddenBio(false)} className="profile__clickable" tabIndex="0">
                                     {!hiddenBio ? null : <span className="hidden">{bio}</span>}
                                 </div>
