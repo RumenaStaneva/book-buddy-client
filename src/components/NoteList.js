@@ -6,25 +6,26 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import Spinner from 'react-spinner-material';
 import Button from './Button';
 import Error from './Error';
+import { useDispatch } from "react-redux";
+import { setError, clearError } from '../reducers/errorSlice';
 
 
 const NotesList = ({ bookDetails }) => {
     const { user } = useAuthContext();
     const bookId = bookDetails._id;
-
     const [editedNoteId, setEditedNoteId] = useState(null);
-
     const [editNoteVisible, setEditNoteVisible] = useState(false);
     const [notesIsVisible, setNotesIsVisible] = useState(false);
     const [editedNoteText, setEditedNoteText] = useState('');
     const [note, setNote] = useState('');
     const [notes, setNotes] = useState([]);
     const [hasMoreNotes, setHasMoreNotes] = useState(true);
-    const [errorMessage, setErrorMessage] = useState('');
+    const dispatchError = useDispatch();
+
 
     const handleAddNote = async () => {
         if (note.trim().length === 0) {
-            setErrorMessage('Note can not be empty');
+            dispatchError(setError({ message: 'Note can not be empty' }))
             return;
         }
 
@@ -38,7 +39,7 @@ const NotesList = ({ bookDetails }) => {
                 body: JSON.stringify({ noteText: note, bookId }),
             })
             await response.json();
-            setErrorMessage('');
+            dispatchError(clearError());
             setNotesIsVisible(false);
             if (notes.length < 10) {
                 fetchNotes();
@@ -48,7 +49,7 @@ const NotesList = ({ bookDetails }) => {
                 setHasMoreNotes(true);
             }
         } catch (error) {
-            setErrorMessage('Error creating note: ', error);
+            dispatchError(setError({ message: `Error creating note: ${error}` }));
         }
     }
 
@@ -68,11 +69,11 @@ const NotesList = ({ bookDetails }) => {
 
                 }
             } catch (error) {
-                setErrorMessage('Error fetching notes data:', error);
+                dispatchError(setError({ message: `Error fetching notes data: ${error}` }));
                 console.error('Error fetching notes data:', error);
             }
         },
-        [user, bookId],
+        [user, bookId, dispatchError],
     );
 
     const fetchMoreNotes = useCallback(
@@ -91,11 +92,11 @@ const NotesList = ({ bookDetails }) => {
                     setHasMoreNotes(false);
                 }
             } catch (error) {
-                setErrorMessage('Error fetching more notes data:', error);
+                dispatchError(setError({ message: `Error fetching more notes data: ${error}` }));
                 console.error('Error fetching more notes data:', error);
             }
         },
-        [user, bookId, notes],
+        [user, bookId, notes, dispatchError],
     );
 
     useEffect(() => {
@@ -137,7 +138,7 @@ const NotesList = ({ bookDetails }) => {
             handleCancelEdit();
             notes.map(note => note._id === editedNote._id ? note.noteText = editedNote.noteText : note);
         } catch (error) {
-            setErrorMessage('Error updating note:', error);
+            dispatchError(setError({ message: `Error updating note: ${error}` }));
             console.error('Error updating note:', error);
         }
     }
@@ -163,7 +164,7 @@ const NotesList = ({ bookDetails }) => {
             const updatedNotes = notes.filter(note => note._id !== deletedNoteId);
             setNotes(updatedNotes);
         } catch (error) {
-            setErrorMessage(error.error);
+            dispatchError(setError({ message: error.error }));
         }
     }
 
@@ -178,9 +179,7 @@ const NotesList = ({ bookDetails }) => {
                         <label className='notes__add-label' htmlFor="addNote">Create note for this book: </label>
                         <MdOutlineCancel onClick={() => setNotesIsVisible(false)} />
                     </div>
-                    {errorMessage.length > 0 ? (
-                        <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                    ) : null}
+                    <Error />
                     <textarea className='notes__add-textarea' name="addNote" id="addNote" cols="100" rows="10" onChange={(e) => setNote(e.target.value)}></textarea>
                     <Button className='cta-btn' onClick={() => handleAddNote()}>Add note</Button>
                 </div>

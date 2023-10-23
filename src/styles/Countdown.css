@@ -1,0 +1,85 @@
+.swiper-books__container {
+    width: 550px;
+}
+
+.countdown__container .book {
+    max-width: 550px;
+    max-height: 620px;
+    height: 100%;
+    padding: 0 40px;
+    margin-bottom: 50px;
+}
+
+.countdown__container .book__details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(237, 201, 191, 0.44);
+    border-radius: 10px;
+    margin-left: 10px;
+    height: 620px;
+}
+
+.countdown__container .book__details .title-author__container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.countdown__container .book__details .book__title {
+    text-align: center;
+    padding: 5px;
+}
+
+.countdown__container .book__details .book__image {
+    max-height: 430px;
+}
+
+.reading-countdown__container .book__progress {
+    padding: 0 42px 0 70px;
+    position: absolute;
+    width: 100%;
+    bottom: 50px;
+    z-index: 1;
+}
+
+.countdown-section {
+    width: 300px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.countdown-message {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+
+.goal-section {
+    margin-bottom: 20px;
+}
+
+.goal-button {
+    border: 1px solid #D92868;
+    border-radius: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: rgba(237, 201, 191, 0.44);
+    cursor: pointer;
+}
+
+.goal-input {
+    width: 60px;
+}
+
+.action-buttons {
+    margin-top: 20px;
+}
+
+.time-info {
+    margin-top: 10px;
+}

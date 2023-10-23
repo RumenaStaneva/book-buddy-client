@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
@@ -10,8 +10,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import categoryColors from "../constants/categoryColors";
 import { GiBookmarklet } from "react-icons/gi";
-
-
 import 'swiper/css';
 import 'swiper/css/pagination';
 import CardContent from '@mui/material/CardContent';
@@ -19,48 +17,31 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Error from '../components/Error';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllBooks } from '../reducers/booksSlice';
 
 function Library() {
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [wantToReadBooks, setWantToReadBooks] = useState([]);
-    const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState([]);
-    const [readBooks, setReadBooks] = useState([]);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const { user } = useAuthContext();
-
-    const fetchBooks = useCallback(
-        async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/library`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                });
-
-                const data = await response.json();
-                setWantToReadBooks(data.wantToReadBooks);
-                setCurrentlyReadingBooks(data.currntlyReadingBooks);
-                setReadBooks(data.readBooks);
-                setIsLoading(false);
-            } catch (error) {
-                setErrorMessage('Error fetching user data: ', error);
-                console.error('Error fetching user data: ', error);
-                setIsLoading(false);
-            }
-        },
-        [user],
-    )
-
+    const dispatchRedux = useDispatch();
+    const { wantToReadBooks, currentlyReadingBooks, readBooks, isLoading } = useSelector((state) => state.books);
     useEffect(() => {
-        if (user) {
-            fetchBooks();
-        }
-    }, [user, fetchBooks]);
+        dispatchRedux(fetchAllBooks(user));
+    }, [dispatchRedux, user]);
 
     useEffect(() => {
         document.title = `User's library`;
     }, []);
+    useEffect(() => {
+        const clearMessage = () => {
+            setSuccessMessage('');
+        };
+
+        if (successMessage.length > 0) {
+            const timer = setTimeout(clearMessage, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [successMessage]);
 
     return (
         <>
@@ -72,7 +53,6 @@ function Library() {
                     (readBooks && readBooks.length > 0)
                     ? `User's library`
                     : `No books in ${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`} />
-
             }
 
             <main className='books__library'>
@@ -82,10 +62,12 @@ function Library() {
                     </div>
                 ) : (
                     <>
-                        {console.log(currentlyReadingBooks.length, wantToReadBooks.length, readBooks.length)}
-                        {errorMessage.length > 0 ? (
-                            <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                        ) : null}
+                        {successMessage.length > 0 ?
+                            <div className={`success-message__container ${successMessage.length > 0 ? 'fade-out' : ''}`}>
+                                <p>{successMessage}</p>
+                            </div>
+                            : null}
+                        <Error />
                         {!currentlyReadingBooks.length > 0 && !wantToReadBooks.length > 0 && !readBooks.length > 0 ?
                             <div className='shelf-header d-flex' style={{ 'marginBottom': '60px', 'justifyContent': 'center' }}>
                                 <p>Currently there are no books in your library. You can search and add one from <NavLink to={'/'}>here.</NavLink></p>
@@ -125,7 +107,7 @@ function Library() {
                                                     >
                                                         <LibraryBook
                                                             book={book}
-                                                            fetchBooks={fetchBooks}
+                                                            setSuccessMessage={setSuccessMessage}
                                                         />
                                                     </SwiperSlide>
                                                 ))
@@ -209,7 +191,7 @@ function Library() {
                             readBooks ?
                                 <>
                                     <div className='shelf-header'>
-                                        <h2 className='shelf-title'>Already read</h2>
+                                        <h2 className='shelf-title'>Already read ({readBooks.length})</h2>
                                         <a href='/books/see-all?shelf=2' className='cta-btn'>See all</a>
                                     </div>
                                     <div className='books__container books-colorful__container'>

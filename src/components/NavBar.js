@@ -67,7 +67,9 @@ const NavBar = () => {
                 <ul className='nav__list' role='menubar'>
                     {user && (
                         <>
-                            <p className='nav__username'>Hi <a href='/users/profile'>{user.username !== '' ? user.username : user.email.split('@')[0]}</a></p>
+                            {<a href='/users/profile' className='nav__profile-picture'>
+                                <img width={50} height={50} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile" />
+                            </a>}
                             <li className='nav__item'>
                                 <NavLink onClick={handleClick} className='nav__link' to='/'>Logout</NavLink>
                             </li>

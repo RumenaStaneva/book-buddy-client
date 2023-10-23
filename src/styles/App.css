@@ -89,3 +89,20 @@ textarea {
 .fw-600 {
     font-weight: 600;
 }
+
+.input-field.error input {
+    border: 1px solid red;
+}
+
+.cta-btn[disabled] {
+    background-color: #cccccc;
+    color: #666666;
+    border-color: #666666;
+    cursor: not-allowed;
+}
+
+.heading {
+    font-size: 36px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}

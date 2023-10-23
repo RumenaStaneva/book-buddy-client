@@ -5,9 +5,10 @@ import Button from "../components/Button";
 import Error from "../components/Error";
 import { useSignup } from "../hooks/useSignUp";
 import '../styles/AuthenticationForms.css'
-import VerificationEmailSent from "./VerificationEmailSent";
 import Spinner from 'react-spinner-material';
-
+import { GoogleLogin } from '@react-oauth/google';
+import { useDispatch } from "react-redux";
+import { setError, clearError } from '../reducers/errorSlice';
 
 function SignUp() {
     const [email, setEmail] = useState('');
@@ -16,15 +17,17 @@ function SignUp() {
     const [identicalPassords, setIdenticalPasswords] = useState(true);
     const [username, setUsername] = useState('');
     const [verificationEmailSent, setVerificationEmailSent] = useState(false);
-    const { signup, errorMessage, isLoading, setErrorMessage, setIsLoading } = useSignup();
+    const { signup, signUpWithGoogleAuth, isLoading, setIsLoading } = useSignup();
+    const dispatchError = useDispatch();
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrorMessage('');
+        dispatchError(clearError());
         setIsLoading(true);
         if (password !== repeatPassword) {
             setIdenticalPasswords(false);
-            setErrorMessage('Passwords should match');
+            dispatchError(setError({ message: 'Passwords should match' }));
             return;
         }
         try {
@@ -42,6 +45,15 @@ function SignUp() {
             setPassword('');
             setRepeatPassword('');
             setUsername('');
+        }
+    }
+
+    const signupWithGoogle = async (data) => {
+        try {
+            await signUpWithGoogleAuth(data);
+        } catch (error) {
+            console.log(error);
+            dispatchError(setError({ message: error.message }));
         }
     }
 
@@ -87,13 +99,17 @@ function SignUp() {
                             {!identicalPassords ?
                                 <p className="form__error">Passwords should match</p>
                                 : null}
-                            {errorMessage.length > 0 ? (
-                                <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                            ) : null}
-
+                            <Error />
                             <Button type='submit' className='btn--cta' disabled={isLoading} onClick={handleSubmit}>Sign up</Button>
 
                             < p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
+                            <div className="google-auth-btn__container">
+                                <GoogleLogin
+                                    buttonText="Sign in with Google"
+                                    onSuccess={(response) => {
+                                        signupWithGoogle(response);
+                                    }} onError={error => dispatchError(setError({ message: error }))} />
+                            </div>
                         </form>
                     )}
                 </div>

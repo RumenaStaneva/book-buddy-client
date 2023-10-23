@@ -1,8 +1,9 @@
-import React from "react";
 import '../styles/Modal.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useDispatch } from "react-redux";
+import { setError, clearError } from '../reducers/errorSlice';
 import BookCategories from "../constants/bookCategories";
 import Button from "./Button";
 import Modal from './Dialog'
@@ -12,16 +13,17 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     const [shelf, setShelf] = useState(null);
     const [category, setCategory] = useState(null);
     const [bookToAdd, setBookToAdd] = useState(null);
-    const [errorMessage, setErrorMessage] = useState('');
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
     const { user } = useAuthContext();
+    const errorRef = useRef(null);
     const shelfOptions = [
         { value: 0, label: 'Want to read' },
         { value: 1, label: 'Currently reading' },
         { value: 2, label: 'Read' }
     ];
+    const dispatchError = useDispatch();
 
     const handleDescriptionChange = (e) => {
         setUpdatedDescription(e.target.value);
@@ -39,15 +41,16 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
         }
     };
-
     const handleCategorySelect = (selectedCategory) => {
         setCategory(selectedCategory);
     };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!user) {
-            setErrorMessage('You have to be logged in to add books!');
+            dispatchError(setError({ message: 'You have to be logged in to add books!' }));
+            setTimeout(() => {
+                executeScroll();
+            }, 10);
             return;
         }
         const { bookApiId,
@@ -70,42 +73,52 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             shelf: shelf
         });
     };
-
-    useEffect(() => {
-        try {
-            if (bookToAdd) {
-
-                fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/add-to-shelf`, {
-                    method: 'POST',
-                    body: JSON.stringify(bookToAdd),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}`
-                    },
-                })
-                    .then(function (response) {
-                        if (!response.ok) {
-                            return response.json().then(data => {
-                                throw new Error(data.error);
-                            });
-                        }
-                        setErrorMessage('');
-                        setIsOpen(false);
-                        onBookAdded(bookToAdd.title);
-                        return response.json();
-                    })
-                    .then(function (data) {
-                        setErrorMessage('');
-                    })
-                    .catch(function (error) {
-                        setErrorMessage(error.message);
-                    });
-            }
-        } catch (error) {
-            setErrorMessage(error.message);
+    const executeScroll = () => {
+        if (errorRef.current) {
+            errorRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest',
+            });
         }
+    };
+    useEffect(() => {
+        const addBookToShelf = async () => {
+            try {
+                if (bookToAdd) {
+                    const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/add-to-shelf`, {
+                        method: 'POST',
+                        body: JSON.stringify(bookToAdd),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${user.token}`
+                        },
+                    });
+
+                    if (!response.ok) {
+                        const data = await response.json();
+                        throw new window.Error(data.error);
+                    }
+
+                    dispatchError(clearError());
+                    setIsOpen(false);
+                    onBookAdded(bookToAdd.title);
+                }
+            } catch (error) {
+                dispatchError(setError({ message: error.message }));
+                if (errorRef.current) {
+                    errorRef.current.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+                }
+            }
+        };
+
+        addBookToShelf();
+
         setBookToAdd(null);
-    }, [bookToAdd, user, onBookAdded, setIsOpen]);
+    }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError, errorRef]);
 
     return (
         <Modal
@@ -115,9 +128,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             setIsOpen={setIsOpen}
             content={
                 <>
-                    {errorMessage.length > 0 ? (
-                        <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                    ) : null}
+                    <Error ref={errorRef} />
                     <form onSubmit={handleSubmit} className="add-book__form">
                         <div className="modal__section">
                             <label htmlFor="thumbnail">Thumbnail</label>

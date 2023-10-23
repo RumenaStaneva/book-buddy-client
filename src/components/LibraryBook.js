@@ -8,27 +8,27 @@ import categoryColors from "../constants/categoryColors";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import '../styles/LibraryBook.css'
 import Error from './Error';
+import { useDispatch } from "react-redux";
+import { fetchAllBooks, calculateProgress } from '../reducers/booksSlice';
+import { clearError, setError } from '../reducers/errorSlice';
 
-function LibraryBook({ book, fetchBooks }) {
+function LibraryBook({ book, setSuccessMessage }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
-    const [errorMessage, setErrorMessage] = useState('');
     const { user } = useAuthContext();
-
+    const dispatchRedux = useDispatch();
+    const dispatchError = useDispatch();
     const bookTotalPages = book.pageCount;
 
-    const calculateProgress = () => {
-        const totalPagesNumber = parseInt(bookTotalPages, 10);
-        if (totalPagesNumber === 0) {
-            return 0;
-        }
-        return Math.floor((bookPageProgress / totalPagesNumber) * 100);
-    };
-
-    const updateProgress = async (currentBook) => {
+    const updateProgress = async (currentBook, bookRead) => {
         try {
-            currentBook.progress = parseInt(bookPageProgress);
+            const mutableBook = { ...currentBook };
+            if (bookRead) {
+                mutableBook.progress = mutableBook.pageCount;
+            } else {
+                mutableBook.progress = parseInt(bookPageProgress);
+            }
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
@@ -36,21 +36,26 @@ function LibraryBook({ book, fetchBooks }) {
                     'Authorization': `Bearer ${user.token}`,
                 },
                 body: JSON.stringify({
-                    book: currentBook
+                    book: mutableBook
                 }),
             });
             const data = await response.json();
-            setBookPageProgress(data.book.progress);
-            setInputVisible(false);
-            const bookProgressPercent = calculateProgress();
-            setBookProgressInPercentage(parseInt(bookProgressPercent));
-            if (data.book.progress === parseInt(bookTotalPages)) {
-                //         //TODO Make congarts disappearing message when book is read
-                fetchBooks();
+            if (response.ok) {
+                setBookPageProgress(data.book.progress);
+                setInputVisible(false);
+                const bookProgressPercent = calculateProgress(bookPageProgress, bookTotalPages);
+                setBookProgressInPercentage(parseInt(bookProgressPercent));
+                if (data.book.progress >= parseInt(bookTotalPages)) {
+                    setSuccessMessage(`Hurray, you successfully read ${data.book.title}`);
+                    dispatchRedux(fetchAllBooks(user))
+                }
+                dispatchError(clearError());
+            } else {
+                dispatchError(setError({ message: data.message }))
             }
         } catch (error) {
-            setErrorMessage('Error fetching user data:', error);
-            console.error('Error fetching user data:', error);
+            dispatchError(setError({ message: `Error fetching book's data ${error.message}` }))
+            console.error('Error fetching book`s data:', error);
         }
     }
 
@@ -78,9 +83,7 @@ function LibraryBook({ book, fetchBooks }) {
                                 className='book__image'
                             />
                             <div className='book__details'>
-                                {errorMessage.length > 0 ? (
-                                    <Error message={errorMessage} onClose={() => setErrorMessage('')} />
-                                ) : null}
+                                <Error />
                                 <h5 className='book__title book-font__outline'>
                                     {book.title}
                                 </h5>
@@ -112,7 +115,10 @@ function LibraryBook({ book, fetchBooks }) {
                                                 onChange={(e) => setBookPageProgress(e.target.value)}
                                             />
                                         </div>
-                                        <Button className='cta-btn' type='submit' onClick={() => updateProgress(book)}>Update</Button>
+                                        <div className="d-flex">
+                                            <Button className='cta-btn btn-sm cta-btn__alt' onClick={() => updateProgress(book, true)}>I've read this book</Button>
+                                            <Button className='cta-btn btn-sm' type='submit' onClick={() => updateProgress(book)}>Update</Button>
+                                        </div>
                                     </>
                                 ) : (
                                     <>
@@ -123,7 +129,7 @@ function LibraryBook({ book, fetchBooks }) {
                                             }}
                                             href={`/books/book-details/${book._id}`}>See more details <AiOutlineArrowRight /></a>
                                         <div className='book__progress'>
-                                            <LinearProgressWithLabel value={bookProgressInPercentage != null ? bookProgressInPercentage : calculateProgress()} />
+                                            <LinearProgressWithLabel value={bookProgressInPercentage != null ? bookProgressInPercentage : calculateProgress(bookPageProgress, bookTotalPages)} />
                                         </div>
                                         <Button className='cta-btn' onClick={() => setInputVisible(true)}>Update progress</Button>
                                     </>
