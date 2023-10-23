@@ -8,7 +8,6 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
     'readingTime/fetchReadingTimeForTheWeek',
     async ({ user, dataRange, startDate, endDate }, thunkAPI) => {
         let formattedStartDate, formattedEndDate;
-        console.log(user);
 
         switch (dataRange) {
             case 'Current week': {
@@ -17,8 +16,6 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
                 const endOfWeekDay = endOfWeek(today, { weekStartsOn: 1 });
                 formattedStartDate = format(startOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
                 formattedEndDate = format(endOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
-                console.log('startOfWeekDay', startOfWeekDay);
-                console.log('endOfWeekDay', endOfWeekDay);
                 break;
             }
             case 'Last week': {
@@ -35,8 +32,6 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
                 const startOfWeekDay = endOfWeek(subWeeks(today, 3), { weekStartsOn: 1 });
                 formattedStartDate = format(startOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
                 formattedEndDate = format(endOfWeekDay, 'yyyy-MM-dd HH:mm:ss', { timeZone: 'UTC' });
-                console.log('startOfWeekDay', startOfWeekDay);
-                console.log('endOfWeekDay', endOfWeekDay);
                 break;
             }
             case 'Custom range':
@@ -62,7 +57,6 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
             }
 
             const data = await response.json();
-            console.log(data);
             return data;
         } catch (error) {
             console.error(error);
@@ -100,8 +94,6 @@ export const fetchHasReadingTimeAnytime = createAsyncThunk(
 export const updateReadingDataInDatabase = createAsyncThunk(
     'readingTime/updateReadingDataInDatabase',
     async ({ date, totalReadingGoalForTheDay, timeInSecondsForTheDayReading, user, currentlyReadingBook }, thunkAPI) => {
-        console.log('in slice ', date, timeInSecondsForTheDayReading, user, currentlyReadingBook);
-        console.log('updated called!!!');
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/update-reading-time`, {
                 method: 'PUT',
@@ -117,7 +109,6 @@ export const updateReadingDataInDatabase = createAsyncThunk(
                 }),
             });
             const data = await response.json();
-            console.log(data);
             return data;
         } catch (error) {
             thunkAPI.dispatch(setError({ message: `Error fetching reading time in the database: ${error.message}` }));
@@ -125,35 +116,6 @@ export const updateReadingDataInDatabase = createAsyncThunk(
         }
     }
 );
-
-// export const fetchReadingTimeForRange = createAsyncThunk(
-//     'readingTime/fetchReadingTimeForRange',
-//     async ({startDate,endDate, user}, thunkAPI) =>{
-//         try {
-//             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
-//                 headers: {
-//                     Authorization: `Bearer ${user.token}`,
-//                 },
-//                 body: {
-//                     startDate,
-//                     endDate
-//                 }
-//             });
-
-//             if (!response.ok) {
-//                 throw new Error(`Error fetching reading time: ${response.statusText}`);
-//             }
-
-//             const data = await response.json();
-//             return data;
-//         } catch (error) {
-//             console.error(error);
-//             thunkAPI.dispatch(setError({ message: `Error updating time: ${error.message}` }));
-//             throw new Error(error.message);
-//         }
-//     }
-// )
-
 
 const initialState = {
     currentWeekData: null,
@@ -219,14 +181,11 @@ const options = {
                 // Set today's date properties in the state
                 if (todayIndex !== -1) {
                     state.dateToday = currentWeekDates[todayIndex];
-                    console.log('readingTimeObject.readingTime[todayIndex]', readingTimeObject.readingTime[todayIndex]);
-
                     state.screenTimeInSeconds = readingTimeObject.readingTime[todayIndex].screenTimeInSeconds;
                     state.weeklyGoalAveragePerDay = readingTimeObject.readingTime[todayIndex].weeklyGoalAveragePerDay;
                     state.timeInSecondsForTheDayReading = readingTimeObject.readingTime[todayIndex].timeInSecondsForTheDayReading;
                     state.timeInSecondsLeftForAchievingReadingGoal = readingTimeObject.readingTime[todayIndex].timeInSecondsLeftForAchievingReadingGoal;
                     state.totalReadingGoalForTheDay = readingTimeObject.readingTime[todayIndex].totalReadingGoalForTheDay;
-                    console.log('readingTimeObject.readingTime[todayIndex].timeInSecondsForTheDayReading', readingTimeObject.readingTime[todayIndex].timeInSecondsForTheDayReading);
                     state.goalAchievedForTheDay = readingTimeObject.readingTime[todayIndex].goalAchievedForTheDay;
                 }
 

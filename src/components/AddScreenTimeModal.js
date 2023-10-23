@@ -175,7 +175,6 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             if (!response.ok) {
                 throw new window.Error(data.error);
             }
-            console.log(data);
             setShowConfirmationDialog(false);
             setIsLoading(false);
             dispatchError(clearError());

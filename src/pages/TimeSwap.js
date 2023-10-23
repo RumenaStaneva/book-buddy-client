@@ -25,7 +25,6 @@ const TimeSwap = () => {
     useEffect(() => {
         dispatch(fetchHasReadingTimeAnytime(user));
         dispatch(fetchAllBooks(user));
-        console.log('hahahahah');
         dispatch(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week' }));
     }, [dispatch, user]);
     return (
