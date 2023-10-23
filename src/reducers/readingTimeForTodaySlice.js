@@ -8,7 +8,7 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
     'readingTime/fetchReadingTimeForTheWeek',
     async ({ user, dataRange, startDate, endDate }, thunkAPI) => {
         let formattedStartDate, formattedEndDate;
-        // console.log(dataRange);
+        console.log(user);
 
         switch (dataRange) {
             case 'Current week': {
@@ -202,12 +202,10 @@ const options = {
         [fetchReadingTimeForTheWeek.fulfilled]: (state, action) => {
             const readingTimeObject = action.payload;
             if (readingTimeObject.readingTime.length > 0) {
-
                 const currentWeekDates = readingTimeObject.readingTime.map(item => {
                     const dateObject = new Date(item.date);
                     return dateObject.toISOString(); // Convert to ISO string to keep the UTC format
                 });
-
 
                 state.currentWeekData = readingTimeObject.readingTime;
                 state.currentWeekDates = currentWeekDates;
@@ -263,7 +261,6 @@ const options = {
             state.errorMessage = '';
         },
         [updateReadingDataInDatabase.fulfilled]: (state, action) => {
-            console.log('action.payload', action.payload);
             if (state.dataRange === 'Current week') {
                 const data = action.payload.updatedReadingTimeRecord;
                 state.goalAchievedForTheDay = data.goalAchievedForTheDay;

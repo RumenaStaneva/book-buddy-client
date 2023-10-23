@@ -140,6 +140,7 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
 
         // Check for invalid inputs
         if (!isValid) {
+            setShowConfirmationDialog(true);
             return;
         }
 
@@ -174,12 +175,12 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             if (!response.ok) {
                 throw new window.Error(data.error);
             }
-
+            console.log(data);
             setShowConfirmationDialog(false);
             setIsLoading(false);
             dispatchError(clearError());
             setIsOpen(false);
-            dispatchReadingTime(fetchReadingTimeForTheWeek(user));
+            dispatchReadingTime(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week' }));
 
         } catch (error) {
             setIsLoading(false);

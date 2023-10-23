@@ -75,7 +75,7 @@ function Diagram() {
         const startDate = selectedDateRange[0];
         const endDate = selectedDateRange[1];
 
-        dispatchRedux(fetchReadingTimeForTheWeek({ user, dataRange: 'Custom range', startDate, endDate }));
+        dispatchRedux(fetchReadingTimeForTheWeek({ user, dataRange: 'Custom range' }));
         dispatchRedux(fetchHasReadingTimeAnytime(user));
     }, [dispatchRedux, user, selectedDateRange]);
 

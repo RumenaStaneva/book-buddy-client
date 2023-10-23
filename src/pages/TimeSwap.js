@@ -14,8 +14,7 @@ import '../styles/TimeSwap.css'
 const TimeSwap = () => {
     const [isOpenAddScreenTime, setIsOpenAddScreenTime] = useState(false);
     const { user } = useAuthContext();
-    const dispatchBooks = useDispatch();
-    const dispatchReadingTime = useDispatch();
+    const dispatch = useDispatch();
     const { currentWeekData, hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
 
@@ -24,10 +23,11 @@ const TimeSwap = () => {
     }, []);
 
     useEffect(() => {
-        dispatchReadingTime(fetchHasReadingTimeAnytime(user));
-        dispatchBooks(fetchAllBooks(user));
-        dispatchReadingTime(fetchReadingTimeForTheWeek(user));
-    }, [dispatchBooks, dispatchReadingTime, user]);
+        dispatch(fetchHasReadingTimeAnytime(user));
+        dispatch(fetchAllBooks(user));
+        console.log('hahahahah');
+        dispatch(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week' }));
+    }, [dispatch, user]);
     return (
         <>
             <NavBar />
