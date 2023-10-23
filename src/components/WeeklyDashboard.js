@@ -4,13 +4,9 @@ import Error from '../components/Error';
 import '../styles/ReadingTimeTable.css'
 import CountdownReading from "./CountdownReading";
 import { useSelector } from "react-redux";
-import { Button } from "@mui/material";
+import Button from "./Button";
 import { useDispatch } from "react-redux";
-import { setDateToday } from "../reducers/readingTimeForTodaySlice";
-
-
-// import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse, addWeeks } from 'date-fns';
-
+// import { setDateToday } from "../reducers/readingTimeForTodaySlice";
 
 
 const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
@@ -97,14 +93,13 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                 <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
             </div>
         ) : (
-            !readingTimeData ? (
-                <>
-                    <h1>No reading time data for this week</h1>
-                    <Button onClick={() => setIsOpenAddScreenTime(true)}>Add from here</Button>
-                </>
-            ) : (
-                <>
-                    {/* <Error /> */}
+            <main className="weekly-dashboard">
+                {!readingTimeData || !readingTimeData.length > 0 ? (
+                    <>
+                        <h1 className="heading">No reading time data for this week</h1>
+                        <Button className="cta-btn" onClick={() => setIsOpenAddScreenTime(true)}>Add from here</Button>
+                    </>
+                ) : (
                     <div className="table-container">
                         <div className="tabs-container">
                             <div className="tab-headers header-row d-flex">
@@ -140,8 +135,8 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                             </div>
                         </div>
                     </div>
-                </>
-            )
+                )}
+            </main>
         )
     );
 

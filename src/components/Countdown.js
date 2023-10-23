@@ -109,9 +109,6 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
 
     const stopTimer = () => {
         playStopSound();
-        console.log('timePassed', timePassed);
-        console.log('timeInSecondsLeftForAchievingReadingGoal', timeInSecondsLeftForAchievingReadingGoal);
-        console.log('timeInSecondsLeftForAchievingReadingGoal + timePassed', timeInSecondsLeftForAchievingReadingGoal + timePassed);
         if (timerMode === "decrement") {
 
             dispatch(setTimeInSecondsLeftForAchievingReadingGoal(timeLeft));
@@ -149,17 +146,10 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     useEffect(() => {
         if (timerReset) {
             setTimeLeft(0);
-            // setTimePassed(0);
             setTimerFinished(false);
             dispatch(setTimerStarted(true));
         }
     }, [timerReset, dispatch]);
-
-    // console.log('timeLeft', timeLeft);
-    // console.log('timerActive', timerActive);
-    // console.log(timerMode);
-    // console.log('timePassed', timePassed);
-    // console.log('timeInSecondsForTheDayReading', timeInSecondsForTheDayReading);
 
     return (
         <>

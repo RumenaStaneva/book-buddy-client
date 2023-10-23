@@ -100,3 +100,9 @@ textarea {
     border-color: #666666;
     cursor: not-allowed;
 }
+
+.heading {
+    font-size: 36px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}

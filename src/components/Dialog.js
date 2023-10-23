@@ -16,7 +16,7 @@ const Modal = ({ title, content, setIsOpen, subtitle, small, disableCloseButton 
             }} />
             <div className={`modal ${small ? 'modal-sm' : ''}`}>
                 <div className="modalHeader">
-                    <h3 className="heading">{title}</h3>
+                    <h3 className="modal-heading">{title}</h3>
                     <p>{subtitle}</p>
                 </div>
                 {!disableCloseButton ?

@@ -9,7 +9,7 @@ import '../styles/Calendar.css'
 import Modal from './Dialog'
 import Error from './Error'
 import ConfirmationDialog from './ConfirmationDialog';
-import { fetchHasReadingTimeAnytime, fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
+import { fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse } from 'date-fns';
 
 const AddScreenTimeModal = ({ setIsOpen }) => {
@@ -20,7 +20,6 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
     const [formattedStartDate, setFormattedStartDate] = useState('');
     const [formattedEndDate, setFormattedEndDate] = useState('');
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-    const [confirmedInputIndex, setConfirmedInputIndex] = useState(null);
     const { user } = useAuthContext();
     const dispatchError = useDispatch();
     const dispatchReadingTime = useDispatch();
@@ -36,7 +35,6 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
                 const lastWeekEnd = endOfWeek(subWeeks(currentDate, 1), { weekStartsOn: 1 });
                 const datesFromLastWeek = eachDayOfInterval({ start: lastWeekStart, end: lastWeekEnd });
                 setDatesFromLastWeek(datesFromLastWeek);
-                const formattedDates = datesFromLastWeek.map(date => format(date, 'MMMM dd, yyyy'));
 
                 const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/week-dates`, {
                     method: 'GET',
@@ -47,7 +45,6 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    // console.log('data', data);
                     setScreenTimeData(prevState => {
                         return prevState.map((item, index) => {
                             return {
@@ -83,6 +80,20 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             time: value
         };
         setScreenTimeData(newData);
+        // Check if the input value is '00:00' and mark it as invalid
+        if (value === '00:00') {
+            setInvalidInputs((prevInvalidInputs) => {
+                if (!prevInvalidInputs.includes(index)) {
+                    return [...prevInvalidInputs, index];
+                }
+                return prevInvalidInputs;
+            });
+        } else {
+            // Remove the index from invalidInputs if the value is not '00:00'
+            setInvalidInputs((prevInvalidInputs) =>
+                prevInvalidInputs.filter((item) => item !== index)
+            );
+        }
     };
 
     const convertToSeconds = (time, index) => {
@@ -92,13 +103,12 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
         const timePattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
         if (!timePattern.test(time)) {
-            setInvalidInputs((prevInvalidInputs) => [...prevInvalidInputs, index]);
             throw new window.Error('Invalid time format. Please use HH:MM format.');
         } else {
             dispatchError(clearError());
-            setInvalidInputs((prevInvalidInputs) =>
-                prevInvalidInputs.filter((item) => item !== index)
-            );
+            // setInvalidInputs((prevInvalidInputs) =>
+            //     prevInvalidInputs.filter((item) => item !== index)
+            // );
             const [hours, minutes] = time.split(':');
             return parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60;
         }
@@ -106,17 +116,31 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
     };
     const handleConfirmDialogCancel = () => {
         setShowConfirmationDialog(false);
-        setConfirmedInputIndex(null);
     };
 
     const handleConfirmDialogConfirm = () => {
         setShowConfirmationDialog(false);
         saveScreenTime();
     };
+    const validateInputs = () => {
+        // Validate inputs and mark invalid ones
+        const invalidInputs = screenTimeData.reduce((invalidInputs, item, index) => {
+            if (item.time === '00:00') {
+                invalidInputs.push(index);
+            }
+            return invalidInputs;
+        }, []);
+        setInvalidInputs(invalidInputs);
+        return invalidInputs.length === 0;
+    };
+
     const checkScreenTime = async () => {
         // Check for invalid inputs
-        if (invalidInputs.length > 0) {
-            console.log("Invalid inputs detected. Data not saved.");
+        const isValid = validateInputs();
+
+        // Check for invalid inputs
+        if (!isValid) {
+            setShowConfirmationDialog(true);
             return;
         }
 
@@ -135,7 +159,7 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             const screenTimeInSeconds = screenTimeData.map((item, index) => {
                 return {
                     date: formattedDates[index],
-                    timeInSecond: convertToSeconds(item.time, index)
+                    timeInSeconds: convertToSeconds(item.time, index)
                 }
             });
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/save-time`, {
@@ -151,12 +175,11 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             if (!response.ok) {
                 throw new window.Error(data.error);
             }
-
             setShowConfirmationDialog(false);
             setIsLoading(false);
             dispatchError(clearError());
             setIsOpen(false);
-            dispatchReadingTime(fetchReadingTimeForTheWeek(user));
+            dispatchReadingTime(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week' }));
 
         } catch (error) {
             setIsLoading(false);
@@ -201,7 +224,7 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
                                         </div>
                                     ))}
                                 </div>
-                                <button onClick={checkScreenTime}>Save Screen Time</button>
+                                <button className='cta-btn cta-sm' onClick={checkScreenTime}>Save Screen Time</button>
                             </>
 
                         }
