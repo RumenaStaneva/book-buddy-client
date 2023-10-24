@@ -25,21 +25,12 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     ];
     const dispatchError = useDispatch();
 
-    const handleDescriptionChange = (e) => {
-        setUpdatedDescription(e.target.value);
-    };
-    const handlePageCountChange = (e) => {
-        setUpdatedPageCount(e.target.value);
-    };
     const handleOptionSelect = (selectedOption) => {
         const selectedValue = shelfOptions.find(option => option.label === selectedOption)?.value;
         if (selectedValue !== undefined) {
             setShelf(selectedValue);
 
         }
-    };
-    const handleCategorySelect = (selectedCategory) => {
-        setCategory(selectedCategory);
     };
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -207,11 +198,11 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                         </div>
                         <div className="modal__section">
                             <label htmlFor="description">Description</label>
-                            <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>
+                            <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={(e) => setUpdatedDescription(e.target.value)}></textarea>
                         </div>
                         <div className="modal__section">
                             <label htmlFor="pageCount">Book Pages</label>
-                            <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
+                            <input type="number" name="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
                         </div>
                         <div className="modal__section">
                             <label htmlFor="bookImage">Book image</label>
@@ -225,9 +216,9 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                             />
                         </div>
                         <div className="modal__section">
-                            <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={category !== null ? category : null} />
+                            <Dropdown options={Object.values(BookCategories)} onSelect={(selectedCategory) => setCategory(selectedCategory)} selectedOption={category !== null ? category : null} />
                         </div>
-                        <Button type="submit" className="cta-button" onClick={handleSubmit}>
+                        <Button type="submit" className="cta-button">
                             Add Book
                         </Button>
                     </form>
