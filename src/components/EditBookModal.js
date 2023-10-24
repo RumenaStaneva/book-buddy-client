@@ -219,7 +219,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                         <AiOutlineDelete className="modal__delete-btn"
                             onClick={handleDeleteBook} />
 
-                        <Error ref={errorRef} />
+                        <Error />
                         <form onSubmit={handleSubmit} className="add-book__form">
                             <div className="modal__section">
                                 <label htmlFor="thumbnail">Thumbnail</label>

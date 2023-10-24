@@ -1,24 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from './Button';
 import { IoIosClose } from 'react-icons/io'
 import { useDispatch, useSelector } from "react-redux";
 import { clearError } from '../reducers/errorSlice';
 
-const Error = React.forwardRef((props, ref) => {
-    const dispatchError = useDispatch();
+const Error = () => {
+    const dispatch = useDispatch();
     const { errorMessage, hasError } = useSelector((state) => state.error);
+    useEffect(() => {
+        // Dispatch clearError action when the component mounts or when error state changes
+        dispatch(clearError());
+
+        // Clean up the error when the component unmounts
+        return () => {
+            dispatch(clearError());
+        };
+    }, [dispatch]); // Dependency array ensures the effect runs when dispatch or error state changes
 
     return (
         hasError ?
-            <div ref={ref} className="error-message__container">
+            <div className="error-message__container">
                 <p>{errorMessage}</p>
 
-                <Button className="close-btn" onClick={() => dispatchError(clearError())}>
+                <Button className="close-btn" onClick={() => dispatch(clearError())}>
                     <IoIosClose />
                 </Button>
             </div>
             : null
     );
-});
+};
 
 export default Error;
