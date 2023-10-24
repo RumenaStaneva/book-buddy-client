@@ -31,9 +31,6 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     const handlePageCountChange = (e) => {
         setUpdatedPageCount(e.target.value);
     };
-    const handleThumbnailChange = (e) => {
-        setUpdatedThumbnail(e.target.value);
-    };
     const handleOptionSelect = (selectedOption) => {
         const selectedValue = shelfOptions.find(option => option.label === selectedOption)?.value;
         if (selectedValue !== undefined) {
@@ -85,12 +82,29 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     useEffect(() => {
         const addBookToShelf = async () => {
             try {
+
                 if (bookToAdd) {
+                    const formData = new FormData();
+                    formData.append('bookApiId', bookDetails.bookApiId);
+                    formData.append('userEmail', user.email);
+                    formData.append('title', bookDetails.title);
+                    formData.append('authors', bookDetails.authors);
+                    formData.append('description', updatedDescription);
+                    formData.append('publisher', bookDetails.publisher);
+                    formData.append('category', category);
+                    formData.append('pageCount', updatedPageCount);
+                    formData.append('progress', 0);
+                    formData.append('shelf', shelf);
+
+                    // Append the image file if it exists
+                    if (updatedThumbnail) {
+                        formData.append('thumbnail', updatedThumbnail);
+                    }
                     const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/add-to-shelf`, {
                         method: 'POST',
-                        body: JSON.stringify(bookToAdd),
+                        body: formData,
                         headers: {
-                            'Content-Type': 'application/json',
+                            // 'Content-Type': 'application/json',
                             'Authorization': `Bearer ${user.token}`
                         },
                     });
@@ -120,6 +134,63 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
         setBookToAdd(null);
     }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError, errorRef]);
 
+    const handleThumbnailUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Calculate new dimensions to resize the image (250x250)
+                    const maxWidth = 250;
+                    const maxHeight = 250;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // Draw the resized image on the canvas
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Convert canvas content to base64 data URL
+                    const dataUrl = canvas.toDataURL('image/jpeg'); // Change format if necessary
+
+                    setUpdatedThumbnail(dataUrl);
+
+                    // Create a Blob from data URL and append it to FormData
+                    const blobBin = atob(dataUrl.split(',')[1]);
+                    const array = [];
+                    for (let i = 0; i < blobBin.length; i++) {
+                        array.push(blobBin.charCodeAt(i));
+                    }
+                    const resizedImageBlob = new Blob([new Uint8Array(array)], { type: 'image/jpeg' }); // Change type if necessary
+
+                    const formData = new FormData();
+                    formData.append('thumbnail', resizedImageBlob);
+
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <Modal
             title={bookDetails.title}
@@ -144,7 +215,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                         </div>
                         <div className="modal__section">
                             <label htmlFor="bookImage">Book image</label>
-                            <input type="text" name="bookImage" value={updatedThumbnail} onChange={handleThumbnailChange} />
+                            <input type="file" accept="image/*" onChange={handleThumbnailUpload} />
                         </div>
                         <div className="modal__section">
                             <Dropdown
