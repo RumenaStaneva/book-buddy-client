@@ -8,16 +8,19 @@ import BookCategories from "../constants/bookCategories";
 import Button from "./Button";
 import Modal from './Dialog'
 import Error from './Error'
+import Spinner from 'react-spinner-material';
+import { NavLink } from 'react-router-dom';
 
 const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     const [shelf, setShelf] = useState(null);
     const [category, setCategory] = useState(null);
     const [bookToAdd, setBookToAdd] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
+    const [loginVisivble, setLoginVisible] = useState(false);
     const { user } = useAuthContext();
-    const errorRef = useRef(null);
     const shelfOptions = [
         { value: 0, label: 'Want to read' },
         { value: 1, label: 'Currently reading' },
@@ -33,12 +36,12 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
         }
     };
     const handleSubmit = (e) => {
+        setIsLoading(true);
         e.preventDefault();
         if (!user) {
             dispatchError(setError({ message: 'You have to be logged in to add books!' }));
-            setTimeout(() => {
-                executeScroll();
-            }, 10);
+            setLoginVisible(true);
+            setIsLoading(false);
             return;
         }
         const { bookApiId,
@@ -61,15 +64,6 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             shelf: shelf
         });
     };
-    const executeScroll = () => {
-        if (errorRef.current) {
-            errorRef.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start',
-                inline: 'nearest',
-            });
-        }
-    };
     useEffect(() => {
         const addBookToShelf = async () => {
             try {
@@ -87,7 +81,6 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                     formData.append('progress', 0);
                     formData.append('shelf', shelf);
 
-                    // Append the image file if it exists
                     if (updatedThumbnail) {
                         formData.append('thumbnail', updatedThumbnail);
                     }
@@ -95,7 +88,6 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                         method: 'POST',
                         body: formData,
                         headers: {
-                            // 'Content-Type': 'application/json',
                             'Authorization': `Bearer ${user.token}`
                         },
                     });
@@ -108,22 +100,19 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                     dispatchError(clearError());
                     setIsOpen(false);
                     onBookAdded(bookToAdd.title);
+                    setIsLoading(false);
+
                 }
             } catch (error) {
                 dispatchError(setError({ message: error.message }));
-                if (errorRef.current) {
-                    errorRef.current.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                    });
-                }
+                setIsLoading(false);
             }
         };
 
         addBookToShelf();
 
         setBookToAdd(null);
-    }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError, errorRef]);
+    }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError]);
 
     const handleThumbnailUpload = (e) => {
         const file = e.target.files[0];
@@ -189,51 +178,61 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             subtitle={`written by: ${bookDetails.authors ? bookDetails.authors.join(', ') : 'No author/s listed'}`}
             setIsOpen={setIsOpen}
             content={
-                <>
-                    <Error ref={errorRef} />
-                    <form onSubmit={handleSubmit} className="add-book__form">
-                        <div className="add-book-form__container">
-                            <div className="modal__section-image-container">
-                                <div className="modal__section">
-                                    <label htmlFor="thumbnail">Thumbnail</label>
-                                    <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={300} />
+                isLoading ?
+                    (<div className='spinner__container'>
+                        <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                    </div>) :
+                    <>
+                        <form onSubmit={handleSubmit} className="add-book__form">
+                            <div className="add-book-form__container">
+                                <div className="modal__section-image-container">
+                                    <div className="modal__section">
+                                        <label htmlFor="thumbnail">Thumbnail</label>
+                                        <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={300} />
+                                    </div>
+                                </div>
+                                <div className="modal__section-content-container">
+                                    <div className="modal__section modal__section-left-align">
+                                        <label htmlFor="description">Description</label>
+                                        <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={(e) => setUpdatedDescription(e.target.value)}></textarea>
+                                    </div>
+                                    <div className="modal__section book-pages-section">
+                                        <label htmlFor="pageCount">Book Pages</label>
+                                        <input type="number" name="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
+                                    </div>
+                                    <div className="modal__section upload-image-section">
+                                        <span>Add book image:</span>
+                                        <label htmlFor="bookImage" className='cta-btn upload-btn'>Book image</label>
+                                        <input id='bookImage' name='bookImage' type="file" accept="image/*" onChange={handleThumbnailUpload} />
+                                    </div>
+                                    <div className="modal__section modal__section-left-align">
+                                        <label htmlFor="dropdown-shelf">Choose book shelf:</label>
+                                        <Dropdown
+                                            id={'dropdown-shelf'}
+                                            options={shelfOptions.map(option => option.label)}
+                                            onSelect={handleOptionSelect}
+                                            selectedOption={shelf !== null ? shelfOptions.find(option => option.value === shelf).label : null}
+                                        />
+                                    </div>
+                                    <div className="modal__section modal__section-left-align">
+                                        <label htmlFor="dropdown-shelf">Choose book category:</label>
+                                        <Dropdown id={'dropdown-category'} options={Object.values(BookCategories)} onSelect={(selectedCategory) => setCategory(selectedCategory)} selectedOption={category !== null ? category : null} />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="modal__section-content-container">
-                                <div className="modal__section modal__section-left-align">
-                                    <label htmlFor="description">Description</label>
-                                    <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={(e) => setUpdatedDescription(e.target.value)}></textarea>
-                                </div>
-                                <div className="modal__section book-pages-section">
-                                    <label htmlFor="pageCount">Book Pages</label>
-                                    <input type="number" name="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
-                                </div>
-                                <div className="modal__section upload-image-section">
-                                    <span>Add book image:</span>
-                                    <label htmlFor="bookImage" className='cta-btn upload-btn'>Book image</label>
-                                    <input id='bookImage' name='bookImage' type="file" accept="image/*" onChange={handleThumbnailUpload} />
-                                </div>
-                                <div className="modal__section modal__section-left-align">
-                                    <label htmlFor="dropdown-shelf">Choose book shelf:</label>
-                                    <Dropdown
-                                        id={'dropdown-shelf'}
-                                        options={shelfOptions.map(option => option.label)}
-                                        onSelect={handleOptionSelect}
-                                        selectedOption={shelf !== null ? shelfOptions.find(option => option.value === shelf).label : null}
-                                    />
-                                </div>
-                                <div className="modal__section modal__section-left-align">
-                                    <label htmlFor="dropdown-shelf">Choose book category:</label>
-                                    <Dropdown id={'dropdown-category'} options={Object.values(BookCategories)} onSelect={(selectedCategory) => setCategory(selectedCategory)} selectedOption={category !== null ? category : null} />
-                                </div>
-                            </div>
-                        </div>
-                        <Button type="submit" className="cta-button">
-                            Add Book
-                        </Button>
-                    </form>
+                            <Error />
+                            {loginVisivble ?
+                                <NavLink to="/users/login">
+                                    <Button className="cta-button">Login</Button>
+                                </NavLink>
+                                :
+                                <Button type="submit" className="cta-button">
+                                    Add Book
+                                </Button>
+                            }
+                        </form>
 
-                </>
+                    </>
             }
         />
     );
