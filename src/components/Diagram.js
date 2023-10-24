@@ -48,14 +48,6 @@ function Diagram() {
         dispatchRedux(setDataRange(selectedRange));
     };
 
-    useEffect(() => {
-        const startOfWeekDate = startOfWeek(new Date(), { weekStartsOn: 1 });
-        const endOfWeekDate = endOfWeek(new Date(), { weekStartsOn: 1 });
-
-        dispatchRedux(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week', startDate: startOfWeekDate, endDate: endOfWeekDate }));
-        dispatchRedux(fetchHasReadingTimeAnytime(user));
-    }, [dispatchRedux, user, dataRange]);
-
     const handleCalendarChange = (dates) => {
         dispatchRedux(clearError());
         if (dates.length === 2) {
