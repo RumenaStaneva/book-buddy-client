@@ -162,7 +162,6 @@
 .add-book-form__container {
     display: flex;
     justify-content: center;
-    margin-bottom: 45px;
 }
 
 .add-book-form__container .modal__section-image-container {
@@ -185,6 +184,17 @@
     border-radius: 4px;
     font-size: 14px;
     margin-bottom: 10px;
+}
+
+.modal__section-left-align {
+    align-items: flex-start;
+}
+
+.book-pages-section input {
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 50%;
 }
 
 .upload-image-section span {
@@ -216,9 +226,9 @@
     margin-bottom: 5px;
 }
 
-.modal__section-content-container .modal__section {
+/* .modal__section-content-container .modal__section {
     align-items: flex-start;
-}
+} */
 
 .modal__section-content-container .modal__section .dropdown {
     max-width: unset;
