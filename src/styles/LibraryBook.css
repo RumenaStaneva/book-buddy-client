@@ -1,7 +1,7 @@
 .book {
     max-width: 600px;
     position: relative;
-    padding: 0 20px;
+    /* padding: 0 20px; */
 }
 
 .blur-background {
