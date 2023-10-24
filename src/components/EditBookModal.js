@@ -13,7 +13,6 @@ import ConformationModal from "./ConformationModal";
 
 
 const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
-    console.log('bookDetails', bookDetails);
     const [updatedShelf, setUpdatedShelf] = useState(bookDetails.shelf);
     const [updatedCategory, setUpdatedCategory] = useState(bookDetails.category);
     const [bookToUpdate, setBookToUpdate] = useState(null);
@@ -89,7 +88,6 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
         }
     };
 
-    console.log(bookToUpdate);
     useEffect(() => {
         const updateBook = async (updatedBook) => {
 
