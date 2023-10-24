@@ -42,3 +42,40 @@
     margin: 20px 0;
 
 }
+
+.pagination__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.pagination__container .pagination-button--next,
+.pagination__container .pagination-button--prev {
+    margin: 0 15px;
+}
+
+
+.pagination__container .pagination-text {
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+    padding: 5px 16px;
+    border: 1px solid #ccc;
+    margin: 0 7px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination__container .pagination-text:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination__container .pagination-button--active {
+    background-color: #ccc;
+
+}
+
+.pagination__container .pagination-button--active:hover {
+    cursor: not-allowed;
+}

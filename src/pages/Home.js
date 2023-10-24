@@ -48,7 +48,6 @@ function Home() {
             setTitle('');
         }
     }
-
     const fetchData = useCallback(async (page, title) => {
         setLoading(true);
         try {
@@ -63,6 +62,8 @@ function Home() {
                 }
             );
             setBooks(response.data.items);
+            const calculatedTotalPages = Math.ceil(response.data.totalItems / PAGE_SIZE);
+            console.log('Calculated Total Pages:', calculatedTotalPages);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
             dispatchError(setError({ message: `Error fetching books: ${error})` }));
@@ -79,15 +80,85 @@ function Home() {
     }, [currentPage, lastSearchedTitle, fetchData]);
 
     const nextPage = () => {
+        setLoading(true);
         if (currentPage < totalPages) {
             setCurrentPage((prevPage) => prevPage + 1);
         }
     };
 
     const prevPage = () => {
+        setLoading(true);
         if (currentPage > 1) {
             setCurrentPage((prevPage) => prevPage - 1);
         }
+    };
+
+    const generatePageNumbers = () => {
+        const pages = [];
+        const totalPagesToShow = 3; // Number of pages to show around the current page
+
+        let startPage = Math.max(1, currentPage - Math.floor(totalPagesToShow / 2));
+        let endPage = startPage + totalPagesToShow - 1;
+
+        // Ensure the end page does not exceed the total number of pages
+        if (endPage > totalPages) {
+            endPage = totalPages;
+            startPage = Math.max(1, endPage - totalPagesToShow + 1);
+        }
+        startPage = Math.max(1, startPage);
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+
+        return pages;
+    };
+    // page numbers 
+    const pageNumbers = () => {
+        const pages = generatePageNumbers();
+        return (
+            <div className="pagination__container">
+                <Button className="pagination-button" onClick={firstPage} disabled={currentPage === 1}>
+                    First
+                </Button>
+                {currentPage > 1 && (
+                    <Button className="pagination-button pagination-button--prev" onClick={prevPage} disabled={currentPage === 1}>
+                        &#10096;
+                    </Button>
+                )}
+                {pages.map((pageNumber) => (
+                    <Button className={`pagination-text ${currentPage === pageNumber ? 'pagination-button--active' : ''}`}
+                        key={pageNumber}
+                        onClick={() => goToPage(pageNumber)}
+                        disabled={currentPage === pageNumber}
+                    >
+                        {pageNumber}
+                    </Button>
+                ))}
+                {currentPage < totalPages && (
+                    <Button className="pagination-button pagination-button--next" onClick={nextPage} disabled={currentPage === totalPages}>
+                        &#10097;
+                    </Button>
+                )}
+            </div>
+        );
+    };
+    const firstPage = () => {
+        setCurrentPage(1);
+    };
+    console.log(totalPages);
+    const goToPage = (pageNumber) => {
+        setLoading(true);
+        // setCurrentPage(pageNumber);
+        setCurrentPage((prevPage) => {
+            // Ensure the current page is updated first before setting the new page
+            if (prevPage !== pageNumber) {
+                // Only set the new page if it's different from the current page
+                return pageNumber;
+            } else {
+                // If it's the same page, return the current page to avoid unnecessary state updates
+                return prevPage;
+            }
+        });
     };
 
     const searchbarVariants = {
@@ -175,18 +246,20 @@ function Home() {
                     : null
                 }
 
-                {books.length !== 0 ?
-                    <BookList books={books} />
+                {books && books.length !== 0 ?
+                    <BookList books={books} loading={loading} />
 
                     : null}
 
 
-                {books.length !== 0 ?
+                {/* {books.length !== 0 ?
                     <div className="pagination__container">
                         <Button onClick={prevPage} disabled={currentPage === 1}>Previous</Button>
                         <Button onClick={nextPage} disabled={currentPage === totalPages}>Next</Button>
                     </div>
-                    : null}
+                    : null} */}
+
+                {totalPages > 1 && books.length !== 0 ? pageNumbers() : null}
 
             </ >
         </>
