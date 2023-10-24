@@ -192,31 +192,38 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                 <>
                     <Error ref={errorRef} />
                     <form onSubmit={handleSubmit} className="add-book__form">
-                        <div className="modal__section">
-                            <label htmlFor="thumbnail">Thumbnail</label>
-                            <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={250} />
-                        </div>
-                        <div className="modal__section">
-                            <label htmlFor="description">Description</label>
-                            <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={(e) => setUpdatedDescription(e.target.value)}></textarea>
-                        </div>
-                        <div className="modal__section">
-                            <label htmlFor="pageCount">Book Pages</label>
-                            <input type="number" name="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
-                        </div>
-                        <div className="modal__section">
-                            <label htmlFor="bookImage">Book image</label>
-                            <input type="file" accept="image/*" onChange={handleThumbnailUpload} />
-                        </div>
-                        <div className="modal__section">
-                            <Dropdown
-                                options={shelfOptions.map(option => option.label)}
-                                onSelect={handleOptionSelect}
-                                selectedOption={shelf !== null ? shelfOptions.find(option => option.value === shelf).label : null}
-                            />
-                        </div>
-                        <div className="modal__section">
-                            <Dropdown options={Object.values(BookCategories)} onSelect={(selectedCategory) => setCategory(selectedCategory)} selectedOption={category !== null ? category : null} />
+                        <div className="add-book-form__container">
+                            <div className="modal__section-image-container">
+                                <div className="modal__section">
+                                    <label htmlFor="thumbnail">Thumbnail</label>
+                                    <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={300} />
+                                </div>
+                            </div>
+                            <div className="modal__section-content-container">
+                                <div className="modal__section">
+                                    <label htmlFor="description">Description</label>
+                                    <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={(e) => setUpdatedDescription(e.target.value)}></textarea>
+                                </div>
+                                <div className="modal__section">
+                                    <label htmlFor="pageCount">Book Pages</label>
+                                    <input type="number" name="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
+                                </div>
+                                <div className="modal__section upload-image-section">
+                                    <span>Add book image:</span>
+                                    <label htmlFor="bookImage" className='cta-btn upload-btn'>Book image</label>
+                                    <input id='bookImage' name='bookImage' type="file" accept="image/*" onChange={handleThumbnailUpload} />
+                                </div>
+                                <div className="modal__section">
+                                    <Dropdown
+                                        options={shelfOptions.map(option => option.label)}
+                                        onSelect={handleOptionSelect}
+                                        selectedOption={shelf !== null ? shelfOptions.find(option => option.value === shelf).label : null}
+                                    />
+                                </div>
+                                <div className="modal__section">
+                                    <Dropdown options={Object.values(BookCategories)} onSelect={(selectedCategory) => setCategory(selectedCategory)} selectedOption={category !== null ? category : null} />
+                                </div>
+                            </div>
                         </div>
                         <Button type="submit" className="cta-button">
                             Add Book
