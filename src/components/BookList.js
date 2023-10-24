@@ -52,7 +52,7 @@ function BookList({ books }) {
             <div className='books__container books-list__container'>
                 {
                     books.map(book => (
-                        <div key={book.id}>
+                        <div className='book__container' key={book.id}>
 
                             <Card sx={{ maxWidth: 345 }} className='book'>
                                 <CardActionArea

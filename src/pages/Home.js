@@ -91,14 +91,18 @@ function Home() {
     };
 
     const searchbarVariants = {
-        big: { height: 700 },
-        small: { height: 400 }
+        big: { height: 570 },
+        small: { height: 460 },
     }
 
     const imageVariants = {
         big: { height: 400 },
         small: { height: 250 }
     }
+
+    const isSmallScreen = () => {
+        return window.innerWidth < 576;
+    };
 
     return (
         <>
@@ -115,7 +119,7 @@ function Home() {
                     className='form__container'
 
                 >
-                    <motion.div animate={books.length !== 0 ? "small" : "big"}
+                    <motion.div animate={books.length !== 0 || isSmallScreen() ? "small" : "big"}
                         transition={{
                             duration: 1,
                             ease: [0, 0.71, 0.2, 1.01],
@@ -125,7 +129,8 @@ function Home() {
 
                         }}
                         layout
-                        variants={searchbarVariants} className={`search__container`}>
+                        variants={searchbarVariants} className={`search__container`}
+                    >
                         <motion.img
                             animate={books.length !== 0 ? "small" : "big"}
                             transition={{
@@ -139,7 +144,9 @@ function Home() {
                             layout
                             variants={imageVariants}
                             src={require('../images/logo-big.png')}
-                            alt="Logo" />
+                            alt="Logo"
+                            className='homepage-logo'
+                        />
                         <Error />
                         {loading ?
                             <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} /> :

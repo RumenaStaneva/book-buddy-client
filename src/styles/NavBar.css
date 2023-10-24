@@ -142,6 +142,10 @@
         display: block;
     }
 
+    .nav__container {
+        padding: 20px 25px;
+    }
+
     .nav__list {
         display: none;
         position: absolute;
@@ -181,4 +185,13 @@
         width: 60%;
         transform: translateX(0);
     }
+}
+
+@media (max-width: 576px) {
+    .search__container {
+        padding: 25px 10px;
+    }
+
+    /* todo fix */
+    .nav__login-register .nav__list {}
 }
