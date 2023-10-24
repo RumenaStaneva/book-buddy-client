@@ -36,9 +36,10 @@ function Home() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        setLoading(true);
         if (title === '' || title === undefined || title === null) {
             dispatchError(setError({ message: 'Please enter a title or author.' }));
+            setLoading(false);
         } else {
             setLastSearchedTitle(title);
             setCurrentPage(1);
@@ -140,19 +141,22 @@ function Home() {
                             src={require('../images/logo-big.png')}
                             alt="Logo" />
                         <Error />
-                        <div className='d-flex'>
-                            <ShakeableTextField
-                                id="outlined-basic"
-                                label="Title/author"
-                                variant="outlined"
-                                value={title}
-                                onChange={handleChange}
-                                error={errorMessage}
-                                className='search__input'
-                            />
-                            <Button className='cta-btn' type='submit'>Search</Button>
+                        {loading ?
+                            <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} /> :
+                            <div className='d-flex'>
+                                <ShakeableTextField
+                                    id="outlined-basic"
+                                    label="Title/author"
+                                    variant="outlined"
+                                    value={title}
+                                    onChange={handleChange}
+                                    error={errorMessage}
+                                    className='search__input'
+                                />
+                                <Button className='cta-btn' type='submit'>Search</Button>
 
-                        </div>
+                            </div>
+                        }
                     </motion.div>
 
 
