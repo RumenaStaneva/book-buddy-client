@@ -177,10 +177,29 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                     </Button>
                 ) : (
                     <>
+                        {!isChangeGoalVisible &&
+                            <div className="countdown__action-buttons d-flex">
+                                <Button disabled={timerStarted} onClick={startTimer} className="cta-btn">
+                                    Start Timer
+                                </Button>
+                                <Button disabled={!timerStarted} onClick={stopTimer} className="cta-btn">
+                                    Stop Timer
+                                </Button>
+                            </div>
+                        }
+
+                        {!timerStarted &&
+                            <div className="d-flex goal-reading-time__container">
+                                <p>Reading goal for the day {formatTime(totalReadingGoalForTheDay)}</p>
+
+                                <p className="time-info">Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
+                            </div>
+                        }
+
                         {!timerStarted && !goalAchievedForTheDay &&
                             <div className="goal-section">
                                 <p>Is your goal for today too high?</p>
-                                <Button className="cta-btn" onClick={() => {
+                                <Button className="cta-btn btn-sm" onClick={() => {
                                     setIsChangeGoalVisible(!isChangeGoalVisible);
                                     dispatch(clearError());
                                 }}>Adjust Goal</Button>
@@ -188,8 +207,8 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                         }
 
                         {isChangeGoalVisible && !goalAchievedForTheDay &&
-                            <div className="goal-section">
-                                <p>Choose an achievable goal:</p>
+                            <div className="goal-section adjust-goal">
+                                <p className='adjust-goal-label'>Choose an achievable goal:</p>
                                 <div className='d-flex'>
                                     <div className='goal__subsection'>
                                         <p>Screen time spent last week:</p>
@@ -205,35 +224,23 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                                             ref={cleaveInputRef}
                                             className="goal-input"
                                             options={{ time: true, timePattern: ['h', 'm'] }}
-                                            placeholder="Enter time in HH:MM format"
+                                            placeholder="Enter time in HH:MM"
                                             value={formattedTime}
                                             onChange={(e) => setFormattedTime(e.target.value)}
 
                                         />
-                                        <Button onClick={() => {
-                                            const timeArray = formattedTime.split(':');
-                                            const hours = parseInt(timeArray[0]) || 0;
-                                            const minutes = parseInt(timeArray[1]) || 0;
-                                            const seconds = (hours * 3600) + (minutes * 60);
-                                            changeTime(seconds);
-                                        }}>Set</Button>
+                                        <Button
+                                            className="cta-btn btn-sm"
+                                            onClick={() => {
+                                                const timeArray = formattedTime.split(':');
+                                                const hours = parseInt(timeArray[0]) || 0;
+                                                const minutes = parseInt(timeArray[1]) || 0;
+                                                const seconds = (hours * 3600) + (minutes * 60);
+                                                changeTime(seconds);
+                                            }}>Set</Button>
                                     </div>
                                 </div>
                             </div>
-                        }
-                        {!isChangeGoalVisible &&
-                            <div className="countdown__action-buttons d-flex">
-                                <Button disabled={timerStarted} onClick={startTimer} className="cta-btn">
-                                    Start Timer
-                                </Button>
-                                <Button disabled={!timerStarted} onClick={stopTimer} className="cta-btn">
-                                    Stop Timer
-                                </Button>
-                            </div>
-                        }
-
-                        {!timerStarted &&
-                            <p className="time-info">Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
                         }
                     </>
                 )}

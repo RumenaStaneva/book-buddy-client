@@ -4,7 +4,6 @@ import CountdownBook from './CountdownBook';
 import Spinner from 'react-spinner-material';
 import Button from './Button';
 import { IoIosClose } from 'react-icons/io';
-import '../styles/CountdownReading.css'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -59,9 +58,9 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                         </div>
                         : null}
                     <div className='d-flex reading-countdown__container'>
-                        <div className='countdown-timer__container'>
+                        <>
                             <Countdown screenTimeSeconds={screenTimeInSeconds} currentlyReadingBooks={currentlyReadingBooks} activeIndex={activeIndex} />
-                        </div>
+                        </>
                         <div className='swiper-books__container'>
                             {currentlyReadingBooks ?
                                 <Swiper

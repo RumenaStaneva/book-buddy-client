@@ -2,6 +2,14 @@
     width: 550px;
 }
 
+.countdown-container {
+    max-width: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
 .countdown__container .book {
     max-width: 550px;
     max-height: 620px;
@@ -35,8 +43,12 @@
     max-height: 430px;
 }
 
+.reading-countdown__container {
+    justify-content: center;
+}
+
 .reading-countdown__container .book__progress {
-    padding: 0 42px 0 70px;
+    padding: 0 60px 0 70px;
     position: absolute;
     width: 100%;
     bottom: 50px;
@@ -54,12 +66,21 @@
 
 .countdown-message {
     font-size: 1.5rem;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
-
 .goal-section {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.adjust-goal {
+    flex-direction: column;
+}
+
+.adjust-goal-label {
+    margin-bottom: 40px;
 }
 
 .goal-button {
@@ -73,13 +94,32 @@
 }
 
 .goal-input {
-    width: 60px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.goal__subsection p {
+    margin-bottom: 10px;
 }
 
 .action-buttons {
     margin-top: 20px;
 }
 
+.countdown__action-buttons {
+    margin-bottom: 20px;
+}
+
+.goal-reading-time__container {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
 .time-info {
-    margin-top: 10px;
+    border-left: 1px solid #ccc;
 }
