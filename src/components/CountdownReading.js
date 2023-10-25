@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearSuccessMessage } from '../reducers/timerSlice';
 import LinearProgressWithLabel from './Progress'
 import { calculateProgress } from '../reducers/booksSlice';
+import { NavLink } from 'react-router-dom';
+
 
 const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadingBooks }) => {
     const [activeIndex, setActiveIndex] = useState(() => {
@@ -62,7 +64,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                             <Countdown screenTimeSeconds={screenTimeInSeconds} currentlyReadingBooks={currentlyReadingBooks} activeIndex={activeIndex} />
                         </>
                         <div className='swiper-books__container'>
-                            {currentlyReadingBooks ?
+                            {currentlyReadingBooks && currentlyReadingBooks.length > 0 ?
                                 <Swiper
                                     ref={swiperRef}
                                     pagination={{
@@ -100,7 +102,11 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                     })}
                                 </Swiper>
                                 :
-                                <p>No currently reading books, add one</p>}
+                                <div className="empty-books-message">
+                                    <p className="empty-books-text">No currently reading books</p>
+                                    <p className="empty-books-text">Add one from <NavLink className="empty-books-link" to="/">here</NavLink></p>
+                                </div>
+                            }
                         </div>
                     </div>
                 </>

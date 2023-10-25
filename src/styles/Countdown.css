@@ -1,5 +1,8 @@
 .swiper-books__container {
     width: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .countdown-container {
@@ -8,6 +11,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    margin-right: 20px;
 }
 
 .countdown__container .book {
@@ -65,8 +69,17 @@
 }
 
 .countdown-message {
-    font-size: 1.5rem;
+    font-size: 6.5rem;
     margin-bottom: 30px;
+}
+
+.countdown-part {
+    font-family: 'Black Ops One';
+    font-weight: 300;
+}
+
+.countdown-seconds {
+    font-size: 6rem;
 }
 
 .goal-section {
@@ -122,4 +135,24 @@
 
 .time-info {
     border-left: 1px solid #ccc;
+}
+
+.empty-books-message {
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.empty-books-text {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.empty-books-link {
+    color: #007bff;
+    text-decoration: underline;
 }

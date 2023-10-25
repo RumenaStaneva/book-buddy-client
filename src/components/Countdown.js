@@ -90,12 +90,24 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     }, [dispatch, goalAchievedForTheDay])
 
 
-    const formatTime = (time) => {
+    const formatTimeWithSeconds = (time) => {
         const hours = Math.floor(time / 3600);
         const minutes = Math.floor((time % 3600) / 60);
         const seconds = time % 60;
 
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        return (
+            <span>
+                <span className="countdown-part">{hours.toString().padStart(2, '0')}</span>:
+                <span className="countdown-part">{minutes.toString().padStart(2, '0')}</span>:
+                <span className="countdown-part countdown-seconds">{seconds.toString().padStart(2, '0')}</span>
+            </span>
+        );
+    };
+    const formatTime = (time) => {
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor((time % 3600) / 60);
+
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     };
 
     const startTimer = () => {
@@ -162,12 +174,16 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                 ) : (
 
                     timerMode === "decrement" ?
-                        <h2 className="countdown-message">{timerStarted ? `Countdown: ${formatTime(timeLeft)}` : `Time left: ${formatTime(timeLeft)}`}</h2>
+                        timerStarted ?
+                            <h2 className="countdown-message countdown-part">{formatTimeWithSeconds(timeLeft)}</h2>
+                            :
+                            <h2 className="countdown-message countdown-part">{formatTime(timeLeft)}</h2>
+
                         :
                         timerStarted ?
-                            <h2 className="countdown-message">{formatTime(timePassed - totalReadingGoalForTheDay)}</h2>
+                            <h2 className="countdown-message countdown-part">{formatTimeWithSeconds(timePassed - totalReadingGoalForTheDay)}</h2>
                             :
-                            <h2 className="countdown-message">Time passed: {formatTime(timePassed - totalReadingGoalForTheDay)}</h2>
+                            <h2 className="countdown-message">Time passed: {formatTimeWithSeconds(timePassed - totalReadingGoalForTheDay)}</h2>
 
                 )}
 
@@ -190,7 +206,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
 
                         {!timerStarted &&
                             <div className="d-flex goal-reading-time__container">
-                                <p>Reading goal for the day {formatTime(totalReadingGoalForTheDay)}</p>
+                                <p>Reading goal for the day: {formatTime(totalReadingGoalForTheDay)}</p>
 
                                 <p className="time-info">Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
                             </div>
@@ -212,17 +228,17 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                                 <div className='d-flex'>
                                     <div className='goal__subsection'>
                                         <p>Screen time spent last week:</p>
-                                        <Button className="goal-button" onClick={() => changeTime(screenTimeSeconds)}>{formatTime(screenTimeSeconds)}</Button>
+                                        <Button className="goal-button countdown-part" onClick={() => changeTime(screenTimeSeconds)}>{formatTime(screenTimeSeconds)}</Button>
                                     </div>
                                     <div className='goal__subsection'>
                                         <p>Your weekly average:</p>
-                                        <Button className="goal-button" onClick={() => changeTime(weeklyGoalAveragePerDay)}>{formatTime(weeklyGoalAveragePerDay)}</Button>
+                                        <Button className="goal-button countdown-part" onClick={() => changeTime(weeklyGoalAveragePerDay)}>{formatTime(weeklyGoalAveragePerDay)}</Button>
                                     </div>
                                     <div className='goal__subsection'>
                                         <p>Add custom reading time:</p>
                                         <Cleave
                                             ref={cleaveInputRef}
-                                            className="goal-input"
+                                            className="goal-input countdown-part"
                                             options={{ time: true, timePattern: ['h', 'm'] }}
                                             placeholder="Enter time in HH:MM"
                                             value={formattedTime}
