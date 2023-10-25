@@ -110,7 +110,12 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             //     prevInvalidInputs.filter((item) => item !== index)
             // );
             const [hours, minutes] = time.split(':');
-            return parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60;
+            const totalSeconds = parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60;
+
+            if (totalSeconds > 24 * 3600) {
+                throw new window.Error('Time cannot exceed 24:00.');
+            }
+            return totalSeconds;
         }
 
     };
@@ -216,10 +221,12 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
                                         <div key={index} className={`input-field ${showConfirmationDialog && 'confirmation-dialog-shown'} ${invalidInputs.includes(index) ? 'error' : ''}`}>
                                             <label>{item.date}</label>
                                             <Cleave
-                                                options={{ time: true, timePattern: ['h', 'm'] }}
+                                                options={{ time: true, timePattern: ['h', 'm'], rawValueTrimPrefix: true, }}
                                                 placeholder="Enter time in HH:MM format"
                                                 value={item.time}
                                                 onChange={(e) => handleInputChange(index, e.target.value)}
+                                                onFocus={(e) => e.target.select()}
+                                                onMouseUp={(e) => e.preventDefault()}
                                             />
                                         </div>
                                     ))}

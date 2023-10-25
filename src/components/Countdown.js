@@ -241,7 +241,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                                             ref={cleaveInputRef}
                                             className="goal-input countdown-part"
                                             options={{ time: true, timePattern: ['h', 'm'] }}
-                                            placeholder="Enter time in HH:MM"
+                                            placeholder="HH:MM"
                                             value={formattedTime}
                                             onChange={(e) => setFormattedTime(e.target.value)}
 
