@@ -26,10 +26,14 @@
     font-weight: bold;
 }
 
-.input-field {
-    width: 100%;
+.input-field__container {
+    /* width: 100%; */
     padding: 10px;
-    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.input-field {
+    padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-top: 0;
