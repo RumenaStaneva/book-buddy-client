@@ -1,5 +1,5 @@
 import '../styles/Modal.css'
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useDispatch } from "react-redux";
@@ -94,9 +94,10 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
                     if (!response.ok) {
                         const data = await response.json();
+                        dispatchError(setError({ message: data.error }));
+                        setIsLoading(false);
                         throw new window.Error(data.error);
                     }
-
                     dispatchError(clearError());
                     setIsOpen(false);
                     onBookAdded(bookToAdd.title);
@@ -104,7 +105,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
                 }
             } catch (error) {
-                dispatchError(setError({ message: error.message }));
+                dispatchError(setError({ message: 'Error adding book to shelf' }));
                 setIsLoading(false);
             }
         };
@@ -178,12 +179,13 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             subtitle={`written by: ${bookDetails.authors ? bookDetails.authors.join(', ') : 'No author/s listed'}`}
             setIsOpen={setIsOpen}
             content={
-                isLoading ?
-                    (<div className='spinner__container'>
-                        <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
-                    </div>) :
-                    <>
-                        <form onSubmit={handleSubmit} className="add-book__form">
+                <>
+                    <form onSubmit={handleSubmit} className="add-book__form">
+                        {isLoading &&
+                            (<div className='spinner__container'>
+                                <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                            </div>)}
+                        <>
                             <div className="add-book-form__container">
                                 <div className="modal__section-image-container">
                                     <div className="modal__section">
@@ -230,9 +232,10 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                     Add Book
                                 </Button>
                             }
-                        </form>
+                        </>
+                    </form>
 
-                    </>
+                </>
             }
         />
     );
