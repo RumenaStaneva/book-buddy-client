@@ -75,7 +75,6 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     useEffect(() => {
         if (timerFinished) {
             dispatch(setTimeInSecondsLeftForAchievingReadingGoal(0));
-            // uncomment?
             dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: timePassed, user, currentlyReadingBook }));
             setTimeLeft(0);
             setTimerActive(false);
@@ -134,7 +133,9 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
             }))
         }
         dispatch(setTimerStarted(false));
-        setUpdateProgressModalIsOpen(true);
+        if (currentlyReadingBook) {
+            setUpdateProgressModalIsOpen(true);
+        }
         setTimerActive(false);
     };
 

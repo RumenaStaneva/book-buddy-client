@@ -7,10 +7,10 @@ import { setError } from '../reducers/errorSlice';
 import Button from "./Button";
 import Modal from './Dialog'
 import Error from "./Error";
-import { setCurrentlyReadingBook, setSuccessMessage, setTimerStarted } from '../reducers/timerSlice';
+import { setCurrentlyReadingBook, setSuccessMessage } from '../reducers/timerSlice';
 import { fetchAllBooks } from '../reducers/booksSlice';
 
-const UpdateBookProgressModal = ({ setIsOpen, timerFinished }) => {
+const UpdateBookProgressModal = ({ setIsOpen }) => {
     const { currentlyReadingBook } = useSelector((state) => state.timer)
     const [updatedPageProgress, setUpdatedPageProgress] = useState(currentlyReadingBook.progress)
     const { user } = useAuthContext();
