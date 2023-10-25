@@ -59,6 +59,8 @@
 
 .input-fields {
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 .input-field {
