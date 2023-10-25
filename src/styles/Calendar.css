@@ -32,10 +32,18 @@
     box-sizing: border-box;
     margin-bottom: 10px;
     border: 1px solid #ccc;
+    border-top: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.input-field input {
+    padding: 5px;
+    border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-.input-field.error {
+.input-field.error input {
     border-color: red;
 }
 
