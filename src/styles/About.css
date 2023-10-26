@@ -1,0 +1,28 @@
+.info-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: rgba(123, 217, 229, 0.48);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
+}
+
+.info-container .title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.info-container .subtitle {
+    margin-top: 20px;
+}
+
+.info-container .paragraph {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.info-container .time-swap__perks-list {
+    margin-bottom: 15px;
+    padding: 20px;
+}
