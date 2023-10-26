@@ -64,6 +64,10 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
         },
         options: {
           scales: {
+            x: {
+              type: 'category',
+              min: 0,
+            },
             y: {
               type: 'linear',
               title: {
@@ -95,12 +99,18 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
             zoom: {
               zoom: {
                 wheel: {
-                  enabled: true
+                  enabled: true,
+                },
+                pinch: {
+                  enabled: true,
                 },
                 mode: 'xy',
               }, pan: {
                 enabled: true,
                 mode: "xy",
+              },
+              limits: {
+                y: { min: 0, max: maxSeconds * 1.2 }
               }
             },
 
