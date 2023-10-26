@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import Chart, { ChartConfiguration } from 'chart.js/auto';
-import 'chartjs-plugin-zoom';
+import zoomPlugin from "chartjs-plugin-zoom";
+
+Chart.register(zoomPlugin);
 
 interface ChartComponentProps {
   screenData: number[];
@@ -20,6 +22,17 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
   const { dataRange } = useSelector((state: RootState) => state.readingTimeForToday);
 
   useEffect(() => {
+
+
+    const convertSecondsToHHMM = (seconds: number): string => {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    };
+
+    const maxSeconds = Math.max(...screenData, ...readingData, ...readingGoal.flat());
+    const suggestedMaxSeconds = maxSeconds / 3600 * 1.2;
+
     if (chartRef.current) {
       const chartConfig: ChartConfiguration<'bar'> = {
         type: 'bar',
@@ -52,19 +65,57 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
         options: {
           scales: {
             y: {
-              type: 'logarithmic',
+              type: 'linear',
               title: {
                 display: true,
-                text: 'Time',
+                text: 'Time (hours)',
               },
-              suggestedMax: Math.max(...screenData, ...readingData, ...readingGoal.flat()) * 2,
+              suggestedMax: suggestedMaxSeconds,
+              ticks: {
+                stepSize: 3600,
+                callback: function (value: any) {
+                  const hours = Math.round(value / 3600);
+                  if (hours === 0) {
+                    return `${hours}`;
+                  } else if (hours === 1) {
+                    return `${hours} hour`;
+                  } else {
+                    return `${hours} hours`;
+                  }
+                },
+              },
             },
           },
+
           plugins: {
             legend: {
               position: 'top',
             },
+
+            zoom: {
+              zoom: {
+                wheel: {
+                  enabled: true
+                },
+                mode: 'xy',
+              }, pan: {
+                enabled: true,
+                mode: "xy",
+              }
+            },
+
+            tooltip: {
+              callbacks: {
+                label: function (context: any) {
+                  const label = context.dataset.label || '';
+                  const value = context.parsed.y;
+                  return `${label}: ${convertSecondsToHHMM(value)}`;
+                },
+              },
+            },
           },
+
+
         },
       };
 
@@ -87,10 +138,8 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
 
 export default ChartComponent;
 
-// Define RootState type for useSelector
 interface RootState {
   readingTimeForToday: {
     dataRange: string;
-    // Add other properties from your readingTimeForToday slice state if applicable
   };
 }
