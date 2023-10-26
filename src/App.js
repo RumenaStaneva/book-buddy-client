@@ -16,6 +16,7 @@ import ListAllBooks from './pages/ListAllBooks';
 import VerificationEmailSent from './pages/VerificationEmailSent';
 import VerificationSuccess from './pages/VerificationSuccess';
 import ResetPassword from './pages/ResetPassword';
+import Footer from './components/Footer';
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
         <Route path='/users/verify/:token' element={<VerificationSuccess />} />
         <Route path='*' element={<ErrorPage />} />
       </Routes>
+      <Footer />
     </>
 
   )
