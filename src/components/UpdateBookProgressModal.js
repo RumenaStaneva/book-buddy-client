@@ -31,9 +31,9 @@ const UpdateBookProgressModal = ({ setIsOpen }) => {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({
-                    book: updatedBook
-                }),
+                body: JSON.stringify(
+                    updatedBook
+                ),
             });
 
             const data = await response.json();

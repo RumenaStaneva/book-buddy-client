@@ -118,9 +118,9 @@ function ListAllBooks() {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({
-                    book: currentBook
-                }),
+                body: JSON.stringify(
+                    currentBook
+                ),
             });
 
             await response.json();
