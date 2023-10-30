@@ -19,9 +19,10 @@ import { CardActionArea } from '@mui/material';
 import Error from '../components/Error';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBooks } from '../reducers/booksSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Library() {
-    const [successMessage, setSuccessMessage] = useState('');
     const { user } = useAuthContext();
     const dispatchRedux = useDispatch();
     const { wantToReadBooks, currentlyReadingBooks, readBooks, isLoading } = useSelector((state) => state.books);
@@ -32,20 +33,24 @@ function Library() {
     useEffect(() => {
         document.title = `User's library`;
     }, []);
-    useEffect(() => {
-        const clearMessage = () => {
-            setSuccessMessage('');
-        };
-
-        if (successMessage.length > 0) {
-            const timer = setTimeout(clearMessage, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [successMessage]);
+    const handleSuccessMessage = (message) => {
+        toast.success(message, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        })
+    }
 
     return (
         <>
             <NavBar />
+            <ToastContainer />
+
             {isLoading ?
                 null :
                 <Header title={(wantToReadBooks && wantToReadBooks.length > 0) ||
@@ -62,11 +67,6 @@ function Library() {
                     </div>
                 ) : (
                     <>
-                        {successMessage.length > 0 ?
-                            <div className={`success-message__container ${successMessage.length > 0 ? 'fade-out' : ''}`}>
-                                <p>{successMessage}</p>
-                            </div>
-                            : null}
                         <Error />
                         {!currentlyReadingBooks.length > 0 && !wantToReadBooks.length > 0 && !readBooks.length > 0 ?
                             <div className='shelf-header d-flex' style={{ 'marginBottom': '60px', 'justifyContent': 'center' }}>
@@ -107,7 +107,7 @@ function Library() {
                                                     >
                                                         <LibraryBook
                                                             book={book}
-                                                            setSuccessMessage={setSuccessMessage}
+                                                            handleSuccessMessage={handleSuccessMessage}
                                                         />
                                                     </SwiperSlide>
                                                 ))

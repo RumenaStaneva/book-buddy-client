@@ -7,12 +7,11 @@ import { GiBookmarklet } from "react-icons/gi";
 import categoryColors from "../constants/categoryColors";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import '../styles/LibraryBook.css'
-import Error from './Error';
 import { useDispatch } from "react-redux";
 import { fetchAllBooks, calculateProgress } from '../reducers/booksSlice';
 import { clearError, setError } from '../reducers/errorSlice';
 
-function LibraryBook({ book, setSuccessMessage }) {
+function LibraryBook({ book, handleSuccessMessage }) {
     const [inputVisible, setInputVisible] = useState(false);
     const [bookProgressInPercentage, setBookProgressInPercentage] = useState(null);
     const [bookPageProgress, setBookPageProgress] = useState(book.progress);
@@ -35,9 +34,9 @@ function LibraryBook({ book, setSuccessMessage }) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({
-                    book: mutableBook
-                }),
+                body: JSON.stringify(
+                    mutableBook
+                ),
             });
             const data = await response.json();
             if (response.ok) {
@@ -46,7 +45,7 @@ function LibraryBook({ book, setSuccessMessage }) {
                 const bookProgressPercent = calculateProgress(bookPageProgress, bookTotalPages);
                 setBookProgressInPercentage(parseInt(bookProgressPercent));
                 if (data.book.progress >= parseInt(bookTotalPages)) {
-                    setSuccessMessage(`Hurray, you successfully read ${data.book.title}`);
+                    handleSuccessMessage(`Hurray, you successfully read ${data.book.title}`);
                     dispatchRedux(fetchAllBooks(user))
                 }
                 dispatchError(clearError());
@@ -83,7 +82,7 @@ function LibraryBook({ book, setSuccessMessage }) {
                                 className='book__image'
                             />
                             <div className='book__details'>
-                                <Error />
+                                {/* <Error /> */}
                                 <h5 className='book__title book-font__outline'>
                                     {book.title}
                                 </h5>

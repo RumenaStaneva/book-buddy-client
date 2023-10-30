@@ -9,11 +9,12 @@ import AddBookModal from './AddBookModal'
 import { useDispatch } from "react-redux";
 import { clearError } from '../reducers/errorSlice';
 import Spinner from 'react-spinner-material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function BookList({ books, loading }) {
     const [bookToAdd, setBookToAdd] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
     const dispatchError = useDispatch();
 
 
@@ -38,7 +39,16 @@ function BookList({ books, loading }) {
     }
 
     const handleBookAdded = (title) => {
-        setSuccessMessage(`${title} added successfully`);
+        toast.success(`${title} added successfully`, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        })
     };
 
     return (
@@ -49,11 +59,7 @@ function BookList({ books, loading }) {
             :
             <>
                 {isOpen && <AddBookModal setIsOpen={setIsOpen} bookDetails={bookToAdd} onBookAdded={handleBookAdded} />}
-                {successMessage.length > 0 ?
-                    <div className='success-message__container'>
-                        <p>{successMessage}</p>
-                    </div>
-                    : null}
+                <ToastContainer />
 
                 <div className='books__container books-list__container'>
                     {
@@ -68,7 +74,6 @@ function BookList({ books, loading }) {
                                             event.stopPropagation();
                                             event.preventDefault();
                                             setIsOpen(true)
-                                            setSuccessMessage('');
                                             handleAddToShelf(book);
                                             dispatchError(clearError());
                                         }}
