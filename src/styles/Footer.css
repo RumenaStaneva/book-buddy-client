@@ -4,8 +4,9 @@
     text-align: center;
     padding: 0 15px;
     width: 100%;
+    position: absolute;
+    bottom: 0;
 }
-
 
 .footer-content {
     align-items: center;
@@ -72,5 +73,19 @@
     100% {
         transform: scale(1);
         opacity: 0.5;
+    }
+}
+
+@media (max-width: 576px) {
+    .info-container {
+        margin-bottom: 100px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
+
+    .social-icons {
+        flex-direction: column;
     }
 }

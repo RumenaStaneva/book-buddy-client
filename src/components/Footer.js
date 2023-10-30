@@ -10,12 +10,14 @@ const Footer = () => {
                     <img className="logo" src='https://storage.googleapis.com/book-buddy/images/logo.png' />
                 </div>
                 <div className="social-icons d-flex">
-                    <NavLink to="https://github.com/RumenaStaneva" target="_blank" rel="noopener noreferrer">
-                        <FaGithub className='icon' />
-                    </NavLink>
-                    <NavLink to="https://www.linkedin.com/in/rumena-staneva" target="_blank" rel="noopener noreferrer">
-                        <FaLinkedinIn className='icon' />
-                    </NavLink>
+                    <div className="d-flex">
+                        <NavLink to="https://github.com/RumenaStaneva" target="_blank" rel="noopener noreferrer">
+                            <FaGithub className='icon' />
+                        </NavLink>
+                        <NavLink to="https://www.linkedin.com/in/rumena-staneva" target="_blank" rel="noopener noreferrer">
+                            <FaLinkedinIn className='icon' />
+                        </NavLink>
+                    </div>
                     <p>&copy; 2023 Book Buddy. All rights reserved.</p>
                 </div>
             </div>
