@@ -27,8 +27,7 @@
 }
 
 .input-field__container {
-    /* width: 100%; */
-    padding: 10px;
+    flex: 1 1 calc(50% - 10px);
     margin-bottom: 10px;
 }
 
@@ -36,31 +35,33 @@
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-top: 0;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
 }
 
 .input-field input {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 1rem;
 }
 
 .input-field.error input {
     border-color: red;
 }
 
-.input-field label {
+.input-field label,
+.input-field__container label {
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
+    font-size: 1.1rem;
+
 }
 
 .input-fields {
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .input-field {

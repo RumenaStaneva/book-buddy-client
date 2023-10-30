@@ -77,10 +77,6 @@
 }
 
 @media (max-width: 576px) {
-    .info-container {
-        margin-bottom: 100px;
-    }
-
     .footer-content {
         flex-direction: column;
     }

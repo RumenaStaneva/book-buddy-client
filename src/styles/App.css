@@ -21,6 +21,7 @@ textarea {
 
 html {
     position: relative;
+    min-height: 100vh;
 }
 
 .cta-btn {

@@ -1,5 +1,6 @@
 import Button from "../components/Button";
-import '../styles/TimeSwapInformationPage.css'
+import '../styles/TimeSwapInformationPage.css';
+import Header from "../components/Header";
 
 const TimeSwapInformationPage = ({ setIsOpenAddScreenTime }) => {
     const handleAddScreenTime = () => {
@@ -7,23 +8,35 @@ const TimeSwapInformationPage = ({ setIsOpenAddScreenTime }) => {
     }
 
     return <>
+        <Header title="Time swap" />
 
-        <main>
+        <main className="time-swap-info">
             <div class="info-container">
-                <h1 class="title">Time Swap</h1>
+                <div className="about__section d-flex">
+                    <div className="about-section__text">
+                        <h2 class="subtitle">What is Time Swap:</h2>
+                        <p class="paragraph">Time Swap helps you balance screen time by encouraging daily reading. Set your reading goals based on your screen time and track your progress.</p>
+                    </div>
+                    <img src="https://storage.googleapis.com/book-buddy/images/asset-6.png" alt="" />
 
-                <h2 class="subtitle">What is Time Swap?</h2>
-                <p class="paragraph">Time Swap helps you balance screen time by encouraging daily reading. Set your reading goals based on your screen time and track your progress.</p>
+                </div>
 
-                <h2 class="subtitle">How to Use Time Swap:</h2>
-                <ol class="ordered-list">
-                    <li>Enter your previous week's screen time.</li>
-                    <li>Time Swap calculates your daily reading goal to match screen time.</li>
-                    <li>Read at your own pace, starting and stopping as needed.</li>
-                    <li>After the set screen time for reading, continue reading with the timer adding to your progress. You can update your progress via a modal.</li>
-                    <li>Change your reading goal to weekly average or a custom time as per your preference.</li>
-                    <li>View detailed statistics in your profile, including reading time, screen time, and goals for each selected week.</li>
-                </ol>
+                <div className="about__section d-flex">
+                    <img src="https://storage.googleapis.com/book-buddy/images/asset-7.png" alt="" />
+                    <div className="about-section__text">
+                        <h2 class="subtitle">How to Use Time Swap:</h2>
+                        <dv class="list">
+                            <dd>Enter your previous week's screen time.</dd>
+                            <dd>Time Swap calculates your daily reading goal to match screen time.</dd>
+                            <dd>Read at your own pace, starting and stopping as needed.</dd>
+                            <dd>After the set screen time for reading, continue reading with the timer adding to your progress. You can update your progress via a modal.</dd>
+                            <dd>Change your reading goal to weekly average or a custom time as per your preference.</dd>
+                            <dd>View detailed statistics in your profile, including reading time, screen time, and goals for each selected week.</dd>
+                        </dv>
+                    </div>
+                </div>
+
+                <Button className="cta-btn" onClick={handleAddScreenTime}>Add screen time</Button>
             </div>
         </main>
 
