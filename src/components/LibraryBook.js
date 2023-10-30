@@ -60,6 +60,10 @@ function LibraryBook({ book, handleSuccessMessage }) {
 
     const categoryColor = categoryColors[book.category] || '#FFFFFF';
 
+    const handleUpdateProgressClick = () => {
+        setBookPageProgress('');
+    }
+
     return (
         <>
             <div className='books__container currently-reading__container'>
@@ -112,6 +116,7 @@ function LibraryBook({ book, handleSuccessMessage }) {
                                                 id="updatedProgress"
                                                 value={bookPageProgress != null ? bookPageProgress : book.progress}
                                                 onChange={(e) => setBookPageProgress(e.target.value)}
+                                                onClick={handleUpdateProgressClick}
                                             />
                                         </div>
                                         <div className="d-flex">

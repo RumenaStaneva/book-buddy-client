@@ -251,14 +251,6 @@ function Home() {
 
                     : null}
 
-
-                {/* {books.length !== 0 ?
-                    <div className="pagination__container">
-                        <Button onClick={prevPage} disabled={currentPage === 1}>Previous</Button>
-                        <Button onClick={nextPage} disabled={currentPage === totalPages}>Next</Button>
-                    </div>
-                    : null} */}
-
                 {totalPages > 1 && books.length !== 0 ? pageNumbers() : null}
 
             </ >

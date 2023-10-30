@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
@@ -76,7 +76,7 @@ function Library() {
                         {currentlyReadingBooks ?
                             <>
                                 <div className='shelf-header'>
-                                    <h2 className='shelf-title'>Currently Reading</h2>
+                                    <h2 className='shelf-title'>Currently Reading ({currentlyReadingBooks.length})</h2>
                                     <a href='/books/see-all?shelf=1' className='cta-btn'>See all</a>
                                 </div>
                                 {currentlyReadingBooks.length > 0 ?
@@ -122,7 +122,7 @@ function Library() {
                         {wantToReadBooks ?
                             <>
                                 <div className='shelf-header'>
-                                    <h2 className='shelf-title'>Want to read books</h2>
+                                    <h2 className='shelf-title'>Want to read books ({wantToReadBooks.length})</h2>
                                     <a href='/books/see-all?shelf=0' className='cta-btn'>See all</a>
                                 </div>
                                 <div className='books__container books-colorful__container'>

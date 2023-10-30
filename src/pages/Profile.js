@@ -107,87 +107,89 @@ function Profile() {
     return (
         <>
             <NavBar />
-            <div className="profile__container">
+            <main>
                 {isLoadingGlobal ? null :
                     <Header title={`${user.username !== '' ? username : user.email.split('@')[0]}'s profile`} />
                 }
-                {isLoadingGlobal ? (
-                    <div className='spinner__container'>
-                        <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
-                    </div>
-                ) : (
-                    <>
-
-                        <Error />
-                        <div className="profile__content">
-                            <h1>User Profile</h1>
-                            <div className='profile__picture-container'>
-                                <button className='change-picture__btn' onClick={handleProfileClick}>
-
-                                    <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
-                                        className={`profile__profile-picture ${isEditingProfile ? 'editing' : ''}`}
-                                    />
-                                </button>
-                            </div>
-
-                            <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
-
-                            <div className="profile__field">
-                                <label>Email: </label>
-                                <div className="profile__info" id="email">{userData.email}</div>
-                            </div>
-                            <div className="profile__field">
-                                <label>Bio: </label>
-                                {hiddenBio && !bio ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
-                                <div onClick={() => setHiddenBio(false)} className="profile__clickable" tabIndex="0">
-                                    {!hiddenBio ? null : <span className="hidden">{bio}</span>}
-                                </div>
-                                <textarea
-                                    rows="4"
-                                    cols="50"
-                                    value={bio}
-                                    onChange={(e) => setBio(e.target.value)}
-                                    {...(hiddenBio ? { hidden: true } : {})}
-                                    className={`profile__textarea ${hiddenBio ? 'hidden' : ''}`}
-                                    aria-labelledby="bio"
-                                />
-                            </div>
-
-                            <div className="profile__field">
-                                <label>Username: </label>
-                                <div onClick={() => setHiddenUsername(false)} className="profile__clickable" tabIndex="0">
-                                    {!hiddenUsername ? null : <span className="hidden">{username}</span>}
-                                </div>
-                                <input
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    {...(hiddenUsername ? { hidden: true } : {})}
-                                    className={`profile__input ${hiddenUsername ? 'hidden' : ''}`}
-                                    aria-labelledby="username"
-                                />
-                            </div>
-
-                            {(username !== userData.username || bio !== userData.bio) && (
-                                <Button onClick={handleUpdateInformation} className="update__button">
-                                    Update Information
-                                </Button>
-                            )}
-
+                <div className="profile__container">
+                    {isLoadingGlobal ? (
+                        <div className='spinner__container'>
+                            <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                         </div>
-                        {isEditingProfile && (
-                            <div className="profile-picture">
-                                <ProfilePicture handleProfileClick={handleProfileClick} />
+                    ) : (
+                        <>
+
+                            <Error />
+                            <div className="profile__content">
+                                <h1>User Profile</h1>
+                                <div className='profile__picture-container'>
+                                    <button className='change-picture__btn' onClick={handleProfileClick}>
+
+                                        <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
+                                            className={`profile__profile-picture ${isEditingProfile ? 'editing' : ''}`}
+                                        />
+                                    </button>
+                                </div>
+
+                                <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
+
+                                <div className="profile__field">
+                                    <label>Email: </label>
+                                    <div className="profile__info" id="email">{userData.email}</div>
+                                </div>
+                                <div className="profile__field">
+                                    <label>Bio: </label>
+                                    {hiddenBio && !bio ? <button className='cta-btn btn-sm' onClick={() => setHiddenBio(false)}>Add bio</button> : null}
+                                    <div onClick={() => setHiddenBio(false)} className="profile__clickable" tabIndex="0">
+                                        {!hiddenBio ? null : <span className="hidden">{bio}</span>}
+                                    </div>
+                                    <textarea
+                                        rows="4"
+                                        cols="50"
+                                        value={bio}
+                                        onChange={(e) => setBio(e.target.value)}
+                                        {...(hiddenBio ? { hidden: true } : {})}
+                                        className={`profile__textarea ${hiddenBio ? 'hidden' : ''}`}
+                                        aria-labelledby="bio"
+                                    />
+                                </div>
+
+                                <div className="profile__field">
+                                    <label>Username: </label>
+                                    <div onClick={() => setHiddenUsername(false)} className="profile__clickable" tabIndex="0">
+                                        {!hiddenUsername ? null : <span className="hidden">{username}</span>}
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        {...(hiddenUsername ? { hidden: true } : {})}
+                                        className={`profile__input ${hiddenUsername ? 'hidden' : ''}`}
+                                        aria-labelledby="username"
+                                    />
+                                </div>
+
+                                {(username !== userData.username || bio !== userData.bio) && (
+                                    <Button onClick={handleUpdateInformation} className="update__button">
+                                        Update Information
+                                    </Button>
+                                )}
+
                             </div>
-                        )}
-                    </>
+                            {isEditingProfile && (
+                                <div className="profile-picture">
+                                    <ProfilePicture handleProfileClick={handleProfileClick} />
+                                </div>
+                            )}
+                        </>
 
 
-                )}
-            </div>
-            {hasReadingTimeAnytime ?
-                <Diagram />
-                : <p>No data to display</p>}
+                    )}
+                </div>
+                {hasReadingTimeAnytime ?
+                    <Diagram />
+                    : <p>No data to display</p>}
+            </main>
 
         </>
 

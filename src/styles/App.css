@@ -24,6 +24,10 @@ html {
     min-height: 100vh;
 }
 
+main {
+    margin-bottom: 90px;
+}
+
 .cta-btn {
     display: block;
     padding: 5px 16px;

@@ -69,13 +69,15 @@
 }
 
 .countdown-message {
-    font-size: 6.5rem;
+    font-size: 2.5rem;
     margin-bottom: 30px;
 }
 
 .countdown-part {
     font-family: 'Black Ops One';
     font-weight: 300;
+    font-size: 6.5rem;
+
 }
 
 .countdown-seconds {

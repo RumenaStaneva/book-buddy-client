@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import '../styles/Modal.css'
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +8,7 @@ import Modal from './Dialog'
 import Error from "./Error";
 import { setCurrentlyReadingBook, setSuccessMessage } from '../reducers/timerSlice';
 import { fetchAllBooks } from '../reducers/booksSlice';
+
 
 const UpdateBookProgressModal = ({ setIsOpen }) => {
     const { currentlyReadingBook } = useSelector((state) => state.timer)

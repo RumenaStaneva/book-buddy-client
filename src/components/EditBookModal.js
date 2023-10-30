@@ -143,7 +143,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                     console.error('Error updating book:', error);
                 });
         }
-    }, [bookToUpdate, user, setIsOpen, fetchBook, dispatchError]);
+    }, [bookToUpdate, user, setIsOpen, fetchBook, dispatchError, updatedThumbnail]);
 
     const handleDeleteBook = () => {
         setDeleteModalIsOpen(true);

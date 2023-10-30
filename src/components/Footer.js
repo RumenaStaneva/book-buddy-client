@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="footer">
             <div className="footer-content d-flex">
                 <div className="logo-container">
-                    <img className="logo" src='https://storage.googleapis.com/book-buddy/images/logo.png' />
+                    <img className="logo" src='https://storage.googleapis.com/book-buddy/images/logo.png' alt='logo' />
                 </div>
                 <div className="social-icons d-flex">
                     <div className="d-flex">
