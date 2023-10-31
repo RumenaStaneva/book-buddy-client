@@ -1,4 +1,5 @@
 import '../styles/Modal.css'
+import { useEffect } from 'react'
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
@@ -6,7 +7,7 @@ import Modal from './Dialog'
 import Spinner from 'react-spinner-material';
 import AvatarEditor from 'react-avatar-editor';
 
-const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale, setEncodedImage, isLoading, setIsLoading, editor, handleProfileClick }) => {
+const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale, setEncodedImage, isLoading, setIsLoading, editor, handleProfileClick, setIsEditingProfile }) => {
     const { user, dispatch } = useAuthContext();
     const dispatchError = useDispatch();
 
@@ -47,6 +48,8 @@ const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale
                     handleProfileClick();
                     setScale(1);
                     setEditor(null);
+                    setIsEditingProfile(false);
+                    setIsOpen(false);
                 } else {
                     console.error('Error uploading profile picture:', responseData.error);
                     dispatchError(setError({ message: `Error uploading profile picture: ${responseData.error}` }));
@@ -65,7 +68,7 @@ const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale
     return (
         <Modal
             title={'Edit profile picture'}
-            onClose={() => setIsOpen(false)}
+            onClose={() => { setIsOpen(false); setIsEditingProfile(false) }}
             subtitle={``}
             setIsOpen={setIsOpen}
             content={

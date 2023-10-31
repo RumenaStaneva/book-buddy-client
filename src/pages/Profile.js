@@ -24,6 +24,7 @@ function Profile() {
     const dispatchRedux = useDispatch();
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const { hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
+    const [isOpen, setIsOpen] = useState(false);
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -120,7 +121,7 @@ function Profile() {
                             <Error />
                             <div className="profile__content">
                                 <h1>User Profile</h1>
-                                {!isEditingProfile && (
+                                {!isEditingProfile && !isOpen && (
                                     <div className='profile__picture-container'>
                                         <button className='change-picture__btn' onClick={() => handleProfileClick(true)}>
 
@@ -132,7 +133,7 @@ function Profile() {
                                 )}
                                 {isEditingProfile && (
                                     <div className="profile-picture">
-                                        <ProfilePicture handleProfileClick={handleProfileClick} />
+                                        <ProfilePicture handleProfileClick={handleProfileClick} setIsEditingProfile={setIsEditingProfile} isOpen={isOpen} setIsOpen={setIsOpen} />
                                     </div>
                                 )}
 

@@ -63,7 +63,6 @@ function Home() {
             );
             setBooks(response.data.items);
             const calculatedTotalPages = Math.ceil(response.data.totalItems / PAGE_SIZE);
-            console.log('Calculated Total Pages:', calculatedTotalPages);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
             dispatchError(setError({ message: `Error fetching books: ${error})` }));
@@ -145,10 +144,8 @@ function Home() {
     const firstPage = () => {
         setCurrentPage(1);
     };
-    console.log(totalPages);
     const goToPage = (pageNumber) => {
         setLoading(true);
-        // setCurrentPage(pageNumber);
         setCurrentPage((prevPage) => {
             // Ensure the current page is updated first before setting the new page
             if (prevPage !== pageNumber) {

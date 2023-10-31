@@ -6,6 +6,10 @@
     padding: 10px;
 }
 
+.profile__container {
+    margin-bottom: 30px;
+}
+
 .profile__container h1 {
     margin-bottom: 20px;
 }
@@ -224,12 +228,73 @@
     min-width: 700px;
 }
 
+.diagram__container {
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.diagram__container p {
+    text-align: center;
+}
+
+.range-calendar__container {
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.range-calendar__container .dropdown {
+    margin-right: 25px;
+    height: 50px;
+}
+
+@media (max-width: 768px) {
+    .chart__content {
+        max-width: 500px;
+        min-width: 300px;
+        width: 100%;
+    }
+
+    .hide-x-axis-label {
+        display: none;
+    }
+}
+
+
 @media (max-width: 576px) {
 
-    .profile__content,
-    .chart__content {
-        padding: 10px;
+    .profile__content {
+        padding: 30px;
         max-width: 300px;
+    }
+
+    .profile__picture-container,
+    .profile-picture {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .profile__picture-container .change-picture__btn,
+    .profile-picture {
+        position: relative;
+        top: 0;
+    }
+
+    .profile__container .modal {
+        overflow: auto;
+    }
+
+    .profile__container canvas {
+        width: 300px !important;
+        height: 300px !important;
     }
 
     .profile__content h1 {
@@ -238,9 +303,5 @@
 
     .profile__status {
         font-size: 16px;
-    }
-
-    .chart__container {
-        max-width: 300px;
     }
 }

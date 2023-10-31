@@ -6,7 +6,7 @@ import Spinner from 'react-spinner-material';
 import '../styles/Profile.css'
 import AvatarEditorModal from "./AvatarEditorModal";
 
-function ProfilePicture({ handleProfileClick }) {
+function ProfilePicture({ handleProfileClick, setIsEditingProfile, isOpen, setIsOpen }) {
     const uploadedImage = useRef(null);
     const imageUploader = useRef(null);
     const [imageUploaded, setImageUploaded] = useState(false);
@@ -25,6 +25,7 @@ function ProfilePicture({ handleProfileClick }) {
             reader.onload = (e) => {
                 const imageDataUrl = reader.result;
                 setEncodedImage(imageDataUrl);
+                setIsOpen(true);
                 if (uploadedImage.current) {
                     uploadedImage.current.file = file;
                     uploadedImage.current.src = imageDataUrl;
@@ -68,7 +69,7 @@ function ProfilePicture({ handleProfileClick }) {
 
     return (
         <>
-            {encodedImage.length > 0 && <AvatarEditorModal setEditor={setEditor} encodedImage={encodedImage} scale={scale} setScale={setScale} setEncodedImage={setEncodedImage} isLoading={isLoading} setIsLoading={setIsLoading} editor={editor} handleProfileClick={handleProfileClick} />}
+            {isOpen > 0 && <AvatarEditorModal setIsOpen={setIsOpen} setEditor={setEditor} encodedImage={encodedImage} scale={scale} setScale={setScale} setEncodedImage={setEncodedImage} isLoading={isLoading} setIsLoading={setIsLoading} editor={editor} handleProfileClick={handleProfileClick} setIsEditingProfile={setIsEditingProfile} />}
             {isLoading ? (
                 <div className='spinner__container'>
                     <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />

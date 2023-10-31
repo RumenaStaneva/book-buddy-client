@@ -26,6 +26,7 @@ html {
 
 main {
     margin-bottom: 90px;
+    padding: 0 15px;
 }
 
 .cta-btn {
@@ -114,4 +115,12 @@ main {
     font-size: 36px;
     margin-bottom: 10px;
     font-weight: 600;
+}
+
+@media (max-width: 576px) {
+
+    main {
+        margin-bottom: 150px;
+        padding: 15px;
+    }
 }

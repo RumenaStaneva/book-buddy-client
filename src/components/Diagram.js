@@ -77,8 +77,8 @@ function Diagram() {
                 isLoading ? (
                     <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                 ) : (
-                    <div>
-                        <div className='d-flex'>
+                    <div className='diagram__container'>
+                        <div className='d-flex range-calendar__container'>
 
                             <Dropdown
                                 options={dropdownOptions}
