@@ -22,7 +22,7 @@
 
 .book-colorful {
     display: flex;
-    flex: 0 0 33%;
+    /* flex: 0 0 33.33%; */
     white-space: break-spaces;
     margin: 30px 16px;
     padding: 30px 35px;
@@ -162,10 +162,46 @@
     .books__list-all .book {
         flex: 0 0 50%;
     }
+
+
 }
 
 @media (max-width: 576px) {
+    .books__library {
+        padding: 20px;
+    }
+
+    .books__library .book-colorful__image {
+        margin-right: 5px;
+    }
+
     .books__list-all .book {
         flex: 0 0 100%;
+    }
+
+    .books-colorful__container .book__button {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .book-colorful {
+        flex: 0 0 100%;
+        margin: 40px 0;
+    }
+
+    .details__additional-info {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .book__all-pages {
+        margin-right: 0;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+
+    .details__additional-info .book__action-area {
+        align-items: center;
     }
 }
