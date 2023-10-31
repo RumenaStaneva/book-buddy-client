@@ -35,8 +35,8 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
 
     const createChart = () => {
       if (chartRef.current) {
-        const isXAxisVisible = window.innerWidth > 767;
-        const isSmallScreen = window.innerWidth <= 767;
+        const isXAxisVisible = window.innerWidth > 576;
+        const isSmallScreen = window.innerWidth <= 576;
 
         const chartConfig: ChartConfiguration<'bar'> = {
           type: 'bar',
