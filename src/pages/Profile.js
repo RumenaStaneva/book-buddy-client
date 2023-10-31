@@ -190,7 +190,7 @@ function Profile() {
                 </div>
                 {hasReadingTimeAnytime ?
                     <Diagram />
-                    : <p>No data to display</p>}
+                    : null}
             </main>
 
         </>
