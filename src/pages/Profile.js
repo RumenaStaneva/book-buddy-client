@@ -25,8 +25,6 @@ function Profile() {
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const { hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
 
-
-
     const fetchUserData = useCallback(async () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/profile`, {
@@ -122,14 +120,21 @@ function Profile() {
                             <Error />
                             <div className="profile__content">
                                 <h1>User Profile</h1>
-                                <div className='profile__picture-container'>
-                                    <button className='change-picture__btn' onClick={handleProfileClick}>
+                                {!isEditingProfile && (
+                                    <div className='profile__picture-container'>
+                                        <button className='change-picture__btn' onClick={() => handleProfileClick(true)}>
 
-                                        <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
-                                            className={`profile__profile-picture ${isEditingProfile ? 'editing' : ''}`}
-                                        />
-                                    </button>
-                                </div>
+                                            <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
+                                                className={`profile__profile-picture ${isEditingProfile ? 'editing' : ''}`}
+                                            />
+                                        </button>
+                                    </div>
+                                )}
+                                {isEditingProfile && (
+                                    <div className="profile-picture">
+                                        <ProfilePicture handleProfileClick={handleProfileClick} />
+                                    </div>
+                                )}
 
                                 <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
 
@@ -176,11 +181,7 @@ function Profile() {
                                 )}
 
                             </div>
-                            {isEditingProfile && (
-                                <div className="profile-picture">
-                                    <ProfilePicture handleProfileClick={handleProfileClick} />
-                                </div>
-                            )}
+
                         </>
 
 
