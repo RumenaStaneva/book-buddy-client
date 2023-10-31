@@ -9,6 +9,8 @@ import Spinner from 'react-spinner-material';
 import { GoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
+import ReCAPTCHA from "react-google-recaptcha";
+
 
 function SignUp() {
     const [email, setEmail] = useState('');
@@ -19,6 +21,12 @@ function SignUp() {
     const [verificationEmailSent, setVerificationEmailSent] = useState(false);
     const { signup, signUpWithGoogleAuth, isLoading, setIsLoading } = useSignup();
     const dispatchError = useDispatch();
+    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+
+    const handleCaptchaVerify = (response) => {
+        setIsCaptchaVerified(true);
+    };
 
 
     const handleSubmit = async (e) => {
@@ -30,21 +38,26 @@ function SignUp() {
             dispatchError(setError({ message: 'Passwords should match' }));
             return;
         }
-        try {
-            await signup(email, password, username);
-            setIdenticalPasswords(true);
-            setEmail('');
-            setPassword('');
-            setRepeatPassword('');
-            setUsername('');
-            setVerificationEmailSent(true);
-        } catch (error) {
-            setVerificationEmailSent(false);
-            setIdenticalPasswords(true);
-            setEmail('');
-            setPassword('');
-            setRepeatPassword('');
-            setUsername('');
+        if (isCaptchaVerified) {
+            try {
+                await signup(email, password, username);
+                setIdenticalPasswords(true);
+                setEmail('');
+                setPassword('');
+                setRepeatPassword('');
+                setUsername('');
+                setVerificationEmailSent(true);
+            } catch (error) {
+                setVerificationEmailSent(false);
+                setIdenticalPasswords(true);
+                setEmail('');
+                setPassword('');
+                setRepeatPassword('');
+                setUsername('');
+            }
+        } else {
+            dispatchError(setError({ message: 'Please verify that you are not a robot.' }));
+
         }
     }
 
@@ -110,6 +123,11 @@ function SignUp() {
                                         signupWithGoogle(response);
                                     }} onError={error => dispatchError(setError({ message: error }))} />
                             </div>
+
+                            <ReCAPTCHA
+                                sitekey='6LdKFeQoAAAAALujPMOEwbzB0ncL4hCMUoJEifDR'
+                                onChange={handleCaptchaVerify}
+                            />
                         </form>
                     )}
                 </div>

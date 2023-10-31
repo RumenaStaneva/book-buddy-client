@@ -8,19 +8,29 @@ import Error from '../components/Error';
 import { GoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";
 import { setError } from '../reducers/errorSlice';
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Login() {
     const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
     const { login, loginWithGoogleAuth, isLoading } = useLogin();
     const dispatchError = useDispatch();
+    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+    const handleCaptchaVerify = (response) => {
+        setIsCaptchaVerified(true);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await login(emailOrUsername, password);
-        } catch (error) {
-            dispatchError(setError({ message: error }));
+        if (isCaptchaVerified) {
+            try {
+                await login(emailOrUsername, password);
+            } catch (error) {
+                dispatchError(setError({ message: error }));
+            }
+        } else {
+            dispatchError(setError({ message: 'Please verify that you are not a robot.' }));
         }
     }
 
@@ -31,6 +41,8 @@ function Login() {
             dispatchError(setError({ message: error.message }));
         }
     }
+
+    console.log(process.env.REACT_APP_RECAPTCHA_SITE_KEY);
 
     return (
         <>
@@ -63,6 +75,11 @@ function Login() {
                                     loginWithGoogle(response);
                                 }} onError={error => dispatchError(setError({ message: error }))} />
                         </div>
+
+                        <ReCAPTCHA
+                            sitekey='6LdKFeQoAAAAALujPMOEwbzB0ncL4hCMUoJEifDR'
+                            onChange={handleCaptchaVerify}
+                        />
                     </form>
                 </div>
                 <div className='wrapper'>
