@@ -198,17 +198,17 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                         <label htmlFor="description">Description</label>
                                         <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={(e) => setUpdatedDescription(e.target.value)}></textarea>
                                     </div>
-                                    <div className="modal__section book-pages-section">
+                                    <div className="modal__section book-pages-section modal__section-left-align">
                                         <label htmlFor="pageCount">Book Pages</label>
                                         <input type="number" name="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
                                     </div>
                                     <div className="modal__section upload-image-section">
-                                        <span>Add book image:</span>
+                                        <span>Change book thumbnail:</span>
                                         <label htmlFor="bookImage" className='cta-btn upload-btn'>Book image</label>
                                         <input id='bookImage' name='bookImage' type="file" accept="image/*" onChange={handleThumbnailUpload} />
                                     </div>
                                     <div className="modal__section modal__section-left-align">
-                                        <label htmlFor="dropdown-shelf">Choose book shelf:</label>
+                                        <label htmlFor="dropdown-shelf">Choose Book Status:</label>
                                         <Dropdown
                                             id={'dropdown-shelf'}
                                             options={shelfOptions.map(option => option.label)}
@@ -217,7 +217,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                         />
                                     </div>
                                     <div className="modal__section modal__section-left-align">
-                                        <label htmlFor="dropdown-shelf">Choose book category:</label>
+                                        <label htmlFor="dropdown-shelf">Choose Book Category:</label>
                                         <Dropdown id={'dropdown-category'} options={Object.values(BookCategories)} onSelect={(selectedCategory) => setCategory(selectedCategory)} selectedOption={category !== null ? category : null} />
                                     </div>
                                 </div>

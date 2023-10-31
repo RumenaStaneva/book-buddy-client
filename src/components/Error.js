@@ -23,7 +23,7 @@ const Error = () => {
                 <p>{errorMessage}</p>
 
                 <Button className="close-btn" onClick={() => dispatch(clearError())}>
-                    <IoIosClose />
+                    <IoIosClose strokeWidth={6} />
                 </Button>
             </div>
             : null
