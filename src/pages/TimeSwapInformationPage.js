@@ -14,7 +14,7 @@ const TimeSwapInformationPage = ({ setIsOpenAddScreenTime }) => {
             <div className="info-container">
                 <div className="about__section d-flex">
                     <div className="about-section__text">
-                        <h2 className="subtitle">What is Time Swap:</h2>
+                        {/* <h2 className="subtitle">What is Time Swap:</h2> */}
                         <p className="paragraph">Time Swap helps you balance screen time by encouraging daily reading. Set your reading goals based on your screen time and track your progress.</p>
                     </div>
                     <img src="https://storage.googleapis.com/book-buddy/images/asset-6.png" alt="" />

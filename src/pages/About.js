@@ -10,7 +10,7 @@ function About() {
 
     return <>
         <NavBar />
-        <Header title="About Time Swap" />
+        <Header title="About" />
         <div className="info-container">
             <div className="about__section d-flex">
                 <div className="about-section__text">

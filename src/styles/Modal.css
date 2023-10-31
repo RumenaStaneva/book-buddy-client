@@ -38,7 +38,7 @@
 
 .modal-content__container {
     /* max-height: 80%; */
-    overflow: auto;
+    overflow: hidden;
     height: inherit;
 }
 
