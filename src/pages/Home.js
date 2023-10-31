@@ -7,23 +7,21 @@ import Button from '../components/Button';
 import Box from '@mui/material/Box';
 import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
-import Error from '../components/Error';
-import { useDispatch, useSelector } from "react-redux";
-import { setError, clearError } from '../reducers/errorSlice';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
+import { IoIosClose } from 'react-icons/io'
+
 
 function Home() {
 
     const [title, setTitle] = useState('');
+    const [error, setError] = useState('');
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
     const PAGE_SIZE = 10;
-    const dispatchError = useDispatch();
-    const { errorMessage } = useSelector((state) => state.error);
     useEffect(() => {
         document.title = 'Home';
     }, []);
@@ -31,14 +29,15 @@ function Home() {
     const handleChange = (e) => {
         const title = e.target.value;
         setTitle(title);
-        dispatchError(clearError());
+        setError('');
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
         if (title === '' || title === undefined || title === null) {
-            dispatchError(setError({ message: 'Please enter a title or author.' }));
+            console.log('hitted');
+            setError('Please enter a title or author.');
             setLoading(false);
         } else {
             setLastSearchedTitle(title);
@@ -48,6 +47,7 @@ function Home() {
             setTitle('');
         }
     }
+
     const fetchData = useCallback(async (page, title) => {
         setLoading(true);
         try {
@@ -62,15 +62,15 @@ function Home() {
                 }
             );
             setBooks(response.data.items);
-            const calculatedTotalPages = Math.ceil(response.data.totalItems / PAGE_SIZE);
+            // const calculatedTotalPages = Math.ceil(response.data.totalItems / PAGE_SIZE);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
-            dispatchError(setError({ message: `Error fetching books: ${error})` }));
+            setError(`Error fetching books: ${error})`);
             console.error('Error fetching books: ', error);
         } finally {
             setLoading(false);
         }
-    }, [dispatchError]);
+    }, []);
 
     useEffect(() => {
         if (lastSearchedTitle) {
@@ -215,7 +215,16 @@ function Home() {
                             alt="Logo"
                             className='homepage-logo'
                         />
-                        <Error />
+                        {error.length > 0 ?
+                            <div className="error-message__container">
+                                <p>{error}</p>
+
+                                <Button className="close-btn" onClick={() => setError('')}>
+                                    <IoIosClose />
+                                </Button>
+                            </div>
+                            : null
+                        }
                         {loading ?
                             <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} /> :
                             <div className='d-flex'>
@@ -225,7 +234,7 @@ function Home() {
                                     variant="outlined"
                                     value={title}
                                     onChange={handleChange}
-                                    error={errorMessage}
+                                    error={error}
                                     className='search__input'
                                 />
                                 <Button className='cta-btn' type='submit'>Search</Button>
