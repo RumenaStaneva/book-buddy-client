@@ -1,28 +1,12 @@
-.table-container th,
-.table-container td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-.table-container th {
-    background-color: #f2f2f2;
-}
-
-.table-container tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.table-container tbody tr:hover {
-    background-color: #ddd;
-}
-
-
 .table-container {
+    width: 100%;
     margin-top: 20px;
     padding: 2px;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
 }
 
 .header-row {

@@ -13,7 +13,7 @@ function LinearProgressWithLabel(props) {
     }, [props.value]);
 
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }} className='progressbar'>
             <Box sx={{ width: '100%', mr: 1 }}>
                 <LinearProgress variant="determinate" value={progress} />
             </Box>
