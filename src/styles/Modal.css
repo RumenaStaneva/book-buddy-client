@@ -82,7 +82,7 @@
 .closeBtn {
     cursor: pointer;
     font-weight: 500;
-    padding: 6px 8px 2px 8px;
+    padding: 10px;
     border-radius: 8px;
     border: none;
     font-size: 18px;
@@ -96,12 +96,16 @@
     align-self: flex-end;
     margin-top: -7px;
     margin-right: -7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 
-.closeBtn:hover {
+/* .closeBtn:hover {
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
     transform: translate(-4px, 4px);
-}
+} */
 
 .closeBtn svg {
     width: 20px;
