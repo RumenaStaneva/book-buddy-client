@@ -62,32 +62,38 @@ const NavBar = () => {
                     }
                 </ul>
             </nav>
+            {
+                !user ?
+                    <nav className='nav nav__login-register' aria-label='Login/Signup'>
+                        <ul className='nav__list' role='menubar'>
 
-            <nav className='nav nav__login-register' aria-label='Login/Signup'>
-                <ul className='nav__list' role='menubar'>
-                    {user && (
-                        <>
-                            {<a href='/users/profile' className='nav__profile-picture'>
-                                <img width={50} height={50} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile" />
-                            </a>}
-                            <li className='nav__item'>
-                                <NavLink onClick={handleClick} className='nav__link' to='/'>Logout</NavLink>
-                            </li>
-                        </>
-                    )}
-                    {!user ?
-                        <>
-                            <li className='nav__item'>
-                                <NavLink className='nav__link' to='/users/login'>Login</NavLink>
-                            </li>
-                            <li className='nav__item'>
-                                <NavLink className='nav__link' to='/users/sign-up'>Sign up</NavLink>
-                            </li>
-                        </>
-                        : null}
-                </ul>
+                            <>
+                                <li className='nav__item'>
+                                    <NavLink className='nav__link' to='/users/login'>Login</NavLink>
+                                </li>
+                                <li className='nav__item'>
+                                    <NavLink className='nav__link' to='/users/sign-up'>Sign up</NavLink>
+                                </li>
+                            </>
+                        </ul>
 
-            </nav>
+                    </nav>
+                    :
+                    <nav className='nav nav__login-register registered' aria-label='Login/Signup'>
+                        <ul className='nav__list' role='menubar'>
+                            <>
+                                {<a href='/users/profile' className='nav__profile-picture'>
+                                    <img width={50} height={50} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile" />
+                                </a>}
+                                <li className='nav__item'>
+                                    <NavLink onClick={handleClick} className='nav__link' to='/'>Logout</NavLink>
+                                </li>
+                            </>
+                        </ul>
+
+                    </nav>
+            }
+
         </div>
     );
 };

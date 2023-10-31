@@ -93,7 +93,9 @@
 }
 
 .nav__profile-picture {
-    margin-right: 10px;
+    margin-right: 15px;
+    width: 50px;
+    height: 50px;
 }
 
 .nav__profile-picture img {
@@ -117,10 +119,10 @@
 
 .burger__line {
     display: block;
-    width: 25px;
-    height: 3px;
+    width: 40px;
+    height: 6px;
     background-color: #4E6B5D;
-    margin: 4px auto;
+    margin: 6px auto;
     transition: background-color 0.3s ease;
 }
 
@@ -149,7 +151,7 @@
     .nav__list {
         display: none;
         position: absolute;
-        top: 60px;
+        top: 110px;
         left: 0;
         width: 100%;
         background-color: #EDC9BF;
@@ -163,6 +165,8 @@
     .nav__main .nav__list {
         transition: transform 0.3s ease;
         transform: translateX(-100%);
+        height: calc(100vh - 110px);
+        z-index: 10;
     }
 
     .nav__login-register .nav__list {
@@ -184,14 +188,41 @@
         display: flex;
         width: 60%;
         transform: translateX(0);
+        align-items: flex-start;
+        padding-left: 50px;
+    }
+
+    .nav__login-register.registered .nav__list {
+        padding: 0;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        width: 100%;
+    }
+
+    .nav__login-register.registered .nav__profile-picture {
+        padding: 0;
+        background-color: transparent;
+        color: transparent;
+    }
+
+    .nav__main .nav__list .nav__item {
+        margin-bottom: 50px;
+    }
+
+    .nav__main .nav__list .nav__link {
+        font-size: 1.8rem;
+        text-align: left;
     }
 }
 
 @media (max-width: 576px) {
+
     .search__container {
         padding: 25px 10px;
     }
 
-    /* todo fix */
-    .nav__login-register .nav__list {}
+    .nav--open.nav__main .nav__list {
+        width: 100%;
+    }
 }
