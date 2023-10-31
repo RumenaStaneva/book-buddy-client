@@ -19,6 +19,13 @@
     height: 500px;
 }
 
+.search__container .cta-btn {
+    min-width: 95px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
 .homepage-logo {
     width: 100%;
     object-fit: contain;

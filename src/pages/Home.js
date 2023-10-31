@@ -225,35 +225,37 @@ function Home() {
                             </div>
                             : null
                         }
-                        {loading ?
-                            <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} /> :
-                            <div className='d-flex'>
-                                <ShakeableTextField
-                                    id="outlined-basic"
-                                    label="Title/author"
-                                    variant="outlined"
-                                    value={title}
-                                    onChange={handleChange}
-                                    error={error}
-                                    className='search__input'
-                                />
-                                <Button className='cta-btn' type='submit'>Search</Button>
 
-                            </div>
-                        }
+                        <div className='d-flex'>
+                            <ShakeableTextField
+                                id="outlined-basic"
+                                label="Title/author"
+                                variant="outlined"
+                                value={title}
+                                onChange={handleChange}
+                                error={error}
+                                className='search__input'
+                            />
+                            <Button className='cta-btn' type='submit'>{loading ?
+                                <Spinner radius={10} color={"#fff"} stroke={2} visible={true} /> : 'Search'}</Button>
+
+                        </div>
+
                     </motion.div>
 
 
                 </Box>
-                {loading ?
+                {/* {loading ?
                     <div className='spinner__container'>
                         <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                     </div>
                     : null
-                }
+                } */}
 
                 {books && books.length !== 0 ?
-                    <BookList books={books} loading={loading} />
+                    <BookList books={books}
+                    // loading={loading} 
+                    />
 
                     : null}
 
