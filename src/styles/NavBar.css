@@ -165,7 +165,7 @@
     .nav__main .nav__list {
         height: calc(100vh - 90px);
         z-index: 10;
-        visibility: hidden;
+        /* visibility: hidden; */
         display: flex;
         align-items: flex-start;
         overflow-x: hidden;
@@ -189,7 +189,7 @@
 
     .nav--open.nav__main .nav__list {
         width: 60%;
-        visibility: visible;
+        /* visibility: visible; */
         -webkit-transform: translateX(0%);
         transform: translateX(0%);
         padding-left: 50px;
