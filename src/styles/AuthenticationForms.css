@@ -23,6 +23,7 @@ body {
 
 .login-form__container {
     margin-right: 30px;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -208,6 +209,7 @@ body {
     .wrapper.login-form__container {
         width: 100%;
         margin: 0;
+        padding: 0;
     }
 
     .wrapper:last-of-type {
@@ -219,11 +221,6 @@ body {
     .mask {
         top: 0;
         height: calc(100% + 40px);
-    }
-
-    .wrapper.login-form__container {
-        padding: 0;
-        height: auto;
     }
 
     .login-form__container form {

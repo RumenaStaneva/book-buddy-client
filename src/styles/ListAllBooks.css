@@ -204,4 +204,8 @@
     .details__additional-info .book__action-area {
         align-items: center;
     }
+
+    .shelf-header::after {
+        width: calc(100% + 32px);
+    }
 }
