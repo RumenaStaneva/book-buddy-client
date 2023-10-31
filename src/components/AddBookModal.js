@@ -186,7 +186,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                 <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                             </div>)}
                         <>
-                            <div className="add-book-form__container">
+                            <div className={`add-book-form__container ${isLoading && 'd-none'}`}>
                                 <div className="modal__section-image-container">
                                     <div className="modal__section">
                                         <label htmlFor="thumbnail">Thumbnail</label>

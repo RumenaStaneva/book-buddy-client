@@ -72,14 +72,22 @@ main {
     cursor: pointer;
     border-radius: 8px;
     border: none;
-    font-size: 18px;
-    padding: 0 5px;
+    padding: 1px;
     background: transparent;
     position: absolute;
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
     transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn svg {
+    fill: #D92868;
+    font-size: 25px;
+
 }
 
 .close-btn:hover {
@@ -94,6 +102,10 @@ main {
 
 .d-flex {
     display: flex;
+}
+
+.d-none {
+    display: none !important;
 }
 
 .fw-600 {
