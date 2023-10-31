@@ -48,6 +48,9 @@ function BookList({ books, loading }) {
             draggable: true,
             progress: undefined,
             theme: "light",
+            style: {
+                fontSize: '14px',
+            }
         })
     };
 
