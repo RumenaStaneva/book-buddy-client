@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import '../styles/NavBar.css'
 import Button from './Button';
@@ -10,6 +10,7 @@ const NavBar = () => {
     const { user, dispatch } = useAuthContext();
     const { logout } = useLogout();
     const navigate = useNavigate();
+    const navRef = useRef(null);
 
     useEffect(() => {
         const handleStorageChange = (e) => {
@@ -34,8 +35,29 @@ const NavBar = () => {
         setNavVisible(!navVisible);
     };
 
+    function useClickOutside(ref, callback) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    callback();
+                }
+            }
+
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, [ref, callback]);
+    }
+
+    useClickOutside(navRef, () => {
+        if (navVisible) {
+            setNavVisible(false);
+        }
+    });
+
     return (
-        <div className='nav__container'>
+        <div ref={navRef} className='nav__container'>
             <Button className='nav__burger' onClick={toggleNav}>
                 <span className='burger__line'></span>
                 <span className='burger__line'></span>

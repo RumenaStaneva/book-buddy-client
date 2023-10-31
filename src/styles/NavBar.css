@@ -151,7 +151,7 @@
     .nav__list {
         display: none;
         position: absolute;
-        top: 110px;
+        top: 90px;
         left: 0;
         width: 100%;
         background-color: #EDC9BF;
@@ -163,10 +163,14 @@
     }
 
     .nav__main .nav__list {
-        transition: transform 0.3s ease;
-        transform: translateX(-100%);
-        height: calc(100vh - 110px);
+        height: calc(100vh - 90px);
         z-index: 10;
+        visibility: hidden;
+        display: flex;
+        align-items: flex-start;
+        overflow-x: hidden;
+        transform: translateX(-100%);
+        transition: -webkit-transform 0.3s ease, transform 0.3s ease;
     }
 
     .nav__login-register .nav__list {
@@ -183,12 +187,11 @@
         transform: translateX(0);
     }
 
-    /* TODO: Fix animation not working */
     .nav--open.nav__main .nav__list {
-        display: flex;
         width: 60%;
-        transform: translateX(0);
-        align-items: flex-start;
+        visibility: visible;
+        -webkit-transform: translateX(0%);
+        transform: translateX(0%);
         padding-left: 50px;
     }
 
@@ -224,5 +227,13 @@
 
     .nav--open.nav__main .nav__list {
         width: 100%;
+    }
+
+    .nav__login-register .nav__list .nav__item {
+        margin-right: 5px;
+    }
+
+    .nav__login-register .nav__list .nav__item:last-of-type {
+        margin-right: 0;
     }
 }
