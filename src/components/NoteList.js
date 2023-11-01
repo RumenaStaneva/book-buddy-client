@@ -170,13 +170,10 @@ const NotesList = ({ bookDetails }) => {
 
     return (
         <>
-            {notesIsVisible ? null :
-                <Button className='cta-btn' onClick={() => setNotesIsVisible(true)}>Create note for this book</Button>
-            }
             {notesIsVisible ?
                 <div className='notes__add-form'>
                     <div className='notes__inner'>
-                        <label className='notes__add-label' htmlFor="addNote">Create note for this book: </label>
+                        <label className='notes__add-label' htmlFor="addNote">Add note: </label>
                         <MdOutlineCancel onClick={() => setNotesIsVisible(false)} />
                     </div>
                     <Error />
@@ -217,13 +214,16 @@ const NotesList = ({ bookDetails }) => {
                                 hasMore={hasMoreNotes}
                                 height={100}
                                 loader={<Spinner />}
-                                endMessage={<p>No more notes</p>}
+                                className='notes-infinite-scroll'
                             ></InfiniteScroll>
                         </div>
                     </div>
                     : <div className="notes__list-container">
                         <p>No notes yet for this book</p>
                     </div>
+                }
+                {notesIsVisible ? null :
+                    <Button className='cta-btn' onClick={() => setNotesIsVisible(true)}>Add note</Button>
                 }
             </div>
         </>

@@ -91,7 +91,6 @@ function BookDetails() {
                     <p className="book-category book__category" style={{ backgroundColor: bookCategoryColor }}>{bookDetails.category}</p>
                     <p className="book-description">{bookDetails.description}</p>
                     {bookDetails.authors.length > 0 ?
-
                       <p className="book-authors">
                         Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
                       </p>

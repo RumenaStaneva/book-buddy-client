@@ -128,11 +128,12 @@
     font-size: 18px;
     font-weight: bold;
     margin-top: 20px;
+    text-align: center;
 }
 
 .notes__list-container {
-    border: 1px solid #ccc;
     margin-top: 20px;
+    margin-bottom: 20px;
     padding: 10px;
     max-height: 525px;
     overflow: auto;
@@ -155,6 +156,10 @@
     align-items: center;
     justify-content: space-between;
     word-break: break-word;
+}
+
+.notes-infinite-scroll {
+    height: auto !important;
 }
 
 .note__actions {
