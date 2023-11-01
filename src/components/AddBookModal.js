@@ -35,6 +35,8 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
         }
     };
+    console.log(bookDetails.description);
+    console.log(updatedDescription);
     const handleSubmit = (e) => {
         setIsLoading(true);
         e.preventDefault();
@@ -107,7 +109,8 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
                 }
             } catch (error) {
-                dispatchError(setError({ message: 'Error adding book to shelf' }));
+                // console.log(error);
+                dispatchError(setError({ message: error.message }));
                 setIsLoading(false);
             }
         };

@@ -49,7 +49,7 @@
 }
 
 .books__library .book-colorful {
-    padding: 0 10px;
+    padding: 0;
 }
 
 .books__library .book-colorful__image {
@@ -60,12 +60,13 @@
     max-height: 250px;
 }
 
-.books__library .book-colorful__image:hover {
+/* .books__library .book-colorful__image:hover {
     transform: translate(0, -35px) scale(1.1);
-}
+} */
 
 .books-colorful__container .book__button {
     display: flex;
+    padding: 0 10px;
 }
 
 .book-colorful .book__description {

@@ -48,7 +48,7 @@
 
 .book-colorful__image:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
-    transform: translate(0, -64px) scale(1.1);
+    /* transform: translate(0, -64px) scale(1.1); */
 }
 
 .books__list-all .book__title {
