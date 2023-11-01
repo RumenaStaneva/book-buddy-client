@@ -183,14 +183,13 @@ function Profile() {
 
                             </div>
 
+                            {hasReadingTimeAnytime ?
+                                <Diagram />
+                                : null}
                         </>
-
 
                     )}
                 </div>
-                {hasReadingTimeAnytime ?
-                    <Diagram />
-                    : null}
             </main>
 
         </>
