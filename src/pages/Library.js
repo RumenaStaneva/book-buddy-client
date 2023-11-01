@@ -76,8 +76,11 @@ function Library() {
                         {currentlyReadingBooks ?
                             <>
                                 <div className='shelf-header'>
-                                    <h2 className='shelf-title'>Currently Reading ({currentlyReadingBooks.length})</h2>
-                                    <a href='/books/see-all?shelf=1' className='cta-btn'>See all</a>
+                                    <h2 className='shelf-title'>Currently Reading</h2>
+                                    {currentlyReadingBooks.length >= 5 &&
+
+                                        <a href='/books/see-all?shelf=1' className='cta-btn'>See all</a>
+                                    }
                                 </div>
                                 {currentlyReadingBooks.length > 0 ?
                                     <div className='books__container'>
@@ -122,8 +125,10 @@ function Library() {
                         {wantToReadBooks ?
                             <>
                                 <div className='shelf-header'>
-                                    <h2 className='shelf-title'>Want to read books ({wantToReadBooks.length})</h2>
-                                    <a href='/books/see-all?shelf=0' className='cta-btn'>See all</a>
+                                    <h2 className='shelf-title'>Want to read books</h2>
+                                    {wantToReadBooks.length >= 5 &&
+                                        <a href='/books/see-all?shelf=0' className='cta-btn'>See all</a>
+                                    }
                                 </div>
                                 <div className='books__container books-colorful__container'>
                                     {wantToReadBooks.length > 0 ?
@@ -191,8 +196,10 @@ function Library() {
                             readBooks ?
                                 <>
                                     <div className='shelf-header'>
-                                        <h2 className='shelf-title'>Already read ({readBooks.length})</h2>
-                                        <a href='/books/see-all?shelf=2' className='cta-btn'>See all</a>
+                                        <h2 className='shelf-title'>Already read</h2>
+                                        {readBooks.length >= 5 &&
+                                            <a href='/books/see-all?shelf=2' className='cta-btn'>See all</a>
+                                        }
                                     </div>
                                     <div className='books__container books-colorful__container'>
                                         {readBooks.length > 0 ?
