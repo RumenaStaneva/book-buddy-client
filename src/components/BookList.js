@@ -96,7 +96,7 @@ function BookList({ books, loading }) {
                                         <p className='book__title'>
                                             {book.volumeInfo.title}
                                         </p>
-                                        <Typography gutterBottom variant="subtitle1" component="div">
+                                        <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
                                             {book.volumeInfo.authors?.join(', ')}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary" className='book__description'>

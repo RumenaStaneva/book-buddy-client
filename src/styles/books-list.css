@@ -8,8 +8,8 @@
 .book {
     max-height: 345px;
     height: 100%;
-    margin-right: 20px;
-    margin-bottom: 20px;
+    /* margin-right: 20px; */
+    /* margin-bottom: 20px; */
     width: 100%;
 }
 
@@ -32,6 +32,14 @@
     text-overflow: ellipsis;
 }
 
+.book__authors {
+    white-space: nowrap;
+    max-width: 310px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .books-list__container .book__title {
     color: #111;
 }
@@ -41,6 +49,7 @@
     margin: 10px;
     text-align: center;
     min-width: 200px;
+    margin-bottom: 20px;
 }
 
 .book__description {
