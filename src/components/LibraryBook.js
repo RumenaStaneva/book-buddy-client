@@ -90,9 +90,13 @@ function LibraryBook({ book, handleSuccessMessage }) {
                                 <h5 className='book__title book-font__outline'>
                                     {book.title}
                                 </h5>
-                                <p className='book__authors'> By: {' '}
-                                    {book.authors?.join(', ')}
-                                </p>
+                                {console.log(book.authors.length)}
+
+                                {book.authors.length > 0 ?
+
+                                    <p className='book__authors'> By: {' '}
+                                        {book.authors?.join(', ')}
+                                    </p> : null}
                                 <div className='details__additional-info'>
                                     <div className='book__all-pages'>
                                         <p className='book-font__outline'>Print Length</p>

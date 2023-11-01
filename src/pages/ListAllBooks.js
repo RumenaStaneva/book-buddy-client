@@ -235,7 +235,9 @@ function ListAllBooks() {
                                         />
                                         <div className="book-colorful__info">
                                             <h2 className="book__title">{book.title}</h2>
-                                            <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
+                                            {book.authors.length > 0 ?
+                                                <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
+                                                : null}
                                             <div className="book__action-area">
                                                 <Button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</Button>
                                                 <Button onClick={() => handleOpen(book)} className="cta-btn">Move</Button>

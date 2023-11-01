@@ -27,9 +27,12 @@ function CountdownBook({ book }) {
                                 <h5 className='book__title book-font__outline'>
                                     {book.title}
                                 </h5>
-                                <p className='book__authors'> By: {' '}
-                                    {book.authors?.join(', ')}
-                                </p>
+
+                                {book.authors.length > 0 ?
+
+                                    <p className='book__authors'> By: {' '}
+                                        {book.authors?.join(', ')}
+                                    </p> : null}
                             </div>
                             <img
                                 src={

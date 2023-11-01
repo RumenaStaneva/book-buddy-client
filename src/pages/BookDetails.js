@@ -90,9 +90,12 @@ function BookDetails() {
                     <h2 className="book-title">{bookDetails.title}</h2>
                     <p className="book-category book__category" style={{ backgroundColor: bookCategoryColor }}>{bookDetails.category}</p>
                     <p className="book-description">{bookDetails.description}</p>
-                    <p className="book-authors">
-                      Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
-                    </p>
+                    {bookDetails.authors.length > 0 ?
+
+                      <p className="book-authors">
+                        Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
+                      </p>
+                      : null}
                   </div>
 
 

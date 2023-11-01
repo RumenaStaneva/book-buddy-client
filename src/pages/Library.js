@@ -161,12 +161,15 @@ function Library() {
                                                             <h5 className='book__title book__title-outline'>
                                                                 {book.title}
                                                             </h5>
-                                                            <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
-                                                                {book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}
-                                                            </Typography>
-                                                            <Typography variant="body2" color="text.secondary" className='book__description'>
-                                                                {book.description}
-                                                            </Typography>
+                                                            {book.authors.length > 0 ?
+                                                                <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
+                                                                    {book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}
+                                                                </Typography>
+                                                                : null}
+                                                            {book.description && book.description.length > 0 && book.description != 'undefined' ?
+                                                                <Typography variant="body2" color="text.secondary" className='book__description'>
+                                                                    {book.description}
+                                                                </Typography> : null}
                                                             <div className='details__additional-info'>
                                                                 <div className='book__all-pages'>
                                                                     <p className='book-font__outline'>Print Length</p>
