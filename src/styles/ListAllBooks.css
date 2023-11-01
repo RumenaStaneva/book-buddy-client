@@ -2,6 +2,11 @@
     padding: 0 40px 40px;
 }
 
+.books__list-all .books-colorful__container .book-colorful {
+    min-height: 350px;
+    min-width: 400px
+}
+
 .heading-section {
     display: flex;
     padding: 30px;
@@ -26,6 +31,13 @@
     white-space: break-spaces;
     margin: 30px 16px;
     padding: 30px 35px;
+    border-radius: 32px;
+}
+
+.books-colorful__container .book-colorful {
+    width: unset !important;
+    display: flex;
+    margin: 30px 16px;
     border-radius: 32px;
 }
 

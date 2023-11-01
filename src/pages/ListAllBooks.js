@@ -14,6 +14,8 @@ import Error from "../components/Error";
 import { useSelector, useDispatch } from 'react-redux';
 import { setCategory, setSearchQuery, setLimit } from '../reducers/filtersSlice';
 import { clearError, setError } from "../reducers/errorSlice";
+import { CardActionArea } from '@mui/material';
+
 
 function ListAllBooks() {
     const location = useLocation();
@@ -223,8 +225,14 @@ function ListAllBooks() {
                                 };
 
                                 return (
-                                    <div key={book._id} className="book-colorful" style={bookStyle}>
-                                        {/* <AiFillEdit className="edit-book__icon" /> */}
+                                    <CardActionArea
+                                        key={book._id} className="book-colorful" style={bookStyle}
+                                        component='a'
+                                        onClick={event => {
+                                            event.stopPropagation();
+                                        }}
+                                        href={`/books/book-details/${book._id}`}
+                                    >
                                         <img
                                             src={
                                                 book.thumbnail === undefined
@@ -243,7 +251,11 @@ function ListAllBooks() {
                                                 <Button onClick={() => handleOpen(book)} className="cta-btn">Move</Button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </CardActionArea>
+                                    // <div key={book._id} className="book-colorful" style={bookStyle}>
+                                    /* <AiFillEdit className="edit-book__icon" /> */
+
+                                    // </div>
                                 );
                             })}
                         </div>
