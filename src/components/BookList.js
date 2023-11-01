@@ -36,6 +36,7 @@ function BookList({ books, loading }) {
             pageCount: book.volumeInfo.pageCount
         })
         setIsOpen(true);
+        document.body.style.overflow = 'hidden';
     }
 
     const handleBookAdded = (title) => {
@@ -76,7 +77,8 @@ function BookList({ books, loading }) {
                                     onClick={event => {
                                         event.stopPropagation();
                                         event.preventDefault();
-                                        setIsOpen(true)
+                                        setIsOpen(true);
+                                        document.body.style.overflow = 'hidden';
                                         handleAddToShelf(book);
                                         dispatchError(clearError());
                                     }}

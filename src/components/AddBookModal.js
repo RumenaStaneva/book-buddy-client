@@ -100,6 +100,8 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                     }
                     dispatchError(clearError());
                     setIsOpen(false);
+                    document.body.style.overflow = 'auto';
+
                     onBookAdded(bookToAdd.title);
                     setIsLoading(false);
 

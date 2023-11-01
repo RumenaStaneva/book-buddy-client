@@ -5,6 +5,7 @@ import Header from "../components/Header";
 const TimeSwapInformationPage = ({ setIsOpenAddScreenTime }) => {
     const handleAddScreenTime = () => {
         setIsOpenAddScreenTime(true);
+        document.body.style.overflow = 'visible';
     }
 
     return <>

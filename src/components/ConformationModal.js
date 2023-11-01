@@ -24,6 +24,7 @@ const ConformationModal = ({ bookId, setIsOpen }) => {
 
             await response.json();
             setIsOpen(false);
+            document.body.style.overflow = 'visible';
             navigate('/books/library');
         } catch (error) {
             dispatchError(setError({ message: error.error }));

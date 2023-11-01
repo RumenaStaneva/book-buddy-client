@@ -50,6 +50,7 @@ const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale
                     setEditor(null);
                     setIsEditingProfile(false);
                     setIsOpen(false);
+                    document.body.style.overflow = 'visible';
                 } else {
                     console.error('Error uploading profile picture:', responseData.error);
                     dispatchError(setError({ message: `Error uploading profile picture: ${responseData.error}` }));

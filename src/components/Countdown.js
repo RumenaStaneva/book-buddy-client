@@ -135,6 +135,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
         dispatch(setTimerStarted(false));
         if (currentlyReadingBook) {
             setUpdateProgressModalIsOpen(true);
+            document.body.style.overflow = 'hidden';
         }
         setTimerActive(false);
     };

@@ -11,7 +11,8 @@ const Modal = ({ title, content, setIsOpen, subtitle, small, disableCloseButton 
         <>
             <div className={`darkBG ${small ? 'modal-sm' : ''}`} onClick={() => {
                 if (!disableCloseButton) {
-                    setIsOpen(false)
+                    setIsOpen(false);
+                    document.body.style.overflow = 'visible';
                 }
             }} />
             <div className={`modal ${small ? 'modal-sm' : ''}`}>
@@ -23,6 +24,8 @@ const Modal = ({ title, content, setIsOpen, subtitle, small, disableCloseButton 
                     <Button className="closeBtn" onClick={() => {
                         setIsOpen(false);
                         dispatchError(clearError());
+                        document.body.style.overflow = 'visible';
+
                     }}>
                         <IoIosClose />
                     </Button>

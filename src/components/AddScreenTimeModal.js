@@ -184,6 +184,8 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             setIsLoading(false);
             dispatchError(clearError());
             setIsOpen(false);
+            document.body.style.overflow = 'visible';
+
             dispatchReadingTime(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week' }));
 
         } catch (error) {

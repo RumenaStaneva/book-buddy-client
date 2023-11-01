@@ -57,7 +57,7 @@ const UpdateBookProgressModal = ({ setIsOpen }) => {
 
     return (
         <Modal title={'Update book progress'}
-            onClose={() => setIsOpen(false)}
+            onClose={() => { setIsOpen(false); document.body.style.overflow = 'visible'; }}
             subtitle={currentlyReadingBook.title}
             setIsOpen={setIsOpen}
             small={true}

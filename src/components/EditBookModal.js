@@ -119,6 +119,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
 
                 await response.json();
                 setIsOpen(false);
+                document.body.style.overflow = 'visible';
                 fetchBook();
             } catch (error) {
                 dispatchError(setError({ message: `Error updating book: ${error}` }));
@@ -147,6 +148,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
 
     const handleDeleteBook = () => {
         setDeleteModalIsOpen(true);
+        document.body.style.overflow = 'hidden';
     }
 
     const handleThumbnailUpload = (e) => {
@@ -211,7 +213,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
         <div className="modals__container">
             <Modal
                 title={bookDetails.title}
-                onClose={() => setIsOpen(false)}
+                onClose={() => { setIsOpen(false); document.body.style.overflow = 'visible'; }}
                 subtitle={`written by: ${bookDetails.authors ? bookDetails.authors.join(', ') : 'No author/s listed'}`}
                 setIsOpen={setIsOpen}
                 content={
@@ -256,7 +258,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                 }
             />
             {deleteModalIsOpen && <ConformationModal
-                onClose={() => setDeleteModalIsOpen(false)}
+                onClose={() => { setDeleteModalIsOpen(false); document.body.style.overflow = 'visible'; }}
                 setIsOpen={setDeleteModalIsOpen}
                 bookId={bookDetails._id}
             />}

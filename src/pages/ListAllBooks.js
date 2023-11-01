@@ -175,7 +175,7 @@ function ListAllBooks() {
                         {currentBook && isOpen ?
                             <Modal
                                 title={'Change shelf'}
-                                onClose={() => setIsOpen(false)}
+                                onClose={() => { setIsOpen(false); document.body.style.overflow = 'visible'; }}
                                 subtitle={`Book: ${currentBook.title}`}
                                 setIsOpen={setIsOpen}
                                 className="change-shelf-modal"

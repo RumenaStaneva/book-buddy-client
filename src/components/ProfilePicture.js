@@ -26,6 +26,7 @@ function ProfilePicture({ handleProfileClick, setIsEditingProfile, isOpen, setIs
                 const imageDataUrl = reader.result;
                 setEncodedImage(imageDataUrl);
                 setIsOpen(true);
+                document.body.style.overflow = 'hidden';
                 if (uploadedImage.current) {
                     uploadedImage.current.file = file;
                     uploadedImage.current.src = imageDataUrl;
