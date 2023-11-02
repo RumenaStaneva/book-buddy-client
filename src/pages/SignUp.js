@@ -94,19 +94,19 @@ function SignUp() {
                             <h1>Sign Up</h1>
                             <div className='form__group'>
                                 <label htmlFor="email">Email</label>
-                                <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                             </div>
                             <div className='form__group'>
                                 <label htmlFor="username">Username</label>
-                                <input type="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                                <input type="username" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
                             </div>
                             <div className="form__group">
                                 <label htmlFor="password">Password</label>
-                                <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                             </div>
                             <div className="form__group">
                                 <label htmlFor="repeat-password">Repeat Password</label>
-                                <input type="password" name="repeat-password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
+                                <input type="password" id="repeat-password" name="repeat-password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
                             </div>
 
                             {!identicalPassords ?
@@ -123,17 +123,19 @@ function SignUp() {
                                         signupWithGoogle(response);
                                     }} onError={error => dispatchError(setError({ message: error }))} />
                             </div>
+                            <div className="recaptcha__container">
+                                <ReCAPTCHA
+                                    sitekey='6LdKFeQoAAAAALujPMOEwbzB0ncL4hCMUoJEifDR'
+                                    onChange={handleCaptchaVerify}
+                                />
+                            </div>
 
-                            <ReCAPTCHA
-                                sitekey='6LdKFeQoAAAAALujPMOEwbzB0ncL4hCMUoJEifDR'
-                                onChange={handleCaptchaVerify}
-                            />
                         </form>
                     )}
                 </div>
                 <div className='wrapper'>
                     <div className='image__container'>
-                        <img src={require("../images/reading-buddies.png")} tabIndex={-1} alt='' width={570} height={487} />
+                        <img src={require("../images/reading-buddies.png")} role="presentation" alt="" width={570} height={487} />
                     </div>
                 </div>
             </main >

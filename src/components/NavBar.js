@@ -65,18 +65,18 @@ const NavBar = () => {
             </Button>
             <nav className={`nav nav__main ${navVisible ? 'nav--open' : ''}`} aria-label='Main'>
                 <ul className='nav__list' role='menubar'>
-                    <li className='nav__item'>
+                    <li className='nav__item' role="menuitem">
                         <NavLink className='nav__link' to="/">Home</NavLink>
                     </li>
-                    <li className='nav__item'>
+                    <li className='nav__item' role="menuitem">
                         <NavLink className='nav__link' to="/about">About</NavLink>
                     </li>
                     {user ?
                         <>
-                            <li className='nav__item'>
+                            <li className='nav__item' role="menuitem">
                                 <NavLink className='nav__link' to="/time-swap">Time swap</NavLink>
                             </li>
-                            <li className='nav__item'>
+                            <li className='nav__item' role="menuitem">
                                 <NavLink className='nav__link' to="/books/library">Library</NavLink>
                             </li>
                         </>
@@ -90,10 +90,10 @@ const NavBar = () => {
                         <ul className='nav__list' role='menubar'>
 
                             <>
-                                <li className='nav__item'>
+                                <li className='nav__item' role="menuitem">
                                     <NavLink className='nav__link' to='/users/login'>Login</NavLink>
                                 </li>
-                                <li className='nav__item'>
+                                <li className='nav__item' role="menuitem">
                                     <NavLink className='nav__link' to='/users/sign-up'>Sign up</NavLink>
                                 </li>
                             </>
@@ -104,10 +104,12 @@ const NavBar = () => {
                     <nav className='nav nav__login-register registered' aria-label='Login/Signup'>
                         <ul className='nav__list' role='menubar'>
                             <>
-                                {<a href='/users/profile' className='nav__profile-picture'>
-                                    <img width={50} height={50} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile" />
-                                </a>}
-                                <li className='nav__item'>
+                                {
+                                    <a href='/users/profile' className='nav__profile-picture' role="menuitem">
+                                        <img width={50} height={50} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile" />
+                                    </a>
+                                }
+                                <li className='nav__item' role="menuitem">
                                     <NavLink onClick={handleClick} className='nav__link' to='/'>Logout</NavLink>
                                 </li>
                             </>

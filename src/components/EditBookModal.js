@@ -271,7 +271,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                                             <label htmlFor="dropdown-shelf">Choose Book Category:</label>
                                             <Dropdown id={'dropdown-category'} options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
                                         </div>
-                                        <Button type="submit" className="cta-button">
+                                        <Button type="submit" className="cta-button" aria-label="Edit Book">
                                             Edit Book
                                         </Button>
                                     </div>

@@ -17,11 +17,11 @@ const Modal = ({ title, content, setIsOpen, subtitle, small, disableCloseButton 
             }} />
             <div className={`modal ${small ? 'modal-sm' : ''}`}>
                 <div className="modalHeader">
-                    <h3 className="modal-heading">{title}</h3>
+                    <h2 className="modal-heading">{title}</h2>
                     <p>{subtitle}</p>
                 </div>
                 {!disableCloseButton ?
-                    <Button className="closeBtn" onClick={() => {
+                    <Button aria-label='Close' className="closeBtn" onClick={() => {
                         setIsOpen(false);
                         dispatchError(clearError());
                         document.body.style.overflow = 'visible';

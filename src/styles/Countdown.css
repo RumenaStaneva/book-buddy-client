@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    margin-right: 20px;
+    margin-right: 100px;
 }
 
 .countdown__container .book {
@@ -27,7 +27,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(237, 201, 191, 0.44);
+    background-color: rgb(170, 100, 86, 0.3);
     border-radius: 10px;
     margin-left: 10px;
     height: 620px;
@@ -59,9 +59,18 @@
     z-index: 1;
 }
 
+.reading-countdown__container .book__progress p {
+    color: #000;
+    font-weight: 600;
+}
+
 .reading-countdown__container .progressbar span {
     height: 15px;
     border-radius: 10px;
+}
+
+.reading-countdown__container .progressbar span:first-child {
+    border: 1px solid rgb(0, 0, 0, 0.3);
 }
 
 .reading-countdown__container .progressbar span span:nth-child(1) {
@@ -69,6 +78,7 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
+    border: none;
 }
 
 .reading-countdown__container .progressbar span span:nth-child(1)::before {
@@ -243,7 +253,7 @@
 }
 
 .header-cell.active {
-    color: #D92868;
+    color: #B70437;
     font-weight: 600;
 }
 
@@ -253,7 +263,7 @@
 
 .header-cell.disabled {
     background-color: #ccc;
-    color: #666;
+    color: #675252;
 }
 
 .header-cell.today {
@@ -272,6 +282,12 @@
     padding: 0 20px;
 }
 
+@media (max-width: 1200px) {
+    .countdown-container {
+        margin-right: 10px;
+    }
+}
+
 @media (max-width: 991px) {
     .reading-countdown__container {
         flex-direction: column;
@@ -280,7 +296,9 @@
 
     .countdown-container {
         margin-right: 0;
+        margin-bottom: 30px;
     }
+
 }
 
 @media (max-width: 768px) {

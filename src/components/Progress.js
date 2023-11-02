@@ -13,9 +13,17 @@ function LinearProgressWithLabel(props) {
     }, [props.value]);
 
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }} className='progressbar'>
-            <Box sx={{ width: '100%', mr: 1 }}>
-                <LinearProgress variant="determinate" value={progress} />
+        <Box
+            sx={{ display: 'flex', alignItems: 'center' }}
+            className='progressbar'
+        >
+            <Box role="progressbar"
+                aria-valuenow={progress}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={`Progress: ${progress}%`}
+                sx={{ width: '100%', mr: 1 }}>
+                <LinearProgress variant="determinate" value={progress} aria-label={`Progress: ${progress}%`} />
             </Box>
             <Box sx={{ minWidth: 35 }}>
                 <Typography variant="body2" color="text.secondary">{`${Math.round(

@@ -87,9 +87,9 @@ function LibraryBook({ book, handleSuccessMessage }) {
                             />
                             <div className='book__details'>
                                 {/* <Error /> */}
-                                <h5 className='book__title book-font__outline'>
+                                <h3 className='book__title book-font__outline'>
                                     {book.title}
-                                </h5>
+                                </h3>
                                 {console.log(book.authors.length)}
 
                                 {book.authors.length > 0 ?

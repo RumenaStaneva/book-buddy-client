@@ -158,15 +158,15 @@ function Library() {
                                                             className='book-colorful__image'
                                                         />
                                                         <CardContent className='book-colorful__info'>
-                                                            <h5 className='book__title book__title-outline'>
+                                                            <h3 className='book__title book__title-outline'>
                                                                 {book.title}
-                                                            </h5>
+                                                            </h3>
                                                             {book.authors.length > 0 ?
                                                                 <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
                                                                     {book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}
                                                                 </Typography>
                                                                 : null}
-                                                            {book.description && book.description.length > 0 && book.description != 'undefined' ?
+                                                            {book.description && book.description.length > 0 && book.description !== 'undefined' ?
                                                                 <Typography variant="body2" color="text.secondary" className='book__description'>
                                                                     {book.description}
                                                                 </Typography> : null}
@@ -232,9 +232,9 @@ function Library() {
                                                                 className='book-colorful__image'
                                                             />
                                                             <CardContent className='book-colorful__info'>
-                                                                <h5 component="div" className='book__title book__title-outline'>
+                                                                <h3 component="div" className='book__title book__title-outline'>
                                                                     {book.title}
-                                                                </h5>
+                                                                </h3>
                                                                 <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
                                                                     {book.authors}
                                                                 </Typography>

@@ -1,15 +1,7 @@
-import { useState } from 'react';
 import '../styles/Library.css'
-import { useAuthContext } from "../hooks/useAuthContext";
 import '../styles/LibraryBook.css'
-import Error from './Error';
-import { useDispatch } from "react-redux";
-import { clearError, setError } from '../reducers/errorSlice';
-
 
 function CountdownBook({ book }) {
-    const { user } = useAuthContext();
-
 
     return (
         <>
@@ -24,9 +16,9 @@ function CountdownBook({ book }) {
                             }}
                         >
                             <div className='title-author__container'>
-                                <h5 className='book__title book-font__outline'>
+                                <h3 className='book__title book-font__outline'>
                                     {book.title}
-                                </h5>
+                                </h3>
 
                                 {book.authors.length > 0 ?
 

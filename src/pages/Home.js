@@ -176,7 +176,7 @@ function Home() {
         <>
             <Navigation />
             <Header title="Find your next favourite book" />
-            <>
+            <main>
                 <Box
                     component="form"
                     noValidate
@@ -261,7 +261,7 @@ function Home() {
 
                 {totalPages > 1 && books.length !== 0 ? pageNumbers() : null}
 
-            </ >
+            </ main>
         </>
 
     )

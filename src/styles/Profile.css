@@ -58,7 +58,7 @@
 
 .profile__clickable {
     cursor: pointer;
-    color: #F3647A;
+    color: #EB142A;
     margin-bottom: 3px;
     display: inline-block;
     position: relative;
@@ -158,7 +158,7 @@
 
 .update__button {
     color: #fff;
-    background: #ff3e4e;
+    background: #EE060B;
     border: none;
     padding: 8px 14px;
     border-radius: 5px;
@@ -171,9 +171,9 @@
 }
 
 .update__button:hover {
-    box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
+    box-shadow: 0 10px 20px -10px rgba(238, 6, 11, 0.6);
     transform: translateY(-5px);
-    background: #ff3e4e;
+    background: #EE060B;
 }
 
 .profile-form {

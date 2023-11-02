@@ -11,7 +11,7 @@
 }
 
 .info-container .paragraph,
-.about-subsection dd {
+.about-subsection li {
     font-size: 1.2rem;
     margin-bottom: 15px;
     line-height: 1.5;
@@ -50,12 +50,16 @@
     margin-right: 5px;
 }
 
-.about-section__text dd::before {
+.about-section__text li::before {
     content: "📚";
     margin-right: 0.5ch;
 }
 
-.about-section__text dd {
+.about-section__text ul {
+    list-style: none;
+}
+
+.about-section__text li {
     display: list-item;
     list-style-type: none;
     padding-inline-start: 1ch;

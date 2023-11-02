@@ -121,14 +121,14 @@
     font-size: 0.9rem;
     border: none;
     color: #fff;
-    background: #ff3e4e;
+    background: #EE060B;
     transition: all 0.2s ease;
 }
 
 .cta-button:hover {
-    box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
+    box-shadow: 0 10px 20px -10px rgb(238, 6, 11, 0.6);
     transform: translateY(-10px);
-    background: #ff3e4e;
+    background: #EE060B;
 }
 
 .cancelBtn {

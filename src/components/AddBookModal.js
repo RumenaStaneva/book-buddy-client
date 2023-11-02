@@ -38,6 +38,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
     const handleSubmit = (e) => {
         setIsLoading(true);
+        dispatchError(clearError());
         e.preventDefault();
         if (!user) {
             dispatchError(setError({ message: 'You have to be logged in to add books!' }));
@@ -117,7 +118,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
         addBookToShelf();
 
         setBookToAdd(null);
-    }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError]);
+    }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError, bookDetails.authors, bookDetails.bookApiId, bookDetails.publisher, bookDetails.title, category, shelf, updatedDescription, updatedPageCount, updatedThumbnail]);
 
     const handleThumbnailUpload = (e) => {
         const file = e.target.files[0];
@@ -204,7 +205,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                     </div>
                                     <div className="modal__section book-pages-section modal__section-left-align">
                                         <label htmlFor="pageCount">Book Pages</label>
-                                        <input type="number" name="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
+                                        <input type="number" id="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
                                     </div>
                                     <div className="modal__section upload-image-section">
                                         <span>Change book thumbnail:</span>
@@ -227,17 +228,18 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                 </div>
                             </div>
                             <Error />
-                            {loginVisivble ?
-                                <NavLink to="/users/login">
-                                    <Button className="cta-button">Login</Button>
-                                </NavLink>
-                                :
-                                <Button type="submit" className="cta-button">
-                                    Add Book
-                                </Button>
+                            {isLoading ? null :
+                                loginVisivble ?
+                                    <NavLink to="/users/login">
+                                        < Button className="cta-button">Login</Button>
+                                    </NavLink>
+                                    :
+                                    <Button type="submit" className="cta-button" aria-label="Add Book">
+                                        Add Book
+                                    </Button>
                             }
                         </>
-                    </form>
+                    </form >
 
                 </>
             }

@@ -56,14 +56,14 @@ function Login() {
                         <h1>Login</h1>
                         <div className='form__group'>
                             <label htmlFor="emailOrUsername">Email / Username</label>
-                            <input type="emailOrUsername" name="emailOrUsername" value={emailOrUsername} onChange={(e => setEmailOrUsername(e.target.value))} />
+                            <input type="emailOrUsername" id='emailOrUsername' name="emailOrUsername" value={emailOrUsername} onChange={(e => setEmailOrUsername(e.target.value))} />
                         </div>
                         <div className="form__group">
                             <p className='form__forgot-pass'>
                                 <a href="/users/forgot-password">Forgot password?</a>
                             </p>
                             <label htmlFor="password">Password</label>
-                            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <Error />
                         <Button type='submit' className='btn--cta' disabled={isLoading}>Sign in</Button>
@@ -75,16 +75,18 @@ function Login() {
                                     loginWithGoogle(response);
                                 }} onError={error => dispatchError(setError({ message: error }))} />
                         </div>
+                        <div className="recaptcha__container">
 
-                        <ReCAPTCHA
-                            sitekey='6LdKFeQoAAAAALujPMOEwbzB0ncL4hCMUoJEifDR'
-                            onChange={handleCaptchaVerify}
-                        />
+                            <ReCAPTCHA
+                                sitekey='6LdKFeQoAAAAALujPMOEwbzB0ncL4hCMUoJEifDR'
+                                onChange={handleCaptchaVerify}
+                            />
+                        </div>
                     </form>
                 </div>
                 <div className='wrapper'>
                     <div className='image__container'>
-                        <img src={require("../images/reading-buddies.png")} tabIndex={-1} alt='' width={570} height={487} />
+                        <img src={require("../images/reading-buddies.png")} width={570} height={487} role="presentation" alt='' />
                     </div>
                 </div>
             </main>

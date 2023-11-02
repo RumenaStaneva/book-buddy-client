@@ -11,7 +11,7 @@ function About() {
     return <>
         <NavBar />
         <Header title="About" />
-        <div className="info-container">
+        <main className="info-container">
             <div className="about__section d-flex">
                 <div className="about-section__text">
                     <h2 className="subtitle">What is Time swap?</h2>
@@ -34,43 +34,43 @@ function About() {
                 <div className="about-section__text">
                     <h2 className="subtitle">How Time Swap Works: Your Journey to Book Bliss</h2>
                     <div className="about-subsection d-flex">
-                        <dl className="list">
-                            <dd>
+                        <ul className="list">
+                            <li>
                                 <b>Assess Your Screen Time: </b>
                                 Start by manually entering your screen time for the previous week. Don't worry; we keep this data private and only use it to help you set personalized reading goals.
-                            </dd>
-                            <dd>
+                            </li>
+                            <li>
                                 <b>Set Your Daily Reading Goal: </b>
                                 Based on your screen time, Time Swap calculates a daily reading goal for the current week. Our aim is to encourage you to read as much as you've been spending on screens. However, remember that Time Swap offers flexibility; you're not obligated to read the hours in one go. You can read during the whole day, starting and stopping the timer whenever convenient.
-                            </dd>
-                            <dd>
+                            </li>
+                            <li>
                                 <b>Track Your Book Progress: </b>
                                 The progress bar on this page represents your journey through the book you're currently reading. With each reading session, you'll see the bar fill up, showing your advancement through the captivating pages.
-                            </dd>
-                            <dd>
+                            </li>
+                            <li>
                                 <b>Customize Your Reading Goal: </b>
                                 If a daily reading goal feels too ambitious, don't fret! You can now change your reading goal to a weekly average or set a custom reading time that suits your schedule. Flexibility is key in nurturing a love for books.
-                            </dd>
-                        </dl>
+                            </li>
+                        </ul>
                         <img src="https://storage.googleapis.com/book-buddy/images/asset-3.png" alt="" />
                     </div>
                     <div className="about-subsection d-flex">
                         <img src="https://storage.googleapis.com/book-buddy/images/asset-5.png" alt="" />
 
-                        <dl className="list">
-                            <dd>
+                        <ul className="list">
+                            <li>
                                 <b>Post-Timer Update: </b>
                                 When the timer stops, a popup will appear, prompting you to update your progress on the current book. This way, you can easily keep track of your accomplishments.
-                            </dd>
-                            <dd>
+                            </li>
+                            <li>
                                 <b>Extended Reading Sessions: </b>
                                 After the settled screen time for reading passes, you can continue reading. The countdown becomes a timer, and the time spent reading will be added to and displayed on the diagram in your profile. This ensures you can seamlessly transition from focused reading sessions to leisurely reading without losing your progress.
-                            </dd>
-                            <dd>
+                            </li>
+                            <li>
                                 <b>Visualize Your Progress: </b>
                                 In the profile section, a graphical representation will display statistics showing your reading time, screen time, and your goal for each day of the chosen week—be it the current week, last week, or any specific period you prefer. This visualization provides a clear overview of your reading habits and achievements, helping you stay motivated on your reading journey.
-                            </dd>
-                        </dl>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
@@ -83,7 +83,7 @@ function About() {
                 </div>
             </div>
 
-        </div>
+        </main>
     </>
 }
 

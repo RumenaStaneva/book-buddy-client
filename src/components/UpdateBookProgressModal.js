@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
+import Spinner from 'react-spinner-material';
 import '../styles/Modal.css'
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from '../reducers/errorSlice';
@@ -20,7 +21,7 @@ const UpdateBookProgressModal = ({ setIsOpen }) => {
 
     const updateBook = async (bookRead) => {
         const updatedBook = { ...currentlyReadingBook };
-        setIsLoading(true);
+        // setIsLoading(true);
         try {
             if (bookRead) {
                 updatedBook.progress = updatedBook.pageCount;
@@ -76,7 +77,11 @@ const UpdateBookProgressModal = ({ setIsOpen }) => {
             disableCloseButton={true}
             content={
                 <div>
-                    <div className="update-book__content">
+                    {isLoading &&
+                        (<div className='spinner__container'>
+                            <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                        </div>)}
+                    <div className={`update-book__content ${isLoading ? 'd-none' : null}`}>
                         <label htmlFor="book-page-progress">Add your last read page:</label>
                         <input name='book-page-progress' type="number" value={updatedPageProgress} onClick={handleUpdateProgressClick} onChange={(e) => setUpdatedPageProgress(e.target.value)} />
                         <Error />

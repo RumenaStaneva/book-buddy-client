@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import Spinner from 'react-spinner-material';
-import Error from '../components/Error';
 import CountdownReading from "./CountdownReading";
 import { useSelector } from "react-redux";
 import Button from "./Button";
-import { useDispatch } from "react-redux";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -15,8 +13,7 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const { currentlyReadingBooks } = useSelector((state) => state.books);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
-    const { screenTimeInSeconds, weeklyGoalAveragePerDay } = useSelector((state) => state.readingTimeForToday);
-    const dispatch = useDispatch();
+    const { screenTimeInSeconds } = useSelector((state) => state.readingTimeForToday);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const swiperRef = useRef(null);
 
@@ -126,6 +123,7 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
             </div>
         ) : (
             <main className="weekly-dashboard">
+                <h1 className="heading">Time Swap</h1>
                 {!readingTimeData || !readingTimeData.length > 0 ? (
                     <>
                         <h1 className="heading">No reading time data for this week</h1>

@@ -21,31 +21,12 @@
     margin-right: 15px;
 }
 
-.nav__username a {
-    color: #5E81AC;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    text-transform: capitalize;
-}
-
-.nav__username a:hover {
-    color: #27ADBA;
-}
-
-.nav__username a:visited {
-    color: #5E81AC;
-}
-
-.nav__username a:visited:hover {
-    color: #27ADBA;
-}
-
 .nav__item {
     margin-right: 25px;
 }
 
 .nav__link {
-    color: #4E6B5D;
+    color: #3F6153;
     text-decoration: none;
 }
 
@@ -54,7 +35,8 @@
 }
 
 .nav__link.active {
-    color: #5E81AC;
+    color: #B50637;
+    font-weight: 600;
 }
 
 .nav__login-register {
