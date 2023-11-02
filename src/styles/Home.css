@@ -86,3 +86,19 @@
 .pagination__container .pagination-button--active:hover {
     cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+    .form__container {
+        padding-bottom: 90px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form__container {
+        padding-bottom: 150px;
+    }
+
+    .pagination__container {
+        margin-bottom: 150px;
+    }
+}
