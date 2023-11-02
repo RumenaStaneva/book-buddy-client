@@ -195,7 +195,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                 <div className="modal__section-image-container">
                                     <div className="modal__section">
                                         <label htmlFor="thumbnail">Thumbnail</label>
-                                        <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={300} />
+                                        <img src={updatedThumbnail !== null ? updatedThumbnail : 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'} alt={bookDetails.title} width={300} />
                                     </div>
                                 </div>
                                 <div className="modal__section-content-container">

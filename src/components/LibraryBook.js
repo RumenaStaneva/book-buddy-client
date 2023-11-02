@@ -80,7 +80,7 @@ function LibraryBook({ book, handleSuccessMessage }) {
                             <img
                                 src={
                                     book.thumbnail === undefined
-                                        ? require('../images/image-not-available.png')
+                                        ? 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'
                                         : `${book.thumbnail}`
                                 } alt={`${book.title}`}
                                 className='book__image'

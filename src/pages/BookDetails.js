@@ -83,7 +83,7 @@ function BookDetails() {
                   <AiFillEdit className="edit-book__icon" onClick={handleEditBook} />
                   <div className="book-thumbnail">
                     <img
-                      src={bookDetails.thumbnail}
+                      src={bookDetails.thumbnail !== undefined ? bookDetails.thumbnail : 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'}
                       alt={`Thumbnail for ${bookDetails.title}`}
                     />
                   </div>

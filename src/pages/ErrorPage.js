@@ -12,7 +12,7 @@ const ErrorPage = () => {
         <h1 className='error-page__title'>Page Not Found</h1>
         <p className='error-page__subtitle'>Oops! The page you are looking for does not exist.</p>
 
-        <img src={require('../images/404-page-image.png')} alt="Page not found" width={300} />
+        <img src='https://storage.googleapis.com/book-buddy/images/404-page-image.png' alt="Page not found" width={300} />
 
         <p className='error-page__subtitle error-page__subtitle--second'>
           Don't worry, let's get you back on track. You can go back to the{' '}
