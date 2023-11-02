@@ -10,6 +10,8 @@ import Error from "./Error";
 import { useDispatch } from "react-redux";
 import { setError } from '../reducers/errorSlice';
 import ConformationModal from "./ConformationModal";
+import Spinner from 'react-spinner-material';
+
 
 
 const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
@@ -20,6 +22,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
     const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const dispatchError = useDispatch();
     const { user } = useAuthContext();
     const errorRef = useRef(null);
@@ -90,7 +93,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
 
     useEffect(() => {
         const updateBook = async (updatedBook) => {
-
+            setIsLoading(true);
             try {
                 const formData = new FormData();
                 formData.append('_id', updatedBook._id);
@@ -117,13 +120,21 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                     body: formData
                 });
 
-                await response.json();
+                // await response.json();
+                if (!response.ok) {
+                    const data = await response.json();
+                    dispatchError(setError({ message: data.error }));
+                    setIsLoading(false);
+                    throw new window.Error(data.error);
+                }
                 setIsOpen(false);
+                setIsLoading(false);
                 document.body.style.overflow = 'visible';
                 fetchBook();
             } catch (error) {
-                dispatchError(setError({ message: `Error updating book: ${error}` }));
+                dispatchError(setError({ message: error.message }));
                 console.error('Error updating book:', error);
+                setIsLoading(false);
             }
         }
 
@@ -200,8 +211,6 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
 
                     const formData = new FormData();
                     formData.append('thumbnail', resizedImageBlob);
-
-                    // Now, you can use formData in your fetch request
                 };
                 img.src = event.target.result;
             };
@@ -220,39 +229,56 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                     <>
                         <AiOutlineDelete className="modal__delete-btn"
                             onClick={handleDeleteBook} />
-
-                        <Error />
                         <form onSubmit={handleSubmit} className="add-book__form">
-                            <div className="modal__section">
-                                <label htmlFor="thumbnail">Thumbnail</label>
-                                <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={250} />
-                            </div>
-                            <div className="modal__section">
-                                <label htmlFor="description">Description</label>
-                                <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>
-                            </div>
-                            <div className="modal__section">
-                                <label htmlFor="pageCount">Book Pages</label>
-                                <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
-                            </div>
-                            <div className="modal__section">
-                                <label htmlFor="bookImage">Book image</label>
-                                <input type="file" accept="image/*" onChange={handleThumbnailUpload} />
+                            {isLoading &&
+                                (<div className='spinner__container'>
+                                    <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                                </div>)}
+                            <>
+                                <div className={`add-book-form__container ${isLoading && 'd-none'}`}>
+                                    <div className="modal__section-image-container">
+                                        <div className="modal__section">
+                                            <label htmlFor="thumbnail">Thumbnail</label>
+                                            <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={300} />
+                                        </div>
+                                    </div>
+                                    <div className="modal__section-content-container">
 
-                            </div>
-                            <div className="modal__section">
-                                <Dropdown
-                                    options={shelfOptions.map(option => option.label)}
-                                    onSelect={handleShelfSelect}
-                                    selectedOption={updatedShelf !== null ? shelfOptions.find(option => option.value === updatedShelf)?.label : null}
-                                />
-                            </div>
-                            <div className="modal__section">
-                                <Dropdown options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
-                            </div>
-                            <Button type="submit" className="cta-button">
-                                Edit Book
-                            </Button>
+                                        <div className="modal__section modal__section-left-align">
+                                            <label htmlFor="description">Description</label>
+                                            <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={handleDescriptionChange}></textarea>
+                                        </div>
+                                        <div className="modal__section book-pages-section modal__section-left-align">
+                                            <label htmlFor="pageCount">Book Pages</label>
+                                            <input type="number" name="pageCount" value={updatedPageCount} onChange={handlePageCountChange} />
+                                        </div>
+                                        <div className="modal__section upload-image-section">
+                                            <span>Change book thumbnail:</span>
+                                            <label htmlFor="bookImage" className='cta-btn upload-btn'>Book image</label>
+                                            <input type="file" name='bookImage' accept="image/*" onChange={handleThumbnailUpload} />
+
+                                        </div>
+                                        <div className="modal__section modal__section-left-align">
+                                            <label htmlFor="dropdown-shelf">Choose Book Status:</label>
+                                            <Dropdown
+                                                id={'dropdown-shelf'}
+                                                options={shelfOptions.map(option => option.label)}
+                                                onSelect={handleShelfSelect}
+                                                selectedOption={updatedShelf !== null ? shelfOptions.find(option => option.value === updatedShelf)?.label : null}
+                                            />
+                                        </div>
+                                        <div className="modal__section modal__section-left-align">
+                                            <label htmlFor="dropdown-shelf">Choose Book Category:</label>
+                                            <Dropdown id={'dropdown-category'} options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
+                                        </div>
+                                        <Button type="submit" className="cta-button">
+                                            Edit Book
+                                        </Button>
+                                    </div>
+
+                                </div>
+                                <Error />
+                            </>
                         </form>
                     </>
                 }

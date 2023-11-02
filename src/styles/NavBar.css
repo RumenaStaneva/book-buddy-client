@@ -146,6 +146,7 @@
 
     .nav__container {
         padding: 20px 25px;
+        width: 100%;
     }
 
     .nav__list {

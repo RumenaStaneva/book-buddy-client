@@ -114,3 +114,39 @@
     font-weight: 600;
     font-size: 1.3rem;
 }
+
+@media (max-width: 576px) {
+
+    .books__library .books__container.currently-reading__container {
+        height: 525px;
+        padding: 10px 0;
+        margin-bottom: 30px;
+    }
+
+    .books__library .currently-reading__container .book__authors {
+        display: none;
+    }
+
+    .currently-reading__container .book {
+        height: 100%;
+        max-height: unset;
+    }
+
+    .currently-reading__container .book__button {
+        flex-direction: column;
+    }
+
+    .book__image {
+        margin-bottom: 10px;
+    }
+
+    .book__title {
+        max-width: unset;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .books__library .swiper-pagination {
+        bottom: 30px;
+    }
+}

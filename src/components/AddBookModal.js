@@ -35,8 +35,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
         }
     };
-    console.log(bookDetails.description);
-    console.log(updatedDescription);
+
     const handleSubmit = (e) => {
         setIsLoading(true);
         e.preventDefault();

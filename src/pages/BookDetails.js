@@ -62,6 +62,7 @@ function BookDetails() {
   const handleEditBook = () => {
     dispatchError(clearError());
     setIsOpen(true);
+    document.body.style.overflow = 'hidden';
   }
 
 
