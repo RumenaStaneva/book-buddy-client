@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import PlaylistReading from "./PlaylistReading";
 
 
 const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
@@ -192,6 +193,7 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                                 )}
                             </div>
                         </div>
+                        <PlaylistReading />
                     </div>
                 )}
             </main>

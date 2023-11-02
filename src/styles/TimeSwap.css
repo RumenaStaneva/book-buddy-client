@@ -2,3 +2,48 @@
     padding: 20px;
     text-align: center;
 }
+
+.spotify-player__container {
+    width: 20px;
+    position: absolute;
+    top: 105px;
+    right: 0;
+}
+
+.spotify-player__container svg {
+    position: absolute;
+    right: 33px;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: fill ease 0.3s;
+}
+
+.spotify-player__container svg:hover {
+    fill: #1DB954;
+}
+
+.spotify-player__container.open {
+    max-width: 600px;
+    width: 100%;
+}
+
+.spotify-iframe {
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 0 10px;
+    border-radius: 12px;
+    z-index: 10;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .spotify-player__container svg {
+        top: 20px;
+    }
+
+    .spotify-player__container {
+        top: 120px;
+    }
+}
