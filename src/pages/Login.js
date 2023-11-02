@@ -86,7 +86,7 @@ function Login() {
                 </div>
                 <div className='wrapper'>
                     <div className='image__container'>
-                        <img src={require("../images/reading-buddies.png")} width={570} height={487} role="presentation" alt='' />
+                        <img src='https://storage.googleapis.com/book-buddy/images/reading-buddies.png' role="presentation" alt='' />
                     </div>
                 </div>
             </main>

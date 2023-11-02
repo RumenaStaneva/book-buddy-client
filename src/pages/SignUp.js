@@ -135,7 +135,7 @@ function SignUp() {
                 </div>
                 <div className='wrapper'>
                     <div className='image__container'>
-                        <img src={require("../images/reading-buddies.png")} role="presentation" alt="" width={570} height={487} />
+                        <img src='https://storage.googleapis.com/book-buddy/images/reading-buddies.png' role="presentation" alt="" width={570} height={487} />
                     </div>
                 </div>
             </main >

@@ -211,7 +211,7 @@ function Home() {
                             }}
                             layout
                             variants={imageVariants}
-                            src={require('../images/logo-big.png')}
+                            src='https://storage.googleapis.com/book-buddy/images/Logo-big.png'
                             alt="Logo"
                             className='homepage-logo'
                         />
