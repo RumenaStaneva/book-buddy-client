@@ -1,5 +1,5 @@
 .swiper-books__container {
-    width: 550px;
+    width: 570px;
     /* display: flex; */
     flex-direction: column;
     justify-content: center;
@@ -121,6 +121,15 @@
     align-items: center;
 }
 
+.goal-section p {
+    margin-right: 10px;
+}
+
+.goal-section .cta-btn {
+    width: 150px;
+    margin-right: 0;
+}
+
 .adjust-goal {
     flex-direction: column;
 }
@@ -140,15 +149,26 @@
 }
 
 .goal-input {
+    max-width: 110px;
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 10px;
-    margin-bottom: 15px;
+    margin: 0 auto 15px;
+    font-size: 1.5rem;
+}
+
+.goal__subsection {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 33%;
+    justify-content: space-between;
+    margin-right: 10px;
 }
 
 .goal__subsection p {
     margin-bottom: 10px;
+    margin-right: 0;
 }
 
 .action-buttons {
@@ -164,6 +184,10 @@
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 20px;
+}
+
+.goal-reading-time__container p {
+    padding: 0 10px;
 }
 
 .time-info {
@@ -188,4 +212,147 @@
 .empty-books-link {
     color: #007bff;
     text-decoration: underline;
+}
+
+.table-container {
+    width: 100%;
+    margin-top: 20px;
+    padding: 2px;
+    border: 2px solid #ccc;
+    overflow-x: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-around;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+
+.header-cell {
+    text-align: center;
+    border-right: 1px solid #ccc;
+    padding: 0 10px;
+    flex: 1;
+    cursor: pointer;
+}
+
+.header-cell.active {
+    color: #D92868;
+    font-weight: 600;
+}
+
+.header-cell:last-child {
+    border-right: none;
+}
+
+.header-cell.disabled {
+    background-color: #ccc;
+    color: #666;
+}
+
+.header-cell.today {
+    background-color: #ffcc00;
+}
+
+.header-cell.future {
+    background-color: antiquewhite;
+}
+
+.day-of-week {
+    font-weight: bold;
+}
+
+.tab-panel-content {
+    padding: 0 20px;
+}
+
+@media (max-width: 991px) {
+    .reading-countdown__container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .countdown-container {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .weekly-dashboard .swiper-books__container {
+        width: 500px;
+    }
+
+    .weekly-dashboard .countdown__container {
+        width: 500px !important;
+    }
+
+    .countdown__container .book {
+        width: 500px;
+    }
+
+    .tab-headers .swiper-button-prev::after,
+    .tab-headers .swiper-button-next::after {
+        color: #D92868;
+        font-weight: 600;
+        font-size: 2.5rem;
+    }
+
+    .weekly-dashboard .tab-content .swiper-button-prev,
+    .weekly-dashboard .tab-content .swiper-button-next {
+        display: none;
+    }
+
+    .countdown__container .book {
+        padding: 0;
+    }
+
+    .header-cell {
+        flex: none;
+    }
+
+    .goal-section {
+        flex-direction: column;
+    }
+
+    .goal-section p {
+        margin-bottom: 10px;
+    }
+
+    .goal-section .cta-btn {
+        margin-right: auto;
+    }
+
+    .countdown__container .book__details {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .countdown-part {
+        font-size: 4.5rem;
+    }
+
+    .goal__subsection .countdown-part,
+    .goal-input {
+        font-size: 1.5rem;
+    }
+
+    .goal__subsection .countdown-part {
+        margin: 0 0 15px;
+        width: 100%;
+    }
+
+    .goal__subsection .goal-input {
+        margin: 0 auto 15px;
+    }
+
+    .adjust-goal>.d-flex {
+        flex-direction: column;
+    }
 }

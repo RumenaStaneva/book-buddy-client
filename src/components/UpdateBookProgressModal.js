@@ -13,18 +13,22 @@ import { fetchAllBooks } from '../reducers/booksSlice';
 const UpdateBookProgressModal = ({ setIsOpen }) => {
     const { currentlyReadingBook } = useSelector((state) => state.timer)
     const [updatedPageProgress, setUpdatedPageProgress] = useState(currentlyReadingBook.progress)
+    const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuthContext();
     const dispatchError = useDispatch();
     const dispatch = useDispatch();
 
     const updateBook = async (bookRead) => {
         const updatedBook = { ...currentlyReadingBook };
+        setIsLoading(true);
         try {
             if (bookRead) {
-                updatedBook.progress = updatedBook.pageCount
+                updatedBook.progress = updatedBook.pageCount;
             } else {
                 updatedBook.progress = parseInt(updatedPageProgress);
             }
+            console.log('updateBook', updatedBook);
+
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
@@ -35,8 +39,13 @@ const UpdateBookProgressModal = ({ setIsOpen }) => {
                     updatedBook
                 ),
             });
-
             const data = await response.json();
+            if (!response.ok) {
+                dispatchError(setError({ message: data.error }));
+                setIsLoading(false);
+                throw new window.Error(data.error);
+            }
+
             setIsOpen(false);
             dispatch(setCurrentlyReadingBook(updatedBook));
             setUpdatedPageProgress(updatedBook.progress);
@@ -45,9 +54,12 @@ const UpdateBookProgressModal = ({ setIsOpen }) => {
                 dispatch(setSuccessMessage(`Hurray, you successfully read ${data.book.title}`));
                 localStorage.setItem('activeIndex', 0);
             }
+            document.body.style.overflow = 'visible';
+            setIsLoading(false);
         } catch (error) {
-            dispatchError(setError({ message: `Error updating book: ${error}` }));
+            dispatchError(setError({ message: error.message }));
             console.error('Error updating book:', error);
+            setIsLoading(false);
         }
     }
 
@@ -64,10 +76,10 @@ const UpdateBookProgressModal = ({ setIsOpen }) => {
             disableCloseButton={true}
             content={
                 <div>
-                    <Error />
                     <div className="update-book__content">
                         <label htmlFor="book-page-progress">Add your last read page:</label>
                         <input name='book-page-progress' type="number" value={updatedPageProgress} onClick={handleUpdateProgressClick} onChange={(e) => setUpdatedPageProgress(e.target.value)} />
+                        <Error />
                         <div className="d-flex">
                             <Button className='cta-btn btn-sm cta-btn__alt' onClick={() => updateBook(true)}>I've read this book</Button>
                             <Button onClick={() => updateBook(false)} className='cta-btn btn-sm'>Update</Button>

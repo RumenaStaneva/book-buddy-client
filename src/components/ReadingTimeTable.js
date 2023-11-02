@@ -5,7 +5,6 @@ import Error from '../components/Error';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 // import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parseISO } from 'date-fns';
-import '../styles/ReadingTimeTable.css'
 
 const ReadingTimeTable = () => {
     const [readingTimeData, setReadingTimeData] = useState([]);

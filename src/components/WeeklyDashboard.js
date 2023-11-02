@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Spinner from 'react-spinner-material';
 import Error from '../components/Error';
-import '../styles/ReadingTimeTable.css'
 import CountdownReading from "./CountdownReading";
 import { useSelector } from "react-redux";
 import Button from "./Button";
 import { useDispatch } from "react-redux";
-// import { setDateToday } from "../reducers/readingTimeForTodaySlice";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
 
 
 const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
@@ -15,6 +17,22 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
     const { screenTimeInSeconds, weeklyGoalAveragePerDay } = useSelector((state) => state.readingTimeForToday);
     const dispatch = useDispatch();
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const swiperRef = useRef(null);
+
+    useEffect(() => {
+        if (swiperRef.current) {
+            swiperRef.current.slideTo(selectedTab);
+        }
+    }, [selectedTab]);
+
+    const handleSwiperInit = (swiper) => {
+        swiperRef.current = swiper;
+        swiper.on('slideChange', () => {
+            const activeIndex = swiper.activeIndex;
+            setSelectedTab(activeIndex);
+        });
+    };
 
     function convertSecondsToHoursMinutesSeconds(seconds) {
         const hours = Math.floor(seconds / 3600);
@@ -87,6 +105,20 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
         setSelectedTab(index);
     };
 
+    useEffect(() => {
+        const handleResize = () => {
+            console.log('window.innerWidth <= 768', window.innerWidth <= 768);
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+
     return (
         isLoadingBooks ? (
             <div className='spinner__container'>
@@ -103,19 +135,47 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                     <div className="table-container">
                         <div className="tabs-container">
                             <div className="tab-headers header-row d-flex">
-                                {readingTimeData.map((data, index) => {
-                                    const cellClassName = `header-cell ${getCellClassName(data.date)}`;
-                                    const tabContent = formatDateDDMMWithDayOfWeek(data.date);
-                                    return (
-                                        <div
-                                            key={index}
-                                            className={`tab-header ${cellClassName} ${selectedTab === index ? 'active' : ''}`}
-                                            onClick={() => handleTabClick(index)}
-                                        >
-                                            {tabContent}
-                                        </div>
-                                    );
-                                })}
+                                {isMobile ? (
+                                    <Swiper
+                                        spaceBetween={50}
+                                        slidesPerView={1}
+                                        onSwiper={handleSwiperInit}
+                                        initialSlide={selectedTab}
+                                        navigation={true}
+                                        modules={[Navigation]}
+                                    >
+                                        {readingTimeData.map((data, index) => {
+                                            const cellClassName = `header-cell ${getCellClassName(data.date)}`;
+                                            const tabContent = formatDateDDMMWithDayOfWeek(data.date);
+                                            return (
+                                                <SwiperSlide
+                                                    key={index}
+                                                    className={`tab-header ${cellClassName} ${selectedTab === index ? 'active' : ''}`}
+                                                    onClick={() => handleTabClick(index)}
+                                                    navigation={true}
+                                                >
+                                                    {tabContent}
+                                                </SwiperSlide>
+                                            );
+                                        })}
+                                    </Swiper>) : (
+
+                                    readingTimeData.map((data, index) => {
+                                        const cellClassName = `header-cell ${getCellClassName(data.date)}`;
+                                        const tabContent = formatDateDDMMWithDayOfWeek(data.date);
+                                        return (
+                                            <div
+                                                key={index}
+                                                className={`tab-header ${cellClassName} ${selectedTab === index ? 'active' : ''}`}
+                                                onClick={() => handleTabClick(index)}
+                                            >
+                                                {tabContent}
+                                            </div>
+                                        );
+                                    })
+
+
+                                )}
                             </div>
                             <div className="tab-content">
                                 {selectedTab !== null && (
