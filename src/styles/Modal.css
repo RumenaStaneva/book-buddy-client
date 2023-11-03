@@ -167,6 +167,7 @@
 .add-book-form__container {
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .add-book-form__container .modal__section-image-container {
@@ -213,9 +214,10 @@
     height: 0;
 }
 
-.upload-image-section label {
+.modal__section-content-container .modal__section.upload-image-section label {
     font-size: 14px;
     height: 32px;
+    margin-bottom: 0;
 }
 
 .modal__section-image-container .modal__section {

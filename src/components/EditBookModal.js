@@ -238,7 +238,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                                 <div className={`add-book-form__container ${isLoading && 'd-none'}`}>
                                     <div className="modal__section-image-container">
                                         <div className="modal__section">
-                                            <label htmlFor="thumbnail">Thumbnail</label>
+                                            <label htmlFor="thumbnail" className='d-none'>Thumbnail</label>
                                             <img src={updatedThumbnail !== null ? updatedThumbnail : 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'} alt={bookDetails.title} width={300} />
                                         </div>
                                     </div>
@@ -259,7 +259,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
 
                                         </div>
                                         <div className="modal__section modal__section-left-align">
-                                            <label htmlFor="dropdown-shelf">Choose Book Status:</label>
+                                            <label htmlFor="dropdown-shelf">Choose Book Status</label>
                                             <Dropdown
                                                 id={'dropdown-shelf'}
                                                 options={shelfOptions.map(option => option.label)}
@@ -268,7 +268,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                                             />
                                         </div>
                                         <div className="modal__section modal__section-left-align">
-                                            <label htmlFor="dropdown-shelf">Choose Book Category:</label>
+                                            <label htmlFor="dropdown-shelf">Choose Book Category</label>
                                             <Dropdown id={'dropdown-category'} options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
                                         </div>
                                         <Button type="submit" className="cta-button" aria-label="Edit Book">
