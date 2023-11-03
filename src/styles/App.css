@@ -54,6 +54,10 @@ main {
     background-color: #fff;
 }
 
+.cta-btn:hover .react-spinner-material {
+    border-color: #D92868#D92868 !important;
+}
+
 .cta-btn__alt {
     color: #D92868;
     background-color: #fff;
