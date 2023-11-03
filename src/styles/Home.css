@@ -37,6 +37,10 @@
     width: 100%;
 }
 
+.search__input label {
+    top: 1px;
+}
+
 .search__input legend span {
     padding-left: 0;
     padding-right: 2px;
