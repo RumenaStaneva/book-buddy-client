@@ -152,7 +152,7 @@
 
 .pagination-button {
     padding: 8px 16px;
-    background-color: #278384;
+    background-color: #D92868;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -161,7 +161,7 @@
 }
 
 .pagination-button:hover {
-    background-color: #3e646c;
+    background-color: #a21f4f;
 }
 
 .pagination-text {

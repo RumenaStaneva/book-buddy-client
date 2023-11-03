@@ -73,6 +73,7 @@
     background-color: #fff;
     padding: 5px 16px;
     border: 1px solid #ccc;
+    border-radius: 10px;
     margin: 0 7px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -83,11 +84,12 @@
 }
 
 .pagination__container .pagination-button--active {
-    background-color: #ccc;
+    border: 1px solid #D92868;
 
 }
 
 .pagination__container .pagination-button--active:hover {
+    background-color: #fff;
     cursor: not-allowed;
 }
 

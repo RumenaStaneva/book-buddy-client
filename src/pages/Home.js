@@ -21,7 +21,7 @@ function Home() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 12;
     useEffect(() => {
         document.title = 'Home';
     }, []);
@@ -36,7 +36,6 @@ function Home() {
         e.preventDefault();
         setLoading(true);
         if (title === '' || title === undefined || title === null) {
-            console.log('hitted');
             setError('Please enter a title or author.');
             setLoading(false);
         } else {
