@@ -172,7 +172,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
             <div className="countdown-container">
                 {updateProgressModalIsOpen && <UpdateBookProgressModal setIsOpen={setUpdateProgressModalIsOpen} timerFinished={timerFinished} />}
 
-                {timerFinished ? (
+                {timerFinished && timeInSecondsForTheDayReading > 0 ? (
                     <h2 className="countdown-message">Countdown Timer has finished!</h2>
                 ) : (
 
