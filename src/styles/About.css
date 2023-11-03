@@ -1,7 +1,7 @@
 .info-container {
     max-width: 1200px;
-    margin: 0 auto 60px;
-    padding: 0 20px 20px;
+    margin: 0 auto;
+    padding: 0 20px 1px;
 }
 
 .info-container .subtitle {
