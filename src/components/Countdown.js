@@ -13,6 +13,7 @@ import '../styles/Countdown.css'
 import { useAuthContext } from '../hooks/useAuthContext';
 import { clearError, setError } from '../reducers/errorSlice';
 import Error from './Error';
+import PlaylistReading from "./PlaylistReading";
 
 
 
@@ -260,6 +261,9 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                                 </div>
                             </div>
                         }
+
+                        <PlaylistReading />
+
                     </>
                 )}
             </div>

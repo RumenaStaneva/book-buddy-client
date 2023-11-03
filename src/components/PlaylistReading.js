@@ -5,7 +5,7 @@ import Button from './Button';
 
 
 function PlaylistReading() {
-    const [showIframe, setShowIframe] = useState(false);
+    const [showIframe, setShowIframe] = useState(true);
     // const [accessToken, setAccessToken] = useState(null);
     const iframeRef = useRef(null);
 
@@ -31,31 +31,31 @@ function PlaylistReading() {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        const handleClickOutsideIframe = (event) => {
-            if (iframeRef.current && !iframeRef.current.contains(event.target)) {
-                if (!(event.target instanceof SVGElement && event.target.closest('button'))) {
-                    setShowIframe(false);
-                }
-            }
-        };
+    // useEffect(() => {
+    //     const handleClickOutsideIframe = (event) => {
+    //         if (iframeRef.current && !iframeRef.current.contains(event.target)) {
+    //             if (!(event.target instanceof SVGElement && event.target.closest('button'))) {
+    //                 setShowIframe(false);
+    //             }
+    //         }
+    //     };
 
-        document.addEventListener('mousedown', handleClickOutsideIframe);
+    //     document.addEventListener('mousedown', handleClickOutsideIframe);
 
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutsideIframe);
-        };
-    }, []);
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClickOutsideIframe);
+    //     };
+    // }, []);
 
-    const toggleIframe = () => {
-        setShowIframe(!showIframe);
-    };
+    // const toggleIframe = () => {
+    //     setShowIframe(!showIframe);
+    // };
 
     return (
         <div className={`spotify-player__container ${showIframe ? 'open' : null}`}>
-            <Button onClick={toggleIframe}>
+            {/* <Button onClick={toggleIframe}>
                 <FaSpotify />
-            </Button>
+            </Button> */}
             {showIframe && (
                 <div style={{ marginBottom: 20 }}>
                     <iframe

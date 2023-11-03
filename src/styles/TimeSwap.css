@@ -4,10 +4,10 @@
 }
 
 .spotify-player__container {
-    width: 20px;
+    /* width: 20px;
     position: absolute;
     top: 105px;
-    right: 0;
+    right: 0; */
 }
 
 .spotify-player__container svg {
