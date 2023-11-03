@@ -23,7 +23,7 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
     const { user } = useAuthContext();
     const dispatchError = useDispatch();
     const dispatchReadingTime = useDispatch();
-
+    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     //get the days for the last week and add them in daysOfWeek
     useEffect(() => {
@@ -45,6 +45,7 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
                 });
                 if (response.ok) {
                     const data = await response.json();
+                    console.log(data);
                     setScreenTimeData(prevState => {
                         return prevState.map((item, index) => {
                             return {
@@ -202,6 +203,7 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             onClose={() => setIsOpen(false)}
             subtitle={``}
             setIsOpen={setIsOpen}
+            small={true}
             content={
                 <>
                     <Error />
@@ -221,6 +223,7 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
                                 <div className="input-fields d-flex">
                                     {screenTimeData.map((item, index) => (
                                         <div key={index} className='input-field__container'>
+                                            <span className='weekday'>{daysOfWeek[index]}</span>
                                             <label>{item.date}</label>
                                             <div className={`input-field ${showConfirmationDialog && 'confirmation-dialog-shown'} ${invalidInputs.includes(index) ? 'error' : ''}`}>
                                                 <Cleave

@@ -10,14 +10,18 @@
 }
 
 .input-field__container {
-    flex: 1 1 calc(50% - 10px);
-    margin-bottom: 10px;
+    /* flex: 1 1 calc(50% - 10px); */
+    margin: 0 10px 30px 0;
+}
+
+.input-field__container .weekday {
+    margin-bottom: 5px;
 }
 
 .input-field {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+    /* padding: 10px;
+    margin-bottom: 10px; */
+    /* border: 1px solid #ccc; */
     border-radius: 5px;
 }
 
@@ -26,6 +30,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
+    text-align: center;
 }
 
 .input-field.error input {
@@ -36,7 +41,7 @@
 .input-field__container label {
     font-weight: bold;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
     font-size: 1.1rem;
 
 }
@@ -44,12 +49,12 @@
 .input-fields {
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 
 .input-field {
-    flex: 1 1 calc(50% - 20px);
-    margin: 10px;
+    /* flex: 1 1 calc(50% - 20px); */
+    /* margin: 10px; */
 }
 
 @media (max-width: 1350px) {}

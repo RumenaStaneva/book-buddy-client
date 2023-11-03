@@ -128,7 +128,7 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                 {!readingTimeData || !readingTimeData.length > 0 ? (
                     <>
                         <h1 className="heading">No reading time data for this week</h1>
-                        <Button className="cta-btn" onClick={() => { setIsOpenAddScreenTime(true); document.body.style.overflow = 'visible'; }}>Add from here</Button>
+                        <Button className="cta-btn" onClick={() => { setIsOpenAddScreenTime(true); document.body.style.overflow = 'hidden'; }}>Add from here</Button>
                     </>
                 ) : (
                     <div className="table-container">
