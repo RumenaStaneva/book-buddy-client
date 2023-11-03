@@ -22,7 +22,8 @@
 }
 
 .books-colorful__container {
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 20px;
 }
 
 .book-colorful {
@@ -37,7 +38,7 @@
 .books-colorful__container .book-colorful {
     width: unset !important;
     display: flex;
-    margin: 30px 16px;
+    margin: 0 60px 40px 0;
     border-radius: 32px;
 }
 

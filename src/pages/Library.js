@@ -77,7 +77,7 @@ function Library() {
                             <>
                                 <div className='shelf-header'>
                                     <h2 className='shelf-title'>Currently Reading</h2>
-                                    {currentlyReadingBooks.length >= 5 &&
+                                    {currentlyReadingBooks.length >= 3 &&
 
                                         <a href='/books/see-all?shelf=1' className='cta-btn'>See all</a>
                                     }
@@ -126,7 +126,7 @@ function Library() {
                             <>
                                 <div className='shelf-header'>
                                     <h2 className='shelf-title'>Want to read books</h2>
-                                    {wantToReadBooks.length >= 5 &&
+                                    {wantToReadBooks.length >= 3 &&
                                         <a href='/books/see-all?shelf=0' className='cta-btn'>See all</a>
                                     }
                                 </div>
@@ -200,7 +200,7 @@ function Library() {
                                 <>
                                     <div className='shelf-header'>
                                         <h2 className='shelf-title'>Already read</h2>
-                                        {readBooks.length >= 5 &&
+                                        {readBooks.length >= 3 &&
                                             <a href='/books/see-all?shelf=2' className='cta-btn'>See all</a>
                                         }
                                     </div>
