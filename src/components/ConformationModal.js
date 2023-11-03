@@ -41,7 +41,7 @@ const ConformationModal = ({ bookId, setIsOpen }) => {
                 <div>
                     <Error />
                     <div className="d-flex">
-                        <Button onClick={() => setIsOpen(false)} className='cta-btn btn-sm cancel-btn'>Cancel</Button>
+                        <Button onClick={() => { setIsOpen(false); document.body.style.overflow = 'visible'; }} className='cta-btn btn-sm cancel-btn'>Cancel</Button>
                         <Button onClick={deleteBook} className='cta-btn btn-sm cta-btn__alt'>Yes</Button>
                     </div>
                 </div>

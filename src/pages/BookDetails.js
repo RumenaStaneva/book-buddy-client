@@ -12,6 +12,11 @@ import Error from '../components/Error';
 import '../styles/BookDetails.css'
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
+import { GiBookmarklet } from "react-icons/gi";
+import { AiOutlineDelete } from 'react-icons/ai';
+import ConformationModal from '../components/ConformationModal';
+
+
 
 function BookDetails() {
 
@@ -23,6 +28,8 @@ function BookDetails() {
   const { user } = useAuthContext();
   const params = useParams();
   const dispatchError = useDispatch();
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+
 
   useEffect(() => {
     document.title = `Book details`;
@@ -65,6 +72,11 @@ function BookDetails() {
     document.body.style.overflow = 'hidden';
   }
 
+  console.log(bookDetails);
+  const handleDeleteBook = () => {
+    setDeleteModalIsOpen(true);
+    document.body.style.overflow = 'hidden';
+  }
 
   return (
     <>
@@ -76,10 +88,17 @@ function BookDetails() {
           <Header title='Book Details' />
           <main className="book-details-container">
             {isOpen && <EditBookModal setIsOpen={setIsOpen} bookDetails={bookDetails} fetchBook={fetchBook} />}
+            {deleteModalIsOpen && <ConformationModal
+              onClose={() => { setDeleteModalIsOpen(false); document.body.style.overflow = 'visible'; }}
+              setIsOpen={setDeleteModalIsOpen}
+              bookId={bookDetails._id}
+            />}
             <Error />
             {bookDetails !== null ? (
               <div className='d-flex'>
                 <div className="book-card" style={bookStyle}>
+                  <AiOutlineDelete className="modal__delete-btn"
+                    onClick={handleDeleteBook} />
                   <AiFillEdit className="edit-book__icon" onClick={handleEditBook} />
                   <div className="book-thumbnail">
                     <img
@@ -89,19 +108,31 @@ function BookDetails() {
                   </div>
                   <div className="book-details">
                     <h2 className="book-title">{bookDetails.title}</h2>
-                    <p className="book-category book__category" style={{ backgroundColor: bookCategoryColor }}>{bookDetails.category}</p>
-                    <p className="book-description">{bookDetails.description}</p>
                     {bookDetails.authors.length > 0 ?
                       <p className="book-authors">
                         Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
                       </p>
                       : null}
+                    <div className='details__additional-info'>
+                      <div className='book__all-pages'>
+                        <p className='book-font__outline'>Print Length</p>
+                        <div className='d-flex fw-600'>
+                          <GiBookmarklet />
+                          <p>{bookDetails.pageCount}</p>
+                        </div>
+                      </div>
+                      <div className="book__action-area">
+                        <p className='book-font__outline'>Category</p>
+                        <span className="book__category" style={{ backgroundColor: bookCategoryColor }}>{bookDetails.category}</span>
+                      </div>
+                    </div>
+
+                    <p className="book-description">{bookDetails.description}</p>
                   </div>
 
 
                 </div>
                 <div className='notes__container'>
-
                   <NotesList bookDetails={bookDetails} />
                 </div>
               </div>

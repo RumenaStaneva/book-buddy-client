@@ -252,6 +252,8 @@
     width: 25px;
     height: 25px;
     cursor: pointer;
+    fill: #000;
+    transition: fill ease-in-out 0.3s;
 }
 
 .modals__container {

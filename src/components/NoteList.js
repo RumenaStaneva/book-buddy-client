@@ -177,7 +177,7 @@ const NotesList = ({ bookDetails }) => {
                         <MdOutlineCancel onClick={() => setNotesIsVisible(false)} />
                     </div>
                     <Error />
-                    <textarea className='notes__add-textarea' name="addNote" id="addNote" cols="100" rows="10" onChange={(e) => setNote(e.target.value)}></textarea>
+                    <textarea className='notes__add-textarea' name="addNote" id="addNote" rows="10" onChange={(e) => setNote(e.target.value)}></textarea>
                     <Button className='cta-btn' onClick={() => handleAddNote()}>Add note</Button>
                 </div>
                 : null}

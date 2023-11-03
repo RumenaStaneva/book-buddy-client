@@ -3,28 +3,31 @@
     flex-direction: column;
     align-items: center;
     /* height: 100vh; */
-    padding: 20px;
+    padding: 0 20px 20px;
 }
 
 .book-card {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     align-items: center;
-    text-align: center;
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    padding: 30px;
+    padding: 65px;
     position: relative;
     min-width: 650px;
 }
 
 .book-thumbnail {
-    max-width: 300px;
+    max-width: 350px;
     width: 100%;
     object-fit: cover;
+}
+
+.book-card .book-thumbnail {
+    margin-right: 50px;
 }
 
 .book-thumbnail img {
@@ -38,6 +41,14 @@
     margin: 0;
 }
 
+.book-card .book-authors {
+    margin-bottom: 20px;
+}
+
+.book-details .book-title {
+    margin-bottom: 20px;
+}
+
 .book-category {
     margin-top: 10px;
     font-style: italic;
@@ -45,24 +56,29 @@
 
 .book-description {
     margin-top: 20px;
-    font-size: 1.1rem;
-    overflow-y: auto;
-    max-height: 200px;
+    font-size: 1rem;
+    /* overflow-y: auto; */
+    padding: 10px;
+    max-width: 900px;
+    width: 100%;
     margin-bottom: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    word-break: break-all;
 }
 
 .edit-book__icon {
     position: absolute;
+    top: 30px;
     right: 20px;
     width: 25px;
     height: 25px;
     fill: #111;
     cursor: pointer;
-    transition: fill ease-in-out;
+    transition: fill ease-in-out 0.3s;
 }
 
-.edit-book__icon:hover {
+.edit-book__icon:hover,
+.modal__delete-btn:hover {
     fill: #fff;
 }
 
@@ -205,13 +221,27 @@
     .book-card {
         min-width: unset;
     }
+
+    .book-card {
+        flex-direction: column;
+    }
+
+    .book-card .book-thumbnail {
+        margin-right: 0;
+    }
 }
 
 @media (max-width: 576px) {
+
+    .modal__delete-btn,
     .edit-book__icon {
         right: 8px;
-        top: 13px;
+        top: 10px;
         width: 20px;
         height: 20px;
+    }
+
+    .modal__delete-btn {
+        left: 20px;
     }
 }

@@ -239,7 +239,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                                     <div className="modal__section-image-container">
                                         <div className="modal__section">
                                             <label htmlFor="thumbnail" className='d-none'>Thumbnail</label>
-                                            <img src={updatedThumbnail !== null ? updatedThumbnail : 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'} alt={bookDetails.title} width={300} />
+                                            <img src={updatedThumbnail !== undefined ? updatedThumbnail : 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'} alt={bookDetails.title} width={300} />
                                         </div>
                                     </div>
                                     <div className="modal__section-content-container">
@@ -271,13 +271,13 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                                             <label htmlFor="dropdown-shelf">Choose Book Category</label>
                                             <Dropdown id={'dropdown-category'} options={Object.values(BookCategories)} onSelect={handleCategorySelect} selectedOption={updatedCategory} />
                                         </div>
-                                        <Button type="submit" className="cta-button" aria-label="Edit Book">
-                                            Edit Book
-                                        </Button>
                                     </div>
 
                                 </div>
                                 <Error />
+                                <Button type="submit" className="cta-button" aria-label="Edit Book">
+                                    Edit Book
+                                </Button>
                             </>
                         </form>
                     </>
