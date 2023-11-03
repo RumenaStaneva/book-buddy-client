@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
-import { FaSpotify } from "react-icons/fa";
-import Button from './Button';
+import { useEffect, useRef } from 'react';
+// import { FaSpotify } from "react-icons/fa";
+// import Button from './Button';
 
 
 
 function PlaylistReading() {
-    const [showIframe, setShowIframe] = useState(true);
+    // const [showIframe, setShowIframe] = useState(true);
     // const [accessToken, setAccessToken] = useState(null);
     const iframeRef = useRef(null);
 
@@ -52,26 +52,27 @@ function PlaylistReading() {
     // };
 
     return (
-        <div className={`spotify-player__container ${showIframe ? 'open' : null}`}>
+        // <div className={`spotify-player__container ${showIframe ? 'open' : null}`}>
+        <div className={`spotify-player__container`}>
             {/* <Button onClick={toggleIframe}>
                 <FaSpotify />
             </Button> */}
-            {showIframe && (
-                <div style={{ marginBottom: 20 }}>
-                    <iframe
-                        ref={iframeRef}
-                        className='spotify-iframe'
-                        id='spotify-iframe'
-                        title="Spotify Playlist"
-                        style={{ borderRadius: 12 }}
-                        src="https://open.spotify.com/embed/playlist/0vvXsWCC9xrXsKd4FyS8kM"
-                        width="100%"
-                        height="352"
-                        frameBorder="0"
-                        allow="encrypted-media"
-                    ></iframe>
-                </div>
-            )}
+            {/* {showIframe && ( */}
+            <div style={{ marginBottom: 20 }}>
+                <iframe
+                    ref={iframeRef}
+                    className='spotify-iframe'
+                    id='spotify-iframe'
+                    title="Spotify Playlist"
+                    style={{ borderRadius: 12 }}
+                    src="https://open.spotify.com/embed/playlist/0vvXsWCC9xrXsKd4FyS8kM"
+                    width="100%"
+                    height="352"
+                    frameBorder="0"
+                    allow="encrypted-media"
+                ></iframe>
+            </div>
+            {/* )} */}
         </div>
     );
 }

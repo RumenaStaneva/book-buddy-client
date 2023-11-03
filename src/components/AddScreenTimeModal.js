@@ -12,8 +12,10 @@ import ConfirmationDialog from './ConfirmationDialog';
 import { fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse } from 'date-fns';
 
-const AddScreenTimeModal = ({ setIsOpen }) => {
+
+const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
     const [screenTimeData, setScreenTimeData] = useState(Array(7).fill({ date: '', time: '00:00' }));
+
     const [datesFromLastWeek, setDatesFromLastWeek] = useState([]);
     const [invalidInputs, setInvalidInputs] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +74,6 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
 
         getWeekDates();
     }, [user.token, dispatchError]);
-
 
     const handleInputChange = (index, value) => {
         const newData = [...screenTimeData];
@@ -184,11 +185,11 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             setShowConfirmationDialog(false);
             setIsLoading(false);
             dispatchError(clearError());
-            setIsOpen(false);
+            setIsOpenAddScreenTime(false);
             document.body.style.overflow = 'visible';
 
             dispatchReadingTime(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week' }));
-
+            handleCloseModal();
         } catch (error) {
             setIsLoading(false);
             console.log(error);
@@ -200,9 +201,9 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
     return (
         <Modal
             title={`Screen time for week: ${formattedStartDate} - ${formattedEndDate}`}
-            onClose={() => setIsOpen(false)}
+            onClose={() => setIsOpenAddScreenTime(false)}
             subtitle={``}
-            setIsOpen={setIsOpen}
+            setIsOpen={setIsOpenAddScreenTime}
             small={true}
             content={
                 <>

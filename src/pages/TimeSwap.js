@@ -27,6 +27,11 @@ const TimeSwap = () => {
         dispatch(fetchAllBooks(user));
         dispatch(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week' }));
     }, [dispatch, user]);
+
+    const handleCloseModal = () => {
+        setIsOpenAddScreenTime(false);
+        dispatch(fetchHasReadingTimeAnytime(user));
+    };
     return (
         <>
             <NavBar />
@@ -36,7 +41,7 @@ const TimeSwap = () => {
                 </div>
             ) : (
                 <>
-                    {isOpenAddScreenTime && <AddScreenTimeModal setIsOpen={setIsOpenAddScreenTime} />}
+                    {isOpenAddScreenTime && <AddScreenTimeModal setIsOpenAddScreenTime={setIsOpenAddScreenTime} handleCloseModal={handleCloseModal} />}
 
 
                     {!hasReadingTimeAnytime ? (

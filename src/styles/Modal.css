@@ -284,6 +284,22 @@
     min-width: 350px;
 }
 
+.confirmation-dialog p {
+    margin-bottom: 15px;
+}
+
+.confirmation-dialog .cta-btn {
+    margin: 0;
+}
+
+.confirmation-dialog .cta-btn:first-of-type {
+    margin-right: 20px;
+}
+
+.confirmation-dialog .button-container {
+    justify-content: center;
+}
+
 .input-field.confirmation-dialog-shown.error input {
     border: 1px solid indianred;
 }
