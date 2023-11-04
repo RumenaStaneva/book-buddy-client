@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { setError } from './errorSlice';
 import { startOfWeek, endOfWeek, format, subWeeks } from 'date-fns';
 
-
 //get the reading time
 export const fetchReadingTimeForTheWeek = createAsyncThunk(
     'readingTime/fetchReadingTimeForTheWeek',

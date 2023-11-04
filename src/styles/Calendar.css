@@ -59,10 +59,14 @@
 
 @media (max-width: 1350px) {}
 
-/* CSS for smaller screens (including down to 768px width) */
 @media (max-width: 768px) {
     .input-field {
         flex: 1 1 calc(100% - 20px);
-        /* Adjust the width as needed */
     }
+
+    .input-fields {
+        align-items: center;
+        justify-content: center;
+    }
+
 }

@@ -328,7 +328,7 @@
 @media (max-width: 768px) {
     .modal {
         width: 90%;
-        overflow: hidden;
+        overflow: auto;
         padding: 30px 0;
     }
 

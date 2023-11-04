@@ -35,6 +35,12 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     const [playStopSound] = useSound(stopSfx);
     const [playEndSound] = useSound(endSfx);
 
+    useEffect(() => {
+        if (screenTimeSeconds === 0 && timeInSecondsForTheDayReading === 0) {
+            dispatch(setTimerMode('increment'));
+        }
+    }, [dispatch, screenTimeSeconds, timeInSecondsForTheDayReading])
+
     const updateTimer = useCallback(() => {
         if (timerActive && timeLeft > 0) {
             setTimeLeft(prevTime => {
@@ -63,7 +69,6 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
         return () => clearInterval(timerInterval);
     }, [updateTimer]);
 
-
     useEffect(() => {
         setTimeLeft(timeInSecondsLeftForAchievingReadingGoal);
     }, [timeInSecondsLeftForAchievingReadingGoal]);
@@ -88,7 +93,6 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
             dispatch(setGoalAchievedForTheDay(true))
         }
     }, [dispatch, goalAchievedForTheDay])
-
 
     const formatTimeWithSeconds = (time) => {
         const hours = Math.floor(time / 3600);
