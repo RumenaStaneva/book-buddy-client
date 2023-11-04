@@ -48,6 +48,10 @@
     text-transform: capitalize;
 }
 
+.books__library .books__container {
+    margin-bottom: 40px;
+}
+
 .books__library .book-colorful {
     padding: 0;
 }
