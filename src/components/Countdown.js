@@ -38,6 +38,9 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     useEffect(() => {
         if (screenTimeSeconds === 0 && timeInSecondsForTheDayReading === 0) {
             dispatch(setTimerMode('increment'));
+        } else {
+            dispatch(setTimerMode('decrement'));
+
         }
     }, [dispatch, screenTimeSeconds, timeInSecondsForTheDayReading])
 
@@ -215,7 +218,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                             <div className="d-flex goal-reading-time__container">
                                 <p>Reading goal for the day: {formatTime(totalReadingGoalForTheDay)}</p>
 
-                                <p className="time-info">Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
+                                <p className="time-info">Reading time achieved: {formatTimeWithSeconds(timeInSecondsForTheDayReading)}</p>
                             </div>
                         }
 

@@ -72,7 +72,7 @@ function BookDetails() {
     document.body.style.overflow = 'hidden';
   }
 
-  console.log(bookDetails);
+  // console.log(bookDetails);
   const handleDeleteBook = () => {
     setDeleteModalIsOpen(true);
     document.body.style.overflow = 'hidden';

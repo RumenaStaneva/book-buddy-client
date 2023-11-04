@@ -200,6 +200,12 @@
     padding: 0 10px;
 }
 
+.goal-reading-time__container p .countdown-part {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1rem;
+}
+
 .time-info {
     border-left: 1px solid #ccc;
 }

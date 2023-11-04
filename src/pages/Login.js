@@ -46,8 +46,6 @@ function Login() {
         }
     }
 
-    console.log(process.env.REACT_APP_RECAPTCHA_SITE_KEY);
-
     return (
         <>
             <NavBar />
@@ -82,7 +80,7 @@ function Login() {
                         <div className="recaptcha__container">
 
                             <ReCAPTCHA
-                                sitekey='6LdKFeQoAAAAALujPMOEwbzB0ncL4hCMUoJEifDR'
+                                sitekey={`${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`}
                                 onChange={handleCaptchaVerify}
                             />
                         </div>

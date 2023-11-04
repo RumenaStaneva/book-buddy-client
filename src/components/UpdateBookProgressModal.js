@@ -28,7 +28,7 @@ const UpdateBookProgressModal = ({ setIsOpen }) => {
             } else {
                 updatedBook.progress = parseInt(updatedPageProgress);
             }
-            console.log('updateBook', updatedBook);
+            // console.log('updateBook', updatedBook);
 
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',

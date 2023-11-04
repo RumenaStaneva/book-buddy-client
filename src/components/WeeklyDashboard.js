@@ -105,7 +105,6 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
 
     useEffect(() => {
         const handleResize = () => {
-            console.log('window.innerWidth <= 768', window.innerWidth <= 768);
             setIsMobile(window.innerWidth <= 768);
         };
 

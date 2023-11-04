@@ -18,7 +18,6 @@ function ProfilePicture({ handleProfileClick, setIsEditingProfile, isOpen, setIs
     const [scale, setScale] = useState(1);
 
     const handleImageUpload = async (e) => {
-        console.log('handleImageUpload');
         const [file] = e.target.files;
         if (file) {
             const reader = new FileReader();

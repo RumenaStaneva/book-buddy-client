@@ -47,7 +47,7 @@ const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data);
+                    // console.log(data);
                     setScreenTimeData(prevState => {
                         return prevState.map((item, index) => {
                             return {
