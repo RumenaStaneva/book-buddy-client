@@ -62,6 +62,7 @@
     padding: 20px 10px;
 }
 
+.pagination-button,
 .pagination__container .pagination-button--next,
 .pagination__container .pagination-button--prev {
     margin: 0 15px;

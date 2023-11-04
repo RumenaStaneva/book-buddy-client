@@ -212,7 +212,7 @@ body {
 
 @media (max-width: 768px) {
     .mask {
-        background-color: #fff;
+        background-color: #EDC9BF;
     }
 
     .wrapper.login-form__container {
@@ -223,6 +223,10 @@ body {
 
     .wrapper:last-of-type {
         display: none;
+    }
+
+    .login-signup-page {
+        background-color: #EDC9BF;
     }
 }
 

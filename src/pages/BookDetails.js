@@ -95,7 +95,7 @@ function BookDetails() {
             />}
             <Error />
             {bookDetails !== null ? (
-              <div className='d-flex'>
+              <div className='d-flex book-details-container__inner'>
                 <div className="book-card" style={bookStyle}>
                   <AiOutlineDelete className="modal__delete-btn"
                     onClick={handleDeleteBook} />
@@ -113,18 +113,20 @@ function BookDetails() {
                         Authors: {bookDetails.authors.map((author, index) => index === bookDetails.authors.length - 1 ? author : `${author}, `)}
                       </p>
                       : null}
+
                     <div className='details__additional-info'>
+                      <div className="book__action-area">
+                        {/* <p className='book-font__outline'>Category</p> */}
+                        <span className="book__category" style={{ backgroundColor: bookCategoryColor }}>{bookDetails.category}</span>
+                      </div>
                       <div className='book__all-pages'>
-                        <p className='book-font__outline'>Print Length</p>
+                        {/* <p className='book-font__outline'>Print Length</p> */}
                         <div className='d-flex fw-600'>
                           <GiBookmarklet />
                           <p>{bookDetails.pageCount}</p>
                         </div>
                       </div>
-                      <div className="book__action-area">
-                        <p className='book-font__outline'>Category</p>
-                        <span className="book__category" style={{ backgroundColor: bookCategoryColor }}>{bookDetails.category}</span>
-                      </div>
+
                     </div>
 
                     <p className="book-description">{bookDetails.description}</p>

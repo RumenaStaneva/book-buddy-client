@@ -1,17 +1,23 @@
 .book-details-container {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; */
     /* height: 100vh; */
+    max-width: 1665px;
+    margin: auto;
     padding: 0 20px 20px;
+}
+
+.book-details-container__inner {
+    align-items: flex-start;
 }
 
 .book-card {
     display: flex;
     /* flex-direction: column; */
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
+    align-items: flex-start;
+    width: 70%;
+    /* max-width: 1200px; */
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -42,11 +48,21 @@
 }
 
 .book-card .book-authors {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-.book-details .book-title {
+/* .book-details .book-title {
     margin-bottom: 20px;
+} */
+
+.book-card .details__additional-info {
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+}
+
+.book-card .details__additional-info .book__action-area {
+    margin-right: 15px;
 }
 
 .book-category {
@@ -62,14 +78,13 @@
     max-width: 900px;
     width: 100%;
     margin-bottom: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     word-break: break-all;
 }
 
 .edit-book__icon {
     position: absolute;
     top: 30px;
-    right: 20px;
+    right: 60px;
     width: 25px;
     height: 25px;
     fill: #111;
@@ -83,14 +98,20 @@
 }
 
 .notes__container {
-    margin: 20px;
+    margin: 0 20px;
     padding: 20px;
-    max-width: 350px;
-    width: 100%;
+    width: 30%;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notes__message-container {
+    max-height: 400px;
+    height: 100%;
+    overflow-y: auto;
+    margin-bottom: 20px;
 }
 
 .notes__create-button:hover {
@@ -98,7 +119,27 @@
 }
 
 .notes__add-form {
-    margin-top: 20px;
+    display: flex;
+    padding: 10px;
+}
+
+.notes__add-form .cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    padding: 10px;
+}
+
+.notes__add-form .cta-btn svg {
+    width: 25px;
+    height: 25px;
+}
+
+.notes__add-form textarea {
+    margin-right: 20px;
 }
 
 .notes__inner {
@@ -123,7 +164,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     resize: none;
 }
 
@@ -145,15 +186,15 @@
     font-size: 18px;
     font-weight: bold;
     margin-top: 20px;
+    margin-bottom: 35px;
     text-align: center;
 }
 
 .notes__list-container {
-    margin-top: 20px;
     margin-bottom: 20px;
-    padding: 10px;
-    max-height: 525px;
-    overflow: auto;
+    padding: 0 10px 10px;
+    /* max-height: 525px; */
+    /* overflow: auto; */
 }
 
 .notes__list {
@@ -168,11 +209,16 @@
     background-color: #f9f9f9;
     position: relative;
     width: 100%;
-    max-width: 260px;
     display: flex;
-    align-items: center;
+    flex-direction: column-reverse;
+    align-items: flex-end;
     justify-content: space-between;
     word-break: break-word;
+}
+
+.notes-item__container {
+    margin-right: 10px;
+    padding: 0 0 0 10px;
 }
 
 .notes-infinite-scroll {
@@ -182,6 +228,7 @@
 .note__actions {
     display: flex;
     align-items: center;
+    padding: 10px 0;
 }
 
 .note__actions svg {
@@ -203,6 +250,9 @@
 
 @media (max-width: 991px) {
     .book-details-container>div:first-of-type {
+        display: flex;
+        align-items: center;
+
         flex-direction: column;
     }
 

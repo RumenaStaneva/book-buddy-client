@@ -23,8 +23,7 @@
 .modal {
     max-width: 800px;
     width: 100%;
-    max-height: 90%;
-    height: 100%;
+    max-height: calc(100% - 60px);
     overflow-y: auto;
     background: white;
     border-radius: 16px;
@@ -39,7 +38,7 @@
 
 .modal-content__container {
     /* max-height: 80%; */
-    overflow: hidden;
+    /* overflow: hidden; */
     height: auto;
 }
 
@@ -94,13 +93,12 @@
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
     position: sticky;
     left: 92%;
-    top: 25px;
+    top: 0;
     align-self: flex-end;
     margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-
 }
 
 /* .closeBtn:hover {
@@ -246,7 +244,7 @@
 
 .modal__delete-btn {
     position: absolute;
-    left: 30px;
+    right: 25px;
     top: 30px;
     width: 25px;
     height: 25px;
