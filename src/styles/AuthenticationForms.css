@@ -211,6 +211,10 @@ body {
 }
 
 @media (max-width: 768px) {
+    .mask {
+        background-color: #fff;
+    }
+
     .wrapper.login-form__container {
         width: 100%;
         margin: 0;

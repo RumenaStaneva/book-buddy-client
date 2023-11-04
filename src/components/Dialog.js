@@ -16,10 +16,6 @@ const Modal = ({ title, content, setIsOpen, subtitle, small, disableCloseButton 
                 }
             }} />
             <div className={`modal ${small ? 'modal-sm' : ''}`}>
-                <div className="modalHeader">
-                    <h2 className="modal-heading">{title}</h2>
-                    <p>{subtitle}</p>
-                </div>
                 {!disableCloseButton ?
                     <Button aria-label='Close' className="closeBtn" onClick={() => {
                         setIsOpen(false);
@@ -30,6 +26,10 @@ const Modal = ({ title, content, setIsOpen, subtitle, small, disableCloseButton 
                         <IoIosClose />
                     </Button>
                     : null}
+                <div className="modalHeader">
+                    <h2 className="modal-heading">{title}</h2>
+                    <p>{subtitle}</p>
+                </div>
                 <div className="modal-content__container">
                     <div className="modalContent">{content}</div>
                 </div>

@@ -208,7 +208,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                         <input type="number" id="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
                                     </div>
                                     <div className="modal__section upload-image-section">
-                                        <span>Change book thumbnail:</span>
+                                        <span>Change book thumbnail</span>
                                         <label htmlFor="bookImage" className='cta-btn upload-btn'>Book image</label>
                                         <input id='bookImage' name='bookImage' type="file" accept="image/*" onChange={handleThumbnailUpload} />
                                     </div>

@@ -54,7 +54,7 @@
 
 .modal-heading {
     margin: 0;
-    padding: 30px 55px 10px;
+    padding: 0 55px 15px 50px;
     color: #2c3e50;
     font-weight: 600;
     font-size: 1.5rem;
@@ -92,12 +92,11 @@
     background: white;
     transition: all 0.25s ease;
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
-    position: absolute;
-    right: 25px;
+    position: sticky;
+    left: 92%;
     top: 25px;
     align-self: flex-end;
-    margin-top: -7px;
-    margin-right: -7px;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
