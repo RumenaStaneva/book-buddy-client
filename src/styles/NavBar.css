@@ -39,6 +39,10 @@
     font-weight: 600;
 }
 
+.nav__login-register .nav__link.active {
+    font-weight: 500;
+}
+
 .nav__login-register {
     padding: 10px 0;
 }

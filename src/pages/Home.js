@@ -120,7 +120,7 @@ function Home() {
                 </Button>
                 {currentPage > 1 && (
                     <Button className="pagination-button pagination-button--prev" onClick={prevPage} disabled={currentPage === 1}>
-                        &#10096;
+                        &#10094;
                     </Button>
                 )}
                 {pages.map((pageNumber) => (
@@ -134,7 +134,7 @@ function Home() {
                 ))}
                 {currentPage < totalPages && (
                     <Button className="pagination-button pagination-button--next" onClick={nextPage} disabled={currentPage === totalPages}>
-                        &#10097;
+                        &#10095;
                     </Button>
                 )}
             </div>
@@ -225,7 +225,7 @@ function Home() {
                             : null
                         }
 
-                        <div className='d-flex'>
+                        <div className='d-flex search-input__container'>
                             <ShakeableTextField
                                 id="outlined-basic"
                                 label="Title/author"
