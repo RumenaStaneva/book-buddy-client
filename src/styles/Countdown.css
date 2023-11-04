@@ -45,7 +45,7 @@
 }
 
 .countdown__container .book__details .book__image {
-    max-height: 430px;
+    max-height: 400px;
 }
 
 .reading-countdown__container {
@@ -53,11 +53,12 @@
 }
 
 .reading-countdown__container .book__progress {
-    padding: 0 52px 0 65px;
+    padding: 0 52px 0 115px;
     position: absolute;
     width: 100%;
     bottom: 50px;
     z-index: 1;
+    margin-bottom: 25px;
 }
 
 .reading-countdown__container .book__progress p {
@@ -329,13 +330,13 @@
 }
 
 @media (max-width: 768px) {
-    .weekly-dashboard .swiper-books__container {
+    /* .weekly-dashboard .swiper-books__container {
         width: 500px;
     }
 
     .weekly-dashboard .countdown__container {
         width: 500px !important;
-    }
+    } */
 
     .countdown__container .book {
         width: 500px;

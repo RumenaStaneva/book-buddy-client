@@ -66,6 +66,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                         <div className='swiper-books__container'>
                             {currentlyReadingBooks && currentlyReadingBooks.length > 0 ?
                                 <Swiper
+                                    spaceBetween={60}
                                     ref={swiperRef}
                                     pagination={{
                                         type: 'fraction',
@@ -73,7 +74,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                     navigation={!timerStarted ? true : false}
                                     modules={[Pagination, Navigation]}
                                     preventClicks={!timerStarted ? true : false}
-                                    width={550}
+                                    // width={550}
                                     onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                                     allowTouchMove={!timerStarted ? true : false}
                                     allowSlideNext={!timerStarted ? true : false}
@@ -103,9 +104,10 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                 </Swiper>
                                 :
                                 <div className="empty-books-message">
-                                    <p className="empty-books-text">No currently reading books</p>
-                                    <p className="empty-books-text">Add one from your <NavLink className="empty-books-link" to="/books/library">Want To Read</NavLink></p>
-                                    <p className="empty-books-text">Add one from <NavLink className="empty-books-link" to="/">here</NavLink></p>
+                                    <p className="empty-books-text">No currently reading books in your library</p>
+                                    <p className="empty-books-text">Add book from your <NavLink className="empty-books-link" to="/books/library">Want To Read</NavLink></p>
+                                    <p className="empty-books-text">or</p>
+                                    <p className="empty-books-text">Search for a book <NavLink className="empty-books-link" to="/">here</NavLink></p>
                                 </div>
                             }
                         </div>

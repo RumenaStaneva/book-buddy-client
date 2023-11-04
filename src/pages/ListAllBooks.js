@@ -263,7 +263,7 @@ function ListAllBooks() {
                                                 </div>
                                             </div>
                                             <div className="book__action-area">
-                                                <Button onClick={(e) => { e.preventDefault(); handleOpen(book); }} className="cta-btn">Move</Button>
+                                                <Button onClick={(e) => { e.preventDefault(); handleOpen(book); }} className="cta-btn">Change shelf</Button>
                                             </div>
                                         </div>
                                     </CardActionArea>

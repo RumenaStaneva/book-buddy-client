@@ -71,7 +71,11 @@
 .books-colorful__container .book__button {
     display: flex;
     padding: 30px;
+}
 
+.no-books__message-container {
+    margin-bottom: 50px;
+    text-align: center;
 }
 
 .book-colorful .book__description {

@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBooks } from '../reducers/booksSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { HiDotsVertical } from "react-icons/hi";
 
 function Library() {
     const { user } = useAuthContext();
@@ -31,7 +32,7 @@ function Library() {
     }, [dispatchRedux, user]);
 
     useEffect(() => {
-        document.title = `User's library`;
+        document.title = `User's Library`;
     }, []);
     const handleSuccessMessage = (message) => {
         toast.success(message, {
@@ -56,8 +57,8 @@ function Library() {
                 <Header title={(wantToReadBooks && wantToReadBooks.length > 0) ||
                     (currentlyReadingBooks && currentlyReadingBooks.length > 0) ||
                     (readBooks && readBooks.length > 0)
-                    ? `User's library`
-                    : `No books in ${user.username !== '' ? user.username : user.email.split('@')[0]}'s library`} />
+                    ? `User's Library`
+                    : `No books in ${user.username !== '' ? user.username : user.email.split('@')[0]}'s Library`} />
             }
 
             <main className='books__library'>
@@ -118,14 +119,16 @@ function Library() {
                                         </Swiper>
 
                                     </div >
-                                    : <p style={{ 'textAlign': 'center' }}>No books to display</p>}
+                                    :
+                                    <div className='no-books__message-container'><p>No books to display</p>
+                                    </div>}
                             </>
                             : null}
 
                         {wantToReadBooks ?
                             <>
                                 <div className='shelf-header'>
-                                    <h2 className='shelf-title'>Want to read books</h2>
+                                    <h2 className='shelf-title'>Want to Read</h2>
                                     {wantToReadBooks.length >= 3 &&
                                         <a href='/books/see-all?shelf=0' className='cta-btn'>See all</a>
                                     }
@@ -140,6 +143,8 @@ function Library() {
                                             }
                                             return (
                                                 <div key={book._id} className="book-colorful" style={bookStyle}>
+                                                    <HiDotsVertical />
+
                                                     <CardActionArea
                                                         className='book__button'
                                                         component='a'
@@ -199,7 +204,7 @@ function Library() {
                             readBooks ?
                                 <>
                                     <div className='shelf-header'>
-                                        <h2 className='shelf-title'>Already read</h2>
+                                        <h2 className='shelf-title'>Already Read</h2>
                                         {readBooks.length >= 3 &&
                                             <a href='/books/see-all?shelf=2' className='cta-btn'>See all</a>
                                         }
@@ -260,7 +265,8 @@ function Library() {
                                                 )
                                             })
 
-                                            : <p>Nothing in read shelf</p>}
+                                            :
+                                            <div className='no-books__message-container'><p>Nothing in read shelf</p></div>}
 
                                     </div >
                                 </>

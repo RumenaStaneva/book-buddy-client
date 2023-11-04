@@ -216,7 +216,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
 
                         {!timerStarted &&
                             <div className="d-flex goal-reading-time__container">
-                                <p>Reading goal for the day: {formatTime(totalReadingGoalForTheDay)}</p>
+                                <p>Reading goal for the day: {formatTimeWithSeconds(totalReadingGoalForTheDay)}</p>
 
                                 <p className="time-info">Reading time achieved: {formatTimeWithSeconds(timeInSecondsForTheDayReading)}</p>
                             </div>
