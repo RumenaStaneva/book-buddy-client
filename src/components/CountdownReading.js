@@ -104,6 +104,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                 :
                                 <div className="empty-books-message">
                                     <p className="empty-books-text">No currently reading books</p>
+                                    <p className="empty-books-text">Add one from your <NavLink className="empty-books-link" to="/books/library">Want To Read</NavLink></p>
                                     <p className="empty-books-text">Add one from <NavLink className="empty-books-link" to="/">here</NavLink></p>
                                 </div>
                             }
