@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar'
 import Button from '../components/Button';
@@ -16,6 +16,10 @@ function Login() {
     const { login, loginWithGoogleAuth, isLoading } = useLogin();
     const dispatchError = useDispatch();
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+    useEffect(() => {
+        document.body.style.overflow = 'visible'
+    }, [])
 
     const handleCaptchaVerify = (response) => {
         setIsCaptchaVerified(true);

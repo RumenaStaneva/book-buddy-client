@@ -186,12 +186,8 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             content={
                 <>
                     <form onSubmit={handleSubmit} className="add-book__form">
-                        {isLoading &&
-                            (<div className='spinner__container'>
-                                <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
-                            </div>)}
                         <>
-                            <div className={`add-book-form__container ${isLoading && 'd-none'}`}>
+                            <div className={`add-book-form__container `}>
                                 <div className="modal__section-image-container">
                                     <div className="modal__section">
                                         <label htmlFor="thumbnail" className='d-none'>Thumbnail</label>
@@ -228,14 +224,18 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                 </div>
                             </div>
                             <Error />
-                            {isLoading ? null :
+                            {
                                 loginVisivble ?
                                     <NavLink to="/users/login">
-                                        < Button className="cta-button">Login</Button>
+                                        < Button className="cta-button">
+                                            {isLoading ?
+                                                <Spinner radius={10} color={"#fff"} stroke={2} visible={true} /> : 'Login'}
+                                        </Button>
                                     </NavLink>
                                     :
                                     <Button type="submit" className="cta-button" aria-label="Add Book">
-                                        Add Book
+                                        {isLoading ?
+                                            <Spinner radius={10} color={"#fff"} stroke={2} visible={true} /> : 'Add Book'}
                                     </Button>
                             }
                         </>

@@ -230,12 +230,12 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                         <AiOutlineDelete className="modal__delete-btn"
                             onClick={handleDeleteBook} />
                         <form onSubmit={handleSubmit} className="add-book__form">
-                            {isLoading &&
+                            {/* {isLoading &&
                                 (<div className='spinner__container'>
                                     <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
-                                </div>)}
+                                </div>)} */}
                             <>
-                                <div className={`add-book-form__container ${isLoading && 'd-none'}`}>
+                                <div className={`add-book-form__container`}>
                                     <div className="modal__section-image-container">
                                         <div className="modal__section">
                                             <label htmlFor="thumbnail" className='d-none'>Thumbnail</label>
@@ -276,7 +276,8 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                                 </div>
                                 <Error />
                                 <Button type="submit" className="cta-button" aria-label="Edit Book">
-                                    Edit Book
+                                    {isLoading ?
+                                        <Spinner radius={10} color={"#fff"} stroke={2} visible={true} /> : 'Edit Book'}
                                 </Button>
                             </>
                         </form>
