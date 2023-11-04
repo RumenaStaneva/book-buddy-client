@@ -181,7 +181,7 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                                         {formatDateDDMM(readingTimeData[selectedTab].date) === formatDateDDMM(new Date()) ? (
                                             <CountdownReading currentlyReadingBooks={currentlyReadingBooks} screenTimeInSeconds={screenTimeInSeconds} isLoadingBooks={isLoadingBooks} />
                                         ) : (
-                                            <div>
+                                            <div className="tab-panel__information">
                                                 <p>Your screen time  for the day {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].screenTimeInSeconds)}</p>
                                                 <p>Reading goal for the day {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].totalReadingGoalForTheDay)}</p>
                                                 <p>Time you have spent reading {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].timeInSecondsForTheDayReading)}</p>

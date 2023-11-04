@@ -246,7 +246,7 @@
     justify-content: space-around;
     background-color: #fff;
     padding: 10px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 
@@ -285,7 +285,27 @@
 }
 
 .tab-panel-content {
-    padding: 0 20px;
+    padding: 20px;
+}
+
+.tab-panel__information {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 400px;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.tab-panel__information p {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    font-size: 1.2rem;
 }
 
 @media (max-width: 1200px) {

@@ -166,7 +166,6 @@ function ListAllBooks() {
         fetchBooks();
     }
 
-
     return <>
         <NavBar />
         < main className="books__list-all">
