@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCategory, setSearchQuery, setLimit } from '../reducers/filtersSlice';
 import { clearError, setError } from "../reducers/errorSlice";
 import { CardActionArea } from '@mui/material';
+import { GiBookmarklet } from "react-icons/gi";
 
 
 function ListAllBooks() {
@@ -45,6 +46,7 @@ function ListAllBooks() {
         setSearchTerm(e.target.value);
     };
     const handleOpen = (book) => {
+        document.body.style.overflow = 'hidden';
         setCurrentBook(book)
         setIsOpen(true);
     }
@@ -128,6 +130,7 @@ function ListAllBooks() {
             await response.json();
             setIsOpen(false);
             fetchBooks();
+            document.body.style.overflow = 'visible';
         } catch (error) {
             dispatch(setError({ message: `Error changing shelf: ${error}` }));
             console.error('Error changing shelf:', error);
@@ -241,14 +244,27 @@ function ListAllBooks() {
                                             } alt={`${book.title}`}
                                             className='book-colorful__image'
                                         />
+
                                         <div className="book-colorful__info">
                                             <h2 className="book__title">{book.title}</h2>
                                             {book.authors.length > 0 ?
                                                 <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
                                                 : null}
+                                            <div className='details__additional-info'>
+                                                <div className='book__all-pages'>
+                                                    <p className='book-font__outline'>Print Length</p>
+                                                    <div className='d-flex fw-600'>
+                                                        <GiBookmarklet />
+                                                        <p>{book.pageCount}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="book__action-area">
+                                                    <p className='book-font__outline'>Category</p>
+                                                    <span className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</span>
+                                                </div>
+                                            </div>
                                             <div className="book__action-area">
-                                                <Button className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</Button>
-                                                <Button onClick={() => handleOpen(book)} className="cta-btn">Move</Button>
+                                                <Button onClick={(e) => { e.preventDefault(); handleOpen(book); }} className="cta-btn">Move</Button>
                                             </div>
                                         </div>
                                     </CardActionArea>

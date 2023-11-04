@@ -4,7 +4,10 @@
 
 .books__list-all .books-colorful__container .book-colorful {
     min-height: 350px;
-    min-width: 400px
+    min-width: 395px;
+    margin: 0 50px 60px 0;
+    flex: 0 0 30%;
+    align-items: center;
 }
 
 .heading-section {
@@ -96,8 +99,15 @@
     justify-content: space-between;
 }
 
-.books__list-all .book__action-area {
+/* .books__list-all .book__action-area {
     flex-direction: row;
+} */
+.books__list-all .book__action-area .cta-btn {
+    margin: auto;
+}
+
+.books__list-all .details__additional-info {
+    margin-bottom: 30px;
 }
 
 .book__action-area .cta-btn {

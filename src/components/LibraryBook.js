@@ -90,7 +90,6 @@ function LibraryBook({ book, handleSuccessMessage }) {
                                 <h3 className='book__title book-font__outline'>
                                     {book.title}
                                 </h3>
-                                {console.log(book.authors.length)}
 
                                 {book.authors.length > 0 ?
 
