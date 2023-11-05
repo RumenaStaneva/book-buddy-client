@@ -9,7 +9,7 @@
     max-width: 280px;
     right: 20px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 15px;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     z-index: 10;
@@ -63,13 +63,20 @@
     /* justify-content: space-between; */
 }
 
-.input-field {
-    /* flex: 1 1 calc(50% - 20px); */
-    /* margin: 10px; */
+
+
+.react-calendar__viewContainer {
+    opacity: 1;
+    transition: all 0.3s ease;
 }
 
 .calendar-hidden .react-calendar__viewContainer {
-    display: none;
+    height: 0;
+    opacity: 0;
+}
+
+.react-calendar__navigation {
+    transition: all 0.3s ease;
 }
 
 .calendar-hidden .react-calendar__navigation {
