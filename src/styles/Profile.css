@@ -247,7 +247,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     flex: 0 0 48%;
-
+    position: relative;
 }
 
 .diagram__container p {
@@ -255,13 +255,17 @@
 }
 
 .range-calendar__container {
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 20px;
 }
 
 .range-calendar__container .dropdown {
     margin-right: 25px;
     height: 50px;
+}
+
+.range-calendar__container .dropdown-options {
+    max-height: 190px;
 }
 
 @media (max-width: 1200px) {

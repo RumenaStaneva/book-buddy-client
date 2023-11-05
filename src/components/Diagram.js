@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Spinner from 'react-spinner-material';
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +22,8 @@ function Diagram() {
     const [selectedDateRange, setSelectedDateRange] = useState([startOfWeek(new Date(), { weekStartsOn: 1 }), endOfWeek(new Date(), { weekStartsOn: 1 })]);
     const dropdownOptions = ['Current week', 'Last week', 'Last 3 weeks', 'Custom range'];
     const labelsWeekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
+    const [isCalendarVisible, setCalendarVisible] = useState(true);
+    const calendarRef = useRef(null);
     useEffect(() => {
         dispatchRedux(fetchReadingTimeForTheWeek({ user, dataRange }));
         dispatchRedux(fetchHasReadingTimeAnytime(user));
@@ -71,6 +72,32 @@ function Diagram() {
         dispatchRedux(fetchHasReadingTimeAnytime(user));
     }, [dispatchRedux, user, selectedDateRange]);
 
+    const handleClickOutside = (event) => {
+        const calendarContainer = calendarRef.current;
+        if (
+            calendarContainer &&
+            !calendarContainer.contains(event.target) &&
+            event.target.getAttribute('data-calendar-container') !== 'true'
+        ) {
+            setCalendarVisible(false);
+        }
+    };
+
+    const handleCalendarClick = (e) => {
+        e.stopPropagation();
+        setCalendarVisible(!isCalendarVisible);
+    };
+
+    useEffect(() => {
+        if (isCalendarVisible) {
+            document.addEventListener('click', handleClickOutside);
+        } else {
+            document.removeEventListener('click', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [isCalendarVisible]);
     return (
         <>
             {hasReadingTimeAnytime ? (
@@ -86,17 +113,27 @@ function Diagram() {
                                 selectedOption={dataRange !== null ? dataRange : 'Pick a Time Frame'}
                             />
                             {dataRange === 'Custom range' ?
-                                <Calendar
-                                    onChange={handleCalendarChange}
-                                    value={selectedDateRange}
-                                    selectRange={true}
-                                    maxDate={endOfWeek(new Date(), { weekStartsOn: 1 })}
-                                />
+                                <div className={`calendar-container ${!isCalendarVisible ? 'calendar-hidden' : ''}`}
+                                    // ref={calendarRef} 
+                                    onClick={handleCalendarClick}>
+                                    <Calendar
+                                        inputRef={calendarRef}
+                                        onClickDay={(value, event) => {
+                                            event.stopPropagation();
+                                            handleCalendarChange(value);
+                                        }}
+                                        onChange={handleCalendarChange}
+                                        value={selectedDateRange}
+                                        selectRange={true}
+                                        maxDate={endOfWeek(new Date(), { weekStartsOn: 1 })}
+                                    />
+                                </div>
                                 : null}
                         </div>
 
                         {currentWeekData && currentWeekData.length > 0 ? (
                             <Chart
+
                                 screenData={screenData}
                                 readingData={readingData}
                                 readingGoal={readingGoal}

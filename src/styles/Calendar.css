@@ -1,7 +1,18 @@
 .calendar-container {
+    position: relative;
     width: 100%;
+}
+
+.range-calendar__container .react-calendar {
+    position: absolute;
+    width: 100%;
+    max-width: 280px;
+    right: 20px;
     margin: 0 auto;
     padding: 20px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    z-index: 10;
 }
 
 .table-container {
@@ -55,6 +66,15 @@
 .input-field {
     /* flex: 1 1 calc(50% - 20px); */
     /* margin: 10px; */
+}
+
+.calendar-hidden .react-calendar__viewContainer {
+    display: none;
+}
+
+.calendar-hidden .react-calendar__navigation {
+    height: 30px;
+    margin-bottom: 0;
 }
 
 @media (max-width: 1350px) {}

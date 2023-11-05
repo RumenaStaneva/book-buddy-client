@@ -73,7 +73,7 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
                 min: 0,
                 title: {
                   display: isXAxisVisible, // Show x-axis title only on screens wider than 767px
-                  text: 'Time (hours)',
+                  // text: 'Time (hours)',
                 },
                 ticks: {
                   display: isXAxisVisible, // Show x-axis ticks only on screens wider than 767px
