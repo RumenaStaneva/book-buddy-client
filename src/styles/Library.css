@@ -64,10 +64,6 @@
     max-height: 250px;
 }
 
-/* .books__library .book-colorful__image:hover {
-    transform: translate(0, -35px) scale(1.1);
-} */
-
 .books-colorful__container .book__button {
     display: flex;
     padding: 30px;
@@ -121,6 +117,47 @@
     color: #fff;
     font-weight: 600;
     font-size: 1.3rem;
+}
+
+.edit-shelf__icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    right: 15px;
+    top: 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.edit-shelf__icon svg {
+    width: 20px;
+    height: 20px;
+    transition: fill 0.3s ease;
+}
+
+.edit-shelf__icon svg:hover {
+    fill: #fff;
+}
+
+.edit-shelf__container {
+    position: absolute;
+    top: 40px;
+    right: 5px;
+}
+
+.edit-shelf__container button {
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.edit-shelf__container button:hover {
+    background-color: #f0f0f0;
 }
 
 @media (max-width: 576px) {

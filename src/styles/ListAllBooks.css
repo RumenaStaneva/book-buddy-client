@@ -146,6 +146,10 @@
     margin-bottom: 15px;
 }
 
+.modal-body__book-shelf+.dropdown .dropdown-options {
+    max-height: 76px;
+}
+
 .change-shelf-modal__body .dropdown {
     max-width: unset;
 }

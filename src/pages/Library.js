@@ -1,15 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import Header from '../components/Header'
 import { useAuthContext } from "../hooks/useAuthContext";
 import '../styles/Library.css'
+import LibraryBookSlider from '../components/LibraryBookSlider';
 import LibraryBook from '../components/LibraryBook';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import categoryColors from "../constants/categoryColors";
 import { GiBookmarklet } from "react-icons/gi";
+import Button from '../components/Button';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import CardContent from '@mui/material/CardContent';
@@ -21,7 +23,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBooks } from '../reducers/booksSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { HiDotsVertical } from "react-icons/hi";
 
 function Library() {
     const { user } = useAuthContext();
@@ -84,7 +85,7 @@ function Library() {
                                     }
                                 </div>
                                 {currentlyReadingBooks.length > 0 ?
-                                    <div className='books__container'>
+                                    <div className='books__container' >
 
                                         <Swiper
                                             pagination={{
@@ -104,12 +105,11 @@ function Library() {
 
                                         >
                                             {
-
                                                 currentlyReadingBooks.map(book => (
                                                     <SwiperSlide
                                                         key={book._id}
                                                     >
-                                                        <LibraryBook
+                                                        <LibraryBookSlider
                                                             book={book}
                                                             handleSuccessMessage={handleSuccessMessage}
                                                         />
@@ -142,55 +142,7 @@ function Library() {
                                                 background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
                                             }
                                             return (
-                                                <div key={book._id} className="book-colorful" style={bookStyle}>
-                                                    <HiDotsVertical />
-
-                                                    <CardActionArea
-                                                        className='book__button'
-                                                        component='a'
-                                                        onClick={event => {
-                                                            event.stopPropagation();
-                                                        }}
-                                                        href={`/books/book-details/${book._id}`}
-                                                    >
-                                                        <CardMedia
-                                                            component="img"
-                                                            src={
-                                                                book.thumbnail === undefined
-                                                                    ? 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'
-                                                                    : `${book.thumbnail}`
-                                                            } alt={`${book.title}`}
-                                                            className='book-colorful__image'
-                                                        />
-                                                        <CardContent className='book-colorful__info'>
-                                                            <h3 className='book__title book__title-outline'>
-                                                                {book.title}
-                                                            </h3>
-                                                            {book.authors.length > 0 ?
-                                                                <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
-                                                                    {book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}
-                                                                </Typography>
-                                                                : null}
-                                                            {book.description && book.description.length > 0 && book.description !== 'undefined' ?
-                                                                <Typography variant="body2" color="text.secondary" className='book__description'>
-                                                                    {book.description}
-                                                                </Typography> : null}
-                                                            <div className='details__additional-info'>
-                                                                <div className='book__all-pages'>
-                                                                    <p className='book-font__outline'>Print Length</p>
-                                                                    <div className='d-flex fw-600'>
-                                                                        <GiBookmarklet />
-                                                                        <p>{book.pageCount}</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="book__action-area">
-                                                                    <p className='book-font__outline'>Category</p>
-                                                                    <span className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</span>
-                                                                </div>
-                                                            </div>
-                                                        </CardContent>
-                                                    </CardActionArea>
-                                                </div>
+                                                <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={0} />
                                             )
 
                                         })
@@ -218,50 +170,52 @@ function Library() {
                                                     background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
                                                 }
                                                 return (
-                                                    <div key={book._id} className="book-colorful" style={bookStyle}>
-                                                        <CardActionArea
-                                                            className='book__button'
-                                                            component='a'
-                                                            onClick={event => {
-                                                                event.stopPropagation();
-                                                            }}
-                                                            href={`/books/book-details/${book._id}`}
-                                                        >
-                                                            <CardMedia
-                                                                component="img"
-                                                                src={
-                                                                    book.thumbnail === undefined
-                                                                        ? 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'
-                                                                        : `${book.thumbnail}`
-                                                                } alt={`${book.title}`}
-                                                                className='book-colorful__image'
-                                                            />
-                                                            <CardContent className='book-colorful__info'>
-                                                                <h3 component="div" className='book__title book__title-outline'>
-                                                                    {book.title}
-                                                                </h3>
-                                                                <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
-                                                                    {book.authors}
-                                                                </Typography>
-                                                                <Typography variant="body2" color="text.secondary" className='book__description'>
-                                                                    {book.description}
-                                                                </Typography>
-                                                                <div className='details__additional-info'>
-                                                                    <div className='book__all-pages'>
-                                                                        <p className='book-font__outline'>Print Length</p>
-                                                                        <div className='d-flex fw-600'>
-                                                                            <GiBookmarklet />
-                                                                            <p>{book.pageCount}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="book__action-area">
-                                                                        <p className='book-font__outline'>Category</p>
-                                                                        <span className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</span>
-                                                                    </div>
-                                                                </div>
-                                                            </CardContent>
-                                                        </CardActionArea>
-                                                    </div>
+                                                    // <div key={book._id} className="book-colorful" style={bookStyle}>
+                                                    //     <CardActionArea
+                                                    //         className='book__button'
+                                                    //         component='a'
+                                                    //         onClick={event => {
+                                                    //             event.stopPropagation();
+                                                    //         }}
+                                                    //         href={`/books/book-details/${book._id}`}
+                                                    //     >
+                                                    //         <CardMedia
+                                                    //             component="img"
+                                                    //             src={
+                                                    //                 book.thumbnail === undefined
+                                                    //                     ? 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'
+                                                    //                     : `${book.thumbnail}`
+                                                    //             } alt={`${book.title}`}
+                                                    //             className='book-colorful__image'
+                                                    //         />
+                                                    //         <CardContent className='book-colorful__info'>
+                                                    //             <h3 component="div" className='book__title book__title-outline'>
+                                                    //                 {book.title}
+                                                    //             </h3>
+                                                    //             <Typography gutterBottom variant="subtitle1" component="div" className='book__authors'>
+                                                    //                 {book.authors}
+                                                    //             </Typography>
+                                                    //             <Typography variant="body2" color="text.secondary" className='book__description'>
+                                                    //                 {book.description}
+                                                    //             </Typography>
+                                                    //             <div className='details__additional-info'>
+                                                    //                 <div className='book__all-pages'>
+                                                    //                     <p className='book-font__outline'>Print Length</p>
+                                                    //                     <div className='d-flex fw-600'>
+                                                    //                         <GiBookmarklet />
+                                                    //                         <p>{book.pageCount}</p>
+                                                    //                     </div>
+                                                    //                 </div>
+                                                    //                 <div className="book__action-area">
+                                                    //                     <p className='book-font__outline'>Category</p>
+                                                    //                     <span className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</span>
+                                                    //                 </div>
+                                                    //             </div>
+                                                    //         </CardContent>
+                                                    //     </CardActionArea>
+                                                    // </div>
+                                                    <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={2} />
+
                                                 )
                                             })
 
