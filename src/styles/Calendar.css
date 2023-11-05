@@ -15,6 +15,10 @@
     z-index: 10;
 }
 
+.calendar-container.calendar-hidden .react-calendar {
+    z-index: 0;
+}
+
 .table-container {
     width: 100%;
     overflow-x: auto;

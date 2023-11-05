@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Header from '../components/Header';
 import Spinner from 'react-spinner-material';
@@ -11,7 +11,7 @@ import '../styles/Profile.css'
 import ProfilePicture from '../components/ProfilePicture';
 import Diagram from '../components/Diagram';
 import { fetchHasReadingTimeAnytime } from "../reducers/readingTimeForTodaySlice";
-
+import AvatarEditorModal from '../components/AvatarEditorModal';
 
 function Profile() {
     const [userData, setUserData] = useState({});
@@ -26,7 +26,9 @@ function Profile() {
     const { hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
     const [isOpen, setIsOpen] = useState(false);
 
+
     const fetchUserData = useCallback(async () => {
+        console.log('1');
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/profile`, {
                 headers: {
@@ -54,11 +56,16 @@ function Profile() {
     }, [user, dispatchRedux]);
 
     useEffect(() => {
+        console.log('2');
+        document.title = `User's profile`;
+        dispatchRedux(fetchHasReadingTimeAnytime(user));
         if (user && user.token) {
             fetchUserData();
         }
     }, [user, fetchUserData]);
     const handleUpdateInformation = async () => {
+        console.log('3');
+
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/update-profile-info`, {
                 method: 'PATCH',
@@ -93,14 +100,37 @@ function Profile() {
         }
     };
 
-    useEffect(() => {
-        document.title = `User's profile`;
-        dispatchRedux(fetchHasReadingTimeAnytime(user));
-    }, [dispatchRedux, user]);
-
     const handleProfileClick = () => {
+        console.log('5');
+
         setIsEditingProfile(!isEditingProfile);
     };
+
+    const uploadedImage = useRef(null);
+    const imageUploader = useRef(null);
+    const [encodedImage, setEncodedImage] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [editor, setEditor] = useState(null);
+    const [scale, setScale] = useState(1);
+
+    const handleImageUpload = async (e) => {
+        const [file] = e.target.files;
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageDataUrl = reader.result;
+                setEncodedImage(imageDataUrl);
+                setIsOpen(true);
+                setIsLoading(false);
+                document.body.style.overflow = 'hidden';
+                if (uploadedImage.current) {
+                    uploadedImage.current.file = file;
+                    uploadedImage.current.src = imageDataUrl;
+                }
+            }
+            reader.readAsDataURL(file);
+        }
+    }
 
 
     return (
@@ -117,25 +147,45 @@ function Profile() {
                         </div>
                     ) : (
                         <>
-
                             <Error />
                             <div className="profile__content">
                                 <h1>User Profile</h1>
                                 {!isEditingProfile && !isOpen && (
                                     <div className='profile__picture-container'>
-                                        <button className='change-picture__btn' onClick={() => handleProfileClick(true)}>
+                                        <Button className='change-picture__btn' onClick={() => imageUploader.current.click()}>
 
                                             <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
                                                 className={`profile__profile-picture ${isEditingProfile ? 'editing' : ''}`}
                                             />
-                                        </button>
+                                        </Button>
                                     </div>
                                 )}
-                                {isEditingProfile && (
-                                    <div className="profile-picture">
-                                        <ProfilePicture handleProfileClick={handleProfileClick} setIsEditingProfile={setIsEditingProfile} isOpen={isOpen} setIsOpen={setIsOpen} />
-                                    </div>
-                                )}
+
+                                <>
+                                    {isOpen && <AvatarEditorModal setIsOpen={setIsOpen} setEditor={setEditor} encodedImage={encodedImage} scale={scale} setScale={setScale} setEncodedImage={setEncodedImage} isLoading={isLoading} setIsLoading={setIsLoading} editor={editor} handleProfileClick={handleProfileClick} setIsEditingProfile={setIsEditingProfile} />}
+
+                                    <form className="profile-form">
+                                        <div className="image-uploader">
+                                            <label htmlFor="profile-picture-uploader" className={`upload-label hidden`}>Click to add your image</label>
+                                            <input
+                                                type="file"
+                                                name="profile-picture-uploader"
+                                                accept="image/*"
+                                                onChange={handleImageUpload}
+                                                ref={imageUploader}
+                                                style={{
+                                                    display: "none"
+                                                }}
+                                            />
+                                        </div>
+                                        {!encodedImage.length > 0 &&
+                                            <div className="image-container" onClick={() => imageUploader.current.click()}>
+
+                                            </div>
+
+                                        }
+                                    </form >
+                                </>
 
                                 <p className="profile__status">Profile Status: {!userData.isAdmin ? 'Regular' : 'Admin'}</p>
 
@@ -182,7 +232,6 @@ function Profile() {
                                 )}
 
                             </div>
-
                             {hasReadingTimeAnytime ?
                                 <Diagram />
                                 : null}
