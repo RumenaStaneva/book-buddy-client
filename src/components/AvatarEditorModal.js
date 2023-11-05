@@ -7,7 +7,7 @@ import Modal from './Dialog'
 import Spinner from 'react-spinner-material';
 import AvatarEditor from 'react-avatar-editor';
 
-const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale, setEncodedImage, isLoading, setIsLoading, editor, handleProfileClick, setIsEditingProfile }) => {
+const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale, setEncodedImage, isLoading, setIsLoading, editor }) => {
     const { user, dispatch } = useAuthContext();
     const dispatchError = useDispatch();
 
@@ -45,10 +45,8 @@ const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale
                     dispatch({ type: 'LOGIN', payload: localstorageUser });
                     dispatchError(clearError());
                     setEncodedImage('');
-                    handleProfileClick();
                     setScale(1);
                     setEditor(null);
-                    setIsEditingProfile(false);
                     setIsOpen(false);
                     document.body.style.overflow = 'visible';
                 } else {
@@ -69,7 +67,7 @@ const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale
     return (
         <Modal
             title={'Edit profile picture'}
-            onClose={() => { setIsOpen(false); setIsEditingProfile(false) }}
+            onClose={() => { setIsOpen(false); }}
             subtitle={``}
             setIsOpen={setIsOpen}
             content={

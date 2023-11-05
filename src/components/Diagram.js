@@ -24,10 +24,10 @@ function Diagram() {
     const labelsWeekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const [isCalendarVisible, setCalendarVisible] = useState(true);
     const calendarRef = useRef(null);
+
     useEffect(() => {
         dispatchRedux(fetchReadingTimeForTheWeek({ user, dataRange }));
         dispatchRedux(fetchHasReadingTimeAnytime(user));
-
     }, [dispatchRedux, user, dataRange])
 
     useEffect(() => {
@@ -49,7 +49,7 @@ function Diagram() {
         dispatchRedux(setDataRange(selectedRange));
     };
 
-    const handleCalendarChange = (dates) => {
+    const handleCalendarChange = (dates, event) => {
         dispatchRedux(clearError());
         if (dates.length === 2) {
             const start = startOfWeek(dates[0], { weekStartsOn: 1 });
@@ -83,8 +83,7 @@ function Diagram() {
         }
     };
 
-    const handleCalendarClick = (e) => {
-        e.stopPropagation();
+    const handleCalendarClick = () => {
         setCalendarVisible(!isCalendarVisible);
     };
 
@@ -114,7 +113,6 @@ function Diagram() {
                             />
                             {dataRange === 'Custom range' ?
                                 <div className={`calendar-container ${!isCalendarVisible ? 'calendar-hidden' : ''}`}
-                                    // ref={calendarRef} 
                                     onClick={handleCalendarClick}>
                                     <Calendar
                                         inputRef={calendarRef}
@@ -133,7 +131,6 @@ function Diagram() {
 
                         {currentWeekData && currentWeekData.length > 0 ? (
                             <Chart
-
                                 screenData={screenData}
                                 readingData={readingData}
                                 readingGoal={readingGoal}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Header from '../components/Header';
 import Spinner from 'react-spinner-material';
@@ -13,7 +13,7 @@ import Diagram from '../components/Diagram';
 import { fetchHasReadingTimeAnytime } from "../reducers/readingTimeForTodaySlice";
 import AvatarEditorModal from '../components/AvatarEditorModal';
 
-function Profile() {
+const Profile = React.memo(() => {
     const [userData, setUserData] = useState({});
     const [isLoadingGlobal, setIsLoadingGlobal] = useState(true);
     const [bio, setBio] = useState('');
@@ -22,10 +22,15 @@ function Profile() {
     const { user, dispatch } = useAuthContext();
     const [username, setUsername] = useState('');
     const dispatchRedux = useDispatch();
-    const [isEditingProfile, setIsEditingProfile] = useState(false);
     const { hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
     const [isOpen, setIsOpen] = useState(false);
 
+    const uploadedImage = useRef(null);
+    const imageUploader = useRef(null);
+    const [encodedImage, setEncodedImage] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [editor, setEditor] = useState(null);
+    const [scale, setScale] = useState(1);
 
     const fetchUserData = useCallback(async () => {
         console.log('1');
@@ -63,6 +68,7 @@ function Profile() {
             fetchUserData();
         }
     }, [user, fetchUserData]);
+
     const handleUpdateInformation = async () => {
         console.log('3');
 
@@ -100,37 +106,25 @@ function Profile() {
         }
     };
 
-    const handleProfileClick = () => {
-        console.log('5');
-
-        setIsEditingProfile(!isEditingProfile);
-    };
-
-    const uploadedImage = useRef(null);
-    const imageUploader = useRef(null);
-    const [encodedImage, setEncodedImage] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
-    const [editor, setEditor] = useState(null);
-    const [scale, setScale] = useState(1);
-
-    const handleImageUpload = async (e) => {
-        const [file] = e.target.files;
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const imageDataUrl = reader.result;
-                setEncodedImage(imageDataUrl);
-                setIsOpen(true);
-                setIsLoading(false);
-                document.body.style.overflow = 'hidden';
-                if (uploadedImage.current) {
-                    uploadedImage.current.file = file;
-                    uploadedImage.current.src = imageDataUrl;
-                }
+    const handleImageUpload = useCallback(
+        async (e) => {
+            const [file] = e.target.files;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imageDataUrl = reader.result;
+                    setEncodedImage(imageDataUrl);
+                    setIsOpen(true);
+                    setIsLoading(false);
+                    document.body.style.overflow = 'hidden';
+                    if (uploadedImage.current) {
+                        uploadedImage.current.file = file;
+                        uploadedImage.current.src = imageDataUrl;
+                    }
+                };
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(file);
-        }
-    }
+        }, []);
 
 
     return (
@@ -150,19 +144,19 @@ function Profile() {
                             <Error />
                             <div className="profile__content">
                                 <h1>User Profile</h1>
-                                {!isEditingProfile && !isOpen && (
+                                {!isOpen && (
                                     <div className='profile__picture-container'>
                                         <Button className='change-picture__btn' onClick={() => imageUploader.current.click()}>
 
                                             <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
-                                                className={`profile__profile-picture ${isEditingProfile ? 'editing' : ''}`}
+                                                className={`profile__profile-picture`}
                                             />
                                         </Button>
                                     </div>
                                 )}
 
                                 <>
-                                    {isOpen && <AvatarEditorModal setIsOpen={setIsOpen} setEditor={setEditor} encodedImage={encodedImage} scale={scale} setScale={setScale} setEncodedImage={setEncodedImage} isLoading={isLoading} setIsLoading={setIsLoading} editor={editor} handleProfileClick={handleProfileClick} setIsEditingProfile={setIsEditingProfile} />}
+                                    {isOpen && <AvatarEditorModal setIsOpen={setIsOpen} setEditor={setEditor} encodedImage={encodedImage} scale={scale} setScale={setScale} setEncodedImage={setEncodedImage} isLoading={isLoading} setIsLoading={setIsLoading} editor={editor} />}
 
                                     <form className="profile-form">
                                         <div className="image-uploader">
@@ -245,6 +239,6 @@ function Profile() {
 
 
     )
-}
+})
 
 export default Profile;
