@@ -29,7 +29,6 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf }) {
     };
 
     const handleShelfChange = (selectedOption) => {
-        console.log(selectedOption);
         if (selectedOption === 'Want to read') {
             setNewShelf(0);
         } else if (selectedOption === 'Currently reading') {
@@ -88,9 +87,9 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf }) {
                     small={true}
                     content={
                         <>
-                            <p className="modal-body__book-shelf" id="modal-modal-description">
+                            {/* <p className="modal-body__book-shelf" id="modal-modal-description">
                                 Currently on: {shelfOptions[shelf]} shelf
-                            </p>
+                            </p> */}
                             <Dropdown options={shelfOptions} onSelect={handleShelfChange} selectedOption={shelfOptions[newShelf]} />
                             <Button className="cta-btn" onClick={() => handleMoveToShelf(book)}>Save</Button>
                         </>
@@ -115,7 +114,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf }) {
                     </Button>
                     {editShelfVisible &&
                         <div className='edit-shelf__container' ref={editShelfContainerRef}>
-                            <Button onClick={(e) => { e.preventDefault(); setIsOpen(true) }}>
+                            <Button onClick={(e) => { e.preventDefault(); setIsOpen(true); document.body.style.overflow = 'hidden'; }}>
                                 Change shelf
                             </Button>
                         </div>

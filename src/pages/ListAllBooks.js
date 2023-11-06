@@ -186,9 +186,9 @@ function ListAllBooks() {
                                 small={true}
                                 content={
                                     <>
-                                        <p className="modal-body__book-shelf" id="modal-modal-description">
+                                        {/* <p className="modal-body__book-shelf" id="modal-modal-description">
                                             Currently on: {getShelfName()} shelf
-                                        </p>
+                                        </p> */}
                                         <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} selectedOption={getShelfName()} />
                                         <Button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</Button>
                                     </>

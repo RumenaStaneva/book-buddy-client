@@ -53,10 +53,13 @@
 }
 
 .reading-countdown__container .book__progress {
-    padding: 0 52px 0 115px;
+    padding: 0;
+    max-width: 68%;
     position: absolute;
     width: 100%;
     bottom: 50px;
+    left: calc(50% + 15px);
+    transform: translateX(-50%);
     z-index: 1;
     margin-bottom: 25px;
 }
@@ -330,6 +333,43 @@
 }
 
 @media (max-width: 768px) {
+    .swiper-books__container {
+        max-width: 480px;
+        width: 100%;
+    }
+
+    .countdown__container .book__details {
+        margin-left: 0;
+        padding: 36px 15px 63px;
+        height: auto;
+    }
+
+    .books__container {
+        justify-content: center;
+    }
+
+    .countdown__container .book__details .book__image {
+        width: 100%;
+    }
+
+    .book__image {
+        height: auto;
+    }
+
+    .book__authors,
+    .book__title {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .countdown__container .book__details .title-author__container {
+        width: 100%;
+    }
+
+    .reading-countdown__container .book__progress {
+        max-width: 80%;
+    }
+
     /* .weekly-dashboard .swiper-books__container {
         width: 500px;
     }
@@ -339,14 +379,14 @@
     } */
 
     .countdown__container .book {
-        width: 500px;
+        width: 100%;
     }
 
     .tab-headers .swiper-button-prev::after,
     .tab-headers .swiper-button-next::after {
         color: #D92868;
         font-weight: 600;
-        font-size: 2.5rem;
+        font-size: 1.5rem;
     }
 
     .weekly-dashboard .tab-content .swiper-button-prev,

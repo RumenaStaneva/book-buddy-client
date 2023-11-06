@@ -8,7 +8,6 @@ import Error from '../components/Error';
 import { useDispatch, useSelector } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import '../styles/Profile.css'
-import ProfilePicture from '../components/ProfilePicture';
 import Diagram from '../components/Diagram';
 import { fetchHasReadingTimeAnytime } from "../reducers/readingTimeForTodaySlice";
 import AvatarEditorModal from '../components/AvatarEditorModal';
@@ -33,7 +32,6 @@ const Profile = React.memo(() => {
     const [scale, setScale] = useState(1);
 
     const fetchUserData = useCallback(async () => {
-        console.log('1');
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/profile`, {
                 headers: {
@@ -61,17 +59,14 @@ const Profile = React.memo(() => {
     }, [user, dispatchRedux]);
 
     useEffect(() => {
-        console.log('2');
         document.title = `User's profile`;
         dispatchRedux(fetchHasReadingTimeAnytime(user));
         if (user && user.token) {
             fetchUserData();
         }
-    }, [user, fetchUserData]);
+    }, [user, fetchUserData, dispatchRedux]);
 
     const handleUpdateInformation = async () => {
-        console.log('3');
-
         try {
             const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/update-profile-info`, {
                 method: 'PATCH',
@@ -134,20 +129,20 @@ const Profile = React.memo(() => {
                 {isLoadingGlobal ? null :
                     <Header title={`${user.username !== '' ? username : user.email.split('@')[0]}'s profile`} />
                 }
+                <Error />
                 <div className="profile__container">
+
                     {isLoadingGlobal ? (
                         <div className='spinner__container'>
                             <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                         </div>
                     ) : (
                         <>
-                            <Error />
                             <div className="profile__content">
                                 <h1>User Profile</h1>
                                 {!isOpen && (
                                     <div className='profile__picture-container'>
                                         <Button className='change-picture__btn' onClick={() => imageUploader.current.click()}>
-
                                             <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
                                                 className={`profile__profile-picture`}
                                             />
@@ -203,20 +198,21 @@ const Profile = React.memo(() => {
                                         aria-labelledby="bio"
                                     />
                                 </div>
-
                                 <div className="profile__field">
                                     <label>Username: </label>
                                     <div onClick={() => setHiddenUsername(false)} className="profile__clickable" tabIndex="0">
-                                        {!hiddenUsername ? null : <span className="hidden">{username}</span>}
+                                        {!hiddenUsername ? null : <span className="hidden">{username !== userData.username ? userData.username : username}</span>}
                                     </div>
-                                    <input
-                                        type="text"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        {...(hiddenUsername ? { hidden: true } : {})}
-                                        className={`profile__input ${hiddenUsername ? 'hidden' : ''}`}
-                                        aria-labelledby="username"
-                                    />
+                                    {!hiddenUsername &&
+                                        <input
+                                            type="text"
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                            {...(hiddenUsername ? { hidden: true } : {})}
+                                            className={`profile__input ${hiddenUsername ? 'hidden' : ''}`}
+                                            aria-labelledby="username"
+                                        />
+                                    }
                                 </div>
 
                                 {(username !== userData.username || bio !== userData.bio) && (
