@@ -202,6 +202,7 @@
 
 .filter-btn__container {
     position: relative;
+    /* max-width: 1577px; */
 }
 
 .filter-btn {
@@ -220,7 +221,7 @@
 
 .search-term__container {
     display: flex;
-    max-width: 70%;
+    /* max-width: 70%; */
     width: 100%;
     margin-right: 15px;
     position: relative;
@@ -260,12 +261,12 @@
 }
 
 .category-limit__container {
-    width: 30%;
+    max-width: 30%;
     align-items: center;
 }
 
 .category-filter__container {
-    width: 240px;
+    min-width: 240px;
     margin-right: 5px;
     position: relative;
 }
@@ -297,14 +298,31 @@
     right: auto;
 }
 
+.limits__container {
+    min-width: 60px;
+    width: 100%;
+}
+
 .limits__container .dropdown {
     margin-bottom: 0;
-    width: 60px;
+    width: 100%;
 }
 
 @media (max-width: 991px) {
     .search-term__container input {
         min-width: unset;
+    }
+
+    .category-filter__container .dropdown {
+        max-width: 240px;
+    }
+
+    .search-term__container {
+        max-width: 60%;
+    }
+
+    .category-limit__container {
+        max-width: 40%;
     }
 }
 
@@ -330,6 +348,7 @@
 
     .category-limit__container {
         width: 100%;
+        max-width: 100%;
     }
 
     .category-filter__container {
