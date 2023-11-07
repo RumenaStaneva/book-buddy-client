@@ -11,17 +11,15 @@ import Dropdown from "../components/Dropdown";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useDispatch } from 'react-redux';
 import { setError } from '../reducers/errorSlice';
-import { fetchAllBooks } from '../reducers/booksSlice';
 
 
-function LibraryBook({ book, categoryColor, bookStyle, shelf }) {
+function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
     const [editShelfVisible, setEditShelfVisible] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [newShelf, setNewShelf] = useState(shelf);
     const { user } = useAuthContext();
     const dispatch = useDispatch();
-    const dispatchRedux = useDispatch();
     const editShelfContainerRef = useRef(null);
 
     const handleEditShelfClick = () => {
@@ -54,7 +52,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf }) {
 
             await response.json();
             setIsOpen(false);
-            dispatchRedux(fetchAllBooks(user));
+            fetchBooks();
             document.body.style.overflow = 'visible';
         } catch (error) {
             dispatch(setError({ message: `Error changing shelf: ${error}` }));

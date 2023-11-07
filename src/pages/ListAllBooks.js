@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Spinner from 'react-spinner-material';
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -6,16 +6,19 @@ import NavBar from "../components/NavBar";
 import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
 import BookCategories from "../constants/bookCategories";
-// import { AiFillEdit } from "react-icons/ai";
 import Button from "../components/Button";
 import '../styles/ListAllBooks.css'
-import Modal from '../components/Dialog'
 import Error from "../components/Error";
 import { useSelector, useDispatch } from 'react-redux';
 import { setCategory, setSearchQuery, setLimit } from '../reducers/filtersSlice';
 import { clearError, setError } from "../reducers/errorSlice";
-import { CardActionArea } from '@mui/material';
-import { GiBookmarklet } from "react-icons/gi";
+import { BsSearch } from "react-icons/bs";
+import { BsFilterCircle, BsFillFilterCircleFill } from "react-icons/bs";
+import LibraryBook from "../components/LibraryBook";
+import { motion } from "framer-motion"
+import { AiOutlineCloseCircle } from "react-icons/ai";
+
+
 
 
 function ListAllBooks() {
@@ -27,15 +30,12 @@ function ListAllBooks() {
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [currentBook, setCurrentBook] = useState();
-    const [isOpen, setIsOpen] = useState(false);
-    const [newShelf, setNewShelf] = useState();
-    const shelfOptions = ['Want to read', 'Currently reading', 'Read'];
     const [searchTerm, setSearchTerm] = useState('');
     const query = useSelector((state) => state.filters.query);
     const category = useSelector((state) => state.filters.category);
-    const limit = useSelector((state) => state.filters.limit)
-
+    const limit = useSelector((state) => state.filters.limit);
+    const [filterVisible, setFilterVisible] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -45,11 +45,6 @@ function ListAllBooks() {
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
-    const handleOpen = (book) => {
-        document.body.style.overflow = 'hidden';
-        setCurrentBook(book)
-        setIsOpen(true);
-    }
 
     const getShelfName = () => {
         if (shelfNum === 0) return 'Want to read';
@@ -104,38 +99,6 @@ function ListAllBooks() {
         }
     }, [user, fetchBooks]);
 
-    const handleShelfChange = (selectedOption) => {
-        if (selectedOption === 'Want to read') {
-            setNewShelf(0);
-        } else if (selectedOption === 'Currently reading') {
-            setNewShelf(1);
-        } else if (selectedOption === 'Read') {
-            setNewShelf(2);
-        }
-    }
-    const handleMoveToShelf = async (currentBook) => {
-        currentBook.shelf = newShelf;
-        try {
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${user.token}`,
-                },
-                body: JSON.stringify(
-                    currentBook
-                ),
-            });
-
-            await response.json();
-            setIsOpen(false);
-            fetchBooks();
-            document.body.style.overflow = 'visible';
-        } catch (error) {
-            dispatch(setError({ message: `Error changing shelf: ${error}` }));
-            console.error('Error changing shelf:', error);
-        }
-    }
     const handleCategoryChange = async (selectedCategory) => {
         dispatch(setCategory(selectedCategory));
     };
@@ -143,6 +106,9 @@ function ListAllBooks() {
         dispatch(setCategory(''));
         fetchBooks();
     };
+    const handleRemoveQueryFilter = () => {
+        dispatch(setSearchQuery(''));
+    }
 
     const removeAllFilters = () => {
         dispatch(setCategory(''));
@@ -176,47 +142,67 @@ function ListAllBooks() {
             ) : (
                 books.length > 0 ?
                     <>
-                        {currentBook && isOpen ?
-                            <Modal
-                                title={'Change shelf'}
-                                onClose={() => { setIsOpen(false); document.body.style.overflow = 'visible'; }}
-                                subtitle={`Book: ${currentBook.title}`}
-                                setIsOpen={setIsOpen}
-                                className="change-shelf-modal"
-                                small={true}
-                                content={
-                                    <>
-                                        {/* <p className="modal-body__book-shelf" id="modal-modal-description">
-                                            Currently on: {getShelfName()} shelf
-                                        </p> */}
-                                        <Dropdown options={Object.values(shelfOptions)} onSelect={handleShelfChange} selectedOption={getShelfName()} />
-                                        <Button className="cta-btn" onClick={() => handleMoveToShelf(currentBook)}>Save</Button>
-                                    </>
-                                }
-                            />
-                            : null}
                         <div className="heading-section">
                             <h1 className="section-title">All books on {getShelfName()}</h1>
                         </div>
-                        <div className="filters__container">
-                            <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={category.length > 0 ? category : 'Select a category'} />
-                            {category && (
-                                <Button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
-                                    Clear Filter
-                                </Button>
+                        <div className="filter-btn__container"
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
+                        >
+                            {isHovered ? (
+                                <BsFillFilterCircleFill
+                                    onClick={() => setFilterVisible(!filterVisible)}
+                                    className="filter-btn"
+                                />
+                            ) : (
+                                <BsFilterCircle
+                                    onClick={() => setFilterVisible(!filterVisible)}
+                                    className="filter-btn"
+                                />
                             )}
-                            <input
-                                type="text"
-                                placeholder="Search books..."
-                                value={searchTerm}
-                                onChange={handleSearchChange}
-                            />
-                            <Button onClick={handleSearchQuery}>Search</Button>
                         </div>
-                        <div className="limits__container">
-                            <label htmlFor="limit">Set book's limit</label>
-                            <Dropdown name="limit" options={[5, 10, 15]} onSelect={handleLimitChange} selectedOption={limit} />
-                        </div>
+                        {filterVisible &&
+                            <motion.div
+                                initial={{ y: -50, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: -50, opacity: 0 }}
+                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                                className={`filters__container`}>
+                                <div className="search-term__container">
+                                    {searchTerm.length > 0 && (
+                                        <Button className="clear-filter-button" onClick={handleRemoveQueryFilter}>
+                                            <AiOutlineCloseCircle />
+                                        </Button>
+                                    )}
+                                    <form onSubmit={handleSearchQuery}>
+                                        <input
+                                            type="text"
+                                            placeholder="Search books..."
+                                            value={searchTerm}
+                                            onChange={handleSearchChange}
+                                        />
+                                        <Button type="submit" onClick={handleSearchQuery} className="search-query-btn">
+                                            <BsSearch />
+                                        </Button>
+                                    </form>
+                                </div>
+                                <div className="d-flex category-limit__container">
+                                    <div className="category-filter__container">
+                                        {category && (
+                                            <Button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
+                                                <AiOutlineCloseCircle />
+                                            </Button>
+                                        )}
+                                        <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={category.length > 0 ? category : 'Category'} />
+                                    </div>
+
+                                    <div className="limits__container">
+                                        <label htmlFor="limit" className="d-none">Set book's limit</label>
+                                        <Dropdown name="limit" options={[5, 10, 15]} onSelect={handleLimitChange} selectedOption={limit} />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        }
 
                         <div className="books__container books-colorful__container">
                             <Error />
@@ -227,50 +213,7 @@ function ListAllBooks() {
                                 };
 
                                 return (
-                                    <CardActionArea
-                                        key={book._id} className="book-colorful" style={bookStyle}
-                                        component='a'
-                                        onClick={event => {
-                                            event.stopPropagation();
-                                        }}
-                                        href={`/books/book-details/${book._id}`}
-                                    >
-                                        <img
-                                            src={
-                                                book.thumbnail === undefined
-                                                    ? 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'
-                                                    : `${book.thumbnail}`
-                                            } alt={`${book.title}`}
-                                            className='book-colorful__image'
-                                        />
-
-                                        <div className="book-colorful__info">
-                                            <h2 className="book__title">{book.title}</h2>
-                                            {book.authors.length > 0 ?
-                                                <p className="book__authors">{book.authors.map((author, index) => index === book.authors.length - 1 ? author : `${author}, `)}</p>
-                                                : null}
-                                            <div className='details__additional-info'>
-                                                <div className='book__all-pages'>
-                                                    <p className='book-font__outline'>Print Length</p>
-                                                    <div className='d-flex fw-600'>
-                                                        <GiBookmarklet />
-                                                        <p>{book.pageCount}</p>
-                                                    </div>
-                                                </div>
-                                                <div className="book__action-area">
-                                                    <p className='book-font__outline'>Category</p>
-                                                    <span className="book__category" style={{ backgroundColor: categoryColor }}>{book.category}</span>
-                                                </div>
-                                            </div>
-                                            <div className="book__action-area">
-                                                <Button onClick={(e) => { e.preventDefault(); handleOpen(book); }} className="cta-btn">Change shelf</Button>
-                                            </div>
-                                        </div>
-                                    </CardActionArea>
-                                    // <div key={book._id} className="book-colorful" style={bookStyle}>
-                                    /* <AiFillEdit className="edit-book__icon" /> */
-
-                                    // </div>
+                                    <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={book.shelf} fetchBooks={fetchBooks} />
                                 );
                             })}
                         </div>
@@ -285,13 +228,13 @@ function ListAllBooks() {
                         </div>
                     </>
                     :
-                    <Fragment>
+                    <div className="no-content">
                         <h1>No books on shelf {getShelfName()} {category === '' ? null : `in ${category} category`}</h1>
 
-                        <Button onClick={removeAllFilters}>Remove all added filters</Button>
+                        <Button onClick={removeAllFilters} className="cta-btn">Remove all added filters</Button>
 
 
-                    </Fragment>
+                    </div>
             )}
         </main >
     </>

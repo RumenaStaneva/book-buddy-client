@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
@@ -10,14 +10,8 @@ import LibraryBook from '../components/LibraryBook';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import categoryColors from "../constants/categoryColors";
-import { GiBookmarklet } from "react-icons/gi";
-import Button from '../components/Button';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
 import Error from '../components/Error';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBooks } from '../reducers/booksSlice';
@@ -31,6 +25,10 @@ function Library() {
     useEffect(() => {
         dispatchRedux(fetchAllBooks(user));
     }, [dispatchRedux, user]);
+
+    const fetchBooks = () => {
+        dispatchRedux(fetchAllBooks(user));
+    }
 
     useEffect(() => {
         document.title = `User's Library`;
@@ -142,7 +140,7 @@ function Library() {
                                                 background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
                                             }
                                             return (
-                                                <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={0} />
+                                                <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={0} fetchBooks={fetchBooks} />
                                             )
 
                                         })
@@ -214,7 +212,7 @@ function Library() {
                                                     //         </CardContent>
                                                     //     </CardActionArea>
                                                     // </div>
-                                                    <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={2} />
+                                                    <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={2} fetchBooks={fetchBooks} />
 
                                                 )
                                             })
