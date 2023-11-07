@@ -35,7 +35,7 @@ function ListAllBooks() {
     const category = useSelector((state) => state.filters.category);
     const limit = useSelector((state) => state.filters.limit);
     const [filterVisible, setFilterVisible] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
+    // const [isHovered, setIsHovered] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -127,10 +127,10 @@ function ListAllBooks() {
         }
     };
 
-    const handleLimitChange = async (selectedLimit) => {
-        dispatch(setLimit(selectedLimit));
-        fetchBooks();
-    }
+    // const handleLimitChange = async (selectedLimit) => {
+    //     dispatch(setLimit(selectedLimit));
+    //     fetchBooks();
+    // }
 
     return <>
         <NavBar />
@@ -146,10 +146,10 @@ function ListAllBooks() {
                             <h1 className="section-title">All books on {getShelfName()}</h1>
                         </div>
                         <div className="filter-btn__container"
-                            onMouseEnter={() => setIsHovered(true)}
-                            onMouseLeave={() => setIsHovered(false)}
+                        // onMouseEnter={() => setIsHovered(true)}
+                        // onMouseLeave={() => setIsHovered(false)}
                         >
-                            {isHovered ? (
+                            {/* {isHovered ? (
                                 <BsFillFilterCircleFill
                                     onClick={() => setFilterVisible(!filterVisible)}
                                     className="filter-btn"
@@ -159,50 +159,50 @@ function ListAllBooks() {
                                     onClick={() => setFilterVisible(!filterVisible)}
                                     className="filter-btn"
                                 />
-                            )}
+                            )} */}
                         </div>
-                        {filterVisible &&
-                            <motion.div
-                                initial={{ y: -50, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                exit={{ y: -50, opacity: 0 }}
-                                transition={{ duration: 0.5, ease: "easeInOut" }}
-                                className={`filters__container`}>
-                                <div className="search-term__container">
-                                    {searchTerm.length > 0 && (
-                                        <Button className="clear-filter-button" onClick={handleRemoveQueryFilter}>
+                        {/* {filterVisible && */}
+                        <motion.div
+                            initial={{ y: -50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -50, opacity: 0 }}
+                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                            className={`filters__container`}>
+                            <div className="search-term__container">
+                                {searchTerm.length > 0 && (
+                                    <Button className="clear-filter-button" onClick={handleRemoveQueryFilter}>
+                                        <AiOutlineCloseCircle />
+                                    </Button>
+                                )}
+                                <form onSubmit={handleSearchQuery}>
+                                    <input
+                                        type="text"
+                                        placeholder="Search books..."
+                                        value={searchTerm}
+                                        onChange={handleSearchChange}
+                                    />
+                                    <Button type="submit" onClick={handleSearchQuery} className="search-query-btn">
+                                        <BsSearch />
+                                    </Button>
+                                </form>
+                            </div>
+                            <div className="d-flex category-limit__container">
+                                <div className="category-filter__container">
+                                    {category && (
+                                        <Button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
                                             <AiOutlineCloseCircle />
                                         </Button>
                                     )}
-                                    <form onSubmit={handleSearchQuery}>
-                                        <input
-                                            type="text"
-                                            placeholder="Search books..."
-                                            value={searchTerm}
-                                            onChange={handleSearchChange}
-                                        />
-                                        <Button type="submit" onClick={handleSearchQuery} className="search-query-btn">
-                                            <BsSearch />
-                                        </Button>
-                                    </form>
+                                    <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={category.length > 0 ? category : 'Category'} />
                                 </div>
-                                <div className="d-flex category-limit__container">
-                                    <div className="category-filter__container">
-                                        {category && (
-                                            <Button className="clear-filter-button" onClick={handleRemoveCategoryFilter}>
-                                                <AiOutlineCloseCircle />
-                                            </Button>
-                                        )}
-                                        <Dropdown options={Object.values(BookCategories)} onSelect={handleCategoryChange} selectedOption={category.length > 0 ? category : 'Category'} />
-                                    </div>
 
-                                    <div className="limits__container">
-                                        <label htmlFor="limit" className="d-none">Set book's limit</label>
+                                {/* <div className="limits__container">
+                                        <label htmlFor="limit">Results per page</label>
                                         <Dropdown name="limit" options={[5, 10, 15]} onSelect={handleLimitChange} selectedOption={limit} />
-                                    </div>
-                                </div>
-                            </motion.div>
-                        }
+                                    </div> */}
+                            </div>
+                        </motion.div>
+                        {/* } */}
 
                         <div className="books__container books-colorful__container">
                             <Error />

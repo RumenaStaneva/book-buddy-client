@@ -23,6 +23,7 @@
     flex: 0 0 30%;
     align-items: center; */
     padding: 0;
+    position: relative;
 }
 
 .heading-section {
@@ -260,10 +261,10 @@
     height: 17px;
 }
 
-.category-limit__container {
-    max-width: 30%;
+/* .category-limit__container {
+    width: 100%;
     align-items: center;
-}
+} */
 
 .category-filter__container {
     min-width: 240px;

@@ -95,7 +95,19 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
                 />
                 : null}
             <div key={book._id} className="book-colorful" style={bookStyle}>
-
+                <Button className='edit-shelf__icon' onClick={(e) => {
+                    e.preventDefault();
+                    handleEditShelfClick()
+                }}>
+                    <HiDotsVertical />
+                </Button>
+                {editShelfVisible &&
+                    <div className='edit-shelf__container' ref={editShelfContainerRef}>
+                        <Button onClick={(e) => { e.preventDefault(); setIsOpen(true); document.body.style.overflow = 'hidden'; }}>
+                            Change shelf
+                        </Button>
+                    </div>
+                }
                 <CardActionArea
                     className='book__button'
                     component='a'
@@ -104,19 +116,6 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
                     }}
                     href={`/books/book-details/${book._id}`}
                 >
-                    <Button className='edit-shelf__icon' onClick={(e) => {
-                        e.preventDefault();
-                        handleEditShelfClick()
-                    }}>
-                        <HiDotsVertical />
-                    </Button>
-                    {editShelfVisible &&
-                        <div className='edit-shelf__container' ref={editShelfContainerRef}>
-                            <Button onClick={(e) => { e.preventDefault(); setIsOpen(true); document.body.style.overflow = 'hidden'; }}>
-                                Change shelf
-                            </Button>
-                        </div>
-                    }
                     <CardMedia
                         component="img"
                         src={
