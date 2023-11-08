@@ -213,7 +213,7 @@ function ListAllBooks() {
                                 };
 
                                 return (
-                                    <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={book.shelf} fetchBooks={fetchBooks} />
+                                    <LibraryBook key={book._id} book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={book.shelf} fetchBooks={fetchBooks} />
                                 );
                             })}
                         </div>

@@ -80,7 +80,6 @@ function Diagram() {
             event.target.getAttribute('data-calendar-container') !== 'true' &&
             event.target.getAttribute('react-calendar__navigation') !== 'true'
         ) {
-            console.log('hehehe');
             setCalendarVisible(false);
         }
     };
