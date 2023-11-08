@@ -38,6 +38,8 @@
     flex: 0 0 48%;
     margin-right: 20px;
     padding: 20px 15px;
+    min-height: 394px;
+    height: 100%;
 }
 
 .profile__content h1 {
@@ -277,9 +279,14 @@
         flex-direction: column;
     }
 
-    .profile__content,
-    .chart__content {
-        max-width: 500px;
+    .profile__content {
+        margin-right: 0;
+        max-width: 1000px;
+    }
+
+    .chart__content canvas {
+        width: 100% !important;
+        height: 100% !important;
     }
 
     .profile__content {
@@ -297,6 +304,23 @@
     .hide-x-axis-label {
         display: none;
     }
+
+    .range-calendar__container {
+        flex-direction: column;
+        margin-bottom: 75px;
+    }
+
+    .range-calendar__container .dropdown {
+        margin-right: 0;
+        max-width: unset;
+    }
+
+    .range-calendar__container .react-calendar {
+        max-width: unset;
+        right: 0;
+        left: 0;
+    }
+
 }
 
 

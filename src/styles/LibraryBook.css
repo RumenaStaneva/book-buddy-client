@@ -96,3 +96,53 @@
     color: #fff;
     margin-bottom: 10px;
 }
+
+@media (max-width: 1200px) {
+    .books-colorful__container .book__button {
+        flex-direction: column;
+        height: 500px;
+    }
+
+    .books__library .book-colorful__image {
+        transform: translate(0, 0);
+    }
+
+    .books__library .books-colorful__container .book-colorful__image {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 807px) {
+    .books-colorful__container .book-colorful {
+        margin-right: 0 !important;
+    }
+
+    .books-colorful__container .book__button {
+        flex-direction: row;
+        height: 345px;
+        padding: 0;
+    }
+
+    .books__library .book-colorful__image {
+        transform: translate(15px, -25px);
+    }
+
+    .books__library .books-colorful__container .book-colorful__image {
+        margin-right: 20px;
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .books__library .book-colorful__image {
+        transform: translate(0, 10px);
+    }
+
+    .book-colorful__info {
+        max-width: unset;
+    }
+
+    .books__library .books-colorful__container .book-colorful {
+        margin-right: 0;
+    }
+}
