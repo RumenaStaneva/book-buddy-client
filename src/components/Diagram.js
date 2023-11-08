@@ -77,14 +77,18 @@ function Diagram() {
         if (
             calendarContainer &&
             !calendarContainer.contains(event.target) &&
-            event.target.getAttribute('data-calendar-container') !== 'true'
+            event.target.getAttribute('data-calendar-container') !== 'true' &&
+            event.target.getAttribute('react-calendar__navigation') !== 'true'
         ) {
+            console.log('hehehe');
             setCalendarVisible(false);
         }
     };
 
-    const handleCalendarClick = () => {
-        setCalendarVisible(!isCalendarVisible);
+    const handleCalendarClick = (e) => {
+        if (e.target.className === 'react-calendar') {
+            setCalendarVisible(!isCalendarVisible);
+        }
     };
 
     useEffect(() => {
@@ -113,12 +117,24 @@ function Diagram() {
                             />
                             {dataRange === 'Custom range' ?
                                 <div className={`calendar-container ${!isCalendarVisible ? 'calendar-hidden' : ''}`}
-                                    onClick={handleCalendarClick}>
+                                    onClick={(e) => handleCalendarClick(e)}
+                                >
                                     <Calendar
                                         inputRef={calendarRef}
                                         onClickDay={(value, event) => {
                                             event.stopPropagation();
                                             handleCalendarChange(value);
+                                        }}
+
+                                        onActiveStartDateChange={({ action, activeStartDate, value, view }) => {
+                                            console.log(action, activeStartDate, value, view);
+                                            if (action === 'next' || action === 'drillDown' || action === 'drillUp' || action === 'prev') {
+                                                setCalendarVisible(true);
+                                            }
+                                        }}
+                                        onClickMonth={(value, event) => {
+                                            event.stopPropagation();
+                                            setCalendarVisible(true);
                                         }}
                                         onChange={handleCalendarChange}
                                         value={selectedDateRange}
