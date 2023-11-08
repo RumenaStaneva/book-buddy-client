@@ -56,6 +56,13 @@ const NavBar = () => {
         }
     });
 
+    if (navVisible) {
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+    } else {
+        document.body.style.position = 'relative';
+    }
+
     return (
         <div ref={navRef} className='nav__container'>
             <Button className='nav__burger' onClick={toggleNav}>
