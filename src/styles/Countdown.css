@@ -1,5 +1,18 @@
 .swiper-books__container {
-    width: 550px;
+    width: 570px;
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    margin: auto 0;
+}
+
+.countdown-container {
+    max-width: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-right: 100px;
 }
 
 .countdown__container .book {
@@ -15,7 +28,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(237, 201, 191, 0.44);
+    background-color: rgb(170, 100, 86, 0.3);
     border-radius: 10px;
     margin-left: 10px;
     height: 620px;
@@ -32,15 +45,64 @@
 }
 
 .countdown__container .book__details .book__image {
-    max-height: 430px;
+    max-height: 400px;
+}
+
+.reading-countdown__container {
+    justify-content: center;
 }
 
 .reading-countdown__container .book__progress {
-    padding: 0 42px 0 70px;
+    padding: 0;
+    max-width: 68%;
     position: absolute;
     width: 100%;
     bottom: 50px;
+    left: calc(50% + 15px);
+    transform: translateX(-50%);
     z-index: 1;
+    margin-bottom: 25px;
+}
+
+.reading-countdown__container .book__progress p {
+    color: #000;
+    font-weight: 600;
+}
+
+.reading-countdown__container .progressbar span {
+    height: 15px;
+    border-radius: 10px;
+}
+
+.reading-countdown__container .progressbar span:first-child {
+    border: 1px solid rgb(0, 0, 0, 0.3);
+}
+
+.reading-countdown__container .progressbar span span:nth-child(1) {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border: none;
+}
+
+.reading-countdown__container .progressbar span span:nth-child(1)::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, #00bcd4, transparent);
+    animation: moveLines 2s linear infinite;
+}
+
+@keyframes moveLines {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 .countdown-section {
@@ -53,13 +115,42 @@
 }
 
 .countdown-message {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
 }
 
+.countdown-part {
+    font-family: 'Black Ops One';
+    font-weight: 300;
+    font-size: 6.5rem;
+
+}
+
+.countdown-seconds {
+    font-size: 6rem;
+}
 
 .goal-section {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.goal-section p {
+    margin-right: 10px;
+}
+
+.goal-section .cta-btn {
+    width: 150px;
+    margin-right: 0;
+}
+
+.adjust-goal {
+    flex-direction: column;
+}
+
+.adjust-goal-label {
+    margin-bottom: 40px;
 }
 
 .goal-button {
@@ -73,13 +164,281 @@
 }
 
 .goal-input {
-    width: 60px;
+    max-width: 110px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 0 auto 15px;
+    font-size: 1.5rem;
+}
+
+.goal__subsection {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 33%;
+    justify-content: space-between;
+    margin-right: 10px;
+}
+
+.goal__subsection p {
+    margin-bottom: 10px;
+    margin-right: 0;
 }
 
 .action-buttons {
     margin-top: 20px;
 }
 
+.countdown__action-buttons {
+    margin-bottom: 20px;
+}
+
+.goal-reading-time__container {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.goal-reading-time__container p {
+    padding: 0 10px;
+}
+
+.goal-reading-time__container p .countdown-part {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1rem;
+}
+
 .time-info {
-    margin-top: 10px;
+    border-left: 1px solid #ccc;
+}
+
+.empty-books-message {
+    text-align: center;
+    /* margin: 20px; */
+    padding: 20px;
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.empty-books-text {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.empty-books-link {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.table-container {
+    width: 100%;
+    margin-top: 20px;
+    padding: 2px;
+    border: 2px solid #ccc;
+    overflow-x: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-around;
+    background-color: #fff;
+    padding: 10px;
+    /* margin-bottom: 20px; */
+}
+
+
+.header-cell {
+    text-align: center;
+    border-right: 1px solid #ccc;
+    padding: 0 10px;
+    flex: 1;
+    cursor: pointer;
+}
+
+.header-cell.active {
+    color: #B70437;
+    font-weight: 600;
+}
+
+.header-cell:last-child {
+    border-right: none;
+}
+
+.header-cell.disabled {
+    background-color: #ccc;
+    color: #675252;
+}
+
+.header-cell.today {
+    background-color: #ffcc00;
+}
+
+.header-cell.future {
+    background-color: antiquewhite;
+}
+
+.day-of-week {
+    font-weight: bold;
+}
+
+.tab-panel-content {
+    padding: 20px;
+}
+
+.tab-panel__information {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 400px;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.tab-panel__information p {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 1200px) {
+    .countdown-container {
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 991px) {
+    .reading-countdown__container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .countdown-container {
+        margin-right: 0;
+        margin-bottom: 30px;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .swiper-books__container {
+        max-width: 480px;
+        width: 100%;
+    }
+
+    .countdown__container .book__details {
+        margin-left: 0;
+        padding: 36px 15px 63px;
+        height: auto;
+    }
+
+    .books__container {
+        justify-content: center;
+    }
+
+    .countdown__container .book__details .book__image {
+        width: 100%;
+    }
+
+    .book__image {
+        height: auto;
+    }
+
+    .book__authors,
+    .book__title {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .countdown__container .book__details .title-author__container {
+        width: 100%;
+    }
+
+    .reading-countdown__container .book__progress {
+        max-width: 80%;
+    }
+
+    /* .weekly-dashboard .swiper-books__container {
+        width: 500px;
+    }
+
+    .weekly-dashboard .countdown__container {
+        width: 500px !important;
+    } */
+
+    .countdown__container .book {
+        width: 100%;
+    }
+
+    .tab-headers .swiper-button-prev::after,
+    .tab-headers .swiper-button-next::after {
+        color: #D92868;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+
+    .weekly-dashboard .tab-content .swiper-button-prev,
+    .weekly-dashboard .tab-content .swiper-button-next {
+        display: none;
+    }
+
+    .countdown__container .book {
+        padding: 0;
+    }
+
+    .header-cell {
+        flex: none;
+    }
+
+    .goal-section {
+        flex-direction: column;
+    }
+
+    .goal-section p {
+        margin-bottom: 10px;
+    }
+
+    .goal-section .cta-btn {
+        margin-right: auto;
+    }
+
+    .countdown__container .book__details {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .countdown-part {
+        font-size: 4.5rem;
+    }
+
+    .goal__subsection .countdown-part,
+    .goal-input {
+        font-size: 1.5rem;
+    }
+
+    .goal__subsection .countdown-part {
+        margin: 0 0 15px;
+        width: 100%;
+    }
+
+    .goal__subsection .goal-input {
+        margin: 0 auto 15px;
+    }
+
+    .adjust-goal>.d-flex {
+        flex-direction: column;
+    }
 }

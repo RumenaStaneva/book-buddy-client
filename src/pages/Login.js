@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar'
 import Button from '../components/Button';
@@ -8,19 +8,33 @@ import Error from '../components/Error';
 import { GoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";
 import { setError } from '../reducers/errorSlice';
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Login() {
     const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
     const { login, loginWithGoogleAuth, isLoading } = useLogin();
     const dispatchError = useDispatch();
+    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+    useEffect(() => {
+        document.body.style.overflow = 'visible'
+    }, [])
+
+    const handleCaptchaVerify = (response) => {
+        setIsCaptchaVerified(true);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await login(emailOrUsername, password);
-        } catch (error) {
-            dispatchError(setError({ message: error }));
+        if (isCaptchaVerified) {
+            try {
+                await login(emailOrUsername, password);
+            } catch (error) {
+                dispatchError(setError({ message: error }));
+            }
+        } else {
+            dispatchError(setError({ message: 'Please verify that you are not a robot.' }));
         }
     }
 
@@ -44,14 +58,14 @@ function Login() {
                         <h1>Login</h1>
                         <div className='form__group'>
                             <label htmlFor="emailOrUsername">Email / Username</label>
-                            <input type="emailOrUsername" name="emailOrUsername" value={emailOrUsername} onChange={(e => setEmailOrUsername(e.target.value))} />
+                            <input type="emailOrUsername" id='emailOrUsername' name="emailOrUsername" value={emailOrUsername} onChange={(e => setEmailOrUsername(e.target.value))} />
                         </div>
                         <div className="form__group">
                             <p className='form__forgot-pass'>
                                 <a href="/users/forgot-password">Forgot password?</a>
                             </p>
                             <label htmlFor="password">Password</label>
-                            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <Error />
                         <Button type='submit' className='btn--cta' disabled={isLoading}>Sign in</Button>
@@ -63,11 +77,18 @@ function Login() {
                                     loginWithGoogle(response);
                                 }} onError={error => dispatchError(setError({ message: error }))} />
                         </div>
+                        <div className="recaptcha__container">
+
+                            <ReCAPTCHA
+                                sitekey={`${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`}
+                                onChange={handleCaptchaVerify}
+                            />
+                        </div>
                     </form>
                 </div>
                 <div className='wrapper'>
                     <div className='image__container'>
-                        <img src={require("../images/reading-buddies.png")} tabIndex={-1} alt='' width={570} height={487} />
+                        <img src='https://storage.googleapis.com/book-buddy/images/reading-buddies.png' role="presentation" alt='' />
                     </div>
                 </div>
             </main>

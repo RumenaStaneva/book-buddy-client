@@ -4,7 +4,6 @@ import CountdownBook from './CountdownBook';
 import Spinner from 'react-spinner-material';
 import Button from './Button';
 import { IoIosClose } from 'react-icons/io';
-import '../styles/CountdownReading.css'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -14,6 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearSuccessMessage } from '../reducers/timerSlice';
 import LinearProgressWithLabel from './Progress'
 import { calculateProgress } from '../reducers/booksSlice';
+import { NavLink } from 'react-router-dom';
+
 
 const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadingBooks }) => {
     const [activeIndex, setActiveIndex] = useState(() => {
@@ -59,12 +60,13 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                         </div>
                         : null}
                     <div className='d-flex reading-countdown__container'>
-                        <div className='countdown-timer__container'>
+                        <>
                             <Countdown screenTimeSeconds={screenTimeInSeconds} currentlyReadingBooks={currentlyReadingBooks} activeIndex={activeIndex} />
-                        </div>
+                        </>
                         <div className='swiper-books__container'>
-                            {currentlyReadingBooks ?
+                            {currentlyReadingBooks && currentlyReadingBooks.length > 0 ?
                                 <Swiper
+                                    spaceBetween={60}
                                     ref={swiperRef}
                                     pagination={{
                                         type: 'fraction',
@@ -72,7 +74,7 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                     navigation={!timerStarted ? true : false}
                                     modules={[Pagination, Navigation]}
                                     preventClicks={!timerStarted ? true : false}
-                                    width={550}
+                                    // width={550}
                                     onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                                     allowTouchMove={!timerStarted ? true : false}
                                     allowSlideNext={!timerStarted ? true : false}
@@ -101,7 +103,13 @@ const CountdownReading = ({ currentlyReadingBooks, screenTimeInSeconds, isLoadin
                                     })}
                                 </Swiper>
                                 :
-                                <p>No currently reading books, add one</p>}
+                                <div className="empty-books-message">
+                                    <p className="empty-books-text">No currently reading books in your library</p>
+                                    <p className="empty-books-text">Add book from your <NavLink className="empty-books-link" to="/books/library">Want To Read</NavLink></p>
+                                    <p className="empty-books-text">or</p>
+                                    <p className="empty-books-text">Search for a book <NavLink className="empty-books-link" to="/">here</NavLink></p>
+                                </div>
+                            }
                         </div>
                     </div>
                 </>

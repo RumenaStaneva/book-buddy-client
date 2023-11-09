@@ -7,23 +7,21 @@ import Button from '../components/Button';
 import Box from '@mui/material/Box';
 import Spinner from 'react-spinner-material';
 import Navigation from '../components/NavBar';
-import Error from '../components/Error';
-import { useDispatch, useSelector } from "react-redux";
-import { setError, clearError } from '../reducers/errorSlice';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
+import { IoIosClose } from 'react-icons/io'
+
 
 function Home() {
 
     const [title, setTitle] = useState('');
+    const [error, setError] = useState('');
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
-    const PAGE_SIZE = 10;
-    const dispatchError = useDispatch();
-    const { errorMessage } = useSelector((state) => state.error);
+    const PAGE_SIZE = 12;
     useEffect(() => {
         document.title = 'Home';
     }, []);
@@ -31,14 +29,15 @@ function Home() {
     const handleChange = (e) => {
         const title = e.target.value;
         setTitle(title);
-        dispatchError(clearError());
+        setError('');
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        setLoading(true);
         if (title === '' || title === undefined || title === null) {
-            dispatchError(setError({ message: 'Please enter a title or author.' }));
+            setError('Please enter a title or author.');
+            setLoading(false);
         } else {
             setLastSearchedTitle(title);
             setCurrentPage(1);
@@ -62,14 +61,15 @@ function Home() {
                 }
             );
             setBooks(response.data.items);
+            // const calculatedTotalPages = Math.ceil(response.data.totalItems / PAGE_SIZE);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
-            dispatchError(setError({ message: `Error fetching books: ${error})` }));
+            setError(`Error fetching books: ${error})`);
             console.error('Error fetching books: ', error);
         } finally {
             setLoading(false);
         }
-    }, [dispatchError]);
+    }, []);
 
     useEffect(() => {
         if (lastSearchedTitle) {
@@ -78,20 +78,88 @@ function Home() {
     }, [currentPage, lastSearchedTitle, fetchData]);
 
     const nextPage = () => {
+        setLoading(true);
         if (currentPage < totalPages) {
             setCurrentPage((prevPage) => prevPage + 1);
         }
     };
 
     const prevPage = () => {
+        setLoading(true);
         if (currentPage > 1) {
             setCurrentPage((prevPage) => prevPage - 1);
         }
     };
 
+    const generatePageNumbers = () => {
+        const pages = [];
+        const totalPagesToShow = 3; // Number of pages to show around the current page
+
+        let startPage = Math.max(1, currentPage - Math.floor(totalPagesToShow / 2));
+        let endPage = startPage + totalPagesToShow - 1;
+
+        // Ensure the end page does not exceed the total number of pages
+        if (endPage > totalPages) {
+            endPage = totalPages;
+            startPage = Math.max(1, endPage - totalPagesToShow + 1);
+        }
+        startPage = Math.max(1, startPage);
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+
+        return pages;
+    };
+    // page numbers 
+    const pageNumbers = () => {
+        const pages = generatePageNumbers();
+        return (
+            <div className="pagination__container">
+                <Button className="pagination-button" onClick={firstPage} disabled={currentPage === 1}>
+                    First
+                </Button>
+                {currentPage > 1 && (
+                    <Button className="pagination-button pagination-button--prev" onClick={prevPage} disabled={currentPage === 1}>
+                        &#10094;
+                    </Button>
+                )}
+                {pages.map((pageNumber) => (
+                    <Button className={`pagination-text ${currentPage === pageNumber ? 'pagination-button--active' : ''}`}
+                        key={pageNumber}
+                        onClick={() => goToPage(pageNumber)}
+                        disabled={currentPage === pageNumber}
+                    >
+                        {pageNumber}
+                    </Button>
+                ))}
+                {currentPage < totalPages && (
+                    <Button className="pagination-button pagination-button--next" onClick={nextPage} disabled={currentPage === totalPages}>
+                        &#10095;
+                    </Button>
+                )}
+            </div>
+        );
+    };
+    const firstPage = () => {
+        setCurrentPage(1);
+    };
+    const goToPage = (pageNumber) => {
+        setLoading(true);
+        setCurrentPage((prevPage) => {
+            // Ensure the current page is updated first before setting the new page
+            if (prevPage !== pageNumber) {
+                // Only set the new page if it's different from the current page
+                return pageNumber;
+            } else {
+                // If it's the same page, return the current page to avoid unnecessary state updates
+                return prevPage;
+            }
+        });
+    };
+
     const searchbarVariants = {
-        big: { height: 700 },
-        small: { height: 400 }
+        big: { height: 570 },
+        small: { height: 460 },
     }
 
     const imageVariants = {
@@ -99,11 +167,15 @@ function Home() {
         small: { height: 250 }
     }
 
+    const isSmallScreen = () => {
+        return window.innerWidth < 576;
+    };
+
     return (
         <>
             <Navigation />
             <Header title="Find your next favourite book" />
-            <>
+            <main>
                 <Box
                     component="form"
                     noValidate
@@ -114,7 +186,7 @@ function Home() {
                     className='form__container'
 
                 >
-                    <motion.div animate={books.length !== 0 ? "small" : "big"}
+                    <motion.div animate={books.length !== 0 || isSmallScreen() ? "small" : "big"}
                         transition={{
                             duration: 1,
                             ease: [0, 0.71, 0.2, 1.01],
@@ -124,7 +196,8 @@ function Home() {
 
                         }}
                         layout
-                        variants={searchbarVariants} className={`search__container`}>
+                        variants={searchbarVariants} className={`search__container`}
+                    >
                         <motion.img
                             animate={books.length !== 0 ? "small" : "big"}
                             transition={{
@@ -137,47 +210,57 @@ function Home() {
                             }}
                             layout
                             variants={imageVariants}
-                            src={require('../images/logo-big.png')}
-                            alt="Logo" />
-                        <Error />
-                        <div className='d-flex'>
+                            src='https://storage.googleapis.com/book-buddy/images/Logo-big.png'
+                            alt="Logo"
+                            className='homepage-logo'
+                        />
+                        {error.length > 0 ?
+                            <div className="error-message__container">
+                                <p>{error}</p>
+
+                                <Button className="close-btn" onClick={() => setError('')}>
+                                    <IoIosClose />
+                                </Button>
+                            </div>
+                            : null
+                        }
+
+                        <div className='d-flex search-input__container'>
                             <ShakeableTextField
                                 id="outlined-basic"
                                 label="Title/author"
                                 variant="outlined"
                                 value={title}
                                 onChange={handleChange}
-                                error={errorMessage}
+                                error={error}
                                 className='search__input'
                             />
-                            <Button className='cta-btn' type='submit'>Search</Button>
+                            <Button className='cta-btn' type='submit'>{loading ?
+                                <Spinner radius={10} color={"#fff"} stroke={2} visible={true} /> : 'Search'}</Button>
 
                         </div>
+
                     </motion.div>
 
 
                 </Box>
-                {loading ?
+                {/* {loading ?
                     <div className='spinner__container'>
                         <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                     </div>
                     : null
-                }
+                } */}
 
-                {books.length !== 0 ?
-                    <BookList books={books} />
+                {books && books.length !== 0 ?
+                    <BookList books={books}
+                    // loading={loading} 
+                    />
 
                     : null}
 
+                {totalPages > 1 && books.length !== 0 ? pageNumbers() : null}
 
-                {books.length !== 0 ?
-                    <div className="pagination__container">
-                        <Button onClick={prevPage} disabled={currentPage === 1}>Previous</Button>
-                        <Button onClick={nextPage} disabled={currentPage === totalPages}>Next</Button>
-                    </div>
-                    : null}
-
-            </ >
+            </ main>
         </>
 
     )

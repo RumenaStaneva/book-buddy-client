@@ -5,6 +5,8 @@ import NavBar from '../components/NavBar';
 import Error from '../components/Error';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ResetPassword = () => {
     const { token } = useParams();
@@ -31,6 +33,16 @@ const ResetPassword = () => {
             });
 
             if (response.ok) {
+                toast.success(`Password reset successful!`, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                })
                 setMessage('Password reset successful!');
                 dispatchError(clearError());
             } else {
@@ -47,6 +59,7 @@ const ResetPassword = () => {
     return (
         <>
             <NavBar />
+            <ToastContainer />
             <main className='login-signup-page'>
                 <div className="mask"></div>
 
@@ -74,7 +87,6 @@ const ResetPassword = () => {
                         </div>
                         <button type="submit" className='btn--cta' onClick={handlePasswordReset}>Reset Password</button>
                         {message && <div className="success-message__container">
-                            <p> {message} </p>
                             <Link to="/users/login">Login</Link>
                         </div>}
                         <Error />
@@ -83,7 +95,7 @@ const ResetPassword = () => {
                 </div>
                 <div className='wrapper'>
                     <div className='image__container'>
-                        <img src={require("../images/reading-buddies.png")} tabIndex={-1} alt='' width={570} height={487} />
+                        <img src='https://storage.googleapis.com/book-buddy/images/reading-buddies.png' tabIndex={-1} alt='' width={570} height={487} />
                     </div>
                 </div>
             </main>

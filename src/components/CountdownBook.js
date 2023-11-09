@@ -1,15 +1,7 @@
-import { useState } from 'react';
 import '../styles/Library.css'
-import { useAuthContext } from "../hooks/useAuthContext";
 import '../styles/LibraryBook.css'
-import Error from './Error';
-import { useDispatch } from "react-redux";
-import { clearError, setError } from '../reducers/errorSlice';
-
 
 function CountdownBook({ book }) {
-    const { user } = useAuthContext();
-
 
     return (
         <>
@@ -24,17 +16,20 @@ function CountdownBook({ book }) {
                             }}
                         >
                             <div className='title-author__container'>
-                                <h5 className='book__title book-font__outline'>
+                                <h3 className='book__title book-font__outline'>
                                     {book.title}
-                                </h5>
-                                <p className='book__authors'> By: {' '}
-                                    {book.authors?.join(', ')}
-                                </p>
+                                </h3>
+
+                                {book.authors.length > 0 ?
+
+                                    <p className='book__authors'> By: {' '}
+                                        {book.authors?.join(', ')}
+                                    </p> : null}
                             </div>
                             <img
                                 src={
                                     book.thumbnail === undefined
-                                        ? require('../images/image-not-available.png')
+                                        ? 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'
                                         : `${book.thumbnail}`
                                 } alt={`${book.title}`}
                                 className='book__image'

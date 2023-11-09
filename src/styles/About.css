@@ -1,0 +1,127 @@
+.info-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 1px;
+}
+
+.info-container .subtitle {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+
+}
+
+.info-container .paragraph,
+.about-subsection li {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.info-container .time-swap__perks-list {
+    margin-bottom: 15px;
+    padding: 20px;
+}
+
+.about__section {
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to bottom, rgb(128, 96, 147, 0.3), #fff);
+    padding: 30px;
+}
+
+.about-section__text:nth-child(odd),
+.about-subsection:nth-child(even) .list {
+    margin-right: 20px;
+}
+
+.about-section__text:nth-child(even),
+.about-subsection:nth-child(odd) .list {
+    margin-left: 20px;
+}
+
+.about-section__text .list {
+    padding-left: 35px;
+}
+
+.about-section__text b {
+    margin-right: 5px;
+}
+
+.about-section__text li::before {
+    content: "📚";
+    margin-right: 0.5ch;
+}
+
+.about-section__text ul {
+    list-style: none;
+}
+
+.about-section__text li {
+    display: list-item;
+    list-style-type: none;
+    padding-inline-start: 1ch;
+}
+
+.about-subsection {
+    align-items: center;
+}
+
+.about-subsection:first-of-type {
+    margin-bottom: 20px;
+}
+
+.time-swap-info .cta-btn {
+    margin: 35px auto 30px;
+    padding: 5px 35px;
+    font-size: 1.5rem;
+    height: auto;
+}
+
+@media (max-width: 991px) {
+    .about__section img {
+        width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .info-container .subtitle {
+        text-align: center;
+    }
+
+    .about__section:nth-of-type(2) {
+        flex-direction: column;
+    }
+
+    .about-subsection img {
+        display: none;
+    }
+
+    .about-subsection:nth-child(even) .list,
+    .about-subsection:nth-child(odd) .list {
+        margin: 0;
+    }
+
+    .about__section:nth-of-type(1) img,
+    .about__section:last-of-type img {
+        width: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .info-container {
+        margin-bottom: 100px;
+    }
+
+    .about__section {
+        flex-direction: column;
+        padding: 20px 10px;
+    }
+
+    .about__section:nth-of-type(2) {
+        flex-direction: column-reverse;
+    }
+}

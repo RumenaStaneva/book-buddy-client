@@ -12,8 +12,10 @@ import ConfirmationDialog from './ConfirmationDialog';
 import { fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse } from 'date-fns';
 
-const AddScreenTimeModal = ({ setIsOpen }) => {
+
+const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
     const [screenTimeData, setScreenTimeData] = useState(Array(7).fill({ date: '', time: '00:00' }));
+
     const [datesFromLastWeek, setDatesFromLastWeek] = useState([]);
     const [invalidInputs, setInvalidInputs] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +25,7 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
     const { user } = useAuthContext();
     const dispatchError = useDispatch();
     const dispatchReadingTime = useDispatch();
-
+    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     //get the days for the last week and add them in daysOfWeek
     useEffect(() => {
@@ -45,6 +47,7 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
                 });
                 if (response.ok) {
                     const data = await response.json();
+                    // console.log(data);
                     setScreenTimeData(prevState => {
                         return prevState.map((item, index) => {
                             return {
@@ -71,7 +74,6 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
 
         getWeekDates();
     }, [user.token, dispatchError]);
-
 
     const handleInputChange = (index, value) => {
         const newData = [...screenTimeData];
@@ -110,7 +112,12 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             //     prevInvalidInputs.filter((item) => item !== index)
             // );
             const [hours, minutes] = time.split(':');
-            return parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60;
+            const totalSeconds = parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60;
+
+            if (totalSeconds > 24 * 3600) {
+                throw new window.Error('Time cannot exceed 24:00.');
+            }
+            return totalSeconds;
         }
 
     };
@@ -178,9 +185,11 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
             setShowConfirmationDialog(false);
             setIsLoading(false);
             dispatchError(clearError());
-            setIsOpen(false);
-            dispatchReadingTime(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week' }));
+            setIsOpenAddScreenTime(false);
+            document.body.style.overflow = 'visible';
 
+            dispatchReadingTime(fetchReadingTimeForTheWeek({ user, dataRange: 'Current week' }));
+            handleCloseModal();
         } catch (error) {
             setIsLoading(false);
             console.log(error);
@@ -192,9 +201,10 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
     return (
         <Modal
             title={`Screen time for week: ${formattedStartDate} - ${formattedEndDate}`}
-            onClose={() => setIsOpen(false)}
+            onClose={() => setIsOpenAddScreenTime(false)}
             subtitle={``}
-            setIsOpen={setIsOpen}
+            setIsOpen={setIsOpenAddScreenTime}
+            small={true}
             content={
                 <>
                     <Error />
@@ -213,14 +223,19 @@ const AddScreenTimeModal = ({ setIsOpen }) => {
                             <>
                                 <div className="input-fields d-flex">
                                     {screenTimeData.map((item, index) => (
-                                        <div key={index} className={`input-field ${showConfirmationDialog && 'confirmation-dialog-shown'} ${invalidInputs.includes(index) ? 'error' : ''}`}>
+                                        <div key={index} className='input-field__container'>
+                                            <span className='weekday'>{daysOfWeek[index]}</span>
                                             <label>{item.date}</label>
-                                            <Cleave
-                                                options={{ time: true, timePattern: ['h', 'm'] }}
-                                                placeholder="Enter time in HH:MM format"
-                                                value={item.time}
-                                                onChange={(e) => handleInputChange(index, e.target.value)}
-                                            />
+                                            <div className={`input-field ${showConfirmationDialog && 'confirmation-dialog-shown'} ${invalidInputs.includes(index) ? 'error' : ''}`}>
+                                                <Cleave
+                                                    options={{ time: true, timePattern: ['h', 'm'], rawValueTrimPrefix: true, }}
+                                                    placeholder="Enter time in HH:MM format"
+                                                    value={item.time}
+                                                    onChange={(e) => handleInputChange(index, e.target.value)}
+                                                    onFocus={(e) => e.target.select()}
+                                                    onMouseUp={(e) => e.preventDefault()}
+                                                />
+                                            </div>
                                         </div>
                                     ))}
                                 </div>

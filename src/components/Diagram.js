@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Spinner from 'react-spinner-material';
 import { useDispatch, useSelector } from "react-redux";
@@ -22,11 +22,12 @@ function Diagram() {
     const [selectedDateRange, setSelectedDateRange] = useState([startOfWeek(new Date(), { weekStartsOn: 1 }), endOfWeek(new Date(), { weekStartsOn: 1 })]);
     const dropdownOptions = ['Current week', 'Last week', 'Last 3 weeks', 'Custom range'];
     const labelsWeekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const [isCalendarVisible, setCalendarVisible] = useState(true);
+    const calendarRef = useRef(null);
 
     useEffect(() => {
         dispatchRedux(fetchReadingTimeForTheWeek({ user, dataRange }));
         dispatchRedux(fetchHasReadingTimeAnytime(user));
-
     }, [dispatchRedux, user, dataRange])
 
     useEffect(() => {
@@ -48,7 +49,7 @@ function Diagram() {
         dispatchRedux(setDataRange(selectedRange));
     };
 
-    const handleCalendarChange = (dates) => {
+    const handleCalendarChange = (dates, event) => {
         dispatchRedux(clearError());
         if (dates.length === 2) {
             const start = startOfWeek(dates[0], { weekStartsOn: 1 });
@@ -71,14 +72,42 @@ function Diagram() {
         dispatchRedux(fetchHasReadingTimeAnytime(user));
     }, [dispatchRedux, user, selectedDateRange]);
 
+    const handleClickOutside = (event) => {
+        const calendarContainer = calendarRef.current;
+        if (
+            calendarContainer &&
+            !calendarContainer.contains(event.target) &&
+            event.target.getAttribute('data-calendar-container') !== 'true' &&
+            event.target.getAttribute('react-calendar__navigation') !== 'true'
+        ) {
+            setCalendarVisible(false);
+        }
+    };
+
+    const handleCalendarClick = (e) => {
+        if (e.target.className === 'react-calendar') {
+            setCalendarVisible(!isCalendarVisible);
+        }
+    };
+
+    useEffect(() => {
+        if (isCalendarVisible) {
+            document.addEventListener('click', handleClickOutside);
+        } else {
+            document.removeEventListener('click', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [isCalendarVisible]);
     return (
         <>
             {hasReadingTimeAnytime ? (
                 isLoading ? (
                     <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
                 ) : (
-                    <div>
-                        <div className='d-flex'>
+                    <div className='diagram__container'>
+                        <div className='d-flex range-calendar__container'>
 
                             <Dropdown
                                 options={dropdownOptions}
@@ -86,12 +115,32 @@ function Diagram() {
                                 selectedOption={dataRange !== null ? dataRange : 'Pick a Time Frame'}
                             />
                             {dataRange === 'Custom range' ?
-                                <Calendar
-                                    onChange={handleCalendarChange}
-                                    value={selectedDateRange}
-                                    selectRange={true}
-                                    maxDate={endOfWeek(new Date(), { weekStartsOn: 1 })}
-                                />
+                                <div className={`calendar-container ${!isCalendarVisible ? 'calendar-hidden' : ''}`}
+                                    onClick={(e) => handleCalendarClick(e)}
+                                >
+                                    <Calendar
+                                        inputRef={calendarRef}
+                                        onClickDay={(value, event) => {
+                                            event.stopPropagation();
+                                            handleCalendarChange(value);
+                                        }}
+
+                                        onActiveStartDateChange={({ action, activeStartDate, value, view }) => {
+                                            console.log(action, activeStartDate, value, view);
+                                            if (action === 'next' || action === 'drillDown' || action === 'drillUp' || action === 'prev') {
+                                                setCalendarVisible(true);
+                                            }
+                                        }}
+                                        onClickMonth={(value, event) => {
+                                            event.stopPropagation();
+                                            setCalendarVisible(true);
+                                        }}
+                                        onChange={handleCalendarChange}
+                                        value={selectedDateRange}
+                                        selectRange={true}
+                                        maxDate={endOfWeek(new Date(), { weekStartsOn: 1 })}
+                                    />
+                                </div>
                                 : null}
                         </div>
 

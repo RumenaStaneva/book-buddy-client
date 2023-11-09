@@ -1,5 +1,9 @@
 .books__library {
-    padding: 20px 50px 30px;
+    padding: 20px 20px 105px;
+}
+
+.books__library .book__carousel .book__button {
+    padding: 0 20px;
 }
 
 .shelf-header {
@@ -14,7 +18,7 @@
 .shelf-header::after {
     content: '';
     position: absolute;
-    width: calc(100% + 65px);
+    width: calc(100% + 30px);
     left: -15px;
     bottom: 0;
     height: 1px;
@@ -44,6 +48,10 @@
     text-transform: capitalize;
 }
 
+.books__library .books__container {
+    margin-bottom: 40px;
+}
+
 .books__library .book-colorful {
     padding: 0;
 }
@@ -56,12 +64,14 @@
     max-height: 250px;
 }
 
-.books__library .book-colorful__image:hover {
-    transform: translate(0, -35px) scale(1.1);
-}
-
 .books-colorful__container .book__button {
     display: flex;
+    padding: 30px;
+}
+
+.no-books__message-container {
+    margin-bottom: 50px;
+    text-align: center;
 }
 
 .book-colorful .book__description {
@@ -106,5 +116,85 @@
 .book__title {
     color: #fff;
     font-weight: 600;
-    font-size: 22px;
+    font-size: 1.3rem;
+}
+
+.edit-shelf__icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    right: 20px;
+    top: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.edit-shelf__icon svg {
+    width: 25px;
+    height: 25px;
+    fill: #fff;
+    transition: fill 0.3s ease;
+}
+
+.edit-shelf__icon svg:hover {
+    fill: #ccc;
+}
+
+.edit-shelf__container {
+    position: absolute;
+    top: 50px;
+    right: 5px;
+    z-index: 10;
+}
+
+.edit-shelf__container button {
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.edit-shelf__container button:hover {
+    background-color: #f0f0f0;
+}
+
+@media (max-width: 576px) {
+
+    .books__library .books__container.currently-reading__container {
+        height: 525px;
+        padding: 10px 0;
+        margin-bottom: 30px;
+    }
+
+    .books__library .currently-reading__container .book__authors {
+        display: none;
+    }
+
+    .currently-reading__container .book {
+        height: 100%;
+        max-height: unset;
+    }
+
+    .currently-reading__container .book__button {
+        flex-direction: column;
+    }
+
+    .book__image {
+        margin-bottom: 10px;
+    }
+
+    .book__title {
+        max-width: unset;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .books__library .swiper-pagination {
+        bottom: 30px;
+    }
 }

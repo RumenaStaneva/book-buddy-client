@@ -1,7 +1,22 @@
 .calendar-container {
+    position: relative;
     width: 100%;
+}
+
+.range-calendar__container .react-calendar {
+    position: absolute;
+    width: 100%;
+    max-width: 280px;
+    right: 20px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 15px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    z-index: 10;
+}
+
+.calendar-container.calendar-hidden .react-calendar {
+    z-index: 0;
 }
 
 .table-container {
@@ -9,57 +24,80 @@
     overflow-x: auto;
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
+.input-field__container {
+    /* flex: 1 1 calc(50% - 10px); */
+    margin: 0 10px 30px 0;
 }
 
-.table th,
-.table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+.input-field__container .weekday {
+    margin-bottom: 5px;
 }
 
 .input-field {
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+    /* padding: 10px;
+    margin-bottom: 10px; */
+    /* border: 1px solid #ccc; */
     border-radius: 5px;
 }
 
-.input-field.error {
+.input-field input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.input-field.error input {
     border-color: red;
 }
 
-.input-field label {
+.input-field label,
+.input-field__container label {
     font-weight: bold;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+
 }
 
 .input-fields {
     flex-wrap: wrap;
+    align-items: center;
+    /* justify-content: space-between; */
 }
 
-.input-field {
-    flex: 1 1 calc(50% - 20px);
-    margin: 10px;
+
+
+.react-calendar__viewContainer {
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.calendar-hidden .react-calendar__viewContainer {
+    height: 0;
+    opacity: 0;
+}
+
+.react-calendar__navigation {
+    transition: all 0.3s ease;
+}
+
+.calendar-hidden .react-calendar__navigation {
+    height: 30px;
+    margin-bottom: 0;
 }
 
 @media (max-width: 1350px) {}
 
-/* CSS for smaller screens (including down to 768px width) */
 @media (max-width: 768px) {
     .input-field {
         flex: 1 1 calc(100% - 20px);
-        /* Adjust the width as needed */
     }
+
+    .input-fields {
+        align-items: center;
+        justify-content: center;
+    }
+
 }

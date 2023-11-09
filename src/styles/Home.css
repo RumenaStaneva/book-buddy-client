@@ -19,10 +19,31 @@
     height: 500px;
 }
 
+.search__container .cta-btn {
+    min-width: 95px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.homepage-logo {
+    width: 100%;
+    object-fit: contain;
+}
+
 .search__input {
     margin-right: 20px !important;
     max-width: 500px;
     width: 100%;
+}
+
+.search__input label {
+    top: 1px;
+}
+
+.search__input legend span {
+    padding-left: 0;
+    padding-right: 2px;
 }
 
 .spinner__container {
@@ -31,4 +52,61 @@
     justify-content: center;
     margin: 20px 0;
 
+}
+
+.pagination__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 85px;
+    padding: 20px 10px;
+}
+
+.pagination-button,
+.pagination__container .pagination-button--next,
+.pagination__container .pagination-button--prev {
+    margin: 0 15px;
+}
+
+
+.pagination__container .pagination-text {
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+    padding: 5px 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin: 0 7px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination__container .pagination-text:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination__container .pagination-button--active {
+    border: 1px solid #D92868;
+
+}
+
+.pagination__container .pagination-button--active:hover {
+    background-color: #fff;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .form__container {
+        padding-bottom: 90px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form__container {
+        padding-bottom: 150px;
+    }
+
+    .pagination__container {
+        margin-bottom: 150px;
+    }
 }

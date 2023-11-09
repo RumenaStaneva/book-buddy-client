@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Dropdown.css'
 
-const Dropdown = ({ options, onSelect, selectedOption }) => {
+const Dropdown = ({ options, onSelect, selectedOption, id }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -28,7 +28,7 @@ const Dropdown = ({ options, onSelect, selectedOption }) => {
     }, []);
 
     return (
-        <div className={`dropdown ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
+        <div id={id} className={`dropdown ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
             <div className="selected-option" onClick={handleToggleDropdown}>
                 {selectedOption !== null ? selectedOption : 'Select an option'}
             </div>

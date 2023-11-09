@@ -9,6 +9,8 @@ import Spinner from 'react-spinner-material';
 import { GoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
+import ReCAPTCHA from "react-google-recaptcha";
+
 
 function SignUp() {
     const [email, setEmail] = useState('');
@@ -19,6 +21,12 @@ function SignUp() {
     const [verificationEmailSent, setVerificationEmailSent] = useState(false);
     const { signup, signUpWithGoogleAuth, isLoading, setIsLoading } = useSignup();
     const dispatchError = useDispatch();
+    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
+
+    const handleCaptchaVerify = (response) => {
+        setIsCaptchaVerified(true);
+    };
 
 
     const handleSubmit = async (e) => {
@@ -30,21 +38,26 @@ function SignUp() {
             dispatchError(setError({ message: 'Passwords should match' }));
             return;
         }
-        try {
-            await signup(email, password, username);
-            setIdenticalPasswords(true);
-            setEmail('');
-            setPassword('');
-            setRepeatPassword('');
-            setUsername('');
-            setVerificationEmailSent(true);
-        } catch (error) {
-            setVerificationEmailSent(false);
-            setIdenticalPasswords(true);
-            setEmail('');
-            setPassword('');
-            setRepeatPassword('');
-            setUsername('');
+        if (isCaptchaVerified) {
+            try {
+                await signup(email, password, username);
+                setIdenticalPasswords(true);
+                setEmail('');
+                setPassword('');
+                setRepeatPassword('');
+                setUsername('');
+                setVerificationEmailSent(true);
+            } catch (error) {
+                setVerificationEmailSent(false);
+                setIdenticalPasswords(true);
+                setEmail('');
+                setPassword('');
+                setRepeatPassword('');
+                setUsername('');
+            }
+        } else {
+            dispatchError(setError({ message: 'Please verify that you are not a robot.' }));
+
         }
     }
 
@@ -81,19 +94,19 @@ function SignUp() {
                             <h1>Sign Up</h1>
                             <div className='form__group'>
                                 <label htmlFor="email">Email</label>
-                                <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                             </div>
                             <div className='form__group'>
                                 <label htmlFor="username">Username</label>
-                                <input type="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                                <input type="username" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
                             </div>
                             <div className="form__group">
                                 <label htmlFor="password">Password</label>
-                                <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                             </div>
                             <div className="form__group">
                                 <label htmlFor="repeat-password">Repeat Password</label>
-                                <input type="password" name="repeat-password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
+                                <input type="password" id="repeat-password" name="repeat-password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
                             </div>
 
                             {!identicalPassords ?
@@ -110,12 +123,19 @@ function SignUp() {
                                         signupWithGoogle(response);
                                     }} onError={error => dispatchError(setError({ message: error }))} />
                             </div>
+                            <div className="recaptcha__container">
+                                <ReCAPTCHA
+                                    sitekey={`${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`}
+                                    onChange={handleCaptchaVerify}
+                                />
+                            </div>
+
                         </form>
                     )}
                 </div>
                 <div className='wrapper'>
                     <div className='image__container'>
-                        <img src={require("../images/reading-buddies.png")} tabIndex={-1} alt='' width={570} height={487} />
+                        <img src='https://storage.googleapis.com/book-buddy/images/reading-buddies.png' role="presentation" alt="" width={570} height={487} />
                     </div>
                 </div>
             </main >

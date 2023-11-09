@@ -1,20 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Spinner from 'react-spinner-material';
-import Error from '../components/Error';
-import '../styles/ReadingTimeTable.css'
 import CountdownReading from "./CountdownReading";
 import { useSelector } from "react-redux";
 import Button from "./Button";
-import { useDispatch } from "react-redux";
-// import { setDateToday } from "../reducers/readingTimeForTodaySlice";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
+// import PlaylistReading from "./PlaylistReading";
 
 
 const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const { currentlyReadingBooks } = useSelector((state) => state.books);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
-    const { screenTimeInSeconds, weeklyGoalAveragePerDay } = useSelector((state) => state.readingTimeForToday);
-    const dispatch = useDispatch();
+    const { screenTimeInSeconds } = useSelector((state) => state.readingTimeForToday);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const swiperRef = useRef(null);
+
+    useEffect(() => {
+        if (swiperRef.current) {
+            swiperRef.current.slideTo(selectedTab);
+        }
+    }, [selectedTab]);
+
+    const handleSwiperInit = (swiper) => {
+        swiperRef.current = swiper;
+        swiper.on('slideChange', () => {
+            const activeIndex = swiper.activeIndex;
+            setSelectedTab(activeIndex);
+        });
+    };
 
     function convertSecondsToHoursMinutesSeconds(seconds) {
         const hours = Math.floor(seconds / 3600);
@@ -87,6 +103,19 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
         setSelectedTab(index);
     };
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+
     return (
         isLoadingBooks ? (
             <div className='spinner__container'>
@@ -94,28 +123,57 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
             </div>
         ) : (
             <main className="weekly-dashboard">
+                <h1 className="heading">Time Swap</h1>
                 {!readingTimeData || !readingTimeData.length > 0 ? (
-                    <>
-                        <h1 className="heading">No reading time data for this week</h1>
-                        <Button className="cta-btn" onClick={() => setIsOpenAddScreenTime(true)}>Add from here</Button>
-                    </>
+                    <div className="no-data__container">
+                        <h2 className="heading">No reading time data for this week</h2>
+                        <Button className="cta-btn" onClick={() => { setIsOpenAddScreenTime(true); document.body.style.overflow = 'hidden'; }}>Add from here</Button>
+                    </div>
                 ) : (
                     <div className="table-container">
                         <div className="tabs-container">
                             <div className="tab-headers header-row d-flex">
-                                {readingTimeData.map((data, index) => {
-                                    const cellClassName = `header-cell ${getCellClassName(data.date)}`;
-                                    const tabContent = formatDateDDMMWithDayOfWeek(data.date);
-                                    return (
-                                        <div
-                                            key={index}
-                                            className={`tab-header ${cellClassName} ${selectedTab === index ? 'active' : ''}`}
-                                            onClick={() => handleTabClick(index)}
-                                        >
-                                            {tabContent}
-                                        </div>
-                                    );
-                                })}
+                                {isMobile ? (
+                                    <Swiper
+                                        spaceBetween={50}
+                                        slidesPerView={1}
+                                        onSwiper={handleSwiperInit}
+                                        initialSlide={selectedTab}
+                                        navigation={true}
+                                        modules={[Navigation]}
+                                    >
+                                        {readingTimeData.map((data, index) => {
+                                            const cellClassName = `header-cell ${getCellClassName(data.date)}`;
+                                            const tabContent = formatDateDDMMWithDayOfWeek(data.date);
+                                            return (
+                                                <SwiperSlide
+                                                    key={index}
+                                                    className={`tab-header ${cellClassName} ${selectedTab === index ? 'active' : ''}`}
+                                                    onClick={() => handleTabClick(index)}
+                                                    navigation={true}
+                                                >
+                                                    {tabContent}
+                                                </SwiperSlide>
+                                            );
+                                        })}
+                                    </Swiper>) : (
+
+                                    readingTimeData.map((data, index) => {
+                                        const cellClassName = `header-cell ${getCellClassName(data.date)}`;
+                                        const tabContent = formatDateDDMMWithDayOfWeek(data.date);
+                                        return (
+                                            <div
+                                                key={index}
+                                                className={`tab-header ${cellClassName} ${selectedTab === index ? 'active' : ''}`}
+                                                onClick={() => handleTabClick(index)}
+                                            >
+                                                {tabContent}
+                                            </div>
+                                        );
+                                    })
+
+
+                                )}
                             </div>
                             <div className="tab-content">
                                 {selectedTab !== null && (
@@ -123,7 +181,7 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                                         {formatDateDDMM(readingTimeData[selectedTab].date) === formatDateDDMM(new Date()) ? (
                                             <CountdownReading currentlyReadingBooks={currentlyReadingBooks} screenTimeInSeconds={screenTimeInSeconds} isLoadingBooks={isLoadingBooks} />
                                         ) : (
-                                            <div>
+                                            <div className="tab-panel__information">
                                                 <p>Your screen time  for the day {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].screenTimeInSeconds)}</p>
                                                 <p>Reading goal for the day {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].totalReadingGoalForTheDay)}</p>
                                                 <p>Time you have spent reading {convertSecondsToHoursMinutesSeconds(readingTimeData[selectedTab].timeInSecondsForTheDayReading)}</p>
@@ -134,6 +192,7 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                                 )}
                             </div>
                         </div>
+                        {/* <PlaylistReading /> */}
                     </div>
                 )}
             </main>

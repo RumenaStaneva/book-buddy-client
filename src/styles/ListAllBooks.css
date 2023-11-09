@@ -1,5 +1,25 @@
-.books__list-all {
-    padding: 0 40px 40px;
+.books__list-all .no-content {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.books__list-all .no-content h1 {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.books__list-all .books-colorful__container .book-colorful {
+    /* min-height: 325px;
+    min-width: 395px;
+    margin: 0 50px 60px 0;
+    flex: 0 0 30%;
+    align-items: center; */
+    padding: 0;
+    position: relative;
 }
 
 .heading-section {
@@ -18,14 +38,22 @@
 
 .books-colorful__container {
     justify-content: center;
+    padding-top: 20px;
 }
 
 .book-colorful {
     display: flex;
-    flex: 0 0 33%;
+    /* flex: 0 0 33.33%; */
     white-space: break-spaces;
     margin: 30px 16px;
     padding: 30px 35px;
+    border-radius: 32px;
+}
+
+.books-colorful__container .book-colorful {
+    width: unset;
+    display: flex;
+    margin: 0 60px 40px 0;
     border-radius: 32px;
 }
 
@@ -34,9 +62,9 @@
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.2s;
-    transform: translate(0, -64px);
-    animation: zoomin 0.5s;
-    max-width: 128px;
+    transform: translate(0, -25px);
+    width: 100%;
+    max-width: 165px;
     height: 100%;
     max-height: 250px;
 }
@@ -48,7 +76,7 @@
 
 .book-colorful__image:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
-    transform: translate(0, -64px) scale(1.1);
+    /* transform: translate(0, -64px) scale(1.1); */
 }
 
 .books__list-all .book__title {
@@ -83,8 +111,15 @@
     justify-content: space-between;
 }
 
-.books__list-all .book__action-area {
+/* .books__list-all .book__action-area {
     flex-direction: row;
+} */
+.books__list-all .book__action-area .cta-btn {
+    margin: auto;
+}
+
+.books__list-all .details__additional-info {
+    margin-bottom: 30px;
 }
 
 .book__action-area .cta-btn {
@@ -123,6 +158,10 @@
     margin-bottom: 15px;
 }
 
+.modal-body__book-shelf+.dropdown .dropdown-options {
+    max-height: 76px;
+}
+
 .change-shelf-modal__body .dropdown {
     max-width: unset;
 }
@@ -140,7 +179,7 @@
 
 .pagination-button {
     padding: 8px 16px;
-    background-color: #27ADBA;
+    background-color: #D92868;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -149,7 +188,7 @@
 }
 
 .pagination-button:hover {
-    background-color: #5E81AC;
+    background-color: #a21f4f;
 }
 
 .pagination-text {
@@ -158,14 +197,242 @@
     color: #111;
 }
 
+.filter-btn__container {
+    position: relative;
+    /* max-width: 1577px; */
+}
+
+.filter-btn {
+    position: absolute;
+    right: 0;
+    left: auto;
+    top: -37px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.filters__container {
+    display: flex;
+}
+
+.search-term__container {
+    display: flex;
+    max-width: 600px;
+    width: 100%;
+    margin-right: 15px;
+    position: relative;
+}
+
+.search-term__container form {
+    width: 100%;
+    position: relative;
+    height: max-content;
+}
+
+.search-term__container input {
+    min-width: 500px;
+    width: 100%;
+    padding: 10px 30px 10px 10px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+}
+
+.search-term__container .search-query-btn {
+    position: absolute;
+    right: 10px;
+    left: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.search-term__container .search-query-btn svg {
+    width: 17px;
+    height: 17px;
+}
+
+/* .category-limit__container {
+    width: 100%;
+    align-items: center;
+} */
+
+.category-filter__container {
+    min-width: 240px;
+    margin-right: 5px;
+    position: relative;
+}
+
+.category-filter__container .dropdown {
+    margin-bottom: 0;
+}
+
+.clear-filter-button {
+    position: absolute;
+    top: -27px;
+    right: 0;
+    left: auto;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.clear-filter-button svg {
+    width: 25px;
+    height: 25px;
+    fill: #a21f4f;
+}
+
+.search-term__container .clear-filter-button {
+    left: 0;
+    right: auto;
+}
+
+.limits__container {
+    min-width: 60px;
+    width: 100%;
+}
+
+.limits__container .dropdown {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .books__list-all .books-colorful__container .book__button {
+        height: 600px;
+    }
+
+    .book-colorful__image {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 991px) {
+    .search-term__container input {
+        min-width: unset;
+    }
+
+    .category-filter__container .dropdown {
+        max-width: 240px;
+    }
+
+    .search-term__container {
+        max-width: 60%;
+    }
+
+    .category-limit__container {
+        max-width: 40%;
+    }
+}
+
+@media (max-width: 807px) {
+    .books__list-all .books-colorful__container .book__button {
+        height: 345px;
+    }
+
+    .books-colorful__container .book-colorful {
+        width: 100%;
+    }
+
+}
+
 @media (max-width: 768px) {
+    .heading-section {
+        justify-content: center;
+    }
+
+    .books__list-all .books-colorful__container .book-colorful {
+        margin-right: 0;
+    }
+
+    .category-filter__container {
+        margin-right: 0;
+    }
+
     .books__list-all .book {
         flex: 0 0 50%;
+    }
+
+    .search-term__container {
+        max-width: 100%;
+        margin-right: 0;
+        margin-bottom: 45px;
+    }
+
+    .filters__container {
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+
+    .category-limit__container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .category-filter__container {
+        width: 100%;
+    }
+
+    .category-filter__container .dropdown,
+    .limits__container .dropdown {
+        max-width: unset;
+        width: 100%;
+    }
+
+    .limits__container {
+        width: 20%;
     }
 }
 
 @media (max-width: 576px) {
+
+    .books__library .book-colorful__image {
+        margin-right: 5px;
+    }
+
     .books__list-all .book {
         flex: 0 0 100%;
+    }
+
+    .books-colorful__container .book__button {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .book-colorful {
+        flex: 0 0 100%;
+        margin: 40px 0;
+    }
+
+    .details__additional-info {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .book__all-pages {
+        margin-right: 0;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+
+    .details__additional-info .book__action-area {
+        align-items: center;
+    }
+
+    .shelf-header::after {
+        width: calc(100% + 32px);
+    }
+
+    .books__list-all .books-colorful__container .book__button {
+        height: 630px;
     }
 }

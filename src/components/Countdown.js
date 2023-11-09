@@ -13,6 +13,7 @@ import '../styles/Countdown.css'
 import { useAuthContext } from '../hooks/useAuthContext';
 import { clearError, setError } from '../reducers/errorSlice';
 import Error from './Error';
+import PlaylistReading from "./PlaylistReading";
 
 
 
@@ -33,6 +34,15 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     const [playStartSound] = useSound(startSfx);
     const [playStopSound] = useSound(stopSfx);
     const [playEndSound] = useSound(endSfx);
+
+    useEffect(() => {
+        if (screenTimeSeconds === 0 && timeInSecondsForTheDayReading === 0) {
+            dispatch(setTimerMode('increment'));
+        } else {
+            dispatch(setTimerMode('decrement'));
+
+        }
+    }, [dispatch, screenTimeSeconds, timeInSecondsForTheDayReading])
 
     const updateTimer = useCallback(() => {
         if (timerActive && timeLeft > 0) {
@@ -62,7 +72,6 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
         return () => clearInterval(timerInterval);
     }, [updateTimer]);
 
-
     useEffect(() => {
         setTimeLeft(timeInSecondsLeftForAchievingReadingGoal);
     }, [timeInSecondsLeftForAchievingReadingGoal]);
@@ -75,7 +84,6 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
     useEffect(() => {
         if (timerFinished) {
             dispatch(setTimeInSecondsLeftForAchievingReadingGoal(0));
-            // uncomment?
             dispatch(updateReadingDataInDatabase({ date: dateToday, totalReadingGoalForTheDay, timeInSecondsForTheDayReading: timePassed, user, currentlyReadingBook }));
             setTimeLeft(0);
             setTimerActive(false);
@@ -89,13 +97,24 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
         }
     }, [dispatch, goalAchievedForTheDay])
 
-
-    const formatTime = (time) => {
+    const formatTimeWithSeconds = (time) => {
         const hours = Math.floor(time / 3600);
         const minutes = Math.floor((time % 3600) / 60);
         const seconds = time % 60;
 
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        return (
+            <span>
+                <span className="countdown-part">{hours.toString().padStart(2, '0')}</span>:
+                <span className="countdown-part">{minutes.toString().padStart(2, '0')}</span>:
+                <span className="countdown-part countdown-seconds">{seconds.toString().padStart(2, '0')}</span>
+            </span>
+        );
+    };
+    const formatTime = (time) => {
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor((time % 3600) / 60);
+
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     };
 
     const startTimer = () => {
@@ -122,7 +141,10 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
             }))
         }
         dispatch(setTimerStarted(false));
-        setUpdateProgressModalIsOpen(true);
+        if (currentlyReadingBook) {
+            setUpdateProgressModalIsOpen(true);
+            document.body.style.overflow = 'hidden';
+        }
         setTimerActive(false);
     };
 
@@ -157,17 +179,21 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
             <div className="countdown-container">
                 {updateProgressModalIsOpen && <UpdateBookProgressModal setIsOpen={setUpdateProgressModalIsOpen} timerFinished={timerFinished} />}
 
-                {timerFinished ? (
+                {timerFinished && timeInSecondsForTheDayReading > 0 ? (
                     <h2 className="countdown-message">Countdown Timer has finished!</h2>
                 ) : (
 
                     timerMode === "decrement" ?
-                        <h2 className="countdown-message">{timerStarted ? `Countdown: ${formatTime(timeLeft)}` : `Time left: ${formatTime(timeLeft)}`}</h2>
+                        timerStarted ?
+                            <h2 className="countdown-message countdown-part">{formatTimeWithSeconds(timeLeft)}</h2>
+                            :
+                            <h2 className="countdown-message countdown-part">{formatTime(timeLeft)}</h2>
+
                         :
                         timerStarted ?
-                            <h2 className="countdown-message">{formatTime(timePassed - totalReadingGoalForTheDay)}</h2>
+                            <h2 className="countdown-message countdown-part">{formatTimeWithSeconds(timePassed - totalReadingGoalForTheDay)}</h2>
                             :
-                            <h2 className="countdown-message">Time passed: {formatTime(timePassed - totalReadingGoalForTheDay)}</h2>
+                            <h2 className="countdown-message">Time passed: {formatTimeWithSeconds(timePassed - totalReadingGoalForTheDay)}</h2>
 
                 )}
 
@@ -177,50 +203,6 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                     </Button>
                 ) : (
                     <>
-                        {!timerStarted && !goalAchievedForTheDay &&
-                            <div className="goal-section">
-                                <p>Is your goal for today too high?</p>
-                                <Button className="cta-btn" onClick={() => {
-                                    setIsChangeGoalVisible(!isChangeGoalVisible);
-                                    dispatch(clearError());
-                                }}>Adjust Goal</Button>
-                            </div>
-                        }
-
-                        {isChangeGoalVisible && !goalAchievedForTheDay &&
-                            <div className="goal-section">
-                                <p>Choose an achievable goal:</p>
-                                <div className='d-flex'>
-                                    <div className='goal__subsection'>
-                                        <p>Screen time spent last week:</p>
-                                        <Button className="goal-button" onClick={() => changeTime(screenTimeSeconds)}>{formatTime(screenTimeSeconds)}</Button>
-                                    </div>
-                                    <div className='goal__subsection'>
-                                        <p>Your weekly average:</p>
-                                        <Button className="goal-button" onClick={() => changeTime(weeklyGoalAveragePerDay)}>{formatTime(weeklyGoalAveragePerDay)}</Button>
-                                    </div>
-                                    <div className='goal__subsection'>
-                                        <p>Add custom reading time:</p>
-                                        <Cleave
-                                            ref={cleaveInputRef}
-                                            className="goal-input"
-                                            options={{ time: true, timePattern: ['h', 'm'] }}
-                                            placeholder="Enter time in HH:MM format"
-                                            value={formattedTime}
-                                            onChange={(e) => setFormattedTime(e.target.value)}
-
-                                        />
-                                        <Button onClick={() => {
-                                            const timeArray = formattedTime.split(':');
-                                            const hours = parseInt(timeArray[0]) || 0;
-                                            const minutes = parseInt(timeArray[1]) || 0;
-                                            const seconds = (hours * 3600) + (minutes * 60);
-                                            changeTime(seconds);
-                                        }}>Set</Button>
-                                    </div>
-                                </div>
-                            </div>
-                        }
                         {!isChangeGoalVisible &&
                             <div className="countdown__action-buttons d-flex">
                                 <Button disabled={timerStarted} onClick={startTimer} className="cta-btn">
@@ -233,8 +215,62 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                         }
 
                         {!timerStarted &&
-                            <p className="time-info">Reading time achieved: {formatTime(timeInSecondsForTheDayReading)}</p>
+                            <div className="d-flex goal-reading-time__container">
+                                <p>Reading goal for the day: {formatTimeWithSeconds(totalReadingGoalForTheDay)}</p>
+
+                                <p className="time-info">Reading time achieved: {formatTimeWithSeconds(timeInSecondsForTheDayReading)}</p>
+                            </div>
                         }
+
+                        {!timerStarted && !goalAchievedForTheDay &&
+                            <div className="goal-section">
+                                <p>Is your goal for today too high?</p>
+                                <Button className="cta-btn btn-sm" onClick={() => {
+                                    setIsChangeGoalVisible(!isChangeGoalVisible);
+                                    dispatch(clearError());
+                                }}>Adjust Goal</Button>
+                            </div>
+                        }
+
+                        {isChangeGoalVisible && !goalAchievedForTheDay &&
+                            <div className="goal-section adjust-goal">
+                                <p className='adjust-goal-label'>Choose an achievable goal:</p>
+                                <div className='d-flex'>
+                                    <div className='goal__subsection'>
+                                        <p>Screen time spent last week:</p>
+                                        <Button className="goal-button countdown-part" onClick={() => changeTime(screenTimeSeconds)}>{formatTime(screenTimeSeconds)}</Button>
+                                    </div>
+                                    <div className='goal__subsection'>
+                                        <p>Your weekly average:</p>
+                                        <Button className="goal-button countdown-part" onClick={() => changeTime(weeklyGoalAveragePerDay)}>{formatTime(weeklyGoalAveragePerDay)}</Button>
+                                    </div>
+                                    <div className='goal__subsection'>
+                                        <p>Add custom reading time:</p>
+                                        <Cleave
+                                            ref={cleaveInputRef}
+                                            className="goal-input countdown-part"
+                                            options={{ time: true, timePattern: ['h', 'm'] }}
+                                            placeholder="HH:MM"
+                                            value={formattedTime}
+                                            onChange={(e) => setFormattedTime(e.target.value)}
+
+                                        />
+                                        <Button
+                                            className="cta-btn btn-sm"
+                                            onClick={() => {
+                                                const timeArray = formattedTime.split(':');
+                                                const hours = parseInt(timeArray[0]) || 0;
+                                                const minutes = parseInt(timeArray[1]) || 0;
+                                                const seconds = (hours * 3600) + (minutes * 60);
+                                                changeTime(seconds);
+                                            }}>Set</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <PlaylistReading />
+
                     </>
                 )}
             </div>

@@ -1,5 +1,5 @@
 import '../styles/Modal.css'
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useDispatch } from "react-redux";
@@ -8,16 +8,19 @@ import BookCategories from "../constants/bookCategories";
 import Button from "./Button";
 import Modal from './Dialog'
 import Error from './Error'
+import Spinner from 'react-spinner-material';
+import { NavLink } from 'react-router-dom';
 
 const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     const [shelf, setShelf] = useState(null);
     const [category, setCategory] = useState(null);
     const [bookToAdd, setBookToAdd] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [updatedDescription, setUpdatedDescription] = useState(bookDetails.description);
     const [updatedThumbnail, setUpdatedThumbnail] = useState(bookDetails.thumbnail);
     const [updatedPageCount, setUpdatedPageCount] = useState(bookDetails.pageCount);
+    const [loginVisivble, setLoginVisible] = useState(false);
     const { user } = useAuthContext();
-    const errorRef = useRef(null);
     const shelfOptions = [
         { value: 0, label: 'Want to read' },
         { value: 1, label: 'Currently reading' },
@@ -32,13 +35,15 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
         }
     };
+
     const handleSubmit = (e) => {
+        setIsLoading(true);
+        dispatchError(clearError());
         e.preventDefault();
         if (!user) {
             dispatchError(setError({ message: 'You have to be logged in to add books!' }));
-            setTimeout(() => {
-                executeScroll();
-            }, 10);
+            setLoginVisible(true);
+            setIsLoading(false);
             return;
         }
         const { bookApiId,
@@ -61,15 +66,6 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             shelf: shelf
         });
     };
-    const executeScroll = () => {
-        if (errorRef.current) {
-            errorRef.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start',
-                inline: 'nearest',
-            });
-        }
-    };
     useEffect(() => {
         const addBookToShelf = async () => {
             try {
@@ -87,7 +83,6 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                     formData.append('progress', 0);
                     formData.append('shelf', shelf);
 
-                    // Append the image file if it exists
                     if (updatedThumbnail) {
                         formData.append('thumbnail', updatedThumbnail);
                     }
@@ -95,35 +90,35 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                         method: 'POST',
                         body: formData,
                         headers: {
-                            // 'Content-Type': 'application/json',
                             'Authorization': `Bearer ${user.token}`
                         },
                     });
 
                     if (!response.ok) {
                         const data = await response.json();
+                        dispatchError(setError({ message: data.error }));
+                        setIsLoading(false);
                         throw new window.Error(data.error);
                     }
-
                     dispatchError(clearError());
                     setIsOpen(false);
+                    document.body.style.overflow = 'visible';
+
                     onBookAdded(bookToAdd.title);
+                    setIsLoading(false);
+
                 }
             } catch (error) {
+                // console.log(error);
                 dispatchError(setError({ message: error.message }));
-                if (errorRef.current) {
-                    errorRef.current.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                    });
-                }
+                setIsLoading(false);
             }
         };
 
         addBookToShelf();
 
         setBookToAdd(null);
-    }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError, errorRef]);
+    }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError, bookDetails.authors, bookDetails.bookApiId, bookDetails.publisher, bookDetails.title, category, shelf, updatedDescription, updatedPageCount, updatedThumbnail]);
 
     const handleThumbnailUpload = (e) => {
         const file = e.target.files[0];
@@ -190,38 +185,61 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             setIsOpen={setIsOpen}
             content={
                 <>
-                    <Error ref={errorRef} />
                     <form onSubmit={handleSubmit} className="add-book__form">
-                        <div className="modal__section">
-                            <label htmlFor="thumbnail">Thumbnail</label>
-                            <img src={updatedThumbnail !== null ? updatedThumbnail : require('../images/image-not-available.png')} alt={bookDetails.title} width={250} />
-                        </div>
-                        <div className="modal__section">
-                            <label htmlFor="description">Description</label>
-                            <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={(e) => setUpdatedDescription(e.target.value)}></textarea>
-                        </div>
-                        <div className="modal__section">
-                            <label htmlFor="pageCount">Book Pages</label>
-                            <input type="number" name="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
-                        </div>
-                        <div className="modal__section">
-                            <label htmlFor="bookImage">Book image</label>
-                            <input type="file" accept="image/*" onChange={handleThumbnailUpload} />
-                        </div>
-                        <div className="modal__section">
-                            <Dropdown
-                                options={shelfOptions.map(option => option.label)}
-                                onSelect={handleOptionSelect}
-                                selectedOption={shelf !== null ? shelfOptions.find(option => option.value === shelf).label : null}
-                            />
-                        </div>
-                        <div className="modal__section">
-                            <Dropdown options={Object.values(BookCategories)} onSelect={(selectedCategory) => setCategory(selectedCategory)} selectedOption={category !== null ? category : null} />
-                        </div>
-                        <Button type="submit" className="cta-button">
-                            Add Book
-                        </Button>
-                    </form>
+                        <>
+                            <div className={`add-book-form__container `}>
+                                <div className="modal__section-image-container">
+                                    <div className="modal__section">
+                                        <label htmlFor="thumbnail" className='d-none'>Thumbnail</label>
+                                        <img src={updatedThumbnail !== null ? updatedThumbnail : 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'} alt={bookDetails.title} width={300} />
+                                    </div>
+                                </div>
+                                <div className="modal__section-content-container">
+                                    <div className="modal__section modal__section-left-align">
+                                        <label htmlFor="description">Description</label>
+                                        <textarea name="description" id="description" cols="10" rows="5" value={updatedDescription} onChange={(e) => setUpdatedDescription(e.target.value)}></textarea>
+                                    </div>
+                                    <div className="modal__section book-pages-section modal__section-left-align">
+                                        <label htmlFor="pageCount">Book Pages</label>
+                                        <input type="number" id="pageCount" value={updatedPageCount} onChange={(e) => setUpdatedPageCount(e.target.value)} />
+                                    </div>
+                                    <div className="modal__section upload-image-section">
+                                        <span>Change book thumbnail</span>
+                                        <label htmlFor="bookImage" className='cta-btn upload-btn'>Book image</label>
+                                        <input id='bookImage' name='bookImage' type="file" accept="image/*" onChange={handleThumbnailUpload} />
+                                    </div>
+                                    <div className="modal__section modal__section-left-align">
+                                        <label htmlFor="dropdown-shelf">Choose Book Status</label>
+                                        <Dropdown
+                                            id={'dropdown-shelf'}
+                                            options={shelfOptions.map(option => option.label)}
+                                            onSelect={handleOptionSelect}
+                                            selectedOption={shelf !== null ? shelfOptions.find(option => option.value === shelf).label : null}
+                                        />
+                                    </div>
+                                    <div className="modal__section modal__section-left-align">
+                                        <label htmlFor="dropdown-shelf">Choose Book Category</label>
+                                        <Dropdown id={'dropdown-category'} options={Object.values(BookCategories)} onSelect={(selectedCategory) => setCategory(selectedCategory)} selectedOption={category !== null ? category : null} />
+                                    </div>
+                                </div>
+                            </div>
+                            <Error />
+                            {
+                                loginVisivble ?
+                                    <NavLink to="/users/login">
+                                        < Button className="cta-button">
+                                            {isLoading ?
+                                                <Spinner radius={10} color={"#fff"} stroke={2} visible={true} /> : 'Login'}
+                                        </Button>
+                                    </NavLink>
+                                    :
+                                    <Button type="submit" className="cta-button" aria-label="Add Book">
+                                        {isLoading ?
+                                            <Spinner radius={10} color={"#fff"} stroke={2} visible={true} /> : 'Add Book'}
+                                    </Button>
+                            }
+                        </>
+                    </form >
 
                 </>
             }

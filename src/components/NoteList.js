@@ -8,6 +8,7 @@ import Button from './Button';
 import Error from './Error';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
+import { VscSend } from "react-icons/vsc";
 
 
 const NotesList = ({ bookDetails }) => {
@@ -170,22 +171,8 @@ const NotesList = ({ bookDetails }) => {
 
     return (
         <>
-            {notesIsVisible ? null :
-                <Button className='cta-btn' onClick={() => setNotesIsVisible(true)}>Create note for this book</Button>
-            }
-            {notesIsVisible ?
-                <div className='notes__add-form'>
-                    <div className='notes__inner'>
-                        <label className='notes__add-label' htmlFor="addNote">Create note for this book: </label>
-                        <MdOutlineCancel onClick={() => setNotesIsVisible(false)} />
-                    </div>
-                    <Error />
-                    <textarea className='notes__add-textarea' name="addNote" id="addNote" cols="100" rows="10" onChange={(e) => setNote(e.target.value)}></textarea>
-                    <Button className='cta-btn' onClick={() => handleAddNote()}>Add note</Button>
-                </div>
-                : null}
-            <div>
-                <p className='notes__header'>Book Notes</p>
+            <p className='notes__header'>Book Notes</p>
+            <div className='notes__message-container'>
                 {notes.length > 0 ?
                     <div className="notes__list-container"
                         onScroll={handleScroll}>
@@ -203,7 +190,9 @@ const NotesList = ({ bookDetails }) => {
                                     </div>
                                 ) : (
                                     <div className='notes__item' key={note._id}>
-                                        {note.noteText}
+                                        <div className='notes-item__container'>
+                                            {note.noteText}
+                                        </div>
                                         <div className='note__actions'>
                                             <AiFillEdit className='edit-note' onClick={() => handleEditNote(note._id, note.noteText)} />
                                             <AiOutlineDelete className='delete-note' onClick={() => handleDeleteNote(note._id)} />
@@ -217,7 +206,7 @@ const NotesList = ({ bookDetails }) => {
                                 hasMore={hasMoreNotes}
                                 height={100}
                                 loader={<Spinner />}
-                                endMessage={<p>No more notes</p>}
+                                className='notes-infinite-scroll'
                             ></InfiniteScroll>
                         </div>
                     </div>
@@ -225,7 +214,21 @@ const NotesList = ({ bookDetails }) => {
                         <p>No notes yet for this book</p>
                     </div>
                 }
+                {/* {notesIsVisible ? null :
+                    <Button className='cta-btn' onClick={() => setNotesIsVisible(true)}>Add note</Button>
+                } */}
             </div>
+            {/* {notesIsVisible ? */}
+            <div className='notes__add-form'>
+                {/* <div className='notes__inner'>
+                    <label className='notes__add-label' htmlFor="addNote">Add note: </label>
+                    <MdOutlineCancel onClick={() => setNotesIsVisible(false)} />
+                </div> */}
+                <Error />
+                <textarea className='notes__add-textarea' name="addNote" id="addNote" rows="3" onChange={(e) => setNote(e.target.value)}></textarea>
+                <Button className='cta-btn' onClick={() => handleAddNote()}><VscSend /></Button>
+            </div>
+            {/* : null} */}
         </>
     );
 };
