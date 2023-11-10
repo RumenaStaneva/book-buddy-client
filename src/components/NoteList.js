@@ -16,7 +16,6 @@ const NotesList = ({ bookDetails }) => {
     const bookId = bookDetails._id;
     const [editedNoteId, setEditedNoteId] = useState(null);
     const [editNoteVisible, setEditNoteVisible] = useState(false);
-    const [notesIsVisible, setNotesIsVisible] = useState(false);
     const [editedNoteText, setEditedNoteText] = useState('');
     const [note, setNote] = useState('');
     const [notes, setNotes] = useState([]);
@@ -41,7 +40,6 @@ const NotesList = ({ bookDetails }) => {
             })
             await response.json();
             dispatchError(clearError());
-            setNotesIsVisible(false);
             if (notes.length < 10) {
                 fetchNotes();
                 setHasMoreNotes(false);
@@ -214,21 +212,12 @@ const NotesList = ({ bookDetails }) => {
                         <p>No notes yet for this book</p>
                     </div>
                 }
-                {/* {notesIsVisible ? null :
-                    <Button className='cta-btn' onClick={() => setNotesIsVisible(true)}>Add note</Button>
-                } */}
             </div>
-            {/* {notesIsVisible ? */}
             <div className='notes__add-form'>
-                {/* <div className='notes__inner'>
-                    <label className='notes__add-label' htmlFor="addNote">Add note: </label>
-                    <MdOutlineCancel onClick={() => setNotesIsVisible(false)} />
-                </div> */}
                 <Error />
                 <textarea className='notes__add-textarea' name="addNote" id="addNote" rows="3" onChange={(e) => setNote(e.target.value)}></textarea>
                 <Button className='cta-btn' onClick={() => handleAddNote()}><VscSend /></Button>
             </div>
-            {/* : null} */}
         </>
     );
 };

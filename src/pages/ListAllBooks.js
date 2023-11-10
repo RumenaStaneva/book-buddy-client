@@ -10,10 +10,9 @@ import Button from "../components/Button";
 import '../styles/ListAllBooks.css'
 import Error from "../components/Error";
 import { useSelector, useDispatch } from 'react-redux';
-import { setCategory, setSearchQuery, setLimit } from '../reducers/filtersSlice';
+import { setCategory, setSearchQuery } from '../reducers/filtersSlice';
 import { clearError, setError } from "../reducers/errorSlice";
 import { BsSearch } from "react-icons/bs";
-import { BsFilterCircle, BsFillFilterCircleFill } from "react-icons/bs";
 import LibraryBook from "../components/LibraryBook";
 import { motion } from "framer-motion"
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -34,7 +33,6 @@ function ListAllBooks() {
     const query = useSelector((state) => state.filters.query);
     const category = useSelector((state) => state.filters.category);
     const limit = useSelector((state) => state.filters.limit);
-    const [filterVisible, setFilterVisible] = useState(false);
     // const [isHovered, setIsHovered] = useState(false);
     const dispatch = useDispatch();
 

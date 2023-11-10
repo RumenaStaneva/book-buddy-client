@@ -12,13 +12,13 @@ const render = () => {
   root.render(
     <AuthContextProvider>
       <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENTID}>
-        {/* <React.StrictMode> */}
-        <BrowserRouter>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </BrowserRouter>
-        {/* </React.StrictMode> */}
+        <React.StrictMode>
+          <BrowserRouter>
+            <Provider store={store}>
+              <App />
+            </Provider>
+          </BrowserRouter>
+        </React.StrictMode>
       </GoogleOAuthProvider>
     </AuthContextProvider>
   );
