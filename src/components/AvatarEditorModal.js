@@ -5,6 +5,7 @@ import { setError, clearError } from '../reducers/errorSlice';
 import Modal from './Dialog'
 import Spinner from 'react-spinner-material';
 import AvatarEditor from 'react-avatar-editor';
+import { REACT_APP_LOCAL_HOST } from '../functions';
 
 const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale, setEncodedImage, isLoading, setIsLoading, editor }) => {
     const { user, dispatch } = useAuthContext();
@@ -22,7 +23,7 @@ const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale
             formData.append('profilePicture', dataUrl);
 
             try {
-                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/upload-profile-picture`, {
+                const response = await fetch(`${REACT_APP_LOCAL_HOST}/users/upload-profile-picture`, {
                     method: "POST",
                     headers: {
                         Authorization: `Bearer ${user.token}`,

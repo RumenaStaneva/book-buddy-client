@@ -6,12 +6,13 @@ import { AuthContextProvider } from './context/AuthContext';
 import { Provider } from 'react-redux';
 import store from './store';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { REACT_APP_CLIENTID } from './functions';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const render = () => {
   root.render(
     <AuthContextProvider>
-      <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENTID}>
+      <GoogleOAuthProvider clientId={REACT_APP_CLIENTID}>
         <React.StrictMode>
           <BrowserRouter>
             <Provider store={store}>

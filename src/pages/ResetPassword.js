@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { REACT_APP_LOCAL_HOST } from '../functions';
 
 const ResetPassword = () => {
     const { token } = useParams();
@@ -24,7 +25,7 @@ const ResetPassword = () => {
         }
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/reset-password/${token}`, {
+            const response = await fetch(`${REACT_APP_LOCAL_HOST}/users/reset-password/${token}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

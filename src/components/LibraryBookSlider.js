@@ -10,7 +10,7 @@ import '../styles/LibraryBook.css'
 import { useDispatch } from "react-redux";
 import { fetchAllBooks, calculateProgress } from '../reducers/booksSlice';
 import { clearError, setError } from '../reducers/errorSlice';
-
+import { REACT_APP_LOCAL_HOST } from '../functions';
 
 function LibraryBookSlider({ book, handleSuccessMessage }) {
     const [inputVisible, setInputVisible] = useState(false);
@@ -21,7 +21,6 @@ function LibraryBookSlider({ book, handleSuccessMessage }) {
     const dispatchError = useDispatch();
     const bookTotalPages = book.pageCount;
 
-
     const updateProgress = async (currentBook, bookRead) => {
         try {
             const mutableBook = { ...currentBook };
@@ -30,7 +29,7 @@ function LibraryBookSlider({ book, handleSuccessMessage }) {
             } else {
                 mutableBook.progress = parseInt(bookPageProgress);
             }
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
+            const response = await fetch(`${REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

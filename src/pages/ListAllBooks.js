@@ -16,9 +16,7 @@ import { BsSearch } from "react-icons/bs";
 import LibraryBook from "../components/LibraryBook";
 import { motion } from "framer-motion"
 import { AiOutlineCloseCircle } from "react-icons/ai";
-
-
-
+import { REACT_APP_LOCAL_HOST } from "../functions";
 
 function ListAllBooks() {
     const location = useLocation();
@@ -55,7 +53,7 @@ function ListAllBooks() {
         async () => {
             setIsLoading(true);
             try {
-                let url = `${process.env.REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`;
+                let url = `${REACT_APP_LOCAL_HOST}/books/see-all?shelf=${shelfNum}&page=${page}&limit=${limit}`;
 
                 if (category !== '') {
                     url += `&category=${category}`;

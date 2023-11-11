@@ -15,7 +15,7 @@ import { setError, clearError } from '../reducers/errorSlice';
 import { GiBookmarklet } from "react-icons/gi";
 import { AiOutlineDelete } from 'react-icons/ai';
 import ConformationModal from '../components/ConformationModal';
-
+import { REACT_APP_LOCAL_HOST } from '../functions';
 
 
 function BookDetails() {
@@ -38,7 +38,7 @@ function BookDetails() {
   const fetchBook = useCallback(
     async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/book-details?bookId=${params.bookId}`, {
+        const response = await fetch(`${REACT_APP_LOCAL_HOST}/books/book-details?bookId=${params.bookId}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

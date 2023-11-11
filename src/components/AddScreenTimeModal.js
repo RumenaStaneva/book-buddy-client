@@ -11,7 +11,7 @@ import Error from './Error'
 import ConfirmationDialog from './ConfirmationDialog';
 import { fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse } from 'date-fns';
-
+import { REACT_APP_LOCAL_HOST } from '../functions';
 
 const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
     const [screenTimeData, setScreenTimeData] = useState(Array(7).fill({ date: '', time: '00:00' }));
@@ -38,7 +38,7 @@ const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
                 const datesFromLastWeek = eachDayOfInterval({ start: lastWeekStart, end: lastWeekEnd });
                 setDatesFromLastWeek(datesFromLastWeek);
 
-                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/week-dates`, {
+                const response = await fetch(`${REACT_APP_LOCAL_HOST}/time-swap/week-dates`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
                     timeInSeconds: convertToSeconds(item.time, index)
                 }
             });
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/save-time`, {
+            const response = await fetch(`${REACT_APP_LOCAL_HOST}/time-swap/save-time`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

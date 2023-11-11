@@ -6,6 +6,7 @@ import { setError } from '../reducers/errorSlice';
 import Button from "./Button";
 import Modal from './Dialog'
 import Error from "./Error";
+import { REACT_APP_LOCAL_HOST } from '../functions';
 
 const ConformationModal = ({ bookId, setIsOpen }) => {
     const dispatchError = useDispatch();
@@ -14,7 +15,7 @@ const ConformationModal = ({ bookId, setIsOpen }) => {
 
     const deleteBook = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/delete-book?bookId=${bookId}`, {
+            const response = await fetch(`${REACT_APP_LOCAL_HOST}/books/delete-book?bookId=${bookId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

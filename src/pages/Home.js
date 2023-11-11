@@ -10,7 +10,7 @@ import Navigation from '../components/NavBar';
 import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
 import { IoIosClose } from 'react-icons/io'
-
+import { REACT_APP_LOCAL_HOST } from '../functions';
 
 function Home() {
 
@@ -50,7 +50,7 @@ function Home() {
     const fetchData = useCallback(async (page, title) => {
         setLoading(true);
         try {
-            const url = `${process.env.REACT_APP_LOCAL_HOST}/api/search-book-title`;
+            const url = `${REACT_APP_LOCAL_HOST}/api/search-book-title`;
             const response = await axios.post(
                 url,
                 { title: title, startIndex: (page - 1) * PAGE_SIZE, maxResults: PAGE_SIZE },

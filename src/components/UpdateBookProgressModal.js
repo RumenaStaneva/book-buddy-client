@@ -9,7 +9,7 @@ import Modal from './Dialog'
 import Error from "./Error";
 import { setCurrentlyReadingBook, setSuccessMessage } from '../reducers/timerSlice';
 import { fetchAllBooks } from '../reducers/booksSlice';
-
+import { REACT_APP_LOCAL_HOST } from '../functions';
 
 const UpdateBookProgressModal = ({ setIsOpen }) => {
     const { currentlyReadingBook } = useSelector((state) => state.timer)
@@ -30,7 +30,7 @@ const UpdateBookProgressModal = ({ setIsOpen }) => {
             }
             // console.log('updateBook', updatedBook);
 
-            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
+            const response = await fetch(`${REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
