@@ -191,6 +191,25 @@ body {
     justify-content: center;
 }
 
+.password-requirements {
+    margin-top: 8px;
+}
+
+.password-requirements p {
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+.password-requirements .fulfilled::before {
+    content: '✅ ';
+    color: green;
+}
+
+.password-requirements .unfulfilled::before {
+    content: '❌ ';
+    color: red;
+}
+
 @media (max-width: 1050px) {
     .wrapper {
         padding: 25px;

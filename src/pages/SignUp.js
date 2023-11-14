@@ -21,18 +21,33 @@ function SignUp() {
     const { signup, signUpWithGoogleAuth, isLoading, setIsLoading } = useSignup();
     const dispatchError = useDispatch();
     const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-
-
+    const specialCharacters = "!@#$%^&*()_.?-";
     const handleCaptchaVerify = (response) => {
         setIsCaptchaVerified(true);
     };
 
+    const isPasswordValid = () => {
+        console.log('hehehe');
+        return (
+            password.length >= 8 &&
+            /[A-Z]/.test(password) &&
+            /[a-z]/.test(password) &&
+            /\d/.test(password) &&
+            /[!@#$%^&*()_.?-]/.test(password)
+        );
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         // setIsLoading(true);
+
         if (password !== repeatPassword) {
-            dispatchError(setError({ message: 'Passwords should match' }));
+            dispatchError(setError({ message: 'Passwords should match.' }));
+            setIsLoading(false);
+            return;
+        }
+        if (!isPasswordValid()) {
+            dispatchError(setError({ message: 'Password does not meet all requirements.' }));
             setIsLoading(false);
             return;
         }
@@ -101,6 +116,13 @@ function SignUp() {
                         <div className="form__group">
                             <label htmlFor="password">Password</label>
                             <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <div className="password-requirements">
+                                <p className={password.length >= 8 ? 'fulfilled' : 'unfulfilled'}>At least 8 characters long</p>
+                                <p className={/[A-Z]/.test(password) ? 'fulfilled' : 'unfulfilled'}>Contains at least one uppercase letter</p>
+                                <p className={/[a-z]/.test(password) ? 'fulfilled' : 'unfulfilled'}>Contains at least one lowercase letter</p>
+                                <p className={/\d/.test(password) ? 'fulfilled' : 'unfulfilled'}>Includes at least one numeric digit</p>
+                                <p className={/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password) ? 'fulfilled' : 'unfulfilled'}>{`Includes at least one special character (e.g., ${specialCharacters})`}</p>
+                            </div>
                         </div>
                         <div className="form__group">
                             <label htmlFor="repeat-password">Repeat Password</label>
