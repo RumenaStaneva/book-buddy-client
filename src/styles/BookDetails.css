@@ -274,14 +274,22 @@
 
     .book-card {
         flex-direction: column;
+        width: 100%;
     }
 
     .book-card .book-thumbnail {
         margin-right: 0;
     }
+
+    .notes__container {
+        width: 100%;
+    }
 }
 
 @media (max-width: 576px) {
+    .book-details-container {
+        padding-bottom: 100px;
+    }
 
     .modal__delete-btn,
     .edit-book__icon {
