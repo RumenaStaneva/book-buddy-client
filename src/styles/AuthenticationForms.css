@@ -16,6 +16,14 @@ body {
 
 }
 
+.verification-email-sent-page .wrapper {
+    width: 100%;
+}
+
+.verification-email-sent-page .mask {
+    z-index: -1;
+}
+
 .wrapper:first-of-type {
     padding: 80px 30px;
 
