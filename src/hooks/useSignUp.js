@@ -12,7 +12,7 @@ export const useSignup = () => {
 
     const signup = async (email, password, username) => {
         setIsLoading(true);
-        dispatchError(clearError());
+        // dispatchError(clearError());
 
         const response = await fetch(`${LOCAL_HOST}/users/sign-up`, {
             method: 'POST',
@@ -32,10 +32,8 @@ export const useSignup = () => {
         if (response.ok) {
             setIsLoading(false);
             localStorage.setItem('user', JSON.stringify(json));
-
             dispatch({ type: 'CONFIRMATION_PENDING' });
             setIsLoading(false);
-
         }
     };
 
@@ -50,7 +48,6 @@ export const useSignup = () => {
             });
             if (!response.ok) {
                 const json = await response.json();
-                console.log(json.error);
                 dispatchError(setError({ message: json.error }));
                 return;
             }

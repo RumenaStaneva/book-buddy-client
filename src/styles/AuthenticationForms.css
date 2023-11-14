@@ -233,7 +233,7 @@ body {
 @media (max-width: 576px) {
     .mask {
         top: 0;
-        height: calc(100% + 40px);
+        height: 100%;
     }
 
     .login-form__container form {
