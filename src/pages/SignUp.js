@@ -8,7 +8,7 @@ import '../styles/AuthenticationForms.css'
 import Spinner from 'react-spinner-material';
 import { GoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";
-import { setError, clearError } from '../reducers/errorSlice';
+import { setError } from '../reducers/errorSlice';
 import ReCAPTCHA from "react-google-recaptcha";
 import { REACT_APP_RECAPTCHA_SITE_KEY } from '../functions';
 
@@ -16,7 +16,6 @@ function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
-    const [identicalPassords, setIdenticalPasswords] = useState(true);
     const [username, setUsername] = useState('');
     const [verificationEmailSent, setVerificationEmailSent] = useState(false);
     const { signup, signUpWithGoogleAuth, isLoading, setIsLoading } = useSignup();
@@ -33,7 +32,6 @@ function SignUp() {
         e.preventDefault();
         // setIsLoading(true);
         if (password !== repeatPassword) {
-            setIdenticalPasswords(false);
             dispatchError(setError({ message: 'Passwords should match' }));
             setIsLoading(false);
             return;
@@ -41,7 +39,6 @@ function SignUp() {
         if (isCaptchaVerified) {
             try {
                 await signup(email, password, username);
-                setIdenticalPasswords(true);
                 setEmail('');
                 setPassword('');
                 setRepeatPassword('');
@@ -49,7 +46,6 @@ function SignUp() {
                 setVerificationEmailSent(true);
             } catch (error) {
                 setVerificationEmailSent(false);
-                setIdenticalPasswords(true);
                 setEmail('');
                 setPassword('');
                 setRepeatPassword('');

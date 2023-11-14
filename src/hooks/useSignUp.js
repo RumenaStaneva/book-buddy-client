@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useDispatch } from "react-redux";
-import { setError, clearError } from '../reducers/errorSlice';
+import { setError } from '../reducers/errorSlice';
 import { REACT_APP_LOCAL_HOST } from "../functions";
 
 export const useSignup = () => {
