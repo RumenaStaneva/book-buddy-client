@@ -40,6 +40,7 @@ const NotesList = ({ bookDetails }) => {
             })
             await response.json();
             dispatchError(clearError());
+            setNote('');
             if (notes.length < 10) {
                 fetchNotes();
                 setHasMoreNotes(false);
@@ -64,8 +65,6 @@ const NotesList = ({ bookDetails }) => {
                 const data = await response.json();
                 if (data.notes.length > 0) {
                     setNotes(data.notes);
-                } else {
-
                 }
             } catch (error) {
                 dispatchError(setError({ message: `Error fetching notes data: ${error}` }));
@@ -213,9 +212,9 @@ const NotesList = ({ bookDetails }) => {
                     </div>
                 }
             </div>
+            <Error />
             <div className='notes__add-form'>
-                <Error />
-                <textarea className='notes__add-textarea' name="addNote" id="addNote" rows="3" onChange={(e) => setNote(e.target.value)}></textarea>
+                <textarea className='notes__add-textarea' name="addNote" id="addNote" rows="3" value={note} onChange={(e) => setNote(e.target.value)}></textarea>
                 <Button className='cta-btn' onClick={() => handleAddNote()}><VscSend /></Button>
             </div>
         </>

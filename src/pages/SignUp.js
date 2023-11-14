@@ -31,11 +31,11 @@ function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatchError(clearError());
-        setIsLoading(true);
+        // setIsLoading(true);
         if (password !== repeatPassword) {
             setIdenticalPasswords(false);
             dispatchError(setError({ message: 'Passwords should match' }));
+            setIsLoading(false);
             return;
         }
         if (isCaptchaVerified) {
@@ -54,6 +54,8 @@ function SignUp() {
                 setPassword('');
                 setRepeatPassword('');
                 setUsername('');
+                // dispatchError(setError({ message: error.message }));
+                setIsLoading(false);
             }
         } else {
             dispatchError(setError({ message: 'Please verify that you are not a robot.' }));
@@ -82,56 +84,51 @@ function SignUp() {
                 <div className="mask"></div>
 
                 <div className='wrapper login-form__container'>
-                    {isLoading ? (
-                        <div className='spinner__container'>
-                            <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+
+                    <form
+                        action="/users/sign-up" method="POST"
+                        onSubmit={handleSubmit}>
+                        {isLoading && (
+                            <div className='spinner__container'>
+                                <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
+                            </div>)}
+                        <p className='form__message'>Hi there!!!</p>
+                        <h1>Sign Up</h1>
+                        <div className='form__group'>
+                            <label htmlFor="email">Email</label>
+                            <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
-                    ) : (
-                        <form
-                            action="/users/sign-up" method="POST"
-                            onSubmit={handleSubmit}>
-                            <p className='form__message'>Hi there!!!</p>
-                            <h1>Sign Up</h1>
-                            <div className='form__group'>
-                                <label htmlFor="email">Email</label>
-                                <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                            </div>
-                            <div className='form__group'>
-                                <label htmlFor="username">Username</label>
-                                <input type="username" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                            </div>
-                            <div className="form__group">
-                                <label htmlFor="password">Password</label>
-                                <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                            </div>
-                            <div className="form__group">
-                                <label htmlFor="repeat-password">Repeat Password</label>
-                                <input type="password" id="repeat-password" name="repeat-password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
-                            </div>
+                        <div className='form__group'>
+                            <label htmlFor="username">Username</label>
+                            <input type="username" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        </div>
+                        <div className="form__group">
+                            <label htmlFor="password">Password</label>
+                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        </div>
+                        <div className="form__group">
+                            <label htmlFor="repeat-password">Repeat Password</label>
+                            <input type="password" id="repeat-password" name="repeat-password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
+                        </div>
+                        <Error />
+                        <Button type='submit' className='btn--cta' disabled={isLoading} onClick={handleSubmit}>Sign up</Button>
 
-                            {!identicalPassords ?
-                                <p className="form__error">Passwords should match</p>
-                                : null}
-                            <Error />
-                            <Button type='submit' className='btn--cta' disabled={isLoading} onClick={handleSubmit}>Sign up</Button>
+                        < p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
+                        <div className="google-auth-btn__container">
+                            <GoogleLogin
+                                buttonText="Sign in with Google"
+                                onSuccess={(response) => {
+                                    signupWithGoogle(response);
+                                }} onError={error => dispatchError(setError({ message: error }))} />
+                        </div>
+                        <div className="recaptcha__container">
+                            <ReCAPTCHA
+                                sitekey={`${REACT_APP_RECAPTCHA_SITE_KEY}`}
+                                onChange={handleCaptchaVerify}
+                            />
+                        </div>
 
-                            < p className='form-switch'>Already have an account ? <a href="/users/login">Login</a></p>
-                            <div className="google-auth-btn__container">
-                                <GoogleLogin
-                                    buttonText="Sign in with Google"
-                                    onSuccess={(response) => {
-                                        signupWithGoogle(response);
-                                    }} onError={error => dispatchError(setError({ message: error }))} />
-                            </div>
-                            <div className="recaptcha__container">
-                                <ReCAPTCHA
-                                    sitekey={`${REACT_APP_RECAPTCHA_SITE_KEY}`}
-                                    onChange={handleCaptchaVerify}
-                                />
-                            </div>
-
-                        </form>
-                    )}
+                    </form>
                 </div>
                 <div className='wrapper'>
                     <div className='image__container'>
