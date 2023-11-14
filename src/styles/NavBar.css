@@ -6,7 +6,6 @@
     background: #EDC9BF;
     top: 0;
     transition: all 0.3s ease;
-    transform: translateY(0);
 }
 
 .nav__container.nav__fixed {
@@ -15,6 +14,8 @@
     width: 100%;
     transform: translateY(-100%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 14;
+
 }
 
 .nav__list {
