@@ -8,6 +8,7 @@ import { REACT_APP_DEFAULT_PROFILE_PICTURE } from '../functions';
 
 const NavBar = () => {
     const [navVisible, setNavVisible] = useState(false);
+    const [fixedNav, setFixedNav] = useState(false);
     const { user, dispatch } = useAuthContext();
     const { logout } = useLogout();
     const navigate = useNavigate();
@@ -64,8 +65,24 @@ const NavBar = () => {
         document.body.style.position = 'relative';
     }
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 100) {
+                setFixedNav(true);
+            } else {
+                setFixedNav(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     return (
-        <div ref={navRef} className='nav__container'>
+        <div ref={navRef} className={`nav__container ${fixedNav ? 'nav__fixed' : ''}`}>
             <Button className='nav__burger' onClick={toggleNav}>
                 <span className='burger__line'></span>
                 <span className='burger__line'></span>
