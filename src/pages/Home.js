@@ -11,6 +11,7 @@ import { motion } from "framer-motion"
 import ShakeableTextField from '../components/AnimatedTextField'
 import { IoIosClose } from 'react-icons/io'
 import { REACT_APP_LOCAL_HOST } from '../functions';
+import NytBest from '../components/NytBest';
 
 function Home() {
 
@@ -60,7 +61,8 @@ function Home() {
                     },
                 }
             );
-            setBooks(response.data.items);
+            setBooks(response.data);
+            console.log(response.data);
             // const calculatedTotalPages = Math.ceil(response.data.totalItems / PAGE_SIZE);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
@@ -244,18 +246,11 @@ function Home() {
 
 
                 </Box>
-                {/* {loading ?
-                    <div className='spinner__container'>
-                        <Spinner radius={120} color={"#E02D67"} stroke={5} visible={true} />
-                    </div>
-                    : null
-                } */}
+                {/* <NytBest /> */}
 
                 {books && books.length !== 0 ?
                     <BookList books={books}
-                    // loading={loading} 
                     />
-
                     : null}
 
                 {totalPages > 1 && books.length !== 0 ? pageNumbers() : null}
