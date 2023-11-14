@@ -37,9 +37,8 @@
 }
 
 .modal-content__container {
-    /* max-height: 80%; */
-    /* overflow: hidden; */
     height: auto;
+    min-height: 140px;
 }
 
 .modalHeader {
@@ -363,5 +362,9 @@
 @media (max-width: 576px) {
     .modal-content__container {
         max-height: 75%;
+    }
+
+    .closeBtn {
+        left: 85%;
     }
 }

@@ -13,13 +13,7 @@
 }
 
 .books__list-all .books-colorful__container .book-colorful {
-    /* min-height: 325px;
-    min-width: 395px;
-    margin: 0 50px 60px 0;
-    flex: 0 0 30%;
-    align-items: center; */
     padding: 0;
-    position: relative;
 }
 
 .heading-section {

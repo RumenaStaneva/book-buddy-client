@@ -97,6 +97,10 @@
     margin-bottom: 10px;
 }
 
+.books-colorful__container .book-colorful {
+    position: relative;
+}
+
 @media (max-width: 1200px) {
     .books-colorful__container .book__button {
         flex-direction: column;
