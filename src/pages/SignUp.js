@@ -121,7 +121,7 @@ function SignUp() {
                                 <p className={/[A-Z]/.test(password) ? 'fulfilled' : 'unfulfilled'}>Contains at least one uppercase letter</p>
                                 <p className={/[a-z]/.test(password) ? 'fulfilled' : 'unfulfilled'}>Contains at least one lowercase letter</p>
                                 <p className={/\d/.test(password) ? 'fulfilled' : 'unfulfilled'}>Includes at least one numeric digit</p>
-                                <p className={/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password) ? 'fulfilled' : 'unfulfilled'}>{`Includes at least one special character (e.g., ${specialCharacters})`}</p>
+                                <p className={/[!@#$%^&*()_.?-]/.test(password) ? 'fulfilled' : 'unfulfilled'}>{`Includes at least one special character (e.g., ${specialCharacters})`}</p>
                             </div>
                         </div>
                         <div className="form__group">
