@@ -258,11 +258,11 @@
 
 .modal.modal-sm {
     height: unset;
-    z-index: 12;
+    z-index: 21;
 }
 
 .darkBG.modal-sm {
-    z-index: 11;
+    z-index: 20;
 }
 
 .confirmation-dialog {
