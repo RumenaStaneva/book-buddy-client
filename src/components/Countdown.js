@@ -187,7 +187,7 @@ const Countdown = ({ screenTimeSeconds, currentlyReadingBooks, activeIndex }) =>
                         timerStarted ?
                             <h2 className="countdown-message countdown-part">{formatTimeWithSeconds(timeLeft)}</h2>
                             :
-                            <h2 className="countdown-message countdown-part">{formatTime(timeLeft)}</h2>
+                            <h2 className="countdown-message countdown-part">{formatTimeWithSeconds(timeLeft)}</h2>
 
                         :
                         timerStarted ?
