@@ -350,8 +350,8 @@
     }
 
     .profile__container canvas {
-        width: 250px !important;
-        height: 150px !important;
+        width: 275px !important;
+        height: 275px !important;
     }
 
     .profile__content h1 {
