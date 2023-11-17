@@ -6,6 +6,11 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - main
+env: 
+  REACT_APP_LOCAL_HOST: ${{secrets.REACT_APP_LOCAL_HOST}}
+  REACT_APP_CLIENTID: ${{secrets.REACT_APP_CLIENTID}}
+  REACT_APP_DEFAULT_PROFILE_PICTURE: ${{secrets.REACT_APP_DEFAULT_PROFILE_PICTURE}}
+  REACT_APP_RECAPTCHA_SITE_KEY: ${{secrets.REACT_APP_RECAPTCHA_SITE_KEY}}
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
