@@ -8,7 +8,6 @@ import { REACT_APP_DEFAULT_PROFILE_PICTURE } from '../functions';
 
 const NavBar = () => {
     const [navVisible, setNavVisible] = useState(false);
-    const [fixedNav, setFixedNav] = useState(false);
     const { user, dispatch } = useAuthContext();
     const { logout } = useLogout();
     const navigate = useNavigate();
@@ -59,30 +58,33 @@ const NavBar = () => {
     });
 
     if (navVisible) {
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
     } else {
-        document.body.style.position = 'relative';
+        document.body.style.overflow = 'visible';
     }
+
+    const [position, setPosition] = useState(window.pageYOffset);
+    const [visible, setVisible] = useState(true);
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 100) {
-                setFixedNav(true);
-            } else {
-                setFixedNav(false);
-            }
+            let moving = window.pageYOffset;
+
+            setVisible(position > moving);
+            setPosition(moving)
         };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll);
 
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
+        return (() => {
+            window.removeEventListener("scroll", handleScroll);
+        });
+    })
+
+    const cls = visible ? 'nav__container--visible' : 'nav__container--hidden';
 
     return (
-        <div ref={navRef} className={`nav__container ${fixedNav ? 'nav__fixed' : ''}`}>
+        <div ref={navRef} className={`nav__container ${cls}`}>
             <Button className='nav__burger' onClick={toggleNav}>
                 <span className='burger__line'></span>
                 <span className='burger__line'></span>

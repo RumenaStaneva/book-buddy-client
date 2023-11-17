@@ -4,8 +4,21 @@
     align-items: center;
     justify-content: space-between;
     background: #EDC9BF;
+    position: fixed;
     top: 0;
     transition: all 0.3s ease;
+    width: 100%;
+    z-index: 8;
+}
+
+.nav__container--visible {
+    top: 0;
+    transition: top 0.4s ease-out;
+}
+
+.nav__container--hidden {
+    top: -90px;
+    transition: top 0.4s ease-out;
 }
 
 .nav__container.nav__fixed {
@@ -144,6 +157,7 @@
     .nav__container {
         padding: 20px 25px;
         width: 100%;
+        height: 110px;
     }
 
     .nav__container.nav__fixed {
@@ -187,6 +201,9 @@
         right: 0;
         left: auto;
         transform: translateX(0);
+        position: static;
+        width: 100%;
+        padding: 0;
     }
 
     .nav--open.nav__main .nav__list {
@@ -218,6 +235,10 @@
     .nav__main .nav__list .nav__link {
         font-size: 1.8rem;
         text-align: left;
+    }
+
+    .nav__container--hidden {
+        top: -110px;
     }
 }
 

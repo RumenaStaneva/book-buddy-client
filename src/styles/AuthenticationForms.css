@@ -173,7 +173,7 @@ body {
     position: absolute;
     right: 0;
     top: 0;
-    height: calc(100% + 40px);
+    /* height: calc(100% + 40px); */
     width: 40%;
     background-color: #EDC9BF;
 }

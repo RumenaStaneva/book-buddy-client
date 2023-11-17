@@ -29,6 +29,10 @@ main {
     padding: 0 15px 105px;
 }
 
+body {
+    padding-top: 90px;
+}
+
 .cta-btn {
     display: block;
     padding: 5px 16px;
@@ -131,4 +135,10 @@ main {
     font-size: 36px;
     margin-bottom: 10px;
     font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 110px;
+    }
 }
