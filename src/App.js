@@ -17,6 +17,7 @@ import VerificationEmailSent from './pages/VerificationEmailSent';
 import VerificationSuccess from './pages/VerificationSuccess';
 import ResetPassword from './pages/ResetPassword';
 import Footer from './components/Footer';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
         )}
         <Route path='/verificate-email' element={<VerificationEmailSent />} />
         <Route path='/users/verify/:token' element={<VerificationSuccess />} />
+        <Route path='/privacy-policy' element={<PrivacyPolicy />} />
         <Route path='*' element={<ErrorPage />} />
       </Routes>
       <Footer />
