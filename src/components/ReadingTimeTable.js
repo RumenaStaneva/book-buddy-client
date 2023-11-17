@@ -4,7 +4,6 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import Error from '../components/Error';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
-import { REACT_APP_LOCAL_HOST } from "../functions";
 
 const ReadingTimeTable = () => {
     const [readingTimeData, setReadingTimeData] = useState([]);
@@ -19,7 +18,7 @@ const ReadingTimeTable = () => {
         setIsLoading(true);
         try {
             //todo fix not correct path
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/time-swap/reading-time`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },

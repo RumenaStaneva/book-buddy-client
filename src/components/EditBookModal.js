@@ -11,7 +11,6 @@ import { useDispatch } from "react-redux";
 import { setError } from '../reducers/errorSlice';
 import ConformationModal from "./ConformationModal";
 import Spinner from 'react-spinner-material';
-import { REACT_APP_LOCAL_HOST } from '../functions';
 
 const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
     const [updatedShelf, setUpdatedShelf] = useState(bookDetails.shelf);
@@ -111,7 +110,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                     formData.append('thumbnail', updatedThumbnail);
                 }
 
-                const response = await fetch(`${REACT_APP_LOCAL_HOST}/books/update-book`, {
+                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                     method: 'PUT',
                     headers: {
                         Authorization: `Bearer ${user.token}`,

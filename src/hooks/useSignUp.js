@@ -2,12 +2,11 @@ import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useDispatch } from "react-redux";
 import { setError } from '../reducers/errorSlice';
-import { REACT_APP_LOCAL_HOST } from "../functions";
 
 export const useSignup = () => {
     const [isLoading, setIsLoading] = useState(null);
     const { dispatch } = useAuthContext();
-    const LOCAL_HOST = REACT_APP_LOCAL_HOST;
+    const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
     const dispatchError = useDispatch();
 
     const signup = async (email, password, username) => {
@@ -39,7 +38,7 @@ export const useSignup = () => {
 
     const signUpWithGoogleAuth = async (data) => {
         try {
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/users/signup-with-google`, {
+            const response = await fetch(`${LOCAL_HOST}/users/signup-with-google`, {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {

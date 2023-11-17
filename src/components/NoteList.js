@@ -9,7 +9,6 @@ import Error from './Error';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import { VscSend } from "react-icons/vsc";
-import { REACT_APP_LOCAL_HOST } from '../functions';
 
 const NotesList = ({ bookDetails }) => {
     const { user } = useAuthContext();
@@ -30,7 +29,7 @@ const NotesList = ({ bookDetails }) => {
         }
 
         try {
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/notes/add-note`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/add-note`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,7 +55,7 @@ const NotesList = ({ bookDetails }) => {
     const fetchNotes = useCallback(
         async () => {
             try {
-                const response = await fetch(`${REACT_APP_LOCAL_HOST}/notes/book-notes?bookId=${bookId}`, {
+                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/book-notes?bookId=${bookId}`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },
@@ -77,7 +76,7 @@ const NotesList = ({ bookDetails }) => {
     const fetchMoreNotes = useCallback(
         async () => {
             try {
-                const response = await fetch(`${REACT_APP_LOCAL_HOST}/notes/book-notes?bookId=${bookId}&offset=${notes.length}`, {
+                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/book-notes?bookId=${bookId}&offset=${notes.length}`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },
@@ -121,7 +120,7 @@ const NotesList = ({ bookDetails }) => {
     const handleSaveEdit = async (note) => {
         try {
             const noteId = note._id;
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/notes/update-note?noteId=${noteId}`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/update-note?noteId=${noteId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -149,7 +148,7 @@ const NotesList = ({ bookDetails }) => {
 
     const handleDeleteNote = async (noteId) => {
         try {
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/notes/delete-note?noteId=${noteId}`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/notes/delete-note?noteId=${noteId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

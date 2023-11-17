@@ -10,7 +10,6 @@ import Modal from './Dialog'
 import Error from './Error'
 import Spinner from 'react-spinner-material';
 import { NavLink } from 'react-router-dom';
-import { REACT_APP_LOCAL_HOST } from '../functions';
 
 const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
     const [shelf, setShelf] = useState(null);
@@ -87,7 +86,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                     if (updatedThumbnail) {
                         formData.append('thumbnail', updatedThumbnail);
                     }
-                    const response = await fetch(`${REACT_APP_LOCAL_HOST}/books/add-to-shelf`, {
+                    const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/add-to-shelf`, {
                         method: 'POST',
                         body: formData,
                         headers: {

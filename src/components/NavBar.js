@@ -4,7 +4,6 @@ import '../styles/NavBar.css'
 import Button from './Button';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
-import { REACT_APP_DEFAULT_PROFILE_PICTURE } from '../functions';
 
 const NavBar = () => {
     const [navVisible, setNavVisible] = useState(false);
@@ -133,7 +132,7 @@ const NavBar = () => {
                             <>
                                 {
                                     <a href='/users/profile' className='nav__profile-picture' role="menuitem">
-                                        <img width={50} height={50} src={user.profilePicture ? user.profilePicture : REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile" />
+                                        <img width={50} height={50} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile" />
                                     </a>
                                 }
                                 <li className='nav__item' role="menuitem">

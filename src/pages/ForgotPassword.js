@@ -4,7 +4,6 @@ import NavBar from '../components/NavBar';
 import Error from '../components/Error';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
-import { REACT_APP_LOCAL_HOST } from '../functions';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
@@ -15,7 +14,7 @@ const ForgotPassword = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/users/forgot-password`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/forgot-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

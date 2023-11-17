@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { setError } from './errorSlice';
 import { startOfWeek, endOfWeek, format, subWeeks } from 'date-fns';
-import { REACT_APP_LOCAL_HOST } from '../functions';
 
 //get the reading time
 export const fetchReadingTimeForTheWeek = createAsyncThunk(
@@ -46,7 +45,7 @@ export const fetchReadingTimeForTheWeek = createAsyncThunk(
 
         try {
 
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/time-swap/reading-time?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time?startDate=${formattedStartDate}&endDate=${formattedEndDate}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 }
@@ -71,7 +70,7 @@ export const fetchHasReadingTimeAnytime = createAsyncThunk(
     async (user, thunkAPI) => {
 
         try {
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/time-swap/reading-time-anytime`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/reading-time-anytime`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 }
@@ -95,7 +94,7 @@ export const updateReadingDataInDatabase = createAsyncThunk(
     'readingTime/updateReadingDataInDatabase',
     async ({ date, totalReadingGoalForTheDay, timeInSecondsForTheDayReading, user, currentlyReadingBook }, thunkAPI) => {
         try {
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/time-swap/update-reading-time`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/time-swap/update-reading-time`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${user.token}`,

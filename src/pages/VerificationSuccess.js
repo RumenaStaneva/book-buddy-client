@@ -5,7 +5,6 @@ import Spinner from 'react-spinner-material';
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import '../styles/VerificationSuccess.css'
-import { REACT_APP_LOCAL_HOST } from "../functions";
 
 function VerificationSuccess() {
     const { token } = useParams();
@@ -15,7 +14,7 @@ function VerificationSuccess() {
     const fetchData = useCallback(
         async () => {
             try {
-                const response = await fetch(`${REACT_APP_LOCAL_HOST}/users/verify/${token}`);
+                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/verify/${token}`);
                 if (!response.ok) {
                     throw new Error(`Fetch request failed with status ${response.status}`);
                 }

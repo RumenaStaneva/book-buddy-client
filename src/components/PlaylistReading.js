@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { REACT_APP_LOCAL_HOST } from '../functions';
 
 function PlaylistReading() {
     // const [showIframe, setShowIframe] = useState(true);
@@ -10,7 +9,7 @@ function PlaylistReading() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${REACT_APP_LOCAL_HOST}/spotify/access-token`, {
+                const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/spotify/access-token`, {
                     method: 'POST'
                 });
                 if (response.ok) {

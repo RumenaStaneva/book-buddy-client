@@ -10,7 +10,6 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";
 import { setError } from '../reducers/errorSlice';
 import ReCAPTCHA from "react-google-recaptcha";
-// import { REACT_APP_RECAPTCHA_SITE_KEY } from '../functions';
 
 function SignUp() {
     const [email, setEmail] = useState('');

@@ -6,8 +6,6 @@ import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import '../styles/Profile.css'
 import AvatarEditorModal from '../components/AvatarEditorModal';
-import { REACT_APP_LOCAL_HOST } from '../functions';
-import { REACT_APP_DEFAULT_PROFILE_PICTURE } from '../functions';
 
 function UserProfile({ isLoadingGlobal, setIsLoadingGlobal }) {
     const [userData, setUserData] = useState({});
@@ -27,7 +25,7 @@ function UserProfile({ isLoadingGlobal, setIsLoadingGlobal }) {
 
     const fetchUserData = useCallback(async () => {
         try {
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/users/profile`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/profile`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -60,7 +58,7 @@ function UserProfile({ isLoadingGlobal, setIsLoadingGlobal }) {
 
     const handleUpdateInformation = async () => {
         try {
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/users/update-profile-info`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/users/update-profile-info`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,7 +124,7 @@ function UserProfile({ isLoadingGlobal, setIsLoadingGlobal }) {
                         {!isOpen && (
                             <div className='profile__picture-container'>
                                 <Button className='change-picture__btn' onClick={() => imageUploader.current.click()}>
-                                    <img width={150} height={150} src={user.profilePicture ? user.profilePicture : REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
+                                    <img width={150} height={150} src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_DEFAULT_PROFILE_PICTURE} alt="Profile"
                                         className={`profile__profile-picture`}
                                     />
                                 </Button>

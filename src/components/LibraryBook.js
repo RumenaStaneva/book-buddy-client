@@ -11,7 +11,6 @@ import Dropdown from "../components/Dropdown";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useDispatch } from 'react-redux';
 import { setError } from '../reducers/errorSlice';
-import { REACT_APP_LOCAL_HOST } from '../functions';
 
 function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
     const [editShelfVisible, setEditShelfVisible] = useState(false);
@@ -39,7 +38,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
     const handleMoveToShelf = async (currentBook) => {
         const updatedBook = { ...currentBook, shelf: newShelf };
         try {
-            const response = await fetch(`${REACT_APP_LOCAL_HOST}/books/update-book`, {
+            const response = await fetch(`${process.env.REACT_APP_LOCAL_HOST}/books/update-book`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
