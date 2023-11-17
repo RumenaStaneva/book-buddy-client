@@ -69,8 +69,9 @@ const NavBar = () => {
         const handleScroll = () => {
             let moving = window.pageYOffset;
 
-            setVisible(position > moving);
-            setPosition(moving)
+            const isVisible = moving < 200 ? true : position > moving;
+            setVisible(isVisible);
+            setPosition(moving);
         };
 
         window.addEventListener("scroll", handleScroll);
