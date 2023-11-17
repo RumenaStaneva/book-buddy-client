@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import NavBar from '../components/NavBar'
 import Button from '../components/Button';
 import { useLogin } from '../hooks/useLogin';
@@ -69,7 +69,7 @@ function Login() {
                         </div>
                         <Error />
                         <Button type='submit' className='btn--cta' disabled={isLoading}>Sign in</Button>
-                        <p className='form-switch'>I don’t have an account ? <Link href="/users/sign-up">Sign up</Link></p>
+                        <p className='form-switch'>I don’t have an account ? <NavLink to="/users/sign-up">Sign up</NavLink></p>
                         <div className="google-auth-btn__container">
                             <GoogleLogin
                                 buttonText="Login with Google"
