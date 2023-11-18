@@ -53,9 +53,11 @@
     text-decoration: underline;
 }
 
-.footer p {
+.footer p,
+.footer .privacy-policy-link {
     font-size: 14px;
     margin-left: 10px;
+    color: #B50637;
 }
 
 .footer .icon {
@@ -86,6 +88,11 @@
 @media (max-width: 576px) {
     .footer-content {
         flex-direction: column;
+    }
+
+    .footer .privacy-policy-link {
+        margin-bottom: 10px;
+        margin-top: 10px;
     }
 
     .social-icons {

@@ -18,6 +18,7 @@ const Footer = () => {
                             <FaLinkedinIn className='icon' />
                         </NavLink>
                     </div>
+                    <NavLink className='privacy-policy-link' to={'/privacy-policy'}>Privacy Policy</NavLink>
                     <p>&copy; 2023 Book Buddy. All rights reserved.</p>
                 </div>
             </div>
