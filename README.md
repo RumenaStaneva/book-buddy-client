@@ -12,7 +12,10 @@ Check out the demo video to see Book Buddy in action: [Book Buddy Demo](https://
 
 ## Deployment
 
-Book Buddy is deployed and accessible at [book-buddy.tech](https://book-buddy.tech).
+<!--- Book Buddy is deployed and accessible at [book-buddy.tech](https://book-buddy.tech). -->
+
+Book Buddy is deployed and accessible at [book-buddy.tech](https://book-buddy-f7b37.web.app/).
+
 
 ## Features
 
