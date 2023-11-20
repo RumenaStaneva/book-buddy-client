@@ -59,7 +59,7 @@ const NavBar = () => {
     if (navVisible) {
         document.body.style.overflow = 'hidden';
     } else {
-        document.body.style.overflow = 'visible';
+        // document.body.style.overflow = 'visible';
     }
 
     const [position, setPosition] = useState(window.pageYOffset);
