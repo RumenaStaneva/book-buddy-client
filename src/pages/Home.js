@@ -109,6 +109,7 @@ function Home() {
 
         return pages;
     };
+
     // page numbers 
     const pageNumbers = () => {
         const pages = generatePageNumbers();
@@ -252,7 +253,6 @@ function Home() {
 
                 {books && books.length !== 0 ?
                     <BookList books={books}
-                    // loading={loading} 
                     />
 
                     : null}
