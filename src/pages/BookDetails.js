@@ -28,6 +28,7 @@ function BookDetails() {
   const params = useParams();
   const dispatchError = useDispatch();
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+  const [previousElement, setPreviousElement] = useState(null);
 
 
   useEffect(() => {
@@ -69,12 +70,14 @@ function BookDetails() {
     dispatchError(clearError());
     setIsOpen(true);
     document.body.style.overflow = 'hidden';
+    setPreviousElement(document.activeElement || document.body);
   }
 
   // console.log(bookDetails);
   const handleDeleteBook = () => {
     setDeleteModalIsOpen(true);
     document.body.style.overflow = 'hidden';
+    setPreviousElement(document.activeElement || document.body);
   }
 
   return (
@@ -86,8 +89,9 @@ function BookDetails() {
         <>
           <Header title='Book Details' />
           <main className="book-details-container">
-            {isOpen && <EditBookModal setIsOpen={setIsOpen} bookDetails={bookDetails} fetchBook={fetchBook} />}
+            {isOpen && <EditBookModal setPreviousElement={setPreviousElement} previousElement={previousElement} setIsOpen={setIsOpen} bookDetails={bookDetails} fetchBook={fetchBook} />}
             {deleteModalIsOpen && <ConformationModal
+              previousElement={previousElement}
               onClose={() => { setDeleteModalIsOpen(false); document.body.style.overflow = 'visible'; }}
               setIsOpen={setDeleteModalIsOpen}
               bookId={bookDetails._id}
@@ -96,9 +100,21 @@ function BookDetails() {
             {bookDetails !== null ? (
               <div className='d-flex book-details-container__inner'>
                 <div className="book-card" style={bookStyle}>
+                  <AiFillEdit className="edit-book__icon" onClick={handleEditBook} tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === ' ' || e.code === 'Enter') {
+                        e.preventDefault();
+                        handleEditBook();
+                      }
+                    }} />
                   <AiOutlineDelete className="modal__delete-btn"
-                    onClick={handleDeleteBook} />
-                  <AiFillEdit className="edit-book__icon" onClick={handleEditBook} />
+                    onClick={handleDeleteBook} tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === ' ' || e.code === 'Enter') {
+                        e.preventDefault();
+                        handleDeleteBook();
+                      }
+                    }} />
                   <div className="book-thumbnail">
                     <img
                       src={bookDetails.thumbnail !== undefined ? bookDetails.thumbnail : 'https://storage.googleapis.com/book-buddy/images/image-not-available.png'}

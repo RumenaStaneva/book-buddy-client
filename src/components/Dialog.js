@@ -1,7 +1,7 @@
 import '../styles/Modal.css';
 import React, { createContext, useEffect, createRef } from "react";
 import { IoIosClose } from 'react-icons/io';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearError } from '../reducers/errorSlice';
 import { createPortal } from "react-dom";
 import Button from "./Button";
@@ -12,14 +12,23 @@ const modalContext = createContext();
 export default function Modal({ title, content, setIsOpen, subtitle, small, disableCloseButton, previousElement }) {
     const dispatchError = useDispatch();
     const modalRef = createRef();
-    console.log('previousElement', previousElement);
+    const { hasError } = useSelector((state) => state.error);
+
+
+    // console.log('modalRef.current', modalRef.current);
     useEffect(() => {
         const focusableModalElements = modalRef.current.querySelectorAll(
-            'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], input[type="number"], select, input[type="file"], div.dropdown'
+            'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], input[type="number"], select, input[type="file"], div.selected-option, .error-message__container.close-btn'
         );
+        //this is confusing  my upload so dont use it
+        if (focusableModalElements.length > 0 && !hasError) {
 
-        if (focusableModalElements.length > 0) {
             focusableModalElements[0].focus();
+        }
+
+        if (focusableModalElements.length > 0 && hasError) {
+
+            focusableModalElements[focusableModalElements.length - 2].focus();
         }
 
         const handleTabKey = (e) => {
@@ -60,7 +69,7 @@ export default function Modal({ title, content, setIsOpen, subtitle, small, disa
         return () => {
             document.removeEventListener("keydown", keyListener);
         };
-    }, [setIsOpen, dispatchError, modalRef]);
+    }, [setIsOpen, dispatchError, modalRef, hasError, previousElement]);
 
     return createPortal(
         <>

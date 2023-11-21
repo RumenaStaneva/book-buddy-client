@@ -4,10 +4,29 @@ import '../styles/Dropdown.css'
 const Dropdown = ({ options, onSelect, selectedOption, id }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const dropdownOptionRef = useRef(null);
 
     const handleOptionSelect = (option) => {
         onSelect(option);
         setIsOpen(false);
+        // console.log('dropdownRef.current', dropdownRef.current);
+        // dropdownRef.current.focus();
+
+        // Find the index of the currently focused element
+        const focusableModalElements = dropdownOptionRef.current.closest('.modal').querySelectorAll('a, button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], input[type="number"], select, input[type="file"], div.selected-option');
+        const currentIndex = Array.from(focusableModalElements).indexOf(dropdownOptionRef.current);
+        console.log('dropdownOptionRef.current', dropdownOptionRef.current);
+        console.log('currentIndex', currentIndex);
+        // Focus on the next element
+        const nextIndex = currentIndex + 1;
+        const nextElement = focusableModalElements[nextIndex];
+        console.log('nextElement', nextElement);
+        if (nextElement) {
+            nextElement.focus();
+        }
+
+        onSelect(option);
+
     };
 
     const handleToggleDropdown = () => {
@@ -30,11 +49,13 @@ const Dropdown = ({ options, onSelect, selectedOption, id }) => {
     const handleTabKey = useCallback(
         (e) => {
             const focusableModalElements = dropdownRef.current.querySelectorAll('li');
-
+            // console.log(e.key);
             if (e.key === 'Tab') {
-                // Close the dropdown
-                handleClickOutside();
-                // Move to the next element (if needed)
+                if (isOpen) {
+                    console.log('hehehe');
+                    setIsOpen(false);
+                    dropdownRef.current.focus();
+                }
             } else if (e.key === 'ArrowDown') {
                 const firstElement = focusableModalElements[0];
                 const lastElement =
@@ -65,17 +86,16 @@ const Dropdown = ({ options, onSelect, selectedOption, id }) => {
                 }
             }
         },
-        [dropdownRef]
+        [dropdownRef, isOpen]
     );
 
 
-    const keyListenersMap = new Map([[27, setIsOpen], [40, handleTabKey]]);
+    const keyListenersMap = new Map([[27, setIsOpen], [40, handleTabKey], [9, handleTabKey]]);
 
     useEffect(() => {
         function keyListener(e) {
             const listener = keyListenersMap.get(e.keyCode);
             return listener && listener(e);
-
         }
 
         document.addEventListener("keydown", keyListener);
@@ -85,9 +105,10 @@ const Dropdown = ({ options, onSelect, selectedOption, id }) => {
 
     return (
         <div id={id} className={`dropdown ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
-            <div className="selected-option" onClick={handleToggleDropdown} tabIndex={0} onKeyDown={(e) => {
+            <div ref={dropdownOptionRef} className="selected-option" onClick={handleToggleDropdown} tabIndex={0} onKeyDown={(e) => {
                 if (e.key === ' ' || e.key === 'Enter') {
                     handleToggleDropdown();
+                    handleTabKey(e);
                 }
             }}>
                 {selectedOption !== null ? selectedOption : 'Select an option'}
@@ -97,7 +118,9 @@ const Dropdown = ({ options, onSelect, selectedOption, id }) => {
                     {options.map((option) => (
                         <li tabIndex={0} className='dropdown-option' key={option} onClick={() => handleOptionSelect(option)} role="option" onKeyDown={(e) => {
                             if (e.key === ' ' || e.key === 'Enter') {
+                                e.preventDefault();
                                 handleOptionSelect(option);
+                                // setIsOpen(false);
                             }
                         }}
                             aria-selected={selectedOption === option} >

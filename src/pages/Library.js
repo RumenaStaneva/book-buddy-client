@@ -22,6 +22,7 @@ function Library() {
     const { user } = useAuthContext();
     const dispatchRedux = useDispatch();
     const { wantToReadBooks, currentlyReadingBooks, readBooks, isLoading } = useSelector((state) => state.books);
+
     useEffect(() => {
         dispatchRedux(fetchAllBooks(user));
     }, [dispatchRedux, user]);

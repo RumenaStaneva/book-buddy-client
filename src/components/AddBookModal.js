@@ -1,5 +1,5 @@
 import '../styles/Modal.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useDispatch } from "react-redux";
@@ -26,6 +26,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded, previousElement }) 
         { value: 1, label: 'Currently reading' },
         { value: 2, label: 'Read' }
     ];
+    const fileInputRef = useRef(null);
     const dispatchError = useDispatch();
 
     const handleOptionSelect = (selectedOption) => {
@@ -119,7 +120,6 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded, previousElement }) 
 
         setBookToAdd(null);
     }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError, bookDetails.authors, bookDetails.bookApiId, bookDetails.publisher, bookDetails.title, category, shelf, updatedDescription, updatedPageCount, updatedThumbnail, previousElement]);
-
     const handleThumbnailUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -169,11 +169,11 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded, previousElement }) 
 
                     const formData = new FormData();
                     formData.append('thumbnail', resizedImageBlob);
-
                 };
                 img.src = event.target.result;
             };
             reader.readAsDataURL(file);
+            fileInputRef.current.focus();
         }
     };
 
@@ -210,7 +210,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded, previousElement }) 
                                             if (e.key === 'Enter' || e.key === ' ') {
                                                 document.getElementById('bookImage').click();
                                             }
-                                        }}>Book image</label>
+                                        }} ref={fileInputRef}>Book image</label>
                                         <input id='bookImage' name='bookImage' type="file" accept="image/*" onChange={handleThumbnailUpload} />
                                     </div>
                                     <div className="modal__section modal__section-left-align">

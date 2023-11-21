@@ -17,6 +17,7 @@ const TimeSwap = () => {
     const dispatch = useDispatch();
     const { currentWeekData, hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
+    const [previousElement, setPreviousElement] = useState(null);
 
     useEffect(() => {
         document.title = 'TimeSwap';
@@ -41,13 +42,13 @@ const TimeSwap = () => {
                 </div>
             ) : (
                 <>
-                    {isOpenAddScreenTime && <AddScreenTimeModal setIsOpenAddScreenTime={setIsOpenAddScreenTime} handleCloseModal={handleCloseModal} />}
+                    {isOpenAddScreenTime && <AddScreenTimeModal previousElement={previousElement} setIsOpenAddScreenTime={setIsOpenAddScreenTime} handleCloseModal={handleCloseModal} />}
 
 
                     {!hasReadingTimeAnytime ? (
-                        <TimeSwapInformationPage setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
+                        <TimeSwapInformationPage setPreviousElement={setPreviousElement} setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
                     ) :
-                        <WeeklyDashboard readingTimeData={currentWeekData} setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
+                        <WeeklyDashboard setPreviousElement={setPreviousElement} readingTimeData={currentWeekData} setIsOpenAddScreenTime={setIsOpenAddScreenTime} />
                     }
                 </>
             )}

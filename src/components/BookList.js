@@ -12,7 +12,7 @@ import { clearError } from '../reducers/errorSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function BookList({ books, loading }) {
+function BookList({ books }) {
     const [bookToAdd, setBookToAdd] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const dispatchError = useDispatch();

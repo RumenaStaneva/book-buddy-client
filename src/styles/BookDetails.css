@@ -92,6 +92,11 @@
     transition: fill ease-in-out 0.3s;
 }
 
+.book-card .modal__delete-btn {
+    left: auto;
+    right: 25px;
+}
+
 .edit-book__icon:hover,
 .modal__delete-btn:hover {
     fill: #fff;
@@ -291,10 +296,23 @@
         padding-bottom: 100px;
     }
 
+    .book-card .modal__delete-btn,
+    .book-card .edit-book__icon {
+        left: auto;
+        top: 28px;
+        width: 25px;
+        height: 25px;
+        right: 55px;
+    }
+
+    .book-card .modal__delete-btn {
+        right: 20px;
+    }
+
     .modal__delete-btn,
     .edit-book__icon {
         right: 8px;
-        top: 10px;
+        top: 40px;
         width: 20px;
         height: 20px;
     }

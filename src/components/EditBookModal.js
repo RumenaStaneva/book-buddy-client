@@ -12,7 +12,7 @@ import { setError } from '../reducers/errorSlice';
 import ConformationModal from "./ConformationModal";
 import Spinner from 'react-spinner-material';
 
-const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
+const EditBookModal = ({ setIsOpen, bookDetails, fetchBook, previousElement, setPreviousElement }) => {
     const [updatedShelf, setUpdatedShelf] = useState(bookDetails.shelf);
     const [updatedCategory, setUpdatedCategory] = useState(bookDetails.category);
     const [bookToUpdate, setBookToUpdate] = useState(null);
@@ -158,6 +158,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
     const handleDeleteBook = () => {
         setDeleteModalIsOpen(true);
         document.body.style.overflow = 'hidden';
+        setPreviousElement(document.activeElement || document.body);
     }
 
     const handleThumbnailUpload = (e) => {
@@ -223,10 +224,17 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                 onClose={() => { setIsOpen(false); document.body.style.overflow = 'visible'; }}
                 subtitle={`written by: ${bookDetails.authors ? bookDetails.authors.join(', ') : 'No author/s listed'}`}
                 setIsOpen={setIsOpen}
+                previousElement={previousElement}
                 content={
                     <>
                         <AiOutlineDelete className="modal__delete-btn"
-                            onClick={handleDeleteBook} />
+                            onClick={handleDeleteBook} tabIndex={0}
+                            onKeyDown={(e) => {
+                                if (e.key === ' ' || e.code === 'Enter') {
+                                    e.preventDefault();
+                                    handleDeleteBook();
+                                }
+                            }} />
                         <form onSubmit={handleSubmit} className="add-book__form">
                             {/* {isLoading &&
                                 (<div className='spinner__container'>
@@ -286,6 +294,7 @@ const EditBookModal = ({ setIsOpen, bookDetails, fetchBook }) => {
                 onClose={() => { setDeleteModalIsOpen(false); document.body.style.overflow = 'visible'; }}
                 setIsOpen={setDeleteModalIsOpen}
                 bookId={bookDetails._id}
+                previousElement={previousElement}
             />}
 
         </div>
