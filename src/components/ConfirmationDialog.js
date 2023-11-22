@@ -1,5 +1,5 @@
 const ConfirmationDialog = ({ message, onCancel, onConfirm, confirmationDialogRef, showConfirmationDialog }) => {
-    console.log('confirmationDialogRef', confirmationDialogRef);
+    // console.log('confirmationDialogRef', confirmationDialogRef);
     return (
         <div className={`${!showConfirmationDialog && 'd-none'} confirmation-dialog`} ref={confirmationDialogRef} tabIndex={0}>
             <p>{message}</p>

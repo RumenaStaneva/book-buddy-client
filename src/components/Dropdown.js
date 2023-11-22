@@ -15,12 +15,12 @@ const Dropdown = ({ options, onSelect, selectedOption, id }) => {
         // Find the index of the currently focused element
         const focusableModalElements = dropdownOptionRef.current.closest('.modal').querySelectorAll('a, button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], input[type="number"], select, input[type="file"], div.selected-option');
         const currentIndex = Array.from(focusableModalElements).indexOf(dropdownOptionRef.current);
-        console.log('dropdownOptionRef.current', dropdownOptionRef.current);
-        console.log('currentIndex', currentIndex);
+        // console.log('dropdownOptionRef.current', dropdownOptionRef.current);
+        // console.log('currentIndex', currentIndex);
         // Focus on the next element
         const nextIndex = currentIndex + 1;
         const nextElement = focusableModalElements[nextIndex];
-        console.log('nextElement', nextElement);
+        // console.log('nextElement', nextElement);
         if (nextElement) {
             nextElement.focus();
         }
@@ -49,10 +49,8 @@ const Dropdown = ({ options, onSelect, selectedOption, id }) => {
     const handleTabKey = useCallback(
         (e) => {
             const focusableModalElements = dropdownRef.current.querySelectorAll('li');
-            // console.log(e.key);
             if (e.key === 'Tab') {
                 if (isOpen) {
-                    console.log('hehehe');
                     setIsOpen(false);
                     dropdownRef.current.focus();
                 }
@@ -90,7 +88,7 @@ const Dropdown = ({ options, onSelect, selectedOption, id }) => {
     );
 
 
-    const keyListenersMap = new Map([[27, setIsOpen], [40, handleTabKey], [9, handleTabKey]]);
+    const keyListenersMap = new Map([[27, setIsOpen], [40, handleTabKey], [38, handleTabKey], [9, handleTabKey]]);
 
     useEffect(() => {
         function keyListener(e) {

@@ -57,7 +57,6 @@ function Home() {
                 throw new Error("No books found with this name. Please double-check your input.");
             }
             setBooks(response.data.items);
-            console.log(response.data.totalItems);
             // const calculatedTotalPages = Math.ceil(response.data.totalItems / PAGE_SIZE);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {

@@ -72,7 +72,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
+    // console.log('previousElement', previousElement);
     return (
         <>
             {isOpen ?
@@ -104,7 +104,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
                 </Button>
                 {editShelfVisible &&
                     <div className='edit-shelf__container' ref={editShelfContainerRef}>
-                        <Button onClick={(e) => { e.preventDefault(); setIsOpen(true); document.body.style.overflow = 'hidden'; }}>
+                        <Button onClick={(e) => { e.preventDefault(); setIsOpen(true); document.body.style.overflow = 'hidden'; setPreviousElement(document.activeElement || document.body); }}>
                             Change shelf
                         </Button>
                     </div>

@@ -22,6 +22,7 @@ function UserProfile({ isLoadingGlobal, setIsLoadingGlobal }) {
     const [isLoading, setIsLoading] = useState(true);
     const [editor, setEditor] = useState(null);
     const [scale, setScale] = useState(1);
+    const previousElementChangePicrure = document.body.getElementsByClassName('change-picture__btn')[0];
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -132,7 +133,7 @@ function UserProfile({ isLoadingGlobal, setIsLoadingGlobal }) {
                         )}
 
                         <>
-                            {isOpen && <AvatarEditorModal setIsOpen={setIsOpen} setEditor={setEditor} encodedImage={encodedImage} scale={scale} setScale={setScale} setEncodedImage={setEncodedImage} isLoading={isLoading} setIsLoading={setIsLoading} editor={editor} />}
+                            {isOpen && <AvatarEditorModal previousElement={previousElementChangePicrure} setIsOpen={setIsOpen} setEditor={setEditor} encodedImage={encodedImage} scale={scale} setScale={setScale} setEncodedImage={setEncodedImage} isLoading={isLoading} setIsLoading={setIsLoading} editor={editor} />}
 
                             <form className="profile-form">
                                 <div className="image-uploader">
@@ -149,7 +150,7 @@ function UserProfile({ isLoadingGlobal, setIsLoadingGlobal }) {
                                     />
                                 </div>
                                 {!encodedImage.length > 0 &&
-                                    <div className="image-container" onClick={() => imageUploader.current.click()}>
+                                    <div className="image-container" onClick={() => { imageUploader.current.click(); }}>
                                     </div>
 
                                 }
