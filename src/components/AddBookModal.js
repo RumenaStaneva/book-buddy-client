@@ -1,5 +1,5 @@
 import '../styles/Modal.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useDispatch } from "react-redux";
@@ -11,7 +11,7 @@ import Error from './Error'
 import Spinner from 'react-spinner-material';
 import { NavLink } from 'react-router-dom';
 
-const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
+const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded, previousElement }) => {
     const [shelf, setShelf] = useState(null);
     const [category, setCategory] = useState(null);
     const [bookToAdd, setBookToAdd] = useState(null);
@@ -26,6 +26,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
         { value: 1, label: 'Currently reading' },
         { value: 2, label: 'Read' }
     ];
+    const fileInputRef = useRef(null);
     const dispatchError = useDispatch();
 
     const handleOptionSelect = (selectedOption) => {
@@ -103,7 +104,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                     dispatchError(clearError());
                     setIsOpen(false);
                     document.body.style.overflow = 'visible';
-
+                    previousElement.focus();
                     onBookAdded(bookToAdd.title);
                     setIsLoading(false);
 
@@ -118,8 +119,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
         addBookToShelf();
 
         setBookToAdd(null);
-    }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError, bookDetails.authors, bookDetails.bookApiId, bookDetails.publisher, bookDetails.title, category, shelf, updatedDescription, updatedPageCount, updatedThumbnail]);
-
+    }, [bookToAdd, user, onBookAdded, setIsOpen, dispatchError, bookDetails.authors, bookDetails.bookApiId, bookDetails.publisher, bookDetails.title, category, shelf, updatedDescription, updatedPageCount, updatedThumbnail, previousElement]);
     const handleThumbnailUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -169,11 +169,11 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
 
                     const formData = new FormData();
                     formData.append('thumbnail', resizedImageBlob);
-
                 };
                 img.src = event.target.result;
             };
             reader.readAsDataURL(file);
+            fileInputRef.current.focus();
         }
     };
 
@@ -183,6 +183,7 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
             onClose={() => setIsOpen(false)}
             subtitle={`written by: ${bookDetails.authors ? bookDetails.authors.join(', ') : 'No author/s listed'}`}
             setIsOpen={setIsOpen}
+            previousElement={previousElement}
             content={
                 <>
                     <form onSubmit={handleSubmit} className="add-book__form">
@@ -205,7 +206,11 @@ const AddBookModal = ({ setIsOpen, bookDetails, onBookAdded }) => {
                                     </div>
                                     <div className="modal__section upload-image-section">
                                         <span>Change book thumbnail</span>
-                                        <label htmlFor="bookImage" className='cta-btn upload-btn'>Book image</label>
+                                        <label htmlFor="bookImage" className='cta-btn upload-btn' tabIndex={0} onKeyDown={(e) => {
+                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                document.getElementById('bookImage').click();
+                                            }
+                                        }} ref={fileInputRef}>Book image</label>
                                         <input id='bookImage' name='bookImage' type="file" accept="image/*" onChange={handleThumbnailUpload} />
                                     </div>
                                     <div className="modal__section modal__section-left-align">

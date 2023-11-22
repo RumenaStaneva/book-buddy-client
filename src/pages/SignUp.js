@@ -26,7 +26,6 @@ function SignUp() {
     };
 
     const isPasswordValid = () => {
-        console.log('hehehe');
         return (
             password.length >= 8 &&
             /[A-Z]/.test(password) &&

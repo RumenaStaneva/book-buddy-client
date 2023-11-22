@@ -7,7 +7,7 @@ import Button from "./Button";
 import Modal from './Dialog'
 import Error from "./Error";
 
-const ConformationModal = ({ bookId, setIsOpen }) => {
+const ConformationModal = ({ bookId, setIsOpen, previousElement }) => {
     const dispatchError = useDispatch();
     const navigate = useNavigate();
     const { user } = useAuthContext();
@@ -37,6 +37,7 @@ const ConformationModal = ({ bookId, setIsOpen }) => {
             subtitle={`Are you sure?`}
             setIsOpen={setIsOpen}
             small={true}
+            previousElement={previousElement}
             content={
                 <div>
                     <Error />

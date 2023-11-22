@@ -126,7 +126,6 @@ function Diagram() {
                                         }}
 
                                         onActiveStartDateChange={({ action, activeStartDate, value, view }) => {
-                                            console.log(action, activeStartDate, value, view);
                                             if (action === 'next' || action === 'drillDown' || action === 'drillUp' || action === 'prev') {
                                                 setCalendarVisible(true);
                                             }

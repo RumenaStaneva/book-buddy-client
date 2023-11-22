@@ -1,5 +1,5 @@
 import '../styles/Modal.css'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Cleave from 'cleave.js/react';
 import Spinner from 'react-spinner-material';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -12,7 +12,7 @@ import ConfirmationDialog from './ConfirmationDialog';
 import { fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, subWeeks, parse } from 'date-fns';
 
-const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
+const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal, previousElement }) => {
     const [screenTimeData, setScreenTimeData] = useState(Array(7).fill({ date: '', time: '00:00' }));
 
     const [datesFromLastWeek, setDatesFromLastWeek] = useState([]);
@@ -25,6 +25,7 @@ const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
     const dispatchError = useDispatch();
     const dispatchReadingTime = useDispatch();
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const confirmationDialogRef = useRef();
 
     //get the days for the last week and add them in daysOfWeek
     useEffect(() => {
@@ -140,19 +141,23 @@ const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
         return invalidInputs.length === 0;
     };
 
-    const checkScreenTime = async () => {
+    const checkScreenTime = async (e) => {
         // Check for invalid inputs
         const isValid = validateInputs();
 
         // Check for invalid inputs
         if (!isValid) {
+            e.preventDefault();
             setShowConfirmationDialog(true);
+            confirmationDialogRef.current.focus();
             return;
         }
 
         // Check if any time is '00:00' and show confirmation dialog
         if (screenTimeData.some(item => item.time === '00:00')) {
+            e.preventDefault();
             setShowConfirmationDialog(true);
+            confirmationDialogRef.current.focus();
         } else {
             // Save the data directly if there are no '00:00' times
             saveScreenTime();
@@ -204,16 +209,19 @@ const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
             subtitle={``}
             setIsOpen={setIsOpenAddScreenTime}
             small={true}
+            previousElement={previousElement}
             content={
                 <>
                     <Error />
-                    {showConfirmationDialog && (
-                        <ConfirmationDialog
-                            message="Setting time to 00:00 will be considered as not using the device on that day. Are you sure?"
-                            onCancel={handleConfirmDialogCancel}
-                            onConfirm={handleConfirmDialogConfirm}
-                        />
-                    )}
+                    {/* {showConfirmationDialog && ( */}
+                    <ConfirmationDialog
+                        message="Setting time to 00:00 will be considered as not using the device on that day. Are you sure?"
+                        onCancel={handleConfirmDialogCancel}
+                        onConfirm={handleConfirmDialogConfirm}
+                        confirmationDialogRef={confirmationDialogRef}
+                        showConfirmationDialog={showConfirmationDialog}
+                    />
+                    {/* )} */}
                     <div className="calendar-container">
                         {isLoading ?
                             (<div className='spinner__container'>
@@ -238,7 +246,7 @@ const AddScreenTimeModal = ({ setIsOpenAddScreenTime, handleCloseModal }) => {
                                         </div>
                                     ))}
                                 </div>
-                                <button className='cta-btn cta-sm' onClick={checkScreenTime}>Save Screen Time</button>
+                                <button className='cta-btn cta-sm' onClick={(e) => checkScreenTime(e)}>Save Screen Time</button>
                             </>
 
                         }

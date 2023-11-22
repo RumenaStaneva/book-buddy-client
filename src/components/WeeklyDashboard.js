@@ -10,7 +10,7 @@ import { Navigation } from 'swiper/modules';
 // import PlaylistReading from "./PlaylistReading";
 
 
-const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
+const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime, setPreviousElement }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const { currentlyReadingBooks } = useSelector((state) => state.books);
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
@@ -127,7 +127,9 @@ const WeeklyDashboard = ({ readingTimeData, setIsOpenAddScreenTime }) => {
                 {!readingTimeData || !readingTimeData.length > 0 ? (
                     <div className="no-data__container">
                         <h2 className="heading">No reading time data for this week</h2>
-                        <Button className="cta-btn" onClick={() => { setIsOpenAddScreenTime(true); document.body.style.overflow = 'hidden'; }}>Add from here</Button>
+                        <Button className="cta-btn" onClick={() => {
+                            setIsOpenAddScreenTime(true); document.body.style.overflow = 'hidden'; setPreviousElement(document.activeElement || document.body);
+                        }}>Add from here</Button>
                     </div>
                 ) : (
                     <div className="table-container">

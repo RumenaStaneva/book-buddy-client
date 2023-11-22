@@ -20,6 +20,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
     const { user } = useAuthContext();
     const dispatch = useDispatch();
     const editShelfContainerRef = useRef(null);
+    const [previousElement, setPreviousElement] = useState(null);
 
     const handleEditShelfClick = () => {
         setEditShelfVisible(!editShelfVisible);
@@ -71,7 +72,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
+    // console.log('previousElement', previousElement);
     return (
         <>
             {isOpen ?
@@ -82,6 +83,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
                     setIsOpen={setIsOpen}
                     className="change-shelf-modal"
                     small={true}
+                    previousElement={previousElement}
                     content={
                         <>
                             {/* <p className="modal-body__book-shelf" id="modal-modal-description">
@@ -102,7 +104,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
                 </Button>
                 {editShelfVisible &&
                     <div className='edit-shelf__container' ref={editShelfContainerRef}>
-                        <Button onClick={(e) => { e.preventDefault(); setIsOpen(true); document.body.style.overflow = 'hidden'; }}>
+                        <Button onClick={(e) => { e.preventDefault(); setIsOpen(true); document.body.style.overflow = 'hidden'; setPreviousElement(document.activeElement || document.body); }}>
                             Change shelf
                         </Button>
                     </div>
@@ -112,6 +114,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
                     component='a'
                     onClick={event => {
                         event.stopPropagation();
+                        setPreviousElement(document.activeElement || document.body);
                     }}
                     href={`/books/book-details/${book._id}`}
                 >
@@ -152,7 +155,7 @@ function LibraryBook({ book, categoryColor, bookStyle, shelf, fetchBooks }) {
                         </div>
                     </CardContent>
                 </CardActionArea>
-            </div>
+            </div >
         </>
     )
 }

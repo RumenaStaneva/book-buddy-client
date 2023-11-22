@@ -6,10 +6,10 @@ import Modal from './Dialog'
 import Spinner from 'react-spinner-material';
 import AvatarEditor from 'react-avatar-editor';
 
-const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale, setEncodedImage, isLoading, setIsLoading, editor }) => {
+const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale, setEncodedImage, isLoading, setIsLoading, editor, previousElement }) => {
     const { user, dispatch } = useAuthContext();
     const dispatchError = useDispatch();
-
+    // console.log(previousElement);
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -61,6 +61,8 @@ const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale
             console.error('Editor instance is null');
             setIsLoading(false);
         }
+
+
     }
 
     return (
@@ -69,6 +71,8 @@ const AvatarEditorModal = ({ setIsOpen, setEditor, encodedImage, scale, setScale
             onClose={() => { setIsOpen(false); }}
             subtitle={``}
             setIsOpen={setIsOpen}
+            //todo fix focus
+            previousElement={document.body}
             content={
 
                 isLoading ? (

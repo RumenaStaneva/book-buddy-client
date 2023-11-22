@@ -25,12 +25,6 @@ function Home() {
         document.title = 'Home';
     }, []);
 
-    const handleChange = (e) => {
-        const title = e.target.value;
-        setTitle(title);
-        setError('');
-    }
-
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
@@ -59,11 +53,14 @@ function Home() {
                     },
                 }
             );
+            if (response.data.totalItems === 0) {
+                throw new Error("No books found with this name. Please double-check your input.");
+            }
             setBooks(response.data.items);
             // const calculatedTotalPages = Math.ceil(response.data.totalItems / PAGE_SIZE);
             setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
         } catch (error) {
-            setError(`Error fetching books: ${error})`);
+            setError(`${error})`);
             console.error('Error fetching books: ', error);
         } finally {
             setLoading(false);
@@ -109,6 +106,7 @@ function Home() {
 
         return pages;
     };
+
     // page numbers 
     const pageNumbers = () => {
         const pages = generatePageNumbers();
@@ -169,7 +167,6 @@ function Home() {
     const isSmallScreen = () => {
         return window.innerWidth < 576;
     };
-
     return (
         <>
             <Navigation />
@@ -230,7 +227,10 @@ function Home() {
                                 label="Title/author"
                                 variant="outlined"
                                 value={title}
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    setTitle(e.target.value);
+                                    setError('');
+                                }}
                                 error={error}
                                 className='search__input'
                             />
@@ -252,7 +252,6 @@ function Home() {
 
                 {books && books.length !== 0 ?
                     <BookList books={books}
-                    // loading={loading} 
                     />
 
                     : null}

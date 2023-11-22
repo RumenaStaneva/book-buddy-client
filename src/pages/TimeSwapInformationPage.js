@@ -2,10 +2,11 @@ import Button from "../components/Button";
 import '../styles/TimeSwapInformationPage.css';
 import Header from "../components/Header";
 
-const TimeSwapInformationPage = ({ setIsOpenAddScreenTime }) => {
+const TimeSwapInformationPage = ({ setIsOpenAddScreenTime, setPreviousElement }) => {
     const handleAddScreenTime = () => {
         setIsOpenAddScreenTime(true);
         document.body.style.overflow = 'hidden';
+        setPreviousElement(document.activeElement || document.body);
     }
 
     return <>

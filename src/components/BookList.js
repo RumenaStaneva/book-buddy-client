@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -12,11 +12,11 @@ import { clearError } from '../reducers/errorSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function BookList({ books, loading }) {
+function BookList({ books }) {
     const [bookToAdd, setBookToAdd] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const dispatchError = useDispatch();
-
+    const [previousElement, setPreviousElement] = useState(null);
 
     const handleAddToShelf = (book) => {
         let thumbnail = book.volumeInfo.imageLinks;
@@ -54,6 +54,14 @@ function BookList({ books, loading }) {
             }
         })
     };
+    // console.log('previousElement', previousElement);
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }, [isOpen]);
 
     return (
         // loading ?
@@ -62,7 +70,7 @@ function BookList({ books, loading }) {
         //     </div>
         //     :
         <>
-            {isOpen && <AddBookModal setIsOpen={setIsOpen} bookDetails={bookToAdd} onBookAdded={handleBookAdded} />}
+            {isOpen && <AddBookModal previousElement={previousElement} setIsOpen={setIsOpen} bookDetails={bookToAdd} onBookAdded={handleBookAdded} />}
             <ToastContainer />
 
             <div className='books__container books-list__container'>
@@ -81,7 +89,9 @@ function BookList({ books, loading }) {
                                         document.body.style.overflow = 'hidden';
                                         handleAddToShelf(book);
                                         dispatchError(clearError());
+                                        setPreviousElement(document.activeElement || document.body);
                                     }}
+
                                 >
                                     <CardMedia
                                         component="img"
