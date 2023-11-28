@@ -33,9 +33,9 @@ function ListAllBooks() {
     // const [isHovered, setIsHovered] = useState(false);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        document.title = 'Books in library';
-    }, []);
+    // useEffect(() => {
+    //     document.title = 'Books in library';
+    // }, []);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);

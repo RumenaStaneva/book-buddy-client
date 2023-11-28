@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import NavBar from "../components/NavBar";
 import Header from "../components/Header";
 import '../styles/About.css'
 
 function About() {
-    useEffect(() => {
-        document.title = 'About';
-    }, []);
+    // useEffect(() => {
+    //     document.title = 'About';
+    // }, []);
 
     return <>
         <NavBar />

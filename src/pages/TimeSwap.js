@@ -19,9 +19,9 @@ const TimeSwap = () => {
     const isLoadingBooks = useSelector((state) => state.books.isLoading);
     const [previousElement, setPreviousElement] = useState(null);
 
-    useEffect(() => {
-        document.title = 'TimeSwap';
-    }, []);
+    // useEffect(() => {
+    //     document.title = 'TimeSwap';
+    // }, []);
 
     useEffect(() => {
         dispatch(fetchHasReadingTimeAnytime(user));

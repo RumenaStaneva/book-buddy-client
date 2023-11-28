@@ -21,9 +21,9 @@ function Home() {
     const [totalPages, setTotalPages] = useState(0);
     const [lastSearchedTitle, setLastSearchedTitle] = useState('');
     const PAGE_SIZE = 12;
-    useEffect(() => {
-        document.title = 'Home';
-    }, []);
+    // useEffect(() => {
+    //     document.title = 'Home';
+    // }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
