@@ -31,9 +31,9 @@ function Library() {
         dispatchRedux(fetchAllBooks(user));
     }
 
-    useEffect(() => {
-        document.title = `User's Library`;
-    }, []);
+    // useEffect(() => {
+    //     document.title = `User's Library`;
+    // }, []);
     const handleSuccessMessage = (message) => {
         toast.success(message, {
             position: 'top-right',
@@ -141,7 +141,7 @@ function Library() {
                                                 background: `linear-gradient(${categoryColor}, rgba(0, 0, 0, 0))`,
                                             }
                                             return (
-                                                <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={0} fetchBooks={fetchBooks} />
+                                                <LibraryBook key={book._id} book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={0} fetchBooks={fetchBooks} />
                                             )
 
                                         })
@@ -213,7 +213,7 @@ function Library() {
                                                     //         </CardContent>
                                                     //     </CardActionArea>
                                                     // </div>
-                                                    <LibraryBook book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={2} fetchBooks={fetchBooks} />
+                                                    <LibraryBook key={book._id} book={book} categoryColor={categoryColor} bookStyle={bookStyle} shelf={2} fetchBooks={fetchBooks} />
 
                                                 )
                                             })

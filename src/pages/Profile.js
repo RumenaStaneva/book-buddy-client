@@ -16,7 +16,7 @@ function Profile() {
     const { hasReadingTimeAnytime } = useSelector((state) => state.readingTimeForToday);
 
     useEffect(() => {
-        document.title = `User's profile`;
+        // document.title = `User's profile`;
         dispatchRedux(fetchHasReadingTimeAnytime(user));
     }, [dispatchRedux, user]);
 

@@ -31,9 +31,9 @@ function BookDetails() {
   const [previousElement, setPreviousElement] = useState(null);
 
 
-  useEffect(() => {
-    document.title = `Book details`;
-  }, []);
+  // useEffect(() => {
+  //   document.title = `Book details`;
+  // }, []);
 
   const fetchBook = useCallback(
     async () => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Home from './pages/Home';
 import About from './pages/About';
 import TimeSwap from './pages/TimeSwap';
@@ -7,7 +7,7 @@ import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import ErrorPage from './pages/ErrorPage';
 import './styles/App.css'
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 import BookDetails from './pages/BookDetails';
 import Profile from './pages/Profile';
@@ -18,10 +18,18 @@ import VerificationSuccess from './pages/VerificationSuccess';
 import ResetPassword from './pages/ResetPassword';
 import Footer from './components/Footer';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import titles from './titles';
+
 
 function App() {
-
   const { user } = useAuthContext();
+  const location = useLocation();
+
+  useEffect(() => {
+    // title updating based on the current route from location object
+    document.title = titles[location.pathname] || 'Book Buddy';
+  }, [location.pathname]);
+
   return (
     <>
       <Routes>
