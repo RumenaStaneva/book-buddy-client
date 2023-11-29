@@ -1,4 +1,4 @@
-import '../styles/Modal.css'
+import '../styles/Modal.scss'
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';

@@ -7,7 +7,7 @@ import Dropdown from "../components/Dropdown";
 import categoryColors from "../constants/categoryColors";
 import BookCategories from "../constants/bookCategories";
 import Button from "../components/Button";
-import '../styles/ListAllBooks.css'
+import '../styles/ListAllBooks.scss'
 import Error from "../components/Error";
 import { useSelector, useDispatch } from 'react-redux';
 import { setCategory, setSearchQuery } from '../reducers/filtersSlice';

@@ -1,5 +1,5 @@
 import Button from "../components/Button";
-import '../styles/TimeSwapInformationPage.css';
+import '../styles/TimeSwapInformationPage.scss';
 import Header from "../components/Header";
 
 const TimeSwapInformationPage = ({ setIsOpenAddScreenTime, setPreviousElement }) => {

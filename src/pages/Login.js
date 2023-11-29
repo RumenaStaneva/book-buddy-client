@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import NavBar from '../components/NavBar'
 import Button from '../components/Button';
 import { useLogin } from '../hooks/useLogin';
-import '../styles/AuthenticationForms.css'
+import '../styles/AuthenticationForms.scss'
 import Error from '../components/Error';
 import { GoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";

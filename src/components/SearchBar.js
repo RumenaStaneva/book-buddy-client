@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import pages from '../data';
-import '../styles/SearchBar.css'
+import '../styles/SearchBar.scss'
 
 const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('');

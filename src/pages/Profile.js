@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import Error from '../components/Error';
 import { useDispatch, useSelector } from "react-redux";
-import '../styles/Profile.css'
+import '../styles/Profile.scss'
 import Diagram from '../components/Diagram';
 import { fetchHasReadingTimeAnytime } from "../reducers/readingTimeForTodaySlice";
 import UserProfile from '../components/UserProfile';

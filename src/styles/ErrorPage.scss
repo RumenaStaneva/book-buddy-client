@@ -1,3 +1,5 @@
+@import './variables/variables.scss';
+
 .error-page {
     text-align: center;
     padding: 15px 50px;
@@ -5,7 +7,7 @@
 
 .error-page__title {
     font-size: 48px;
-    color: #D92868;
+    color: $mainColor;
     margin-bottom: 20px;
 }
 

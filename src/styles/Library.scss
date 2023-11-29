@@ -1,3 +1,5 @@
+@import './variables/variables.scss';
+
 .books__library {
     padding: 20px 20px 105px;
 }
@@ -93,8 +95,8 @@
 }
 
 .book-colorful .book__title.book__title-outline {
-    color: #111;
-    text-shadow: 9px 0px 7px rgba(255, 255, 255, 1), -5px 1px 7px rgba(255, 255, 255, 1);
+    color: $black;
+    text-shadow: 9px 0px 7px $white, -5px 1px 7px $white;
 }
 
 .book__button {
@@ -114,7 +116,7 @@
 }
 
 .book__title {
-    color: #fff;
+    color: $white;
     font-weight: 600;
     font-size: 1.3rem;
 }
@@ -134,12 +136,12 @@
 .edit-shelf__icon svg {
     width: 25px;
     height: 25px;
-    fill: #fff;
+    fill: $white;
     transition: fill 0.3s ease;
 }
 
 .edit-shelf__icon svg:hover {
-    fill: #ccc;
+    fill: $lightGrey;
 }
 
 .edit-shelf__container {
@@ -150,12 +152,12 @@
 }
 
 .edit-shelf__container button {
-    background-color: #fff;
+    background-color: $white;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid $lightGrey;
     border-radius: 10px;
     transition: background-color 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px $boxShadow;
     cursor: pointer;
 }
 

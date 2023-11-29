@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Header from '../components/Header';
 import BookList from '../components/BookList';
 import axios from "axios";
-import '../styles/Home.css'
+import '../styles/Home.scss'
 import Button from '../components/Button';
 import Box from '@mui/material/Box';
 import Spinner from 'react-spinner-material';

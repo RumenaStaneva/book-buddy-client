@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import '../styles/Library.css'
+import '../styles/Library.scss'
 import Button from './Button';
 import LinearProgressWithLabel from './Progress'
 import { useAuthContext } from "../hooks/useAuthContext";
 import { GiBookmarklet } from "react-icons/gi";
 import categoryColors from "../constants/categoryColors";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import '../styles/LibraryBook.css'
+import '../styles/LibraryBook.scss'
 import { useDispatch } from "react-redux";
 import { fetchAllBooks, calculateProgress } from '../reducers/booksSlice';
 import { clearError, setError } from '../reducers/errorSlice';

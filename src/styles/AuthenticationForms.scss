@@ -1,5 +1,7 @@
+@import './variables/variables.scss';
+
 body {
-    background-color: #fff;
+    background-color: $white;
 }
 
 .login-signup-page {
@@ -40,7 +42,7 @@ body {
 .login-form__container form {
     position: relative;
     border-radius: 20px;
-    background: #FFF;
+    background: $white;
     box-shadow: 0px 19px 40px 0px rgba(0, 0, 0, 0.05);
     padding: 85px 65px;
     max-width: 570px;
@@ -57,7 +59,7 @@ body {
 }
 
 .login-form__container h1 {
-    color: #000;
+    color: $black;
     font-size: 56px;
     font-weight: 600;
     margin-bottom: 28px;
@@ -86,28 +88,28 @@ body {
 
 .login-form__container .form__group input {
     border-radius: 4px;
-    background: #FFF6F4;
+    background: $white;
     border: none;
     padding: 12px 10px;
-    color: #000;
+    color: $black;
     font-size: 14px;
     font-weight: 400;
 }
 
 .login-form__container .form__group label {
-    color: #000;
+    color: $black;
     font-size: 16px;
     font-weight: 300;
 }
 
 .form__error {
-    color: #D92868;
+    color: $mainColor;
     font-size: 14px;
     margin-top: 5px;
     text-align: center;
     font-weight: 600;
-    border: 1px solid #D92868;
-    background-color: #fff;
+    border: 1px solid $mainColor;
+    background-color: $white;
     padding: 10px;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -115,12 +117,12 @@ body {
 
 .btn--cta {
     border-radius: 25px;
-    background-color: #D92868;
-    color: #FFF;
+    background-color: $mainColor;
+    color: $white;
     font-size: 16px;
     font-weight: 600;
     text-transform: uppercase;
-    border: 1px solid #D92868;
+    border: 1px solid $mainColor;
     padding: 10px 25px;
     display: flex;
     justify-content: center;
@@ -131,8 +133,8 @@ body {
 
 .btn--cta:hover {
     cursor: pointer;
-    background-color: #fff;
-    color: #D92868;
+    background-color: $white;
+    color: $mainColor;
 }
 
 .form-switch {
@@ -146,7 +148,7 @@ body {
 }
 
 .form-switch a {
-    color: #D92868;
+    color: $mainColor;
     font-size: 16px;
     font-weight: 400;
     line-height: 22px;
@@ -175,7 +177,7 @@ body {
     top: 0;
     /* height: calc(100% + 40px); */
     width: 40%;
-    background-color: #EDC9BF;
+    background-color: $beigeBackground;
 }
 
 .google-auth-btn__container {
@@ -202,12 +204,12 @@ body {
 
 .password-requirements .fulfilled::before {
     content: '✅ ';
-    color: green;
+    color: $green;
 }
 
 .password-requirements .unfulfilled::before {
     content: '❌ ';
-    color: red;
+    color: $red;
 }
 
 @media (max-width: 1050px) {
@@ -239,7 +241,7 @@ body {
 
 @media (max-width: 768px) {
     .mask {
-        background-color: #EDC9BF;
+        background-color: $beigeBackground;
     }
 
     .wrapper.login-form__container {
@@ -253,7 +255,7 @@ body {
     }
 
     .login-signup-page {
-        background-color: #EDC9BF;
+        background-color: $beigeBackground;
     }
 }
 

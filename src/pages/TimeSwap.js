@@ -8,7 +8,7 @@ import WeeklyDashboard from "../components/WeeklyDashboard";
 import { fetchHasReadingTimeAnytime, fetchReadingTimeForTheWeek } from "../reducers/readingTimeForTodaySlice";
 import { fetchAllBooks } from "../reducers/booksSlice";
 import { useDispatch, useSelector } from "react-redux";
-import '../styles/TimeSwap.css'
+import '../styles/TimeSwap.scss'
 
 
 const TimeSwap = () => {

@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 import Spinner from 'react-spinner-material';
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import '../styles/VerificationSuccess.css'
+import '../styles/VerificationSuccess.scss'
 
 function VerificationSuccess() {
     const { token } = useParams();

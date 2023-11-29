@@ -3,7 +3,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import Spinner from 'react-spinner-material';
 import { useDispatch, useSelector } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
-import '../styles/Profile.css'
+import '../styles/Profile.scss'
 import { fetchHasReadingTimeAnytime, fetchReadingTimeForTheWeek, setDataRange } from "../reducers/readingTimeForTodaySlice";
 import Chart from '../components/Chart';
 import Dropdown from '../components/Dropdown';

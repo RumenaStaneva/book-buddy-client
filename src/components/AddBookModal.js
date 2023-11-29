@@ -1,4 +1,4 @@
-import '../styles/Modal.css'
+import '../styles/Modal.scss'
 import { useState, useEffect, useRef } from "react";
 import Dropdown from "./Dropdown";
 import { useAuthContext } from '../hooks/useAuthContext';

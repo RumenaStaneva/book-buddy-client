@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Spinner from 'react-spinner-material';
-import '../styles/Modal.css'
+import '../styles/Modal.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { setError } from '../reducers/errorSlice';
 import Button from "./Button";
