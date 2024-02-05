@@ -1,11 +1,11 @@
-import '../styles/Modal.css'
+import '../styles/Modal.scss'
 import { useState, useEffect, useRef } from 'react';
 import Cleave from 'cleave.js/react';
 import Spinner from 'react-spinner-material';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
-import '../styles/Calendar.css'
+import '../styles/Calendar.scss'
 import Modal from './Dialog'
 import Error from './Error'
 import ConfirmationDialog from './ConfirmationDialog';

@@ -4,7 +4,7 @@ import Spinner from 'react-spinner-material';
 import NavBar from '../components/NavBar';
 import Header from '../components/Header'
 import { useAuthContext } from "../hooks/useAuthContext";
-import '../styles/Library.css'
+import '../styles/Library.scss'
 import LibraryBookSlider from '../components/LibraryBookSlider';
 import LibraryBook from '../components/LibraryBook';
 import { Swiper, SwiperSlide } from 'swiper/react';

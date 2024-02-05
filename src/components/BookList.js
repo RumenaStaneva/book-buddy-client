@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-import '../styles/books-list.css'
+import '../styles/books-list.scss'
 import AddBookModal from './AddBookModal'
 import { useDispatch } from "react-redux";
 import { clearError } from '../reducers/errorSlice';

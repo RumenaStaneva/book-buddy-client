@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import ErrorPage from './pages/ErrorPage';
-import './styles/App.css'
+import './styles/App.scss'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 import BookDetails from './pages/BookDetails';

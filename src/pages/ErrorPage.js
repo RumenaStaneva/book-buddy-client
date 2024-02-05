@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar'
 import SearchBar from '../components/SearchBar';
-import '../styles/ErrorPage.css'
+import '../styles/ErrorPage.scss'
 
 const ErrorPage = () => {
   return (

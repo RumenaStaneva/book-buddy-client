@@ -9,7 +9,7 @@ import UpdateBookProgressModal from './UpdateBookProgressModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTimerStarted, setCurrentlyReadingBook, setTimerMode } from '../reducers/timerSlice';
 import { setTimeInSecondsLeftForAchievingReadingGoal, updateReadingDataInDatabase, setGoalAchievedForTheDay } from '../reducers/readingTimeForTodaySlice'
-import '../styles/Countdown.css'
+import '../styles/Countdown.scss'
 import { useAuthContext } from '../hooks/useAuthContext';
 import { clearError, setError } from '../reducers/errorSlice';
 import Error from './Error';

@@ -9,7 +9,7 @@ import EditBookModal from '../components/EditBookModal';
 import { AiFillEdit } from "react-icons/ai";
 import NotesList from '../components/NoteList';
 import Error from '../components/Error';
-import '../styles/BookDetails.css'
+import '../styles/BookDetails.scss'
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
 import { GiBookmarklet } from "react-icons/gi";

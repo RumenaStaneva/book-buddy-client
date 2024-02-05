@@ -4,7 +4,7 @@ import Spinner from 'react-spinner-material';
 import Button from '../components/Button';
 import { useDispatch } from "react-redux";
 import { setError, clearError } from '../reducers/errorSlice';
-import '../styles/Profile.css'
+import '../styles/Profile.scss'
 import AvatarEditorModal from '../components/AvatarEditorModal';
 
 function UserProfile({ isLoadingGlobal, setIsLoadingGlobal }) {

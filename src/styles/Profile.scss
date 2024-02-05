@@ -1,3 +1,5 @@
+@import './variables/variables.scss';
+
 .profile__container,
 .chart__container {
     display: flex;
@@ -25,12 +27,12 @@
 
 .profile__content,
 .chart__content {
-    background-color: #ffffff;
+    background-color: $white;
     padding: 15px;
     border-radius: 10px;
     width: 100%;
     /* max-width: 500px; */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px $boxShadow;
     position: relative;
 }
 
@@ -60,7 +62,7 @@
 
 .profile__clickable {
     cursor: pointer;
-    color: #EB142A;
+    color: $red;
     margin-bottom: 3px;
     display: inline-block;
     position: relative;
@@ -102,7 +104,7 @@
 .profile__input {
     width: 100%;
     padding: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid $lightGrey;
     border-radius: 5px;
     font-size: 14px;
 }
@@ -125,7 +127,7 @@
 }
 
 .profile__picture-container .change-picture__btn:focus {
-    border: 1px solid #000;
+    border: 1px solid $black;
 }
 
 .profile__picture-container .change-picture__btn:hover {
@@ -151,7 +153,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 22px;
-    color: #111;
+    color: $black;
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 1;
@@ -163,8 +165,8 @@
 }
 
 .update__button {
-    color: #fff;
-    background: #EE060B;
+    color: white;
+    background: $red;
     border: none;
     padding: 8px 14px;
     border-radius: 5px;
@@ -179,7 +181,7 @@
 .update__button:hover {
     box-shadow: 0 10px 20px -10px rgba(238, 6, 11, 0.6);
     transform: translateY(-5px);
-    background: #EE060B;
+    background: $red;
 }
 
 .profile-form {
@@ -221,7 +223,7 @@
 .image-container {
     height: 150px;
     width: 150px;
-    border: 2px dashed black;
+    border: 2px dashed $black;
     margin-bottom: 20px;
     cursor: pointer;
     border-radius: 50%;
@@ -251,7 +253,7 @@
     flex-direction: column;
     justify-content: center;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px $boxShadow;
     border-radius: 10px;
     flex: 0 0 48%;
     position: relative;

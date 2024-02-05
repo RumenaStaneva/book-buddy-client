@@ -1,3 +1,5 @@
+@import './variables/variables.scss';
+
 .book-details-container {
     /* display: flex;
     flex-direction: column;
@@ -18,9 +20,9 @@
     align-items: flex-start;
     width: 70%;
     /* max-width: 1200px; */
-    background-color: #ffffff;
+    background-color: $white;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 10px $boxShadow;
     padding: 65px;
     position: relative;
     min-width: 650px;
@@ -87,7 +89,7 @@
     right: 60px;
     width: 25px;
     height: 25px;
-    fill: #111;
+    fill: $black;
     cursor: pointer;
     transition: fill ease-in-out 0.3s;
 }
@@ -99,17 +101,17 @@
 
 .edit-book__icon:hover,
 .modal__delete-btn:hover {
-    fill: #fff;
+    fill: $white;
 }
 
 .notes__container {
     margin: 0 20px;
     padding: 20px;
     width: 30%;
-    border: 1px solid #ccc;
+    border: 1px solid $lightGrey;
     border-radius: 4px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: $white;
+    box-shadow: 0 2px 4px $boxShadow;
 }
 
 .notes__message-container {
@@ -166,7 +168,7 @@
 .notes__add-textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid $lightGrey;
     border-radius: 4px;
     resize: vertical;
     /* margin-bottom: 10px; */
@@ -176,7 +178,7 @@
 .notes__add-button {
     margin-top: 10px;
     background-color: #007BFF;
-    color: #fff;
+    color: $white;
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
@@ -207,7 +209,7 @@
 }
 
 .notes__item {
-    border: 1px solid #ccc;
+    border: 1px solid $lightGrey;
     border-radius: 4px;
     margin-bottom: 10px;
     padding: 10px;

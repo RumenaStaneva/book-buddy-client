@@ -1,4 +1,4 @@
-import '../styles/Modal.css';
+import '../styles/Modal.scss';
 import React, { createContext, useEffect, createRef } from "react";
 import { IoIosClose } from 'react-icons/io';
 import { useDispatch, useSelector } from "react-redux";

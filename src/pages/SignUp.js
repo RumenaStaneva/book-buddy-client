@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 import Button from "../components/Button";
 import Error from "../components/Error";
 import { useSignup } from "../hooks/useSignUp";
-import '../styles/AuthenticationForms.css'
+import '../styles/AuthenticationForms.scss'
 import Spinner from 'react-spinner-material';
 import { GoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";

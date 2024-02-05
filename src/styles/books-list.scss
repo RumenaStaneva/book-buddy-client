@@ -1,3 +1,5 @@
+@import './variables/variables.scss';
+
 .books__container {
     display: flex;
     align-items: center;
@@ -41,7 +43,7 @@
 }
 
 .books-list__container .book__title {
-    color: #111;
+    color: $black;
 }
 
 .book__container {
@@ -61,13 +63,13 @@
 }
 
 .error-message__container {
-    color: #D92868;
+    color: $mainColor;
     font-size: 14px;
     margin-top: 5px;
     text-align: center;
     font-weight: 600;
-    border: 1px solid #D92868;
-    background-color: #fff;
+    border: 1px solid $mainColor;
+    background-color: $white;
     padding: 10px 40px;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -76,13 +78,13 @@
 }
 
 .success-message__container {
-    color: #50C878;
+    color: $green;
     font-size: 14px;
     margin-top: 5px;
     text-align: center;
     font-weight: 600;
-    border: 1px solid #50C878;
-    background-color: #fff;
+    border: 1px solid $green;
+    background-color: $white;
     padding: 10px;
     margin-bottom: 20px;
     border-radius: 5px;

@@ -1,5 +1,5 @@
-import '../styles/Library.css'
-import '../styles/LibraryBook.css'
+import '../styles/Library.scss'
+import '../styles/LibraryBook.scss'
 
 function CountdownBook({ book }) {
 

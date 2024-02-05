@@ -1,6 +1,4 @@
-/* body {
-    background: rgba(237, 201, 191, 0.68);
-} */
+@import './variables/variables.scss';
 
 .form__container {
     padding: 20px 20px 50px;
@@ -14,8 +12,8 @@
     width: auto !important;
     padding: 10px;
     border-radius: 20px;
-    background: #FFF;
-    box-shadow: 0px 19px 40px 0px rgba(0, 0, 0, 0.05);
+    background: $white;
+    box-shadow: 0px 19px 40px 0px $boxShadow;
     height: 500px;
 }
 
@@ -71,10 +69,10 @@
 
 .pagination__container .pagination-text {
     font-size: 16px;
-    color: #333;
-    background-color: #fff;
+    color: $black;
+    background-color: $white;
     padding: 5px 16px;
-    border: 1px solid #ccc;
+    border: 1px solid $lightGrey;
     border-radius: 10px;
     margin: 0 7px;
     cursor: pointer;
@@ -86,12 +84,12 @@
 }
 
 .pagination__container .pagination-button--active {
-    border: 1px solid #D92868;
+    border: 1px solid $mainColor;
 
 }
 
 .pagination__container .pagination-button--active:hover {
-    background-color: #fff;
+    background-color: $white;
     cursor: not-allowed;
 }
 

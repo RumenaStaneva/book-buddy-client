@@ -1,8 +1,10 @@
+@import './variables/variables.scss';
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: $font;
 }
 
 input::-webkit-outer-spin-button,
@@ -38,8 +40,8 @@ body {
     padding: 5px 16px;
     border: 0px;
     border-radius: 32px;
-    background-color: #D92868;
-    border: 1px solid #D92868;
+    background-color: $mainColor;
+    border: 1px solid $mainColor;
     height: 40px;
     color: #fff;
     font-size: 18px;
@@ -54,22 +56,22 @@ body {
 }
 
 .cta-btn:hover {
-    color: #D92868;
+    color: $mainColor;
     background-color: #fff;
 }
 
 .cta-btn:hover .react-spinner-material {
-    border-color: #D92868#D92868 !important;
+    border-color: $mainColor$mainColor !important;
 }
 
 .cta-btn__alt {
-    color: #D92868;
+    color: $mainColor;
     background-color: #fff;
 }
 
 .cta-btn__alt:hover {
     color: #fff;
-    background-color: #D92868;
+    background-color: $mainColor;
 }
 
 .cancel-btn {
@@ -93,7 +95,7 @@ body {
 }
 
 .close-btn svg {
-    fill: #D92868;
+    fill: $mainColor;
     font-size: 25px;
 
 }
@@ -125,7 +127,7 @@ body {
 }
 
 .cta-btn[disabled] {
-    background-color: #cccccc;
+    background-color: $lightGrey;
     color: #666666;
     border-color: #666666;
     cursor: not-allowed;

@@ -1,4 +1,4 @@
-import '../styles/Footer.css';
+import '../styles/Footer.scss';
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { NavLink } from 'react-router-dom'
 

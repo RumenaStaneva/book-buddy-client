@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../hooks/useAuthContext';
-import '../styles/Modal.css'
+import '../styles/Modal.scss'
 import { useDispatch } from "react-redux";
 import { setError } from '../reducers/errorSlice';
 import Button from "./Button";

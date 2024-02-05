@@ -1,6 +1,8 @@
+@import './variables/variables.scss';
+
 .footer {
-    background-color: #EDC9BF;
-    color: #B50637;
+    background-color: $beigeBackground;
+    color: $mainColor-dark;
     text-align: center;
     padding: 0 15px;
     width: 100%;
@@ -57,7 +59,7 @@
 .footer .privacy-policy-link {
     font-size: 14px;
     margin-left: 10px;
-    color: #B50637;
+    color: $mainColor-dark;
 }
 
 .footer .icon {

@@ -1,3 +1,5 @@
+@import './variables/variables.scss';
+
 .book {
     max-width: 600px;
     position: relative;
@@ -16,7 +18,7 @@
 }
 
 .book-font__outline {
-    text-shadow: 3px 3px 5px #111, 3px 3px 5px #111;
+    text-shadow: 3px 3px 5px $black, 3px 3px 5px $black;
 }
 
 .details__additional-info {
@@ -35,7 +37,7 @@
 
 .book__all-pages p:first-child {
     font-size: 14px;
-    color: #fff;
+    color: $white;
     margin-bottom: 10px;
 }
 
@@ -54,7 +56,7 @@
 }
 
 .book__details .book__see-more {
-    color: #111;
+    color: $black;
     font-size: 14px;
     text-decoration: none;
     position: relative;
@@ -67,12 +69,12 @@
     left: 0;
     height: 1px;
     width: 0;
-    background-color: #111;
+    background-color: $black;
     transition: width 0.3s ease;
 }
 
 .book__details .book__see-more:hover::after {
-    color: #111;
+    color: $black;
     width: 100%;
 }
 
@@ -93,7 +95,7 @@
 
 .details__additional-info .book__action-area p {
     font-size: 14px;
-    color: #fff;
+    color: $white;
     margin-bottom: 10px;
 }
 
