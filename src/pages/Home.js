@@ -63,7 +63,18 @@ function Home() {
         );
       }
       //   console.log(response.data.items);
-      setBooks(response.data.items.filter((bookData) => bookData.volumeInfo));
+      setBooks(
+        response.data.items.map((bookData) => ({
+          bookApiId: bookData.id,
+          title: bookData.volumeInfo.title,
+          authors: bookData.volumeInfo.authors,
+          description: bookData.volumeInfo.description,
+          publisher: bookData.volumeInfo.publisher,
+          thumbnail: bookData.volumeInfo.imageLinks.thumbnail,
+          categories: bookData.volumeInfo.categories,
+          pageCount: bookData.volumeInfo.pageCount,
+        }))
+      );
       // const calculatedTotalPages = Math.ceil(response.data.totalItems / PAGE_SIZE);
       setTotalPages(Math.ceil(response.data.totalItems / PAGE_SIZE));
     } catch (error) {
@@ -73,7 +84,6 @@ function Home() {
       setLoading(false);
     }
   }, []);
-  //   console.log(books);
 
   useEffect(() => {
     if (lastSearchedTitle) {
