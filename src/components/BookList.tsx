@@ -28,7 +28,7 @@ type BookListProps = {
 };
 
 function BookList({ books }: BookListProps) {
-  console.log(books);
+  // console.log(books);
 
   const [bookToAdd, setBookToAdd] = useState<Book | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -39,8 +39,6 @@ function BookList({ books }: BookListProps) {
     let thumbnail = book.thumbnail;
     if (!thumbnail) {
       thumbnail = null;
-    } else {
-      thumbnail = thumbnail;
     }
     if (book) {
       setBookToAdd(book);
@@ -110,7 +108,7 @@ function BookList({ books }: BookListProps) {
                 <CardMedia
                   component="img"
                   src={
-                    book.thumbnail === undefined
+                    book.thumbnail === null
                       ? "https://storage.googleapis.com/book-buddy/images/image-not-available.png"
                       : `${book.thumbnail}`
                   }

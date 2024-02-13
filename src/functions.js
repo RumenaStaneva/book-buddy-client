@@ -1,1 +1,0 @@
-export const REACT_APP_LOCAL_HOST = 'https://book-buddy-server-6b413ec41906.herokuapp.com';

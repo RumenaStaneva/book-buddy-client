@@ -15,15 +15,11 @@ function Home() {
   const [title, setTitle] = useState("");
   const [error, setError] = useState("");
   const [books, setBooks] = useState([]);
-  const [booksRawData, setBooksRawData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [lastSearchedTitle, setLastSearchedTitle] = useState("");
   const PAGE_SIZE = 12;
-  // useEffect(() => {
-  //     document.title = 'Home';
-  // }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -62,7 +58,7 @@ function Home() {
           "No books found with this name. Please double-check your input."
         );
       }
-      //   console.log(response.data.items);
+      // console.log(response.data.items);
       setBooks(
         response.data.items.map((bookData) => ({
           bookApiId: bookData.id,
@@ -70,7 +66,9 @@ function Home() {
           authors: bookData.volumeInfo.authors,
           description: bookData.volumeInfo.description,
           publisher: bookData.volumeInfo.publisher,
-          thumbnail: bookData.volumeInfo.imageLinks.thumbnail,
+          thumbnail: bookData.volumeInfo.imageLinks
+            ? bookData.volumeInfo.imageLinks.thumbnail
+            : null,
           categories: bookData.volumeInfo.categories,
           pageCount: bookData.volumeInfo.pageCount,
         }))
