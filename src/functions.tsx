@@ -33,8 +33,6 @@ function levenshteinDistance(a: string, b: string): number {
 }
 
 export function findExistingCategory(category: string): string | null {
-  console.log("category", category);
-
   if (!category) {
     return null;
   }
@@ -54,7 +52,6 @@ export function findExistingCategory(category: string): string | null {
       bestMatch = existingCategory;
     }
   }
-  console.log("bestMatch", bestMatch);
 
   return bestMatch;
 }

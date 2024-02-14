@@ -12,7 +12,7 @@ import { clearError } from "../reducers/errorSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-type Book = {
+export type Book = {
   bookApiId: string;
   title: string;
   authors: Array<string>;
@@ -31,7 +31,7 @@ function BookList({ books }: BookListProps) {
   // console.log(books);
 
   const [bookToAdd, setBookToAdd] = useState<Book | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const dispatchError = useDispatch();
   const [previousElement, setPreviousElement] = useState<Element | null>(null);
 
