@@ -1,16 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setError } from "../reducers/errorSlice";
-import { REACT_APP_LOCAL_HOST } from "../functions";
 
 export const fetchAllBooks = createAsyncThunk(
   "book/fetchAllBooks",
   async (user, thunkAPI) => {
     try {
-      const response = await fetch(`${REACT_APP_LOCAL_HOST}/books/library`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_LOCAL_HOST}/books/library`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       const data = await response.json();
       return data;
     } catch (error) {

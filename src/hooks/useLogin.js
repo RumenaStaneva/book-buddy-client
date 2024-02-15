@@ -2,12 +2,11 @@ import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import { useDispatch } from "react-redux";
 import { setError, clearError } from "../reducers/errorSlice";
-import { REACT_APP_LOCAL_HOST } from "../functions";
 
 export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(null);
   const { dispatch } = useAuthContext();
-  const LOCAL_HOST = REACT_APP_LOCAL_HOST;
+  const LOCAL_HOST = process.env.REACT_APP_LOCAL_HOST;
   const dispatchError = useDispatch();
 
   const login = async (emailOrUsername, password) => {
