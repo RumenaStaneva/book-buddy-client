@@ -27,7 +27,7 @@ type ModalProps = {
   subtitle: string;
   small?: boolean;
   disableCloseButton?: boolean;
-  previousElement: Element;
+  previousElement: Element | null;
 };
 
 export default function Modal({

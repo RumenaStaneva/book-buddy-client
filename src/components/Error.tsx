@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearError } from "../reducers/errorSlice";
 import { RootState } from "../store";
 
+export type ErrorMessage = {
+  message: string;
+};
+
 const Error = () => {
   const dispatch = useDispatch();
   const { errorMessage, hasError } = useSelector(
