@@ -2,7 +2,6 @@ import "../styles/Modal.scss";
 import { useState, useEffect, useRef, FormEvent } from "react";
 import Dropdown from "./Dropdown";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { useDispatch } from "react-redux";
 import { setError, clearError } from "../reducers/errorSlice";
 import BookCategories from "../constants/bookCategories";
 import Button from "./Button";
@@ -12,6 +11,7 @@ import Spinner from "react-spinner-material";
 import { NavLink } from "react-router-dom";
 import { findExistingCategory } from "../functions";
 import { Book } from "./BookList";
+import { useAppDispatch } from "../hooks/basicHooks";
 
 type AddBookModalProps = {
   setIsOpen: (isOpen: boolean) => void;
@@ -50,6 +50,11 @@ const initialBookToAddState: BookToAdd = {
   shelf: 0,
 };
 
+type ShelfOptions = {
+  value: number;
+  label: string;
+};
+
 const AddBookModal = ({
   setIsOpen,
   bookDetails,
@@ -64,7 +69,7 @@ const AddBookModal = ({
   );
   // console.log(bookDetails);
   const [bookToAdd, setBookToAdd] = useState<BookToAdd>(initialBookToAddState);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [updatedDescription, setUpdatedDescription] = useState<string>(
     bookDetails!.description ? bookDetails!.description : ""
   );
@@ -74,18 +79,18 @@ const AddBookModal = ({
   const [updatedPageCount, setUpdatedPageCount] = useState<number>(
     bookDetails!.pageCount ? bookDetails!.pageCount : 0
   );
-  const [loginVisivble, setLoginVisible] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [loginVisivble, setLoginVisible] = useState<boolean>(false);
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { user } = useAuthContext();
-  const shelfOptions = [
+  const shelfOptions: Array<ShelfOptions> = [
     { value: 0, label: "Want to read" },
     { value: 1, label: "Currently reading" },
     { value: 2, label: "Read" },
   ];
   const fileInputRef = useRef<HTMLLabelElement>(null);
-  const dispatchError = useDispatch();
+  const dispatchError = useAppDispatch();
 
-  const handleOptionSelect = (selectedOption: string) => {
+  const handleOptionSelect = (selectedOption: string | null) => {
     const selectedValue = shelfOptions.find(
       (option) => option.label === selectedOption
     )?.value;
@@ -131,11 +136,11 @@ const AddBookModal = ({
   };
 
   useEffect(() => {
-    console.log("useeffectttttttttttttt");
-    console.log(formSubmitted);
+    // console.log("useeffectttttttttttttt");
+    // console.log(formSubmitted);
 
     if (formSubmitted) {
-      console.log("hhhahahahahhahaha");
+      // console.log("hhhahahahahhahaha");
 
       const addBookToShelf = async () => {
         try {
@@ -285,6 +290,18 @@ const AddBookModal = ({
     }
   };
 
+  function findSelectedOption(): string | null {
+    if (shelf !== null && shelfOptions) {
+      const foundOption = shelfOptions.find(
+        (option) => option.value === shelf
+      )?.label;
+      if (foundOption) {
+        return foundOption;
+      }
+    }
+    return null;
+  }
+
   return (
     <Modal
       title={bookDetails!.title}
@@ -373,13 +390,7 @@ const AddBookModal = ({
                       id={"dropdown-shelf"}
                       options={shelfOptions.map((option) => option.label)}
                       onSelect={handleOptionSelect}
-                      selectedOption={
-                        shelf !== null
-                          ? shelfOptions.find(
-                              (option) => option.value === shelf
-                            )?.label
-                          : null
-                      }
+                      selectedOption={findSelectedOption()}
                     />
                   </div>
                   <div className="modal__section modal__section-left-align">
